@@ -70,6 +70,7 @@ html {
   --color-foreground-muted: var(--foreground-muted);
   --color-foreground-subtle: var(--foreground-subtle);
   --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);
   --color-badge: var(--badge);
@@ -241,6 +242,7 @@ html {
     color: var(--foreground);
     font-weight: 600;
     letter-spacing: -0.022em;
+    text-wrap: balance;
   }
 
   main a:not(.no-underline) {
@@ -403,9 +405,15 @@ html {
     display: block;
     width: 100%;
     border-radius: var(--radius-lg);
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--color-border);
+    /* Pure black/white hairline outline — never a tinted neutral, which reads
+       as dirt on the image edge. Flips to white in dark mode. */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .prose img {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
   }
 
   /* Traveling highlight hover effect for Item components */

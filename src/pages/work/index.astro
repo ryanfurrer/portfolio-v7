@@ -30,6 +30,8 @@ const years = Object.keys(projectsByYear)
   .sort((a, b) => b - a);
 
 const description = "A collection of my projects, code snippets, and more";
+
+const showEarlyState = projects.length <= 1;
 ---
 
 <Layout>
@@ -57,6 +59,14 @@ const description = "A collection of my projects, code snippets, and more";
               </ul>
             </section>
           ))
+        }
+        {
+          showEarlyState && (
+            <p class="max-w-[60ch] text-pretty text-sm text-foreground-subtle md:px-2">
+              More projects are on the way. In the meantime, this is where it
+              started.
+            </p>
+          )
         }
       </div>
     </main>

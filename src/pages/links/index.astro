@@ -143,7 +143,9 @@ const socialLinks = [
   <div class="space-y-16">
     <header class="space-y-8">
       <div class="jusftify-center flex items-center gap-8">
-        <div class="size-full max-w-36 overflow-hidden rounded-full">
+        <div
+          class="size-full max-w-36 overflow-hidden rounded-full ring-1 ring-black/10 dark:ring-white/10"
+        >
           <img src={profilePicture.src} alt="Ryan Furrer" class="" />
         </div>
         <div class="space-y-2">
@@ -156,7 +158,11 @@ const socialLinks = [
         </div>
       </div>
       <div>
-        <Button href="/">Go to ryanfurrer.com</Button>
+        <Button
+          href="/"
+          class="dark:inset-ring dark:inset-ring-white/10 dark:bg-surface dark:text-foreground dark:hover:bg-surface-hover"
+          >Go to ryanfurrer.com</Button
+        >
       </div>
     </header>
     <main class="space-y-16">
@@ -170,7 +176,7 @@ const socialLinks = [
                 <LinksCard
                   href={link.href}
                   class={cn(
-                    "squircle rounded-3xl p-4 ring-offset-2 ring-offset-background transition-all hover:saturate-150 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:hover:brightness-105",
+                    "squircle rounded-3xl p-4 ring-offset-2 ring-offset-background transition hover:saturate-150 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:hover:brightness-105",
                     getColorClasses(link.color),
                   )}
                 >
@@ -222,7 +228,7 @@ const socialLinks = [
                     <h3 class="sr-only">{content.item.title}</h3>
                   </header>
                   {content.ogImageUrl && (
-                    <div class="overflow-hidden rounded-md">
+                    <div class="overflow-hidden rounded-md ring-1 ring-black/10 dark:ring-white/10">
                       <img src={content.ogImageUrl} alt={content.item.title} />
                     </div>
                   )}
@@ -233,7 +239,11 @@ const socialLinks = [
         )
       }
       <div>
-        <Button href="/">Go to ryanfurrer.com</Button>
+        <Button
+          href="/"
+          class="dark:inset-ring dark:inset-ring-white/10 dark:bg-surface dark:text-foreground dark:hover:bg-surface-hover"
+          >Go to ryanfurrer.com</Button
+        >
       </div>
     </main>
   </div>

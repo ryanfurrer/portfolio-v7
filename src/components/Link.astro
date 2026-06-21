@@ -19,10 +19,15 @@ if (target === "_blank" && !rel) {
 <a
   href={href}
   class:list={[
-    "small-heading text-foreground-muted hover:text-foreground focus:text-foreground",
+    "group/cta inline-flex w-fit items-center gap-1 text-sm font-medium text-link no-underline transition-colors hover:text-link-hover focus-visible:text-link-hover",
     className,
   ]}
   target={target}
   rel={finalRel}
-  {...restProps}><slot /></a
+  {...restProps}
+  ><slot /><span
+    aria-hidden="true"
+    class="transition-transform duration-150 ease-out group-hover/cta:translate-x-0.5"
+    >&rarr;</span
+  ></a
 >
