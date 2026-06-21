@@ -53,6 +53,16 @@ html {
   }
 }
 
+/* On-brand text selection — a soft accent wash; text stays "ink" and readable. */
+::selection {
+  background-color: color-mix(in oklch, var(--link) 22%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background-color: color-mix(in oklch, var(--link) 32%, transparent);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   body > div,
   body[data-scroll-locked] > div {
