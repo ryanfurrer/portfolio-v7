@@ -12,16 +12,14 @@ const description = "What I'm up to currently";
       <p class="max-w-[60ch] text-pretty text-foreground-muted">{description}</p>
     </header>
     <main class="space-y-6 md:px-2">
-      <article
-        class="space-y-5 rounded-lg bg-surface p-5 dark:inset-ring dark:inset-ring-white/5"
-      >
-        <header class="flex items-baseline justify-between gap-4">
+      <article class="now-card">
+        <header class="now-head flex items-baseline justify-between gap-4">
           <span class="small-heading">Now</span>
           <time datetime="2026-02-02" class="text-sm font-medium text-foreground-muted"
             >February 2, 2026</time
           >
         </header>
-        <div class="space-y-4">
+        <div class="now-body">
           <p>
             I just returned from my first company offsite which took place in
             Portland, OR. It was a long week but great to meet everyone in-person
@@ -46,9 +44,9 @@ const description = "What I'm up to currently";
             >.
           </p>
         </div>
-        <dl class="space-y-3 border-t border-border pt-5">
-          <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 pt-0.5 sm:w-28">Watching</dt>
+        <dl class="now-meta">
+          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+            <dt class="small-heading shrink-0 sm:w-28">Watching</dt>
             <dd class="flex-1 text-pretty">
               Finishing up <a href="https://www.youtube.com/watch?v=uXr9Ha9qRHE"
                 >Dan Da Dan (Season 2)</a
@@ -60,8 +58,8 @@ const description = "What I'm up to currently";
               >
             </dd>
           </div>
-          <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 pt-0.5 sm:w-28">Reading</dt>
+          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+            <dt class="small-heading shrink-0 sm:w-28">Reading</dt>
             <dd class="flex-1 text-pretty">
               Finishing up <a
                 href="https://store.dailystoic.com/collections/all-books/products/the-obstacle-is-the-way-expanded-10th-anniversary-edition"
@@ -69,16 +67,16 @@ const description = "What I'm up to currently";
               >
             </dd>
           </div>
-          <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 pt-0.5 sm:w-28">Playing</dt>
+          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+            <dt class="small-heading shrink-0 sm:w-28">Playing</dt>
             <dd class="flex-1 text-pretty">
               <a href="https://www.expedition33.com/"
                 >Clair Obscur: Expedition 33</a
               >
             </dd>
           </div>
-          <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 pt-0.5 sm:w-28">Obsessed with</dt>
+          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+            <dt class="small-heading shrink-0 sm:w-28">Obsessed with</dt>
             <dd class="flex-1 text-pretty">
               This cover of <a href="https://youtu.be/KsrN_jsDFOA?si=dRT_Mg1ffS_CYfIG"
                 >Radiohead's "Creep" by Erin Morton</a
@@ -90,33 +88,31 @@ const description = "What I'm up to currently";
           </div>
         </dl>
       </article>
-      <article
-        class="space-y-5 rounded-lg bg-surface p-5 dark:inset-ring dark:inset-ring-white/5"
-      >
-        <header class="flex items-baseline justify-between gap-4">
+      <article class="now-card">
+        <header class="now-head flex items-baseline justify-between gap-4">
           <span class="small-heading">Previously</span>
           <time datetime="2026-01-01" class="text-sm font-medium text-foreground-muted"
             >January 1, 2026</time
           >
         </header>
-        <div class="space-y-4">
+        <div class="now-body">
           <p>
             Focusing on both my mental and physical health, giving it all at my
             job, and moving into a new apartment next year. I'm setting up the
             systems now to help me stay on track and meet my goals.
           </p>
         </div>
-        <dl class="space-y-3 border-t border-border pt-5">
-          <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 pt-0.5 sm:w-28">Watching</dt>
+        <dl class="now-meta">
+          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+            <dt class="small-heading shrink-0 sm:w-28">Watching</dt>
             <dd class="flex-1 text-pretty">
               <a href="https://www.youtube.com/watch?v=uXr9Ha9qRHE"
                 >Dan Da Dan (Season 2)</a
               >
             </dd>
           </div>
-          <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 pt-0.5 sm:w-28">Reading</dt>
+          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+            <dt class="small-heading shrink-0 sm:w-28">Reading</dt>
             <dd class="flex-1 text-pretty">
               <a
                 href="https://store.dailystoic.com/collections/all-books/products/the-obstacle-is-the-way-expanded-10th-anniversary-edition"
@@ -124,16 +120,16 @@ const description = "What I'm up to currently";
               >
             </dd>
           </div>
-          <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 pt-0.5 sm:w-28">Playing</dt>
+          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+            <dt class="small-heading shrink-0 sm:w-28">Playing</dt>
             <dd class="flex-1 text-pretty">
               <a href="https://www.expedition33.com/"
                 >Clair Obscur: Expedition 33</a
               >
             </dd>
           </div>
-          <div class="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 pt-0.5 sm:w-28">Obsessed with</dt>
+          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+            <dt class="small-heading shrink-0 sm:w-28">Obsessed with</dt>
             <dd class="flex-1 text-pretty">
               <a
                 href="https://www.youtube.com/watch?v=jH3xpS7Q_3E&list=OLAK5uy_k_hE5HhMiwlHuzdS7R17Yk8w68ilnSrMw&index=2"
@@ -146,3 +142,94 @@ const description = "What I'm up to currently";
     </main>
   </div>
 </Layout>
+
+<style>
+  /* Ruled-notebook "journal page" cards.
+     Everything sits on one baseline grid: every line-height and every vertical
+     gap is a multiple of --r, and the horizontal rules repeat every --r at the
+     text baseline (--baseline), so the writing lands ON the lines. Bright-white
+     paper is defined by the hairline + soft shadow + rules; a faint left margin
+     rule (tied to the accent) runs down the side. */
+  .now-card {
+    --r: 1.75rem; /* the single rhythm unit */
+    --baseline: 1.32rem; /* where the rule sits within a line (≈ text baseline) */
+    line-height: var(--r);
+    padding: var(--r) 1.5rem var(--r) 3rem;
+    background-color: oklch(0.999 0 0);
+    /* A single tiled rule line (via background-size/-repeat) rather than
+       repeating-linear-gradient — WebKit drops thin repeating bands partway
+       down a tall element, so the lines would stop rendering in Safari. */
+    background-image:
+      linear-gradient(
+        to right,
+        transparent 0 2.25rem,
+        color-mix(in oklch, var(--link) 35%, transparent) 2.25rem 2.28rem,
+        transparent 2.28rem
+      ),
+      linear-gradient(to bottom, oklch(0.45 0.12 250 / 0.13) 0 1px, transparent 1px);
+    background-size:
+      100% 100%,
+      100% var(--r);
+    background-repeat:
+      no-repeat,
+      repeat;
+    background-position:
+      0 0,
+      0 var(--baseline);
+    border: 1px solid oklch(0 0 0 / 0.07);
+    border-radius: 0.6rem;
+    box-shadow:
+      0 1px 2px oklch(0 0 0 / 0.05),
+      0 12px 32px -18px oklch(0 0 0 / 0.18);
+  }
+
+  /* Lock every line to the rhythm. */
+  .now-card :is(p, dt, dd, span, time, a) {
+    line-height: var(--r);
+  }
+
+  /* All vertical spacing is a whole number of rule lines so nothing drifts. */
+  .now-card > * + *,
+  .now-body > * + * {
+    margin-top: var(--r);
+  }
+  .now-row + .now-row {
+    margin-top: 0; /* rows flow line-by-line, like list entries on the page */
+  }
+
+  /* Inside the cards the "writing" reads as a single ink color: body copy and
+     its values use the foreground, and links drop the accent — the underline
+     alone marks them. (Eyebrow, date, and category labels keep their styling.) */
+  .now-body,
+  .now-row dd {
+    color: var(--color-foreground);
+  }
+  .now-card :is(.now-body, .now-row dd) a {
+    color: var(--color-foreground);
+    text-decoration-color: color-mix(
+      in oklch,
+      var(--color-foreground) 40%,
+      transparent
+    );
+  }
+  .now-card :is(.now-body, .now-row dd) a:hover {
+    color: var(--color-foreground);
+    text-decoration-color: currentColor;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .now-card {
+      background-color: oklch(0.21 0 0);
+      background-image:
+        linear-gradient(
+          to right,
+          transparent 0 2.25rem,
+          color-mix(in oklch, var(--link) 42%, transparent) 2.25rem 2.28rem,
+          transparent 2.28rem
+        ),
+        linear-gradient(to bottom, oklch(0.92 0 0 / 0.07) 0 1px, transparent 1px);
+      border-color: oklch(1 0 0 / 0.08);
+      box-shadow: none;
+    }
+  }
+</style>
