@@ -96,7 +96,7 @@ const headings = (appearance.body ?? [])
       <h1 class="mb-1">{appearance.title}</h1>
       {
         appearance.publishedAt && !appearance.updatedAt && (
-          <span class="font-mono-custom font-medium">
+          <span class="text-sm text-foreground-subtle">
             {formatDateLong(appearance.publishedAt)}
           </span>
         )
@@ -104,7 +104,7 @@ const headings = (appearance.body ?? [])
       {
         appearance.updatedAt && (
           <div class="flex flex-col gap-y-1">
-            <span class="font-mono-custom font-medium">
+            <span class="text-sm text-foreground-subtle">
               Originally published: {formatDateLong(appearance.publishedAt)}
             </span>
             <span class="badge w-fit">

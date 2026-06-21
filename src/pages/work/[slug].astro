@@ -91,7 +91,7 @@ const headings = (project.body ?? [])
       <h1 class="mb-2">{project.title}</h1>
       {
         project.publishedAt && !project.updatedAt && (
-          <span class="font-mono-custom font-medium">
+          <span class="text-sm text-foreground-subtle">
             {formatDateLong(project.publishedAt)}
           </span>
         )
@@ -99,7 +99,7 @@ const headings = (project.body ?? [])
       {
         project.updatedAt && (
           <div class="flex flex-col gap-y-1">
-            <span class="font-mono-custom font-medium">
+            <span class="text-sm text-foreground-subtle">
               Originally published: {formatDateLong(project.publishedAt)}
             </span>
             <span class="badge w-fit">

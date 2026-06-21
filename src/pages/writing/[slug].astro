@@ -87,7 +87,7 @@ const headings = (post.body ?? [])
       <h1 class="mb-1">{post.title}</h1>
       {
         post.publishedAt && !post.updatedAt && (
-          <span class="font-mono-custom font-medium">
+          <span class="text-sm text-foreground-subtle">
             {formatDateLong(post.publishedAt)}
           </span>
         )
@@ -95,7 +95,7 @@ const headings = (post.body ?? [])
       {
         post.updatedAt && (
           <div class="flex flex-col gap-y-1">
-            <span class="font-mono-custom font-medium">
+            <span class="text-sm text-foreground-subtle">
               Originally published: {formatDateLong(post.publishedAt)}
             </span>
             <span class="badge w-fit">
