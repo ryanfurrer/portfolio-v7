@@ -41,7 +41,7 @@ export default function TocDrawer({ headings }: Props) {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="max-h-[60vh] overflow-y-auto overscroll-contain rounded-t-xl !ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=open]:!duration-300 data-[state=closed]:!duration-[250ms]"
+        className="max-h-[60vh] overflow-y-auto overscroll-contain rounded-t-xl !ease-ios data-[state=open]:!duration-300 data-[state=closed]:!duration-[250ms]"
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => {
           e.preventDefault();

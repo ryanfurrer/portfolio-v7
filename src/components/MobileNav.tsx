@@ -59,7 +59,7 @@ export default function MobileNav({ navItems, pathname }: Props) {
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="w-3/4 rounded-l-xl dark:shadow-none dark:inset-ring dark:inset-ring-white/5 !ease-[cubic-bezier(0.23,1,0.32,1)] data-[state=open]:!duration-300 data-[state=closed]:!duration-[250ms]"
+        className="w-3/4 rounded-l-xl dark:shadow-none dark:inset-ring dark:inset-ring-white/5 !ease-ios data-[state=open]:!duration-300 data-[state=closed]:!duration-[250ms]"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <SheetHeader>
