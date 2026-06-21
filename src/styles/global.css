@@ -250,18 +250,22 @@ html {
     text-wrap: balance;
   }
 
+  /* Body links read as "ink" at rest — foreground text + a faint underline so
+     they're identifiable without color — and reveal the accent on hover. Keeps
+     the accent reserved for interaction + deliberate CTAs rather than spending
+     it on every inline link. */
   main a:not(.no-underline) {
     font-weight: inherit;
-    color: var(--link);
+    color: var(--color-foreground);
     text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--link) 30%, transparent);
+    text-decoration-color: color-mix(in oklch, var(--color-foreground) 35%, transparent);
     text-underline-offset: 2px;
     transition-property: color, text-decoration-color;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
     &:hover {
-      color: var(--link-hover);
-      text-decoration-color: currentColor;
+      color: var(--link);
+      text-decoration-color: var(--link);
     }
   }
 
@@ -339,12 +343,12 @@ html {
   }
 
   .prose a:not(.no-underline) {
-    color: var(--link) !important;
+    color: var(--color-foreground) !important;
     font-weight: inherit !important;
     text-decoration: underline !important;
     text-decoration-color: color-mix(
-      in srgb,
-      var(--link) 30%,
+      in oklch,
+      var(--color-foreground) 35%,
       transparent
     ) !important;
     text-underline-offset: 2px;
@@ -352,8 +356,8 @@ html {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
     &:hover {
-      color: var(--link-hover) !important;
-      text-decoration-color: currentColor !important;
+      color: var(--link) !important;
+      text-decoration-color: var(--link) !important;
     }
   }
 
