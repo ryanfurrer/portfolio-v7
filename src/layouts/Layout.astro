@@ -24,28 +24,10 @@ const {
   noFooter = false,
   maxWidth = "lg",
 } = Astro.props;
-
-const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <html lang="en">
-  <head>
-    <Head title={title} description={description} ogImage={ogImage} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-    <title>{title}</title>
-    {description && <meta name="description" content={description} />}
-    {/* Open Graph meta tags */}
-    <meta property="og:title" content={title} />
-    {description && <meta property="og:description" content={description} />}
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={ogUrl} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
-    {/* Twitter Card meta tags */}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    {description && <meta name="twitter:description" content={description} />}
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
-  </head>
+  <Head title={title} description={description} ogImage={ogImage} />
   <body class="bg-background text-foreground-muted antialiased">
     <a
       href="#main-content"

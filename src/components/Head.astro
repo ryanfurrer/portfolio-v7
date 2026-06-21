@@ -65,13 +65,11 @@ const ogImageUrl = ogImage
   <link rel="sitemap" href="/sitemap-index.xml" />
   <title>{title}</title>
   {description && <meta name="description" content={description} />}
-  {/* Open Graph meta tags */}
   <meta property="og:title" content={title} />
   {description && <meta property="og:description" content={description} />}
   <meta property="og:type" content="website" />
   <meta property="og:url" content={ogUrl} />
   <meta property="og:image" content={ogImageUrl} />
-  {/* Twitter Card meta tags */}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   {description && <meta name="twitter:description" content={description} />}
