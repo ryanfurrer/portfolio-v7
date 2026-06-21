@@ -68,6 +68,15 @@ html {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-link: var(--link);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-badge: var(--badge);
+  --color-badge-foreground: var(--badge-foreground);
+  /* Soft Apple-style elevation — pair with a hairline ring, never a solid border */
+  --shadow-elevated: 0 1px 2px -1px oklch(0 0 0 / 0.06),
+    0 6px 20px -4px oklch(0 0 0 / 0.08);
   --font-sans: "Geist", "Inter", ui-sans-serif, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
   --font-cursive: "Permanent Marker", ui-cursive, cursive;
@@ -112,9 +121,18 @@ html {
 }
 
 :root {
+  color-scheme: light;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --foreground-muted: #6e6e73;
+  /* Apple-style neutral text hierarchy (light) */
+  --foreground: #1d1d1f; /* primary — headings & key copy (Apple near-black, not pure black) */
+  --foreground-muted: #6e6e73; /* secondary — body & descriptions */
+  --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
+  /* Recessed off-white surfaces — wells, hover highlights, inline code */
+  --surface: oklch(0.971 0 0); /* ≈ #f5f5f7, Apple section gray */
+  --surface-hover: oklch(0.952 0 0);
+  /* Neutral metadata pill (replaces hardcoded amber "Updated" badge) */
+  --badge: oklch(0.971 0 0);
+  --badge-foreground: var(--foreground-muted);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --card-foreground-muted: #6e6e73;
@@ -129,10 +147,13 @@ html {
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
+  /* Single reserved accent — interactivity only, the way Apple uses blue */
+  --link: #0066cc;
+  --link-hover: #0051a8;
   --link-underline: #bbb;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --border: oklch(0 0 0 / 0.08); /* hairline — opacity-based per surface rules */
+  --input: oklch(0 0 0 / 0.12);
   --ring: oklch(0.708 0 0);
   --radius: 0.625rem;
   --accent-foreground: oklch(0.205 0 0);
@@ -153,9 +174,19 @@ html {
 
 @media (prefers-color-scheme: dark) {
   :root {
+    color-scheme: dark;
     --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --foreground-muted: #86868b;
+    /* Apple-style neutral text hierarchy (dark) */
+    --foreground: #f5f5f7; /* primary */
+    --foreground-muted: #86868b; /* secondary */
+    --foreground-subtle: #6e6e73; /* tertiary */
+    --link: #2997ff; /* Apple blue (dark) */
+    --link-hover: #5aaeff;
+    /* Recessed surfaces (dark) — refined in a later dark-mode pass */
+    --surface: oklch(0.205 0 0);
+    --surface-hover: oklch(0.249 0 0);
+    --badge: oklch(0.269 0 0);
+    --badge-foreground: var(--foreground-muted);
     --card: oklch(0.205 0 0);
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
@@ -195,15 +226,30 @@ html {
     @apply border-border outline-ring/50;
   }
 
+  /* Apple-style headings: semibold + tight tracking. Components that set their
+     own weight (.small-heading, font-medium/semibold utilities) still win. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--foreground);
+    font-weight: 600;
+    letter-spacing: -0.022em;
+  }
+
   main a:not(.no-underline) {
     font-weight: inherit;
+    color: var(--link);
     text-decoration: underline;
-    text-decoration-color: var(--link-underline);
+    text-decoration-color: color-mix(in srgb, var(--link) 30%, transparent);
+    text-underline-offset: 2px;
     transition-property: color, text-decoration-color;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
     &:hover {
-      color: var(--color-foreground);
+      color: var(--link-hover);
       text-decoration-color: currentColor;
     }
   }
@@ -239,8 +285,24 @@ html {
   .small-heading {
     font-size: 0.75rem;
     font-weight: 500;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: var(--foreground-subtle);
+  }
+
+  /* Neutral metadata pill — e.g. "Updated", year chips */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 9999px;
+    background-color: var(--badge);
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--badge-foreground);
+    white-space: nowrap;
   }
 
   .squircle {
@@ -266,15 +328,20 @@ html {
   }
 
   .prose a:not(.no-underline) {
-    color: inherit !important;
+    color: var(--link) !important;
     font-weight: inherit !important;
     text-decoration: underline !important;
-    text-decoration-color: var(--link-underline) !important;
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--link) 30%,
+      transparent
+    ) !important;
+    text-underline-offset: 2px;
     transition-property: color, text-decoration-color;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
     &:hover {
-      color: var(--color-foreground) !important;
+      color: var(--link-hover) !important;
       text-decoration-color: currentColor !important;
     }
   }
@@ -282,7 +349,36 @@ html {
   .prose b,
   .prose strong {
     font-weight: 600 !important;
-    color: var(--color-accent) !important;
+    color: var(--color-foreground) !important;
+  }
+
+  /* Inline code — subtle pill; drop the plugin's backtick pseudo-content */
+  .prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    font-weight: 500;
+    background-color: var(--surface);
+    color: var(--color-foreground);
+    padding: 0.125em 0.375em;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+
+  .prose :not(pre) > code::before,
+  .prose :not(pre) > code::after {
+    content: none !important;
+  }
+
+  /* Code blocks — soften the corners and fence them in a hairline */
+  .prose pre {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+
+  .prose blockquote {
+    font-style: normal;
+    border-inline-start: 2px solid var(--border);
+    color: var(--color-foreground-muted);
   }
 
   .prose img {
@@ -307,8 +403,7 @@ html {
     right: 0;
     top: var(--dir-hover-y, 0);
     height: var(--dir-hover-h, 0);
-    background-color: var(--card);
-    border: 1px solid var(--border);
+    background-color: var(--surface);
     border-radius: var(--radius-md);
     pointer-events: none;
     z-index: -1;
@@ -334,8 +429,7 @@ html {
   /* CSS fallback hover effect when JS hasn't initialized (desktop only) */
   @media (hover: hover) {
     body:not([data-dir-hover-active]) a[data-dir-hover="item"]:hover {
-      background-color: var(--card);
-      border-color: var(--border);
+      background-color: var(--surface);
     }
   }
 }

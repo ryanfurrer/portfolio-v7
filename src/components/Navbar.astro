@@ -1,5 +1,6 @@
 ---
 import logo from "@/assets/logo.svg";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   {
@@ -15,6 +16,10 @@ const navItems = [
     href: "/appearances",
   },
 ];
+
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) =>
+  href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 ---
 
 <nav class="mb-16 md:px-2">
@@ -22,17 +27,23 @@ const navItems = [
     <a
       href="/"
       name="go to home page"
-      class="transition-all hover:saturate-100 focus:saturate-100 md:saturate-70"
+      class="rounded-sm transition-all hover:saturate-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-link md:saturate-70"
       ><img src={logo.src} alt="Ryan Furrer" class="size-8" /></a
     >
-    <ul class="flex gap-4 text-sm">
+    <ul class="flex gap-4 text-sm" role="list">
       {
         navItems.map((item) => (
           <li>
             <a
               href={item.href}
               name={`go to ${item.label.toLowerCase()} page`}
-              class="text-color-hover font-medium focus:text-foreground"
+              aria-current={isActive(item.href) ? "page" : undefined}
+              class={cn(
+                "text-color-hover font-medium focus:text-foreground aria-[current=page]:text-foreground",
+                isActive(item.href)
+                  ? "text-foreground"
+                  : "text-foreground-muted",
+              )}
             >
               {item.label}
             </a>

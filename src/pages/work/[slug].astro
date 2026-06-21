@@ -102,8 +102,8 @@ const headings = (project.body ?? [])
             <span class="font-mono-custom font-medium">
               Originally published: {formatDateLong(project.publishedAt)}
             </span>
-            <span class="font-mono-custom w-fit bg-amber-400/50 font-medium text-foreground">
-              Updated: {formatDateLong(project.updatedAt)}
+            <span class="badge w-fit">
+              Updated {formatDateLong(project.updatedAt)}
             </span>
           </div>
         )

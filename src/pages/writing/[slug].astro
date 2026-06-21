@@ -98,8 +98,8 @@ const headings = (post.body ?? [])
             <span class="font-mono-custom font-medium">
               Originally published: {formatDateLong(post.publishedAt)}
             </span>
-            <span class="font-mono-custom w-fit bg-amber-400/50 font-medium text-foreground">
-              Updated: {formatDateLong(post.updatedAt)}
+            <span class="badge w-fit">
+              Updated {formatDateLong(post.updatedAt)}
             </span>
           </div>
         )

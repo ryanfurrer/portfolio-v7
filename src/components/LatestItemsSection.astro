@@ -16,7 +16,7 @@ const { title, items, basePath } = Astro.props;
   <h2 class="small-heading md:px-2">
     {title}
   </h2>
-  <ul class="flex flex-col gap-px">
+  <ul class="flex flex-col gap-px" role="list">
     {
       items.map((item) => (
         <li>

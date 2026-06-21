@@ -21,14 +21,14 @@ December: #D9E7F5
 ---
 
 <Layout title={title} description={description}>
-  <div class="space-y-8 text-foreground">
-    <header class="md:px-2">
-      <h1>{title}</h1>
-      <p class="text-foreground-muted">{description}</p>
+  <div class="space-y-8">
+    <header class="space-y-2 md:px-2">
+      <h1 class="text-2xl text-foreground sm:text-3xl">{title}</h1>
+      <p class="max-w-[60ch] text-pretty text-foreground-muted">{description}</p>
     </header>
-    <main class="space-y-8 md:px-2">
+    <main class="space-y-6 md:px-2">
       <article
-        class="dark:to-[#0C263B]/05 space-y-4 rounded-r-lg border-l-4 border-[#0C263B]/50 bg-linear-to-br from-[#0C263B]/20 to-[#0C263B]/5 p-4 saturate-500 dark:border-[#0C263B] dark:from-[#0C263B]/90 dark:saturate-200"
+        class="space-y-4 rounded-r-lg border-l-[3px] border-[#0C263B] bg-surface p-5"
       >
         <span class="font-mono-custom inline-block font-medium"
           >February 2, 2026</span
@@ -56,7 +56,7 @@ December: #D9E7F5
           >.
         </p>
         <section>
-          <ul class="space-y-1">
+          <ul class="space-y-1" role="list">
             <li>
               Watching: Finishing up <a
                 href="https://www.youtube.com/watch?v=uXr9Ha9qRHE"
@@ -92,7 +92,7 @@ December: #D9E7F5
         </section>
       </article>
       <article
-        class="space-y-4 rounded-r-lg border-l-4 border-[#8EB2C6] bg-linear-to-br from-[#8EB2C6]/40 to-[#8EB2C6]/5 p-4 saturate-150 dark:border-[#8EB2C6]/50 dark:from-[#8EB2C6]/40 dark:to-[#8EB2C6]/5 dark:saturate-200"
+        class="space-y-4 rounded-r-lg border-l-[3px] border-[#8EB2C6] bg-surface p-5"
       >
         <span class="font-mono-custom inline-block font-medium"
           >January 1, 2026</span
@@ -103,7 +103,7 @@ December: #D9E7F5
           systems now to help me stay on track and meet my goals.
         </p>
         <section>
-          <ul class="space-y-1">
+          <ul class="space-y-1" role="list">
             <li>
               Watching: <a href="https://www.youtube.com/watch?v=uXr9Ha9qRHE"
                 >Dan Da Dan (Season 2)</a

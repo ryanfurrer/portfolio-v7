@@ -9,6 +9,7 @@ const { orientation = "horizontal" } = Astro.props;
 ---
 
 <ul
+  role="list"
   class:list={orientation === "vertical"
     ? "flex flex-col gap-y-4 md:gap-y-2"
     : "flex gap-x-4 md:gap-x-2"}
