@@ -429,7 +429,6 @@ html {
       var(--color-foreground) 35%,
       transparent
     ) !important;
-    text-underline-offset: 2px;
     text-decoration-skip-ink: none;
     transition-property: color, text-decoration-color;
     transition-timing-function: var(--ease-out-curve);
