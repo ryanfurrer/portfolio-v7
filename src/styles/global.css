@@ -223,6 +223,14 @@ html {
     @apply border-border outline-ring/50;
   }
 
+  /* Consistent keyboard focus ring across interactive elements — uses the
+     reserved accent so focus reads as "interactive". Low specificity via
+     :where() so components can still override when needed. */
+  :where(a, button, summary, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 2px;
+  }
+
   /* Apple-style headings: semibold + tight tracking. Components that set their
      own weight (.small-heading, font-medium/semibold utilities) still win. */
   h1,
@@ -430,6 +438,12 @@ html {
       top 0.2s ease,
       height 0.2s ease,
       opacity 0.15s ease;
+  }
+
+  /* While snapping the highlight to the pointer's entry edge, suppress the
+     slide transition so it can emanate from that point (directional entry). */
+  ul[data-dir-hover-list="items"][data-dir-snap]::before {
+    transition: none;
   }
 
   /* Reduced motion: disable sliding transitions */

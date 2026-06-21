@@ -23,9 +23,18 @@ function findListContainer(element: HTMLAnchorElement): HTMLUListElement | null 
 }
 
 /**
- * Update the highlight position and visibility for a list
+ * Update the highlight position and visibility for a list.
+ *
+ * When the highlight was hidden, it first snaps (without transition) to the
+ * pointer's entry point — `entryClientY` — then transitions to the hovered
+ * item, so it appears to grow out of wherever the cursor crossed into the
+ * list (directional entry). When already visible, it simply slides.
  */
-function updateHighlight(item: HTMLAnchorElement, list: HTMLUListElement): void {
+function updateHighlight(
+  item: HTMLAnchorElement,
+  list: HTMLUListElement,
+  entryClientY?: number,
+): void {
   const itemRect = item.getBoundingClientRect();
   const listRect = list.getBoundingClientRect();
 
@@ -33,6 +42,23 @@ function updateHighlight(item: HTMLAnchorElement, list: HTMLUListElement): void 
   const h = itemRect.height;
 
   list.setAttribute("data-dir-hover-list", "items");
+
+  const wasHidden = !currentHovered.has(list);
+  if (wasHidden) {
+    // Clamp the entry point within the list so the seed never starts outside.
+    const rawStart =
+      entryClientY != null ? entryClientY - listRect.top : y + h / 2;
+    const startY = Math.max(0, Math.min(rawStart, listRect.height));
+    list.setAttribute("data-dir-snap", "");
+    list.style.setProperty("--dir-hover-y", `${startY}px`);
+    list.style.setProperty("--dir-hover-h", "0px");
+    list.style.setProperty("--dir-hover-opacity", "1");
+    // Force a reflow so the seeded position applies before we re-enable the
+    // transition and move to the target.
+    void list.offsetHeight;
+    list.removeAttribute("data-dir-snap");
+  }
+
   list.style.setProperty("--dir-hover-y", `${y}px`);
   list.style.setProperty("--dir-hover-h", `${h}px`);
   list.style.setProperty("--dir-hover-opacity", "1");
@@ -62,7 +88,7 @@ function handlePointerOver(e: PointerEvent): void {
   const currentlyHovered = currentHovered.get(list);
   if (currentlyHovered === item) return;
 
-  updateHighlight(item, list);
+  updateHighlight(item, list, e.clientY);
   currentHovered.set(list, item);
 }
 

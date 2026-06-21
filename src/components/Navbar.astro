@@ -48,7 +48,7 @@ const isActive = (href: string) =>
         rf
       </span>
     </a>
-    <ul class="hidden gap-4 text-sm sm:flex" role="list">
+    <ul class="hidden items-center gap-1 text-sm sm:flex" role="list">
       {
         navItems.map((item) => (
           <li>
@@ -57,9 +57,9 @@ const isActive = (href: string) =>
               name={`go to ${item.label.toLowerCase()} page`}
               aria-current={isActive(item.href) ? "page" : undefined}
               class={cn(
-                "text-color-hover font-medium focus:text-foreground aria-[current=page]:text-foreground",
+                "block rounded-md px-3 py-1.5 font-medium transition-colors hover:bg-surface hover:text-foreground",
                 isActive(item.href)
-                  ? "text-foreground"
+                  ? "bg-surface text-foreground"
                   : "text-foreground-muted",
               )}
             >

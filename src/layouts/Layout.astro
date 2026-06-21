@@ -47,6 +47,12 @@ const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
     {ogImage && <meta name="twitter:image" content={ogImage} />}
   </head>
   <body class="bg-background text-foreground-muted antialiased">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-background"
+    >
+      Skip to content
+    </a>
     <div class="mx-auto max-w-280 px-4 py-8 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
       <!-- Navbar: center column, row 1 — above the side gutters -->
       {
@@ -71,8 +77,10 @@ const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
 
       <!-- Center: row 2, same width on every page -->
       <div
+        id="main-content"
+        tabindex="-1"
         class={cn(
-          "space-y-16 min-w-0 lg:col-start-2 lg:row-start-2",
+          "space-y-16 min-w-0 scroll-mt-8 focus:outline-none lg:col-start-2 lg:row-start-2",
           maxWidth === "sm"
             ? "max-w-sm mx-auto lg:max-w-none lg:mx-0"
             : "max-w-2xl mx-auto lg:max-w-none lg:mx-0",
