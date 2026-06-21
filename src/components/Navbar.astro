@@ -55,9 +55,10 @@ const isActive = (href: string) =>
             <a
               href={item.href}
               name={`go to ${item.label.toLowerCase()} page`}
+              data-dir-hover="nav"
               aria-current={isActive(item.href) ? "page" : undefined}
               class={cn(
-                "block rounded-md px-3 py-1.5 font-medium transition-colors hover:bg-surface hover:text-foreground",
+                "block rounded-md px-3 py-1.5 font-medium transition-colors hover:text-foreground",
                 isActive(item.href)
                   ? "bg-surface text-foreground"
                   : "text-foreground-muted",

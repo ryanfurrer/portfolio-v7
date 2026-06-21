@@ -441,27 +441,53 @@ html {
       opacity 0.15s ease;
   }
 
+  /* Horizontal variant — primary navbar */
+  ul[data-dir-hover-list="nav"] {
+    position: relative;
+    isolation: isolate;
+  }
+
+  ul[data-dir-hover-list="nav"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--dir-hover-x, 0);
+    width: var(--dir-hover-w, 0);
+    background-color: var(--surface);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+    z-index: -1;
+    opacity: var(--dir-hover-opacity, 0);
+    transition:
+      left 0.2s ease,
+      width 0.2s ease,
+      opacity 0.15s ease;
+  }
+
   /* While snapping the highlight to the pointer's entry edge, suppress the
      slide transition so it can emanate from that point (directional entry). */
-  ul[data-dir-hover-list="items"][data-dir-snap]::before {
+  ul[data-dir-hover-list="items"][data-dir-snap]::before,
+  ul[data-dir-hover-list="nav"][data-dir-snap]::before {
     transition: none;
   }
 
   /* Reduced motion: disable sliding transitions */
   @media (prefers-reduced-motion: reduce) {
-    ul[data-dir-hover-list="items"]::before {
+    ul[data-dir-hover-list="items"]::before,
+    ul[data-dir-hover-list="nav"]::before {
       transition: opacity 0.15s ease;
     }
   }
 
   /* Ensure items are positioned correctly relative to the highlight */
-  a[data-dir-hover="item"] {
+  a[data-dir-hover] {
     position: relative;
   }
 
   /* CSS fallback hover effect when JS hasn't initialized (desktop only) */
   @media (hover: hover) {
-    body:not([data-dir-hover-active]) a[data-dir-hover="item"]:hover {
+    body:not([data-dir-hover-active]) a[data-dir-hover]:hover {
       background-color: var(--surface);
     }
   }
