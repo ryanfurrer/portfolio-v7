@@ -113,6 +113,11 @@ function handleFocusIn(e: FocusEvent): void {
   const item = findItemElement(e.target);
   if (!item) return;
 
+  // Only show the highlight for keyboard focus — a tap also focuses the link
+  // (but isn't :focus-visible), and would otherwise leave the highlight stuck
+  // on under the finger on touch devices.
+  if (!item.matches(":focus-visible")) return;
+
   const list = findListContainer(item);
   if (!list) return;
 
