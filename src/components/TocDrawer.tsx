@@ -35,7 +35,7 @@ export default function TocDrawer({ headings }: Props) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         ref={triggerRef}
-        className="fixed bottom-6 right-6 z-30 lg:hidden bg-foreground text-background text-sm font-medium px-4 py-2 rounded-full shadow-lg hover:opacity-90 transition-opacity"
+        className="fixed bottom-6 right-6 z-30 lg:hidden bg-foreground text-background text-sm font-medium px-4 py-2 rounded-full shadow-lg dark:shadow-none hover:opacity-90 transition-opacity"
       >
         Table of Contents
       </SheetTrigger>

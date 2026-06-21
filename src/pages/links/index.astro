@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { urlForImage } from "@/sanity/lib/url-for-image";
 import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
-import { formatFollowerCount, getColorClasses } from "./utils";
+import { formatFollowerCount, getColorClasses } from "@/utils/links";
 
 const LATEST_CONTENT_QUERY = `{
   "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},

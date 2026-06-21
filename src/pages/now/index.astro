@@ -3,21 +3,6 @@ import Layout from "@/layouts/Layout.astro";
 
 const title = "Now";
 const description = "What I'm up to currently";
-
-/* colors from: calendar wallpapers by Rob McCombe
-January: #8EB2C6
-Feburary: #0C263B
-March: #A0C2AF
-April: #577B5E
-May: #2B3A27
-June: #F3C93D
-July: #F88E3C
-August: #EA6644
-September: #D9CFB9
-October: #816A50
-November: #3D2E28
-December: #D9E7F5
-*/
 ---
 
 <Layout title={title} description={description}>
@@ -28,7 +13,7 @@ December: #D9E7F5
     </header>
     <main class="space-y-6 md:px-2">
       <article
-        class="space-y-4 rounded-r-lg border-l-[3px] border-[#0C263B] bg-surface p-5"
+        class="space-y-4 rounded-lg bg-surface p-5 dark:inset-ring dark:inset-ring-white/5"
       >
         <span class="font-mono-custom inline-block font-medium"
           >February 2, 2026</span
@@ -92,7 +77,7 @@ December: #D9E7F5
         </section>
       </article>
       <article
-        class="space-y-4 rounded-r-lg border-l-[3px] border-[#8EB2C6] bg-surface p-5"
+        class="space-y-4 rounded-lg bg-surface p-5 dark:inset-ring dark:inset-ring-white/5"
       >
         <span class="font-mono-custom inline-block font-medium"
           >January 1, 2026</span
