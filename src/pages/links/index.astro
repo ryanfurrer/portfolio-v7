@@ -9,11 +9,10 @@ import profilePicture from "@/assets/profile-picture.webp";
 import Button from "@/components/ui/Button.astro";
 import LinksCard from "@/components/ui/LinksCard.astro";
 import Layout from "@/layouts/Layout.astro";
-import { cn } from "@/lib/utils";
 import { urlForImage } from "@/sanity/lib/url-for-image";
 import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
-import { formatFollowerCount, getColorClasses } from "@/utils/links";
+import { formatFollowerCount } from "@/utils/links";
 
 const LATEST_CONTENT_QUERY = `{
   "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},
@@ -74,7 +73,6 @@ const socialLinks = [
     label: "Twitter/X",
     href: "https://x.com/ryandotfurrer",
     followerCount: 970,
-    color: "zinc",
     icon: XIcon,
     iconFill: "fill-white",
     iconBackground: "bg-zinc-950",
@@ -84,7 +82,6 @@ const socialLinks = [
     label: "Bluesky",
     href: "https://bsky.app/profile/ryandotfurrer.bsky.social",
     followerCount: 764,
-    color: "sky",
     icon: BlueskyIcon,
     iconFill: "fill-white",
     iconBackground: "bg-sky-500",
@@ -94,7 +91,6 @@ const socialLinks = [
     label: "Twitch",
     href: "https://www.twitch.tv/ryandotfurrer",
     followerCount: 178,
-    color: "violet",
     icon: TwitchIcon,
     iconFill: "fill-white",
     iconBackground: "bg-violet-600",
@@ -104,7 +100,6 @@ const socialLinks = [
     label: "YouTube",
     href: "https://www.youtube.com/@ryandotfurrer",
     followerCount: 46,
-    color: "rose",
     icon: YoutubeIcon,
     iconFill: "fill-white",
     iconBackground: "bg-rose-600",
@@ -114,7 +109,6 @@ const socialLinks = [
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/ryanfurrer/",
     followerCount: 1920,
-    color: "blue",
     icon: LinkedinIcon,
     iconFill: "fill-white stroke-none",
     iconBackground: "bg-blue-600",
@@ -124,7 +118,6 @@ const socialLinks = [
     label: "GitHub",
     href: "https://github.com/ryandotfurrer",
     followerCount: 59,
-    color: "zinc",
     icon: GithubIcon,
     iconFill: "fill-white",
     iconBackground: "bg-zinc-950",
@@ -175,10 +168,7 @@ const socialLinks = [
               return (
                 <LinksCard
                   href={link.href}
-                  class={cn(
-                    "squircle rounded-3xl p-4 ring-offset-2 ring-offset-background transition hover:saturate-150 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:hover:brightness-105",
-                    getColorClasses(link.color),
-                  )}
+                  class="squircle rounded-3xl bg-surface p-4 hover:bg-surface-hover"
                 >
                   <div class="flex items-start justify-between gap-2">
                     <IconComponent
@@ -188,20 +178,15 @@ const socialLinks = [
                         link.iconBackground,
                       ]}
                     />
-                    <span
-                      class={cn(
-                        "squircle pointer-events-none inline-flex items-center justify-center rounded-lg px-2 py-1 text-xs font-medium text-inherit",
-                        getColorClasses(link.color),
-                      )}
-                    >
+                    <span class="pointer-events-none inline-flex items-center justify-center rounded-md px-2 py-1 text-xs font-medium text-foreground-subtle">
                       {link.actionLabel}
                     </span>
                   </div>
                   <div class="mt-3 space-y-0.5">
                     <h3 class="small-heading leading-none">{link.label}</h3>
-                    <p class="text-4xl font-bold leading-none dark:text-white!">
+                    <p class="text-4xl font-bold leading-none text-foreground">
                       {formatFollowerCount(link.followerCount)}
-                      <span class="mt-1 block text-sm font-normal opacity-60">
+                      <span class="mt-1 block text-sm font-normal text-foreground-subtle">
                         {link.actionLabel === "Subscribe"
                           ? "subscribers"
                           : "followers"}
