@@ -38,15 +38,27 @@ const isActive = (href: string) =>
     <a
       href="/"
       name="go to home page"
-      class="rounded-[10px] transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-link"
+      class="block rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-link"
     >
-      <span
-        class="squircle flex size-8 items-center justify-center rounded-[10px] bg-foreground text-[0.8125rem] font-semibold tracking-tight text-background lowercase"
-        aria-label="Ryan Furrer"
+      <svg
+        viewBox="0 0 4167 4167"
+        class="size-8"
         role="img"
+        aria-label="Ryan Furrer"
+        fill="none"
+        stroke="#ed3f1c"
+        stroke-width="208.33"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       >
-        rf
-      </span>
+        <circle cx="2083.33" cy="2083.33" r="1875"></circle>
+        <path
+          d="M3409.16,757.508c365.871,365.872 68.83,1257 -662.913,1988.74c-731.743,731.743 -1622.87,1028.78 -1988.74,662.913c-365.871,-365.872 -68.83,-1257 662.913,-1988.74c731.743,-731.743 1622.87,-1028.78 1988.74,-662.913Z"
+        ></path>
+        <path
+          d="M757.508,757.508c365.872,-365.871 1257,-68.83 1988.74,662.913c731.743,731.743 1028.78,1622.87 662.913,1988.74c-365.872,365.871 -1257,68.83 -1988.74,-662.913c-731.743,-731.743 -1028.78,-1622.87 -662.913,-1988.74Z"
+        ></path>
+      </svg>
     </a>
     <ul class="hidden items-center gap-1 text-sm sm:flex" role="list">
       {

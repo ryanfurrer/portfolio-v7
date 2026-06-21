@@ -1,22 +1,17 @@
-<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    .bg { fill: #1d1d1f; }
-    .fg { fill: #ffffff; }
-    @media (prefers-color-scheme: dark) {
-      .bg { fill: #f5f5f7; }
-      .fg { fill: #1a1a1a; }
-    }
-  </style>
-  <rect class="bg" width="128" height="128" rx="29" ry="29" />
-  <text
-    class="fg"
-    x="64"
-    y="64"
-    text-anchor="middle"
-    dominant-baseline="central"
-    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-    font-weight="700"
-    font-size="62"
-    letter-spacing="-3"
-  >rf</text>
+<svg
+  viewBox="0 0 4167 4167"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="none"
+  stroke="#ed3f1c"
+  stroke-width="208.33"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="2083.33" cy="2083.33" r="1875" fill="#fafafa" />
+  <path
+    d="M3409.16,757.508c365.871,365.872 68.83,1257 -662.913,1988.74c-731.743,731.743 -1622.87,1028.78 -1988.74,662.913c-365.871,-365.872 -68.83,-1257 662.913,-1988.74c731.743,-731.743 1622.87,-1028.78 1988.74,-662.913Z"
+  />
+  <path
+    d="M757.508,757.508c365.872,-365.871 1257,-68.83 1988.74,662.913c731.743,731.743 1028.78,1622.87 662.913,1988.74c-365.872,365.871 -1257,68.83 -1988.74,-662.913c-731.743,-731.743 -1028.78,-1622.87 -662.913,-1988.74Z"
+  />
 </svg>
