@@ -35,34 +35,45 @@ const {
     >
       Skip to content
     </a>
-    <div class="mx-auto max-w-280 px-4 py-8 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
-      <!-- Navbar: center column, row 1 — above the side gutters -->
-      {
-        !noNavbar && (
-          <div
-            class={cn(
-              "lg:col-start-2",
-              maxWidth === "sm"
-                ? "mx-auto max-w-sm lg:mx-0 lg:max-w-none"
-                : "mx-auto max-w-2xl lg:mx-0 lg:max-w-none",
-            )}
-          >
-            <Navbar />
+    <!-- Sticky header: transparent at the top, then a translucent blurred bar
+         with a hairline border once scrolled (data-scrolled, set by
+         sticky-header.ts). will-change:transform pins it to its own compositing
+         layer so iOS Safari repaints it (and its backdrop-filter) smoothly during
+         momentum scroll — otherwise it only redraws on scroll-up. -->
+    {
+      !noNavbar && (
+        <header
+          data-site-header
+          class="sticky top-0 z-40 [will-change:transform] [transform:translateZ(0)] border-b border-transparent transition-[background-color,border-color] duration-300 ease-out data-[scrolled]:border-border data-[scrolled]:bg-background/70 data-[scrolled]:backdrop-blur-xl"
+        >
+          <div class="mx-auto max-w-280 px-4 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
+            <div
+              class={cn(
+                "py-4 lg:col-start-2",
+                maxWidth === "sm"
+                  ? "mx-auto max-w-sm lg:mx-0 lg:max-w-none"
+                  : "mx-auto max-w-2xl lg:mx-0 lg:max-w-none",
+              )}
+            >
+              <Navbar />
+            </div>
           </div>
-        )
-      }
+        </header>
+      )
+    }
 
-      <!-- Left gutter: row 2, starts level with content (below Navbar) -->
-      <aside class="hidden lg:col-start-1 lg:row-start-2 lg:block">
+    <div class="mx-auto max-w-280 px-4 py-8 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
+      <!-- Left gutter -->
+      <aside class="hidden lg:col-start-1 lg:block">
         <slot name="left" />
       </aside>
 
-      <!-- Center: row 2, same width on every page -->
+      <!-- Center: same width on every page -->
       <div
         id="main-content"
         tabindex="-1"
         class={cn(
-          "space-y-16 min-w-0 scroll-mt-8 focus:outline-none lg:col-start-2 lg:row-start-2",
+          "space-y-16 min-w-0 scroll-mt-24 focus:outline-none lg:col-start-2",
           maxWidth === "sm"
             ? "max-w-sm mx-auto lg:max-w-none lg:mx-0"
             : "max-w-2xl mx-auto lg:max-w-none lg:mx-0",
@@ -72,8 +83,8 @@ const {
         {!noFooter && <Footer />}
       </div>
 
-      <!-- Right gutter: row 2, starts level with content (below Navbar) -->
-      <aside class="hidden lg:col-start-3 lg:row-start-2 lg:block">
+      <!-- Right gutter -->
+      <aside class="hidden lg:col-start-3 lg:block">
         <slot name="right" />
       </aside>
     </div>
@@ -81,6 +92,7 @@ const {
     <SpeedInsights />
     <script>
       import "@/scripts/dir-hover";
+      import "@/scripts/sticky-header";
     </script>
   </body>
 </html>

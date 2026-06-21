@@ -45,6 +45,8 @@ html {
      the content width constant. */
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
+  /* Keep anchor jumps (TOC links, skip link) clear of the sticky header. */
+  scroll-padding-top: 5rem;
 }
 
 /* Respect reduced-motion: neutralize positional + scale motion and looping

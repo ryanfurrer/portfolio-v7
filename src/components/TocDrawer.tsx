@@ -35,13 +35,13 @@ export default function TocDrawer({ headings }: Props) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         ref={triggerRef}
-        className="fixed bottom-6 right-6 z-30 lg:hidden bg-foreground text-background text-sm font-medium px-4 py-2 rounded-full shadow-lg dark:shadow-none hover:opacity-90 transition-opacity"
+        className="fixed right-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-30 lg:hidden [will-change:transform] [transform:translateZ(0)] bg-foreground text-background text-sm font-medium px-4 py-2 rounded-full shadow-lg dark:shadow-none hover:opacity-90 transition-opacity"
       >
         Table of Contents
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="max-h-[60vh] overflow-y-auto overscroll-contain rounded-t-xl !ease-ios data-[state=open]:!duration-300 data-[state=closed]:!duration-[250ms]"
+        className="max-h-[60dvh] overflow-y-auto overscroll-contain rounded-t-xl !ease-ios data-[state=open]:!duration-300 data-[state=closed]:!duration-[250ms]"
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => {
           e.preventDefault();
