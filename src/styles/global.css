@@ -203,7 +203,7 @@ html {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
     &:hover {
-      color: var(--color-accent);
+      color: var(--color-foreground);
       text-decoration-color: currentColor;
     }
   }
@@ -274,7 +274,7 @@ html {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
     &:hover {
-      color: var(--color-accent) !important;
+      color: var(--color-foreground) !important;
       text-decoration-color: currentColor !important;
     }
   }

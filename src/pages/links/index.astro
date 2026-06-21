@@ -169,38 +169,38 @@ const socialLinks = [
               return (
                 <LinksCard
                   href={link.href}
-                  variant="square"
-                  class={getColorClasses(link.color)}
+                  class={cn(
+                    "squircle rounded-3xl p-4 ring-offset-2 ring-offset-background transition-all hover:saturate-150 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none dark:hover:brightness-105",
+                    getColorClasses(link.color),
+                  )}
                 >
-                  <div class="flex h-full flex-col justify-between">
-                    <div class="flex flex-col gap-2">
-                      <IconComponent
-                        class:list={[
-                          "squircle size-8 rounded-xl p-2",
-                          link.iconFill,
-                          link.iconBackground,
-                        ]}
-                      />
-                      <h3 class="small-heading leading-none">{link.label}</h3>
-                    </div>
-                    <div
+                  <div class="flex items-start justify-between gap-2">
+                    <IconComponent
+                      class:list={[
+                        "squircle size-9 shrink-0 rounded-xl p-2",
+                        link.iconFill,
+                        link.iconBackground,
+                      ]}
+                    />
+                    <span
                       class={cn(
+                        "squircle pointer-events-none inline-flex items-center justify-center rounded-lg px-2 py-1 text-xs font-medium text-inherit",
                         getColorClasses(link.color),
-                        "font-mono-custom mt-1 bg-transparent! text-4xl dark:text-white!",
                       )}
                     >
-                      <span>{formatFollowerCount(link.followerCount)}</span>
-                    </div>
-                    <div>
-                      <span
-                        class={cn(
-                          "squircle pointer-events-none inline-flex h-auto items-center justify-center rounded-lg px-2 py-1 text-xs font-medium text-inherit transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
-                          getColorClasses(link.color),
-                        )}
-                      >
-                        {link.actionLabel}
+                      {link.actionLabel}
+                    </span>
+                  </div>
+                  <div class="mt-3 space-y-0.5">
+                    <h3 class="small-heading leading-none">{link.label}</h3>
+                    <p class="text-4xl font-bold leading-none dark:text-white!">
+                      {formatFollowerCount(link.followerCount)}
+                      <span class="mt-1 block text-sm font-normal opacity-60">
+                        {link.actionLabel === "Subscribe"
+                          ? "subscribers"
+                          : "followers"}
                       </span>
-                    </div>
+                    </p>
                   </div>
                 </LinksCard>
               );
