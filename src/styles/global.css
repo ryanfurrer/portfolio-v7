@@ -39,7 +39,11 @@
 
 html {
   background-color: var(--background);
-  /* scrollbar-gutter: stable; */
+  /* Reserve the scrollbar gutter so the centered layout doesn't shift (CLS)
+     when navigating between short pages (no scrollbar) and long ones. On
+     overlay-scrollbar systems this is a no-op; on classic scrollbars it keeps
+     the content width constant. */
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
 }
 
