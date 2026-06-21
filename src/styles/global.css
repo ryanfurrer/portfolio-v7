@@ -139,9 +139,9 @@ html {
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
-  /* Single reserved accent — interactivity only, the way Apple uses blue */
-  --link: #0066cc;
-  --link-hover: #0051a8;
+  /* Single reserved accent — interactivity only. Swiss red #DA291C in OKLCH. */
+  --link: oklch(0.575 0.213 29.55); /* #DA291C — 4.87:1 on white (WCAG AA) */
+  --link-hover: oklch(0.53 0.21 29.55); /* darker — 5.9:1 */
   --link-underline: #bbb;
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0 0 0 / 0.08); /* hairline — opacity-based per surface rules */
@@ -173,8 +173,9 @@ html {
     --foreground: #f5f5f7; /* primary — headings & key copy */
     --foreground-muted: #a1a1a6; /* secondary — body & descriptions */
     --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
-    --link: #2997ff; /* Apple blue (dark) */
-    --link-hover: #5aaeff;
+    /* Swiss red, lightened for the dark field (AA on ~#1a1a1a) */
+    --link: oklch(0.66 0.205 29.55); /* ≈ #f94c3a — 5.08:1 */
+    --link-hover: oklch(0.7 0.19 29.55); /* lighter — 5.98:1 */
     /* Recessed surfaces (dark) — a single perceptual step above the page,
        paired with a hairline inset ring on cards for definition */
     --surface: oklch(0.215 0 0);
