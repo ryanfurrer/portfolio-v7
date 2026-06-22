@@ -105,6 +105,57 @@ html {
   }
 }
 
+/* Mobile menu reveal — clip from the top edge so the panel appears to grow down
+   out of the navbar instead of sliding in from off-screen. Overrides the Sheet's
+   default slide-in-from-top (higher specificity wins; duration comes from the
+   `data-[state]:!duration-*` utilities on the element). */
+@keyframes menu-grow-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes menu-grow-out {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+[data-slot="sheet-content"].menu-grow[data-state="open"] {
+  animation-name: menu-grow-in;
+  animation-timing-function: var(--ease-ios-curve);
+  animation-fill-mode: both;
+}
+[data-slot="sheet-content"].menu-grow[data-state="closed"] {
+  animation-name: menu-grow-out;
+  animation-timing-function: var(--ease-ios-curve);
+  animation-fill-mode: both;
+}
+
+/* Nav links settle in with a staggered fade-up as the panel grows. The stagger
+   runs top→bottom (--index) to track the clip sweep. Enter only — on close the
+   links simply clip away with the panel (exits stay subtler than enters). */
+@keyframes menu-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .menu-grow[data-state="open"] .menu-item {
+    animation: menu-item-in 340ms var(--ease-ios-curve) backwards;
+    animation-delay: calc(90ms + var(--index) * 45ms);
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
