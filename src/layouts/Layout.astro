@@ -32,7 +32,7 @@ const {
   <body class="bg-background text-foreground-muted antialiased">
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-background"
+      class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-background"
     >
       Skip to content
     </a>
@@ -45,7 +45,7 @@ const {
       !noNavbar && (
         <header
           data-site-header
-          class="sticky top-0 z-40 [will-change:transform] [transform:translateZ(0)] border-b border-transparent transition-[background-color,border-color] duration-300 ease-out data-[scrolled]:border-border data-[scrolled]:bg-background/70 data-[scrolled]:backdrop-blur-xl"
+          class="sticky top-0 z-40 transform-[translateZ(0)] border-b border-transparent transition-[background-color,border-color] duration-300 ease-out will-change-transform data-scrolled:border-border data-scrolled:bg-background/70 data-scrolled:backdrop-blur-xl"
         >
           <div class="mx-auto max-w-280 px-4 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
             <div
@@ -63,7 +63,9 @@ const {
       )
     }
 
-    <div class="mx-auto max-w-280 px-4 py-8 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
+    <div
+      class="mx-auto max-w-280 px-4 py-8 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8"
+    >
       <!-- Left gutter -->
       <aside class="hidden lg:col-start-1 lg:block">
         <slot name="left" />

@@ -161,7 +161,9 @@ const description = "What I'm up to currently";
     --r: 1.75rem; /* the single rhythm unit */
     --baseline: 1.32rem; /* where the rule sits within a line (≈ text baseline) */
     line-height: var(--r);
-    padding: var(--r) 1.5rem var(--r) 3rem;
+    padding-block: var(--r);
+    /* inline-start gets the wide gutter for the margin rule (see note below). */
+    padding-inline: 3rem 1.5rem;
     background-color: oklch(0.999 0 0);
     /* A single tiled rule line (via background-size/-repeat) rather than
        repeating-linear-gradient — WebKit drops thin repeating bands partway

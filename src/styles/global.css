@@ -445,8 +445,7 @@ html {
   }
 
   .prose {
-    margin-left: auto;
-    margin-right: auto;
+    margin-inline: auto;
     width: 100% !important;
     max-width: 48rem !important;
     color: var(--color-foreground-muted) !important;
@@ -554,8 +553,7 @@ html {
   ul[data-dir-hover-list="items"]::before {
     content: "";
     position: absolute;
-    left: 0;
-    right: 0;
+    inset-inline: 0;
     top: var(--dir-hover-y, 0);
     height: var(--dir-hover-h, 0);
     background-color: var(--surface);

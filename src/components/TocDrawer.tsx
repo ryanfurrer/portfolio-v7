@@ -23,7 +23,10 @@ export default function TocDrawer({ headings }: Props) {
 
   if (headings.length === 0) return null;
 
-  const handleHeadingClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const handleHeadingClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: string,
+  ) => {
     e.preventDefault();
     setOpen(false);
     setTimeout(() => {
@@ -35,13 +38,13 @@ export default function TocDrawer({ headings }: Props) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         ref={triggerRef}
-        className="fixed right-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-40 lg:hidden [will-change:transform] [transform:translateZ(0)] bg-foreground text-background text-sm font-medium px-4 py-2 rounded-full shadow-lg dark:shadow-none hover:opacity-90 transition-opacity"
+        className="fixed end-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-40 transform-[translateZ(0)] rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background shadow-lg transition-opacity will-change-transform hover:opacity-90 lg:hidden dark:shadow-none"
       >
         Table of Contents
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="max-h-[60dvh] overflow-y-auto overscroll-contain rounded-t-xl !ease-ios data-[state=open]:!duration-300 data-[state=closed]:!duration-[250ms]"
+        className="max-h-[60dvh] overflow-y-auto overscroll-contain rounded-t-xl ease-ios! data-[state=closed]:duration-250! data-[state=open]:duration-300!"
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => {
           e.preventDefault();
@@ -49,16 +52,19 @@ export default function TocDrawer({ headings }: Props) {
         }}
       >
         <SheetHeader>
-          <SheetTitle className="text-sm font-semibold">On this page</SheetTitle>
+          <SheetTitle className="text-sm font-semibold">
+            On this page
+          </SheetTitle>
         </SheetHeader>
-        <nav className="space-y-2 text-sm px-4 pb-4">
+        <nav className="space-y-2 px-4 pb-4 text-sm">
           {headings.map((h) => (
             <a
               key={h.id}
               href={`#${h.id}`}
               onClick={(e) => handleHeadingClick(e, h.id)}
-              className={`block text-foreground-muted hover:text-foreground transition-colors no-underline ${h.level === 3 ? "pl-3" : h.level === 4 ? "pl-6" : ""
-                }`}
+              className={`block text-foreground-muted no-underline transition-colors hover:text-foreground ${
+                h.level === 3 ? "ps-3" : h.level === 4 ? "ps-6" : ""
+              }`}
             >
               {h.text}
             </a>
