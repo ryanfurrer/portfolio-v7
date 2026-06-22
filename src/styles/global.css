@@ -39,20 +39,13 @@
 
 html {
   background-color: var(--background);
-  /* Reserve the scrollbar gutter so the centered layout doesn't shift (CLS)
-     when navigating between short pages (no scrollbar) and long ones. On
-     overlay-scrollbar systems this is a no-op; on classic scrollbars it keeps
-     the content width constant. */
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
   /* Keep anchor jumps (TOC links, skip link) clear of the sticky header. */
   scroll-padding-top: 5rem;
 }
 
-/* Respect reduced-motion: neutralize positional + scale motion and looping
-   animations, but keep gentle opacity/color crossfades (Apple's own approach is
-   to cross-fade rather than slide). This covers press scales, the CTA arrow /
-   BackLink chevron nudges, and the drawer slide-ins in one place. */
+/* Respect reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -62,15 +55,15 @@ html {
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-property: opacity, color, background-color, border-color, fill,
-      stroke, text-decoration-color !important;
+    transition-property:
+      opacity, color, background-color, border-color, fill, stroke,
+      text-decoration-color !important;
     scale: none !important;
     translate: none !important;
     rotate: none !important;
   }
 }
 
-/* On-brand text selection — a soft accent wash; text stays "ink" and readable. */
 ::selection {
   background-color: color-mix(in oklch, var(--link) 22%, transparent);
 }
@@ -80,11 +73,6 @@ html {
   }
 }
 
-/* Minimal site-wide scrollbar — a thin, rounded translucent thumb on a
-   transparent track (the 3px transparent border + padding-box clip insets it).
-   Note: a styled ::-webkit-scrollbar is always visible while scrollable rather
-   than the macOS hide-when-idle overlay; the reserved scrollbar-gutter keeps
-   the layout stable regardless. scrollbar-color/-width cover Firefox. */
 ::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -312,8 +300,9 @@ html {
     outline-offset: 2px;
   }
 
-  /* Apple-style headings: semibold + tight tracking. Components that set their
-     own weight (.small-heading, font-medium/semibold utilities) still win. */
+  /* Apple-style headings: extrabold + tight tracking, matching the weight of
+     content-page (.prose) h1s. Components that set their own weight
+     (.small-heading, font-medium/semibold utilities) still win. */
   h1,
   h2,
   h3,
@@ -321,7 +310,7 @@ html {
   h5,
   h6 {
     color: var(--foreground);
-    font-weight: 600;
+    font-weight: 800;
     letter-spacing: -0.022em;
     text-wrap: balance;
   }
