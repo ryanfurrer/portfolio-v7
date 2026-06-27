@@ -13,7 +13,7 @@ const { title, items, basePath } = Astro.props;
 ---
 
 <section class="space-y-2">
-  <h2 class="small-heading md:px-2">
+  <h2 class="small-heading md:px-2" data-reveal>
     {title}
   </h2>
   <ul class="flex flex-col gap-px" role="list">
@@ -30,7 +30,7 @@ const { title, items, basePath } = Astro.props;
       ))
     }
   </ul>
-  <div class="md:px-2">
+  <div class="md:px-2" data-reveal>
     <Link href={`${basePath}`}>View all</Link>
   </div>
 </section>

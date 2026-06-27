@@ -611,8 +611,61 @@ html {
   }
 }
 
+/* ── Entrance reveal ──────────────────────────────────────────────────
+   Content marked [data-reveal] fades + rises in once on load, cascading top to
+   bottom. The `reveal-init` class is added to <html> before paint by the inline
+   script in Head.astro — only when JS is on AND motion is allowed — so no-JS
+   and reduced-motion users get the content immediately, unhidden. The cascade
+   itself is driven by scripts/reveal.ts (which adds .is-revealed). The failsafe
+   animation reveals everything after 2s if that script never runs, so content —
+   especially article bodies — can't get stuck hidden. Kept outside @layer so
+   the hidden state beats Tailwind's opacity utilities. */
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+.reveal-init [data-reveal]:not(.is-revealed) {
+  opacity: 0;
+  animation: reveal-failsafe 0.3s var(--ease-out-curve) 2s forwards;
+}
+
+.reveal-init [data-reveal].is-revealed {
+  animation: reveal-rise 0.5s var(--ease-out-curve) both;
+}
+
 /* Table of Contents active link — outside @layer so it beats Tailwind utility classes */
 [data-toc-link].is-active {
   color: var(--color-primary);
   font-weight: 600;
+}
+
+@utility touch-hitbox {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    min-height: 44px;
+    min-width: 44px;
+    z-index: 9999;
+  }
 }

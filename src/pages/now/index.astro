@@ -8,13 +8,13 @@ const description = "What I'm up to currently";
 <Layout title={title} description={description}>
   <div class="space-y-8">
     <header class="space-y-2 md:px-2">
-      <h1 class="text-2xl text-foreground sm:text-3xl">{title}</h1>
-      <p class="max-w-[60ch] text-pretty text-foreground-muted">
+      <h1 class="text-2xl text-foreground sm:text-3xl" data-reveal>{title}</h1>
+      <p class="max-w-[60ch] text-pretty text-foreground-muted" data-reveal>
         {description}
       </p>
     </header>
     <main class="space-y-6 md:px-2">
-      <article class="now-card">
+      <article class="now-card" data-reveal>
         <header class="now-head flex items-baseline justify-between gap-4">
           <span class="small-heading">Now</span>
           <time
@@ -93,7 +93,7 @@ const description = "What I'm up to currently";
           </div>
         </dl>
       </article>
-      <article class="now-card">
+      <article class="now-card" data-reveal>
         <header class="now-head flex items-baseline justify-between gap-4">
           <span class="small-heading">Previously</span>
           <time

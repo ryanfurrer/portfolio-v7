@@ -23,6 +23,17 @@ const ogImageUrl = ogImage
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
+  {/* Arm the entrance reveal before paint so [data-reveal] content starts
+      hidden — but only when JS is on and motion is allowed. See
+      scripts/reveal.ts. */}
+  <script is:inline>
+    (() => {
+      try {
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        document.documentElement.classList.add("reveal-init");
+      } catch {}
+    })();
+  </script>
   <meta
     name="theme-color"
     media="(prefers-color-scheme: light)"

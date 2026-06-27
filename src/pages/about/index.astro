@@ -8,10 +8,14 @@ const description = "Learn more about me";
 <Layout title="About — Ryan Furrer" description={description}>
   <div class="space-y-8 md:px-2">
     <header class="space-y-2">
-      <h1 class="text-2xl text-balance text-foreground sm:text-3xl">About</h1>
-      <p class="max-w-[60ch] text-pretty text-foreground-muted">{description}</p>
+      <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
+        About
+      </h1>
+      <p class="max-w-[60ch] text-pretty text-foreground-muted" data-reveal>
+        {description}
+      </p>
     </header>
-    <main class="space-y-4">
+    <main class="space-y-4" data-reveal>
       <p>
         I'm Ryan Furrer, a Frontend Engineer who cares about how things look,
         how they feel, accessibility, and more. I thrive on tight-knit,

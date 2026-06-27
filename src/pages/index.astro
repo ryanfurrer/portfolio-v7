@@ -36,14 +36,14 @@ const latestAppearances = await sanityClient.fetch<SanityDocument[]>(
 <Layout>
   <main class="space-y-16">
     <section class="space-y-6 md:px-2">
-      <div class="space-y-3">
+      <div class="space-y-3" data-reveal>
         <h1 class="text-3xl text-foreground sm:text-4xl">Ryan Furrer</h1>
         <p class="max-w-[46ch] text-lg font-medium text-pretty text-foreground">
           Frontend Engineer who loves creating where design and engineering
           meet.
         </p>
       </div>
-      <div class="max-w-[46ch] space-y-3 text-pretty">
+      <div class="max-w-[46ch] space-y-3 text-pretty" data-reveal>
         <p>
           Currently I am a Design Engineer at <a href="https://pragma.gg"
             >Pragma</a
@@ -53,7 +53,7 @@ const latestAppearances = await sanityClient.fetch<SanityDocument[]>(
         <Link href="/about">Learn more about me</Link>
       </div>
 
-      <div class="space-y-2">
+      <div class="space-y-2" data-reveal>
         <span class="small-heading inline-block">Find me elsewhere:</span>
         <div class="text-sm">
           <SocialLinks orientation="horizontal" />

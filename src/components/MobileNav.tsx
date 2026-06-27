@@ -59,7 +59,7 @@ export default function MobileNav({ navItems, pathname }: Props) {
       <SheetContent
         side="top"
         showCloseButton={false}
-        className="menu-grow h-dvh ease-ios! data-[state=closed]:duration-300! data-[state=open]:duration-420! dark:shadow-none"
+        className="menu-grow h-dvh ease-ios! data-[state=closed]:duration-300! data-[state=open]:duration-420! shadow-none"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <SheetHeader className="sr-only">

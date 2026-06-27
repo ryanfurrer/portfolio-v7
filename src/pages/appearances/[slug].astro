@@ -2,7 +2,7 @@
 import BackLink from "@/components/BackLink.astro";
 import PortableText from "@/components/sanity/PortableText.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
-import TocDrawer from "@/components/TocDrawer.tsx";
+import TocMobile from "@/components/TocMobile.tsx";
 import Layout from "@/layouts/Layout.astro";
 import { slugify, textToPortableTextBlock } from "@/lib/utils";
 import { formatDateLong } from "@/utils/date";
@@ -89,10 +89,10 @@ const headings = (appearance.body ?? [])
     <BackLink href="/appearances" label="Appearances" class="mb-6 lg:hidden" />
     {
       appearanceImageUrl && (
-        <img src={appearanceImageUrl} alt={appearance.title} />
+        <img src={appearanceImageUrl} alt={appearance.title} data-reveal />
       )
     }
-    <header>
+    <header data-reveal>
       <h1 class="mb-1">{appearance.title}</h1>
       {
         appearance.publishedAt && !appearance.updatedAt && (
@@ -122,5 +122,5 @@ const headings = (appearance.body ?? [])
   </main>
 
   <!-- Mobile ToC drawer -->
-  <TocDrawer headings={headings} client:load />
+  <TocMobile headings={headings} title={appearance.title} client:load />
 </Layout>

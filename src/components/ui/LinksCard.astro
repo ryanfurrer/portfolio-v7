@@ -20,11 +20,17 @@ const classes = cn(baseClasses, variantClasses, className);
 
 {
   href ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" class={classes}>
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class={classes}
+      data-reveal
+    >
       <slot />
     </a>
   ) : (
-    <div class={classes}>
+    <div class={classes} data-reveal>
       <slot />
     </div>
   )

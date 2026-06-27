@@ -2,7 +2,7 @@
 import BackLink from "@/components/BackLink.astro";
 import PortableText from "@/components/sanity/PortableText.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
-import TocDrawer from "@/components/TocDrawer.tsx";
+import TocMobile from "@/components/TocMobile.tsx";
 import Tag from "@/components/Tag.astro";
 import Layout from "@/layouts/Layout.astro";
 import { slugify, textToPortableTextBlock } from "@/lib/utils";
@@ -86,8 +86,8 @@ const headings = (project.body ?? [])
   <!-- Center: article -->
   <main class="prose min-w-0 prose-neutral dark:prose-invert">
     <BackLink href="/work" label="Work" class="mb-6 lg:hidden" />
-    {projectImageUrl && <img src={projectImageUrl} alt={project.title} />}
-    <header>
+    {projectImageUrl && <img src={projectImageUrl} alt={project.title} data-reveal />}
+    <header data-reveal>
       <h1 class="mb-2">{project.title}</h1>
       {
         project.publishedAt && !project.updatedAt && (
@@ -154,5 +154,5 @@ const headings = (project.body ?? [])
   </main>
 
   <!-- Mobile ToC drawer -->
-  <TocDrawer headings={headings} client:load />
+  <TocMobile headings={headings} title={project.title} client:load />
 </Layout>

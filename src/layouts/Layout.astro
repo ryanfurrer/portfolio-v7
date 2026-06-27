@@ -1,6 +1,7 @@
 ---
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
+import BackToTop from "@/components/BackToTop.tsx";
 import Footer from "@/components/Footer.astro";
 import Head from "@/components/Head.astro";
 import Navbar from "@/components/Navbar.astro";
@@ -25,6 +26,13 @@ const {
   noFooter = false,
   maxWidth = "lg",
 } = Astro.props;
+
+// Back-to-top lives only on long-form content sections.
+const contentPrefixes = ["/writing", "/work", "/appearances", "/now"];
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isContentPage = contentPrefixes.some(
+  (p) => path === p || path.startsWith(`${p}/`),
+);
 ---
 
 <html lang="en">
@@ -45,7 +53,7 @@ const {
       !noNavbar && (
         <header
           data-site-header
-          class="sticky top-0 z-40 transform-[translateZ(0)] border-b border-transparent transition-[background-color,border-color] duration-300 ease-out will-change-transform data-scrolled:border-border data-scrolled:bg-background/70 data-scrolled:backdrop-blur-xl"
+          class="sticky top-0 z-40 transform-[translateZ(0)] border-b border-transparent transition-[background-color,border-color,translate] duration-300 ease-out will-change-transform data-hidden:-translate-y-full data-scrolled:border-border data-scrolled:bg-background/70 data-scrolled:backdrop-blur-xl"
         >
           <div class="mx-auto max-w-280 px-4 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
             <div
@@ -83,6 +91,7 @@ const {
         )}
       >
         <slot />
+        {isContentPage && <div id="content-end" aria-hidden="true" class="mt-0!"></div>}
         {!noFooter && <Footer />}
       </div>
 
@@ -92,11 +101,13 @@ const {
       </aside>
     </div>
     <ScrollFade />
+    {isContentPage && <BackToTop client:load />}
     <Analytics />
     <SpeedInsights />
     <script>
       import "@/scripts/dir-hover";
       import "@/scripts/sticky-header";
+      import "@/scripts/reveal";
     </script>
   </body>
 </html>
