@@ -5,6 +5,12 @@ import vercel from "@astrojs/vercel";
 import sanity from "@sanity/astro";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import {
+  apiVersion,
+  dataset,
+  projectId,
+  studioBasePath,
+} from "./src/sanity/lib/config";
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,10 +19,11 @@ export default defineConfig({
     react(),
     sitemap(),
     sanity({
-      projectId: "z2j0j9ei",
-      dataset: "production",
+      projectId,
+      dataset,
+      apiVersion,
       useCdn: false,
-      studioBasePath: "/admin",
+      studioBasePath,
     }),
   ],
   site: "https://ryanfurrer.com/",

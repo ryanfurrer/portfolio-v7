@@ -1,36 +1,25 @@
 ---
-import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
 import LatestItemsSection from "@/components/LatestItemsSection.astro";
 import Link from "@/components/Link.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
 import Layout from "@/layouts/Layout.astro";
-
-const LATEST_POSTS_QUERY = `*[
-  _type == "post"
-  && defined(slug.current)
-]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}`;
-
-const LATEST_PROJECTS_QUERY = `*[
-  _type == "project"
-  && defined(slug.current)
-]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt, techStack}`;
-
-const LATEST_APPEARANCES_QUERY = `*[
-  _type == "appearance"
-  && defined(slug.current)
-]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}`;
-
-const latestPosts =
-  await sanityClient.fetch<SanityDocument[]>(LATEST_POSTS_QUERY);
-
-const latestProjects = await sanityClient.fetch<SanityDocument[]>(
-  LATEST_PROJECTS_QUERY,
-);
-
-const latestAppearances = await sanityClient.fetch<SanityDocument[]>(
+import {
   LATEST_APPEARANCES_QUERY,
-);
+  LATEST_POSTS_QUERY,
+  LATEST_PROJECTS_QUERY,
+} from "@/sanity/lib/queries";
+import type {
+  LATEST_APPEARANCES_QUERY_RESULT,
+  LATEST_POSTS_QUERY_RESULT,
+  LATEST_PROJECTS_QUERY_RESULT,
+} from "@/sanity/sanity.types";
+
+const [latestPosts, latestProjects, latestAppearances] = await Promise.all([
+  sanityClient.fetch<LATEST_POSTS_QUERY_RESULT>(LATEST_POSTS_QUERY),
+  sanityClient.fetch<LATEST_PROJECTS_QUERY_RESULT>(LATEST_PROJECTS_QUERY),
+  sanityClient.fetch<LATEST_APPEARANCES_QUERY_RESULT>(LATEST_APPEARANCES_QUERY),
+]);
 ---
 
 <Layout>

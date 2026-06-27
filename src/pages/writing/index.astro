@@ -1,33 +1,13 @@
 ---
-import type { SanityDocument } from "@sanity/client";
 import { sanityClient } from "sanity:client";
 import Item from "@/components/Item.astro";
 import Layout from "@/layouts/Layout.astro";
+import { groupByYear } from "@/sanity/lib/content";
+import { POSTS_QUERY } from "@/sanity/lib/queries";
+import type { POSTS_QUERY_RESULT } from "@/sanity/sanity.types";
 
-const POSTS_QUERY = `*[
-  _type == "post"
-  && defined(slug.current)
-]|order(publishedAt desc){_id, title, slug, publishedAt}`;
-
-const posts = await sanityClient.fetch<SanityDocument[]>(POSTS_QUERY);
-
-// Group posts by year
-const postsByYear = posts.reduce(
-  (acc, post) => {
-    const year = new Date(post.publishedAt).getFullYear();
-    if (!acc[year]) {
-      acc[year] = [];
-    }
-    acc[year].push(post);
-    return acc;
-  },
-  {} as Record<number, SanityDocument[]>,
-);
-
-// Sort years descending (newest first)
-const years = Object.keys(postsByYear)
-  .map(Number)
-  .sort((a, b) => b - a);
+const posts = await sanityClient.fetch<POSTS_QUERY_RESULT>(POSTS_QUERY);
+const { byYear: postsByYear, years } = groupByYear(posts);
 
 const description = "Thoughts, ramblings, and technical writings";
 ---
@@ -55,7 +35,7 @@ const description = "Thoughts, ramblings, and technical writings";
                   <li>
                     <Item
                       title={post.title}
-                      href={`/writing/${post.slug.current}`}
+                      href={`/writing/${post.slug?.current}`}
                       publishedAt={post.publishedAt}
                     />
                   </li>

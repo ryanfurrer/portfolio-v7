@@ -1,80 +1,38 @@
-import {defineArrayMember, defineField, defineType} from 'sanity'
+import {defineType} from 'sanity'
+import {DocumentTextIcon} from '@sanity/icons'
+import {
+  bodyField,
+  descriptionField,
+  formatPreviewDate,
+  headerImageField,
+  ogImageField,
+  publishedAtField,
+  publishedAtOrderings,
+  slugField,
+  titleField,
+  updatedAtField,
+} from './shared'
 
 export const postType = defineType({
   name: 'post',
   title: 'Post',
   type: 'document',
+  icon: DocumentTextIcon,
+  orderings: publishedAtOrderings,
   fields: [
-    defineField({
-      name: 'title',
-      type: 'string',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      type: 'slug',
-      options: {source: 'title'},
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'publishedAt',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'updatedAt',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
-    }),
-    defineField({
-      name: 'ogImage',
-      type: 'image',
-      title: 'OG Image',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'headerImage',
-      type: 'image',
-      title: 'Header Image',
-    }),
-    defineField({
-      name: 'description',
-      type: 'text',
-      title: 'Description',
-      validation: (rule) => [
-        rule.required(),
-        rule.max(160).warning('Description should be 160 characters or less'),
-      ],
-    }),
-    defineField({
-      name: 'body',
-      type: 'array',
-      of: [
-        defineArrayMember({type: 'block'}),
-        defineArrayMember({type: 'code'}),
-        defineArrayMember({
-          type: 'image',
-          options: {hotspot: true},
-          fields: [
-            defineField({
-              name: 'alt',
-              type: 'string',
-              title: 'Alt Text',
-            }),
-          ],
-        }),
-      ],
-    }),
-    defineField({
-      name: 'tags',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          type: 'reference',
-          to: [{type: 'tag'}],
-        }),
-      ],
-    }),
+    titleField,
+    slugField,
+    publishedAtField,
+    updatedAtField,
+    descriptionField,
+    ogImageField,
+    headerImageField,
+    bodyField,
   ],
+  preview: {
+    select: {title: 'title', date: 'publishedAt', media: 'ogImage'},
+    prepare({title, date, media}) {
+      return {title, subtitle: formatPreviewDate(date), media}
+    },
+  },
 })

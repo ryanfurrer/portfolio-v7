@@ -1,11 +1,17 @@
 ---
-import type { SanityDocument } from "@sanity/client";
 import Item from "./Item.astro";
 import Link from "./Link.astro";
 
+interface LatestItem {
+  _id: string;
+  title: string | null;
+  slug: { current?: string } | null;
+  publishedAt: string | null;
+}
+
 interface Props {
   title: string;
-  items: SanityDocument[];
+  items: LatestItem[];
   basePath: string;
 }
 
@@ -22,9 +28,8 @@ const { title, items, basePath } = Astro.props;
         <li>
           <Item
             title={item.title}
-            href={`${basePath}/${item.slug.current}`}
+            href={`${basePath}/${item.slug?.current}`}
             publishedAt={item.publishedAt}
-            techStack={item.techStack}
           />
         </li>
       ))

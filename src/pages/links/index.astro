@@ -10,56 +10,43 @@ import Button from "@/components/ui/Button.astro";
 import LinksCard from "@/components/ui/LinksCard.astro";
 import Layout from "@/layouts/Layout.astro";
 import { urlForImage } from "@/sanity/lib/url-for-image";
-import type { SanityDocument } from "@sanity/client";
+import { LINKS_LATEST_QUERY } from "@/sanity/lib/queries";
+import type { LINKS_LATEST_QUERY_RESULT } from "@/sanity/sanity.types";
 import { sanityClient } from "sanity:client";
 import { formatFollowerCount } from "@/utils/links";
 
-const LATEST_CONTENT_QUERY = `{
-  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},
-  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},
-  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage}
-}`;
-
-const latestContent = await sanityClient.fetch<{
-  post: SanityDocument | null;
-  project: SanityDocument | null;
-  appearance: SanityDocument | null;
-}>(LATEST_CONTENT_QUERY);
+type LatestLinkItem = NonNullable<LINKS_LATEST_QUERY_RESULT["post"]>;
 
 const {
   post: latestPost,
   project: latestProject,
   appearance: latestAppearance,
-} = latestContent;
+} = await sanityClient.fetch<LINKS_LATEST_QUERY_RESULT>(LINKS_LATEST_QUERY);
 
-const getOgImageUrl = (item: SanityDocument | null) =>
+const getOgImageUrl = (item: LatestLinkItem | null) =>
   item?.ogImage ? urlForImage(item.ogImage).url() : undefined;
-
-const latestPostOgImageUrl = getOgImageUrl(latestPost);
-const latestProjectOgImageUrl = getOgImageUrl(latestProject);
-const latestAppearanceOgImageUrl = getOgImageUrl(latestAppearance);
 
 const latestContentItems = [
   {
     type: "writing",
     path: "writing",
     item: latestPost,
-    ogImageUrl: latestPostOgImageUrl,
+    ogImageUrl: getOgImageUrl(latestPost),
   },
   {
     type: "work",
     path: "work",
     item: latestProject,
-    ogImageUrl: latestProjectOgImageUrl,
+    ogImageUrl: getOgImageUrl(latestProject),
   },
   {
     type: "appearance",
     path: "appearances",
     item: latestAppearance,
-    ogImageUrl: latestAppearanceOgImageUrl,
+    ogImageUrl: getOgImageUrl(latestAppearance),
   },
 ].filter(
-  (content): content is typeof content & { item: SanityDocument } =>
+  (content): content is typeof content & { item: LatestLinkItem } =>
     content.item !== null,
 );
 
@@ -206,7 +193,7 @@ const socialLinks = [
             <div class="grid grid-cols-1 gap-4">
               {latestContentItems.map((content) => (
                 <LinksCard
-                  href={`/${content.path}/${content.item.slug.current}`}
+                  href={`/${content.path}/${content.item.slug?.current}`}
                 >
                   <header class="flex items-center pt-1 pb-2">
                     <p class="small-heading leading-none">{content.type}</p>
