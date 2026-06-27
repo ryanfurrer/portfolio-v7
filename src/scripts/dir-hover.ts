@@ -103,7 +103,7 @@ function handlePointerLeave(e: PointerEvent): void {
   if (!list) return;
 
   const relatedTarget = e.relatedTarget;
-  if (!relatedTarget || !list.contains(relatedTarget)) {
+  if (!relatedTarget || !list.contains(relatedTarget as Node)) {
     hideHighlight(list as HTMLUListElement);
     currentHovered.delete(list as HTMLUListElement);
   }
@@ -131,7 +131,7 @@ function handleFocusOut(e: FocusEvent): void {
   if (!list) return;
 
   const relatedTarget = e.relatedTarget;
-  if (!relatedTarget || !list.contains(relatedTarget)) {
+  if (!relatedTarget || !list.contains(relatedTarget as Node)) {
     hideHighlight(list as HTMLUListElement);
     currentHovered.delete(list as HTMLUListElement);
   }

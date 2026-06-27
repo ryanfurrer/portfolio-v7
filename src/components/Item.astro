@@ -1,21 +1,15 @@
 ---
 import { formatDateDotNotation } from "@/utils/date";
-import Tag from "./Tag.astro";
 
 interface Props {
-  title: string;
+  title: string | null;
   href: string;
-  publishedAt?: string;
-  techStack?: string[];
+  publishedAt?: string | null;
 }
 
-const { title, href, publishedAt, techStack } = Astro.props;
+const { title, href, publishedAt } = Astro.props;
 
 const formattedDate = publishedAt ? formatDateDotNotation(publishedAt) : null;
-
-const displayedTags = techStack?.slice(0, 3) ?? [];
-const remainingCount =
-  techStack && techStack.length > 3 ? techStack.length - 3 : 0;
 ---
 
 <a
@@ -32,23 +26,12 @@ const remainingCount =
     </div>
     <div class="hidden min-w-4 flex-1 border-b md:block"></div>
     {
-      techStack && techStack.length > 0 ? (
-        <>
-          <div class="flex items-center gap-1">
-            {displayedTags.map((tech) => (
-              <Tag label={tech} />
-            ))}
-            {remainingCount > 0 && <Tag label={`+${remainingCount} more`} />}
-          </div>
-        </>
-      ) : (
-        formattedDate && (
-          <div class="font-mono-custom w-fit">
-            <span class="transition-colors group-hover/item:text-foreground">
-              {formattedDate}
-            </span>
-          </div>
-        )
+      formattedDate && (
+        <div class="font-mono-custom w-fit">
+          <span class="transition-colors group-hover/item:text-foreground">
+            {formattedDate}
+          </span>
+        </div>
       )
     }
   </div>

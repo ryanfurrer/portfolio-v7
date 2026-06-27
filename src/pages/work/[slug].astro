@@ -3,71 +3,55 @@ import BackLink from "@/components/BackLink.astro";
 import PortableText from "@/components/sanity/PortableText.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import TocMobile from "@/components/TocMobile.tsx";
-import Tag from "@/components/Tag.astro";
 import Layout from "@/layouts/Layout.astro";
-import { slugify, textToPortableTextBlock } from "@/lib/utils";
-import { formatDateLong } from "@/utils/date";
-import type { SanityDocument } from "@sanity/client";
 import {
-  createImageUrlBuilder,
-  type SanityImageSource,
-} from "@sanity/image-url";
+  extractHeadings,
+  prependDescription,
+  toStaticPaths,
+} from "@/sanity/lib/content";
+import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { urlForImage } from "@/sanity/lib/url-for-image";
+import type {
+  PROJECT_QUERY_RESULT,
+  PROJECT_SLUGS_QUERY_RESULT,
+} from "@/sanity/sanity.types";
+import { formatDateLong } from "@/utils/date";
 import { sanityClient } from "sanity:client";
 
-const PROJECT_QUERY = `*[_type == "project" && slug.current == $slug][0]{
-  ...,
-  tags[]->{name, slug}
-}`;
-const project = await sanityClient.fetch<SanityDocument>(
+export async function getStaticPaths() {
+  const slugs = await sanityClient.fetch<PROJECT_SLUGS_QUERY_RESULT>(
+    PROJECT_SLUGS_QUERY,
+  );
+  return toStaticPaths(slugs);
+}
+
+const project = await sanityClient.fetch<PROJECT_QUERY_RESULT>(
   PROJECT_QUERY,
   Astro.params,
 );
-
-// Prepend description as first paragraph in body
-let bodyWithDescription = Array.isArray(project.body) ? [...project.body] : [];
-if (project.description && typeof project.description === "string") {
-  const descriptionBlock = textToPortableTextBlock(project.description);
-  bodyWithDescription = [descriptionBlock, ...bodyWithDescription];
+if (!project) {
+  throw new Error(`Project not found for slug: ${Astro.params.slug}`);
 }
 
-export async function getStaticPaths(): Promise<{ params: { slug: string } }> {
-  const SLUGS_QUERY = `*[_type == "project" && defined(slug.current)]{
-    "params": {"slug": slug.current}
-  }`;
-  return await sanityClient.fetch(SLUGS_QUERY, Astro.params);
-}
+const bodyWithDescription = prependDescription(
+  project.body,
+  project.description,
+);
+const headings = extractHeadings(project.body);
 
-const { projectId, dataset } = sanityClient.config();
-const urlFor = (source: SanityImageSource) =>
-  projectId && dataset
-    ? createImageUrlBuilder({ projectId, dataset }).image(source)
-    : null;
 const projectImageUrl = project.headerImage
-  ? urlFor(project.headerImage)?.width(550).height(310).url()
+  ? urlForImage(project.headerImage).width(550).height(310).url()
   : null;
 const projectOgImageUrl = project.ogImage
-  ? urlFor(project.ogImage)?.width(1200).height(630).url()
+  ? urlForImage(project.ogImage).width(1200).height(630).url()
   : undefined;
 
-// Extract headings for ToC
-interface HeadingBlock {
-  _type: string;
-  style: string;
-  children: Array<{ text?: string }>;
-}
-const headings = (project.body ?? [])
-  .filter(
-    (b: HeadingBlock) =>
-      b._type === "block" && ["h2", "h3", "h4"].includes(b.style),
-  )
-  .map((b: HeadingBlock) => {
-    const text = b.children.map((c) => c.text ?? "").join("");
-    return {
-      id: slugify(text),
-      text,
-      level: parseInt(b.style.replace("h", ""), 10),
-    };
-  });
+const publishedLong = project.publishedAt
+  ? formatDateLong(project.publishedAt)
+  : null;
+const updatedLong = project.updatedAt
+  ? formatDateLong(project.updatedAt)
+  : null;
 ---
 
 <Layout
@@ -86,65 +70,54 @@ const headings = (project.body ?? [])
   <!-- Center: article -->
   <main class="prose min-w-0 prose-neutral dark:prose-invert">
     <BackLink href="/work" label="Work" class="mb-6 lg:hidden" />
-    {projectImageUrl && <img src={projectImageUrl} alt={project.title} data-reveal />}
+    {
+      projectImageUrl && (
+        <img src={projectImageUrl} alt={project.title} data-reveal />
+      )
+    }
     <header data-reveal>
       <h1 class="mb-2">{project.title}</h1>
       {
-        project.publishedAt && !project.updatedAt && (
-          <span class="text-sm text-foreground-subtle">
-            {formatDateLong(project.publishedAt)}
-          </span>
+        publishedLong && !updatedLong && (
+          <span class="text-sm text-foreground-subtle">{publishedLong}</span>
         )
       }
       {
-        project.updatedAt && (
+        updatedLong && (
           <div class="flex flex-col gap-y-1">
             <span class="text-sm text-foreground-subtle">
-              Originally published: {formatDateLong(project.publishedAt)}
+              Originally published: {publishedLong}
             </span>
-            <span class="badge w-fit">
-              Updated {formatDateLong(project.updatedAt)}
-            </span>
+            <span class="badge w-fit">Updated {updatedLong}</span>
           </div>
         )
       }
-      <div class="mt-4 flex flex-col gap-4">
-        {
-          Array.isArray(project.techStack) && project.techStack.length > 0 && (
-            <div class="flex flex-wrap gap-2">
-              {project.techStack.map((tech) => (
-                <Tag label={tech} />
-              ))}
-            </div>
-          )
-        }
-        {
-          (project.projectUrl || project.githubUrl) && (
-            <div class="flex flex-wrap gap-4">
-              {project.projectUrl && (
-                <a
-                  href={project.projectUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-sm"
-                >
-                  Live Site
-                </a>
-              )}
-              {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-sm"
-                >
-                  GitHub
-                </a>
-              )}
-            </div>
-          )
-        }
-      </div>
+      {
+        (project.projectUrl || project.githubUrl) && (
+          <div class="mt-4 flex flex-wrap gap-4">
+            {project.projectUrl && (
+              <a
+                href={project.projectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm"
+              >
+                Live Site
+              </a>
+            )}
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm"
+              >
+                GitHub
+              </a>
+            )}
+          </div>
+        )
+      }
     </header>
     {
       bodyWithDescription.length > 0 && (
@@ -154,5 +127,5 @@ const headings = (project.body ?? [])
   </main>
 
   <!-- Mobile ToC drawer -->
-  <TocMobile headings={headings} title={project.title} client:load />
+  <TocMobile headings={headings} title={project.title ?? ""} client:load />
 </Layout>

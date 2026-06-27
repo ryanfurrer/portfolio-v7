@@ -4,71 +4,54 @@ import PortableText from "@/components/sanity/PortableText.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import TocMobile from "@/components/TocMobile.tsx";
 import Layout from "@/layouts/Layout.astro";
-import { slugify, textToPortableTextBlock } from "@/lib/utils";
-import { formatDateLong } from "@/utils/date";
-import type { SanityDocument } from "@sanity/client";
 import {
-  createImageUrlBuilder,
-  type SanityImageSource,
-} from "@sanity/image-url";
+  extractHeadings,
+  prependDescription,
+  toStaticPaths,
+} from "@/sanity/lib/content";
+import { APPEARANCE_QUERY, APPEARANCE_SLUGS_QUERY } from "@/sanity/lib/queries";
+import { urlForImage } from "@/sanity/lib/url-for-image";
+import type {
+  APPEARANCE_QUERY_RESULT,
+  APPEARANCE_SLUGS_QUERY_RESULT,
+} from "@/sanity/sanity.types";
+import { formatDateLong } from "@/utils/date";
 import { sanityClient } from "sanity:client";
 
-const APPEARANCE_QUERY = `*[_type == "appearance" && slug.current == $slug][0]{
-  ...,
-  tags[]->{name, slug}
-}`;
-const appearance = await sanityClient.fetch<SanityDocument>(
+export async function getStaticPaths() {
+  const slugs = await sanityClient.fetch<APPEARANCE_SLUGS_QUERY_RESULT>(
+    APPEARANCE_SLUGS_QUERY,
+  );
+  return toStaticPaths(slugs);
+}
+
+const appearance = await sanityClient.fetch<APPEARANCE_QUERY_RESULT>(
   APPEARANCE_QUERY,
   Astro.params,
 );
-
-// Prepend description as first paragraph in body
-let bodyWithDescription = Array.isArray(appearance.body)
-  ? [...appearance.body]
-  : [];
-if (appearance.description && typeof appearance.description === "string") {
-  const descriptionBlock = textToPortableTextBlock(appearance.description);
-  bodyWithDescription = [descriptionBlock, ...bodyWithDescription];
+if (!appearance) {
+  throw new Error(`Appearance not found for slug: ${Astro.params.slug}`);
 }
 
-export async function getStaticPaths(): Promise<{ params: { slug: string } }> {
-  const SLUGS_QUERY = `*[_type == "appearance" && defined(slug.current)]{
-    "params": {"slug": slug.current}
-  }`;
-  return await sanityClient.fetch(SLUGS_QUERY, Astro.params);
-}
+const bodyWithDescription = prependDescription(
+  appearance.body,
+  appearance.description,
+);
+const headings = extractHeadings(appearance.body);
 
-const { projectId, dataset } = sanityClient.config();
-const urlFor = (source: SanityImageSource) =>
-  projectId && dataset
-    ? createImageUrlBuilder({ projectId, dataset }).image(source)
-    : null;
 const appearanceImageUrl = appearance.headerImage
-  ? urlFor(appearance.headerImage)?.width(550).height(310).url()
+  ? urlForImage(appearance.headerImage).width(550).height(310).url()
   : null;
 const appearanceOgImageUrl = appearance.ogImage
-  ? urlFor(appearance.ogImage)?.width(1200).height(630).url()
+  ? urlForImage(appearance.ogImage).width(1200).height(630).url()
   : undefined;
 
-// Extract headings for ToC
-interface HeadingBlock {
-  _type: string;
-  style: string;
-  children: Array<{ text?: string }>;
-}
-const headings = (appearance.body ?? [])
-  .filter(
-    (b: HeadingBlock) =>
-      b._type === "block" && ["h2", "h3", "h4"].includes(b.style),
-  )
-  .map((b: HeadingBlock) => {
-    const text = b.children.map((c) => c.text ?? "").join("");
-    return {
-      id: slugify(text),
-      text,
-      level: parseInt(b.style.replace("h", ""), 10),
-    };
-  });
+const publishedLong = appearance.publishedAt
+  ? formatDateLong(appearance.publishedAt)
+  : null;
+const updatedLong = appearance.updatedAt
+  ? formatDateLong(appearance.updatedAt)
+  : null;
 ---
 
 <Layout
@@ -95,21 +78,17 @@ const headings = (appearance.body ?? [])
     <header data-reveal>
       <h1 class="mb-1">{appearance.title}</h1>
       {
-        appearance.publishedAt && !appearance.updatedAt && (
-          <span class="text-sm text-foreground-subtle">
-            {formatDateLong(appearance.publishedAt)}
-          </span>
+        publishedLong && !updatedLong && (
+          <span class="text-sm text-foreground-subtle">{publishedLong}</span>
         )
       }
       {
-        appearance.updatedAt && (
+        updatedLong && (
           <div class="flex flex-col gap-y-1">
             <span class="text-sm text-foreground-subtle">
-              Originally published: {formatDateLong(appearance.publishedAt)}
+              Originally published: {publishedLong}
             </span>
-            <span class="badge w-fit">
-              Updated {formatDateLong(appearance.updatedAt)}
-            </span>
+            <span class="badge w-fit">Updated {updatedLong}</span>
           </div>
         )
       }
@@ -122,5 +101,5 @@ const headings = (appearance.body ?? [])
   </main>
 
   <!-- Mobile ToC drawer -->
-  <TocMobile headings={headings} title={appearance.title} client:load />
+  <TocMobile headings={headings} title={appearance.title ?? ""} client:load />
 </Layout>
