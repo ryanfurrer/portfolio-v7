@@ -15,8 +15,13 @@ import {
 
 // astro.config runs before Astro injects .env, so parse the file ourselves.
 // Inline vars (e.g. `SANITY_PREVIEW_DRAFTS=true pnpm dev`) win over the file.
+/**
+ * @param {string} path
+ * @returns {Record<string, string>}
+ */
 function readEnvFile(path) {
   try {
+    /** @type {Record<string, string>} */
     const out = {};
     for (const line of readFileSync(path, "utf8").split("\n")) {
       if (/^\s*#/.test(line)) continue;
@@ -29,6 +34,7 @@ function readEnvFile(path) {
   }
 }
 
+/** @type {Record<string, string | undefined>} */
 const env = { ...readEnvFile(".env"), ...process.env };
 
 // Draft preview: point the site's Sanity client at the `drafts` perspective

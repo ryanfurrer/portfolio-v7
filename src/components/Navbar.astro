@@ -1,5 +1,6 @@
 ---
 import MobileNav from "@/components/MobileNav";
+import Presence from "@/components/Presence";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -35,7 +36,9 @@ const mobileNavItems = [
 
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isActive = (href: string) =>
-  href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+  href === "/"
+    ? pathname === "/"
+    : pathname === href || pathname.startsWith(`${href}/`);
 ---
 
 <nav class="md:px-2">
@@ -65,30 +68,33 @@ const isActive = (href: string) =>
         ></path>
       </svg>
     </a>
-    <ul class="hidden items-center gap-1 text-sm sm:flex" role="list">
-      {
-        navItems.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              name={`go to ${item.label.toLowerCase()} page`}
-              data-dir-hover="nav"
-              aria-current={isActive(item.href) ? "page" : undefined}
-              class={cn(
-                "block rounded-md px-3 py-1.5 font-medium transition-colors hover:text-foreground",
-                isActive(item.href)
-                  ? "bg-surface text-foreground"
-                  : "text-foreground-muted",
-              )}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-    <div class="sm:hidden">
-      <MobileNav client:load navItems={mobileNavItems} pathname={pathname} />
+    <div class="flex items-center gap-2 sm:gap-3">
+      <ul class="hidden items-center gap-1 text-sm sm:flex" role="list">
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                name={`go to ${item.label.toLowerCase()} page`}
+                data-dir-hover="nav"
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class={cn(
+                  "block rounded-md px-3 py-1.5 font-medium transition-colors hover:text-foreground",
+                  isActive(item.href)
+                    ? "bg-surface text-foreground"
+                    : "text-foreground-muted",
+                )}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <Presence client:idle />
+      <div class="sm:hidden">
+        <MobileNav client:load navItems={mobileNavItems} pathname={pathname} />
+      </div>
     </div>
   </div>
 </nav>
