@@ -92,7 +92,7 @@ export type Appearance = {
   slug?: Slug;
   publishedAt?: string;
   updatedAt?: string;
-  appearanceType?: "podcast" | "video" | "talk" | "presentation";
+  appearanceType?: "podcast" | "video" | "livestream" | "talk" | "presentation";
   externalUrl?: string;
   description?: string;
   ogImage?: OgImage;
@@ -489,7 +489,7 @@ export type APPEARANCE_QUERY_RESULT = {
   slug?: Slug;
   publishedAt?: string;
   updatedAt?: string;
-  appearanceType?: "podcast" | "presentation" | "talk" | "video";
+  appearanceType?: "livestream" | "podcast" | "presentation" | "talk" | "video";
   externalUrl?: string;
   description?: string;
   ogImage?: OgImage;

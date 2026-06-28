@@ -5,6 +5,7 @@ import {UserIcon} from '@sanity/icons'
 import {schemaTypes} from './src/sanity/schemaTypes'
 import {codeInput} from '@sanity/code-input'
 import {dataset, projectId} from './src/sanity/lib/config'
+import {publishWithUpdatedAt} from './src/sanity/lib/publishWithUpdatedAt'
 
 export default defineConfig({
   name: 'default',
@@ -46,5 +47,14 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
+  },
+
+  document: {
+    // Stamp `updatedAt` on publish, but only for already-published docs
+    // (so new entries don't get it). See publishWithUpdatedAt.
+    actions: (prev) =>
+      prev.map((action) =>
+        action.action === 'publish' ? publishWithUpdatedAt(action) : action,
+      ),
   },
 })
