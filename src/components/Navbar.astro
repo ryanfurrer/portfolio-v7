@@ -25,8 +25,13 @@ const navItems = [
   },
 ];
 
-// Mobile menu leads with Home since the logo is the only desktop home affordance.
-const mobileNavItems = [{ label: "Home", href: "/" }, ...navItems];
+// Mobile menu leads with Home (the logo is the only desktop home affordance)
+// and includes Links, which is intentionally kept out of the desktop nav.
+const mobileNavItems = [
+  { label: "Home", href: "/" },
+  ...navItems,
+  { label: "Links", href: "/links" },
+];
 
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isActive = (href: string) =>
@@ -38,7 +43,7 @@ const isActive = (href: string) =>
     <a
       href="/"
       name="go to home page"
-      class="block rounded-full transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-link"
+      class="block rounded-full focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-link"
     >
       <svg
         viewBox="0 0 4167 4167"
