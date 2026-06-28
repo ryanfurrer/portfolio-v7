@@ -31,16 +31,17 @@ function readEnvFile(path) {
 
 const env = { ...readEnvFile(".env"), ...process.env };
 
-// Draft preview (see `pnpm preview:drafts`): point the site's Sanity client
-// at the `drafts` perspective with a read token so unpublished/edited entries
-// render with the real styling. OFF for normal dev and all production builds,
-// which stay on published content only.
-const previewDrafts = env.SANITY_PREVIEW_DRAFTS === "true";
+// Draft preview: point the site's Sanity client at the `drafts` perspective
+// with a read token so unpublished/edited entries render with the real styling.
+// `pnpm dev` turns this on; production builds never do (they stay published).
+// A missing token degrades gracefully to published rather than breaking dev.
+const wantsDrafts = env.SANITY_PREVIEW_DRAFTS === "true";
 const readToken = env.SANITY_API_READ_TOKEN;
-if (previewDrafts && !readToken) {
-  throw new Error(
-    "Draft preview is on but SANITY_API_READ_TOKEN is missing. Add a Viewer " +
-      "token to .env (see .env.example), then rerun `pnpm preview:drafts`.",
+const previewDrafts = wantsDrafts && Boolean(readToken);
+if (wantsDrafts && !readToken) {
+  console.warn(
+    "[sanity] Draft preview is on but SANITY_API_READ_TOKEN is missing — " +
+      "showing published content. Add a Viewer token to .env (see .env.example).",
   );
 }
 
