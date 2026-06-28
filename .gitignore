@@ -6,6 +6,9 @@ dist/
 # the generated src/sanity/sanity.types.ts is committed)
 schema.json
 
+# Sanity Studio runtime (regenerated whenever the studio/dev server runs)
+.sanity/
+
 # dependencies
 node_modules/
 
