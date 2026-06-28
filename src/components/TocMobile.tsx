@@ -24,6 +24,7 @@ export default function TocMobile({ headings, title }: Props) {
   const [navHidden, setNavHidden] = useState(false);
   const [activeId, setActiveId] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const reduce = useReducedMotion();
 
   // Reveal only after the reader has scrolled into the page.
@@ -57,7 +58,12 @@ export default function TocMobile({ headings, title }: Props) {
       if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      // Return focus to the trigger so keyboard users aren't dropped to <body>
+      // when Escape unmounts the panel from under their focused heading link.
+      if (e.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     };
     document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
@@ -118,6 +124,7 @@ export default function TocMobile({ headings, title }: Props) {
       className="fixed inset-s-1/2 top-[calc(env(safe-area-inset-top)+5.5rem)] z-30 w-[65vw] overflow-hidden rounded-xl border border-border bg-background/70 shadow-lg backdrop-blur-xl lg:hidden dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
     >
       <button
+        ref={triggerRef}
         type="button"
         aria-expanded={open}
         aria-controls="toc-mobile-panel"

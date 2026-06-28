@@ -31,30 +31,35 @@ export default function BackToTop() {
   };
 
   return (
-    <motion.button
-      type="button"
-      onClick={handleClick}
-      aria-label="Back to top"
-      inert={!visible}
-      initial={false}
-      animate={{ opacity: visible ? 1 : 0, y: reduce ? 0 : visible ? 0 : 8 }}
-      transition={reduce ? { duration: 0.2 } : { duration: 0.3, ease: EASE_IOS }}
-      className="fixed end-4 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-30 flex items-center gap-2 rounded-lg border border-border bg-secondary/40 px-4 py-2.5 text-sm font-medium text-foreground shadow-lg backdrop-blur-xl transition-[scale] duration-150 ease-out hover:bg-secondary/60 active:scale-[0.96] dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
-    >
-      Back to top
-      <svg
-        viewBox="0 0 24 24"
-        className="size-4 shrink-0"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
+    // Wrapper pins to the page container's end edge (not the raw viewport edge),
+    // so on wide screens the button hugs the content column instead of floating
+    // out in the far margin. pointer-events pass through everywhere but the button.
+    <div className="pointer-events-none fixed inset-x-0 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-30 mx-auto flex max-w-280 justify-end px-4">
+      <motion.button
+        type="button"
+        onClick={handleClick}
+        aria-label="Back to top"
+        inert={!visible}
+        initial={false}
+        animate={{ opacity: visible ? 1 : 0, y: reduce ? 0 : visible ? 0 : 8 }}
+        transition={reduce ? { duration: 0.2 } : { duration: 0.3, ease: EASE_IOS }}
+        className="pointer-events-auto flex items-center gap-2 rounded-lg border border-border bg-secondary/40 px-4 py-2.5 text-sm font-medium text-foreground shadow-lg backdrop-blur-xl transition-[scale] duration-150 ease-out hover:bg-secondary/60 active:scale-[0.96] dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
       >
-        <path d="m5 12 7-7 7 7" />
-        <path d="M12 19V5" />
-      </svg>
-    </motion.button>
+        Back to top
+        <svg
+          viewBox="0 0 24 24"
+          className="size-4 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m5 12 7-7 7 7" />
+          <path d="M12 19V5" />
+        </svg>
+      </motion.button>
+    </div>
   );
 }

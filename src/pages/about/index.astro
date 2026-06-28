@@ -1,43 +1,30 @@
 ---
+import PortableText from "@/components/sanity/PortableText.astro";
 import Signature from "@/components/Signature.astro";
 import Layout from "@/layouts/Layout.astro";
+import { ABOUT_QUERY } from "@/sanity/lib/queries";
+import type { ABOUT_QUERY_RESULT } from "@/sanity/sanity.types";
+import { sanityClient } from "sanity:client";
 
-const description = "Learn more about me";
+const about = await sanityClient.fetch<ABOUT_QUERY_RESULT>(ABOUT_QUERY);
+
+const title = about?.title ?? "About";
+const description = about?.description ?? "Learn more about me";
+const body = about?.body ?? [];
 ---
 
-<Layout title="About — Ryan Furrer" description={description}>
+<Layout title={`${title} — Ryan Furrer`} description={description}>
   <div class="space-y-8 md:px-2">
     <header class="space-y-2">
       <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
-        About
+        {title}
       </h1>
       <p class="max-w-[60ch] text-pretty text-foreground-muted" data-reveal>
         {description}
       </p>
     </header>
     <main class="space-y-4" data-reveal>
-      <p>
-        I'm Ryan Furrer, a Frontend Engineer who cares about how things look,
-        how they feel, accessibility, and more. I thrive on tight-knit,
-        fast-moving teams where we ship often, iterate quickly, and can actually
-        see the impact of our work.
-      </p>
-      <p>
-        I believe great products come from sweating the details and caring about
-        the craft. I'm always looking for new challenges and opportunities to
-        learn and grow.
-      </p>
-      <p>
-        When I'm not working, you'll probably find me tinkering with side
-        projects, writing about what I'm learning, or exploring new tools and
-        projects.
-      </p>
-      <p>
-        Or, if I need some downtime, I'll fire up a game or catch up on whatever
-        shows or anime I've been putting off. <a href="/now"
-          >Check out what I'm currently up to!</a
-        >
-      </p>
+      {body.length > 0 && <PortableText portableText={body} />}
       <Signature />
     </main>
   </div>

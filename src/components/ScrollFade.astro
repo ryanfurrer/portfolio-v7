@@ -1,90 +1,57 @@
 ---
 /**
- * ScrollFade — full-width progressive blur at the viewport's bottom (and
- * optionally top) edge, so content dissolves into focus instead of cutting off.
+ * ScrollFade — a fixed gradient overlay at the viewport's bottom (and optionally
+ * top) edge that dissolves scrolling content into the page background.
  *
- * Desktop only (gated to `@media (hover: hover)`): on mobile the blur couldn't
- * reliably track Safari's animating toolbar. Parked for a future revisit.
+ * A single `linear-gradient` of the `--background` token: no backdrop-filter,
+ * no JS, no scroll listeners, so it's cheap on every device and adapts to
+ * light/dark automatically through the token. The transparent stop is the
+ * background color at zero alpha (relative-color syntax) to avoid the grey
+ * mid-band you get fading to `transparent` (transparent-black); the keyword
+ * fallback on the line above covers browsers without relative color.
  *
- * Stacks N layers whose blur radius doubles toward the edge, each masked to an
- * overlapping band — a single constant-radius layer reads as a smeary seam.
- *
- * Props: top/bottom (heights, "0" disables) · topBlur/bottomBlur (max px) · layers.
+ * Props: top/bottom heights ("0" disables that edge).
  */
 interface Props {
   top?: string;
   bottom?: string;
-  topBlur?: number;
-  bottomBlur?: number;
-  layers?: number;
 }
-const {
-  top = "0",
-  bottom = "5rem",
-  topBlur = 24,
-  bottomBlur = 5,
-  layers = 4,
-} = Astro.props;
-
-function buildLayers(maxBlur: number, n: number, dir: "top" | "bottom") {
-  const step = 100 / (n + 1);
-  const base = maxBlur / 2 ** (n - 1);
-  return Array.from({ length: n }, (_, i) => {
-    const blur = +(base * 2 ** i).toFixed(2);
-    const a = +(i * step).toFixed(2);
-    const b = +((i + 1) * step).toFixed(2);
-    const c = Math.min(100, +((i + 2) * step).toFixed(2));
-    const d = (i + 3) * step;
-    const stops =
-      d < 100
-        ? `transparent ${a}%, black ${b}%, black ${c}%, transparent ${+d.toFixed(2)}%`
-        : `transparent ${a}%, black ${b}%, black ${c}%`;
-    const mask = `linear-gradient(to ${dir}, ${stops})`;
-    return `backdrop-filter:blur(${blur}px);-webkit-backdrop-filter:blur(${blur}px);-webkit-mask-image:${mask};mask-image:${mask};`;
-  });
-}
-
+const { top = "0", bottom = "5rem" } = Astro.props;
 const showTop = top !== "0";
 const showBottom = bottom !== "0";
-const topLayers = showTop ? buildLayers(topBlur, layers, "top") : [];
-const bottomLayers = showBottom ? buildLayers(bottomBlur, layers, "bottom") : [];
 ---
 
-<div class="scroll-fade pointer-events-none" aria-hidden="true">
+<div class="pointer-events-none" aria-hidden="true">
   {
     showTop && (
-      <div class="sf-bar fixed inset-x-0 top-0 z-20" style={`height:${top}`}>
-        {topLayers.map((style) => (
-          <div class="sf-layer" style={style} />
-        ))}
-      </div>
+      <div class="sf-bar sf-top fixed inset-x-0 top-0 z-20" style={`height:${top}`} />
     )
   }
-
   {
     showBottom && (
-      <div class="sf-bar fixed inset-x-0 bottom-0 z-20" style={`height:${bottom}`}>
-        {bottomLayers.map((style) => (
-          <div class="sf-layer" style={style} />
-        ))}
-      </div>
+      <div
+        class="sf-bar sf-bottom fixed inset-x-0 bottom-0 z-20"
+        style={`height:${bottom}`}
+      />
     )
   }
 </div>
 
 <style>
-  .scroll-fade {
-    display: none;
+  .sf-top {
+    background-image: linear-gradient(to bottom, var(--background), transparent);
+    background-image: linear-gradient(
+      to bottom,
+      var(--background),
+      rgb(from var(--background) r g b / 0)
+    );
   }
-  @media (hover: hover) {
-    .scroll-fade {
-      display: block;
-    }
-  }
-  .sf-layer {
-    position: absolute;
-    inset: 0;
-    /* own compositing layer so Safari repaints the backdrop-filter on scroll */
-    transform: translateZ(0);
+  .sf-bottom {
+    background-image: linear-gradient(to top, var(--background), transparent);
+    background-image: linear-gradient(
+      to top,
+      var(--background),
+      rgb(from var(--background) r g b / 0)
+    );
   }
 </style>

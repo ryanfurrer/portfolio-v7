@@ -38,6 +38,50 @@ export type HeaderImage = {
   _type: "image";
 };
 
+export type Now = {
+  _id: string;
+  _type: "now";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  publishedAt?: string;
+  body?: BlockContent;
+  media?: Array<{
+    label?: string;
+    value?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+    _type: "mediaRow";
+    _key: string;
+  }>;
+};
+
+export type About = {
+  _id: string;
+  _type: "about";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: string;
+  body?: BlockContent;
+};
+
 export type Appearance = {
   _id: string;
   _type: "appearance";
@@ -48,12 +92,19 @@ export type Appearance = {
   slug?: Slug;
   publishedAt?: string;
   updatedAt?: string;
-  appearanceType?: "podcast" | "video" | "talk" | "presentation";
+  appearanceType?: "podcast" | "video" | "livestream" | "talk" | "presentation";
   externalUrl?: string;
   description?: string;
   ogImage?: OgImage;
   headerImage?: HeaderImage;
   body?: BlockContent;
+};
+
+export type CompanyReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "company";
 };
 
 export type Project = {
@@ -68,10 +119,53 @@ export type Project = {
   updatedAt?: string;
   projectUrl?: string;
   githubUrl?: string;
+  company?: CompanyReference;
   description?: string;
   ogImage?: OgImage;
   headerImage?: HeaderImage;
   body?: BlockContent;
+};
+
+export type Company = {
+  _id: string;
+  _type: "company";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  url?: string;
+  logo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  description?: string;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
 };
 
 export type Post = {
@@ -122,28 +216,6 @@ export type BlockContent = Array<
       _key: string;
     }
 >;
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
 
 export type Code = {
   _type: "code";
@@ -254,13 +326,17 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | OgImage
   | HeaderImage
+  | Now
+  | About
   | Appearance
+  | CompanyReference
   | Project
-  | Post
-  | BlockContent
+  | Company
   | SanityImageCrop
   | SanityImageHotspot
   | Slug
+  | Post
+  | BlockContent
   | Code
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -283,12 +359,16 @@ export type POSTS_QUERY_RESULT = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: PROJECTS_QUERY
-// Query: *[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}
+// Query: *[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt, "company": company->{name, "slug": slug.current}}
 export type PROJECTS_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
   slug: Slug | null;
   publishedAt: string | null;
+  company: {
+    name: string | null;
+    slug: string | null;
+  } | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
@@ -389,6 +469,7 @@ export type PROJECT_QUERY_RESULT = {
   updatedAt?: string;
   projectUrl?: string;
   githubUrl?: string;
+  company?: CompanyReference;
   description?: string;
   ogImage?: OgImage;
   headerImage?: HeaderImage;
@@ -408,7 +489,7 @@ export type APPEARANCE_QUERY_RESULT = {
   slug?: Slug;
   publishedAt?: string;
   updatedAt?: string;
-  appearanceType?: "podcast" | "presentation" | "talk" | "video";
+  appearanceType?: "livestream" | "podcast" | "presentation" | "talk" | "video";
   externalUrl?: string;
   description?: string;
   ogImage?: OgImage;
@@ -443,12 +524,85 @@ export type APPEARANCE_SLUGS_QUERY_RESULT = Array<{
   };
 }>;
 
+// Source: src/sanity/lib/queries.ts
+// Variable: ABOUT_QUERY
+// Query: *[_type == "about"][0]{title, description, body}
+export type ABOUT_QUERY_RESULT = {
+  title: string | null;
+  description: string | null;
+  body: BlockContent | null;
+} | null;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: NOW_QUERY
+// Query: *[_type == "now"]|order(publishedAt desc){_id, publishedAt, body, media}
+export type NOW_QUERY_RESULT = Array<{
+  _id: string;
+  publishedAt: string | null;
+  body: BlockContent | null;
+  media: Array<{
+    label?: string;
+    value?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+    _type: "mediaRow";
+    _key: string;
+  }> | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: WORK_HUBS_QUERY
+// Query: {  "companies": *[_type == "company" && defined(slug.current)]|order(name asc){    name,    "slug": slug.current,    url,    logo,    description,    "projects": *[_type == "project" && references(^._id) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}  },  "personal": *[_type == "project" && !defined(company) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}}
+export type WORK_HUBS_QUERY_RESULT = {
+  companies: Array<{
+    name: string | null;
+    slug: string | null;
+    url: string | null;
+    logo: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    } | null;
+    description: string | null;
+    projects: Array<{
+      _id: string;
+      title: string | null;
+      slug: Slug | null;
+      publishedAt: string | null;
+    }>;
+  }>;
+  personal: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    publishedAt: string | null;
+  }>;
+};
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "post" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}': POSTS_QUERY_RESULT;
-    '*[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}': PROJECTS_QUERY_RESULT;
+    '*[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt, "company": company->{name, "slug": slug.current}}': PROJECTS_QUERY_RESULT;
     '*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}': APPEARANCES_QUERY_RESULT;
     '*[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_POSTS_QUERY_RESULT;
     '*[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_PROJECTS_QUERY_RESULT;
@@ -460,5 +614,8 @@ declare module "@sanity/client" {
     '*[_type == "post" && defined(slug.current)]{"params": {"slug": slug.current}}': POST_SLUGS_QUERY_RESULT;
     '*[_type == "project" && defined(slug.current)]{"params": {"slug": slug.current}}': PROJECT_SLUGS_QUERY_RESULT;
     '*[_type == "appearance" && defined(slug.current)]{"params": {"slug": slug.current}}': APPEARANCE_SLUGS_QUERY_RESULT;
+    '*[_type == "about"][0]{title, description, body}': ABOUT_QUERY_RESULT;
+    '*[_type == "now"]|order(publishedAt desc){_id, publishedAt, body, media}': NOW_QUERY_RESULT;
+    '{\n  "companies": *[_type == "company" && defined(slug.current)]|order(name asc){\n    name,\n    "slug": slug.current,\n    url,\n    logo,\n    description,\n    "projects": *[_type == "project" && references(^._id) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}\n  },\n  "personal": *[_type == "project" && !defined(company) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}\n}': WORK_HUBS_QUERY_RESULT;
   }
 }

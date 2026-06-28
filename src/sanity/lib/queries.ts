@@ -15,7 +15,7 @@ export const POSTS_QUERY = defineQuery(
 );
 
 export const PROJECTS_QUERY = defineQuery(
-  `*[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}`,
+  `*[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt, "company": company->{name, "slug": slug.current}}`,
 );
 
 export const APPEARANCES_QUERY = defineQuery(
@@ -71,3 +71,29 @@ export const PROJECT_SLUGS_QUERY = defineQuery(
 export const APPEARANCE_SLUGS_QUERY = defineQuery(
   `*[_type == "appearance" && defined(slug.current)]{"params": {"slug": slug.current}}`,
 );
+
+// --- About (singleton) ---
+
+export const ABOUT_QUERY = defineQuery(
+  `*[_type == "about"][0]{title, description, body}`,
+);
+
+// --- Now (newest = "Now" card, rest = "Previously") ---
+
+export const NOW_QUERY = defineQuery(
+  `*[_type == "now"]|order(publishedAt desc){_id, publishedAt, body, media}`,
+);
+
+// --- Work tag hubs (one per company + a derived "personal" bucket) ---
+
+export const WORK_HUBS_QUERY = defineQuery(`{
+  "companies": *[_type == "company" && defined(slug.current)]|order(name asc){
+    name,
+    "slug": slug.current,
+    url,
+    logo,
+    description,
+    "projects": *[_type == "project" && references(^._id) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}
+  },
+  "personal": *[_type == "project" && !defined(company) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}
+}`);

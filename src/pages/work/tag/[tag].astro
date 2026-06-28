@@ -1,0 +1,132 @@
+---
+import BackLink from "@/components/BackLink.astro";
+import Item from "@/components/Item.astro";
+import Layout from "@/layouts/Layout.astro";
+import { groupByYear } from "@/sanity/lib/content";
+import { WORK_HUBS_QUERY } from "@/sanity/lib/queries";
+import { urlForImage } from "@/sanity/lib/url-for-image";
+import type { WORK_HUBS_QUERY_RESULT } from "@/sanity/sanity.types";
+import { sanityClient } from "sanity:client";
+
+// One hub per company that has projects, plus a derived "personal" bucket
+// (projects with no company). Lives under /work/tag/* to avoid colliding
+// with the /work/[slug] project-detail route.
+export async function getStaticPaths() {
+  const { companies, personal } =
+    await sanityClient.fetch<WORK_HUBS_QUERY_RESULT>(WORK_HUBS_QUERY);
+
+  const paths = companies
+    .filter((c) => c.slug && c.projects.length > 0)
+    .map((c) => ({
+      params: { tag: c.slug as string },
+      props: {
+        label: c.name ?? (c.slug as string),
+        url: c.url,
+        description: c.description,
+        logo: c.logo,
+        projects: c.projects,
+      },
+    }));
+
+  if (personal.length > 0) {
+    paths.push({
+      params: { tag: "personal" },
+      props: {
+        label: "Personal",
+        url: null,
+        description:
+          "Things I've built for myself — side projects and experiments.",
+        logo: null,
+        projects: personal,
+      },
+    });
+  }
+
+  return paths;
+}
+
+const { label, url, description, logo, projects } = Astro.props;
+const { byYear, years } = groupByYear(projects);
+
+const logoUrl = logo
+  ? urlForImage(logo).width(80).height(80).fit("max").url()
+  : null;
+const metaDescription = description ?? `Work for ${label}`;
+---
+
+<Layout title={`${label} — Work — Ryan Furrer`} description={metaDescription}>
+  <!-- Desktop: back link in left gutter -->
+  <div slot="left" class="sticky top-20">
+    <BackLink href="/work" label="Work" />
+  </div>
+
+  <div class="space-y-8">
+    <BackLink href="/work" label="Work" class="lg:hidden" />
+    <header class="space-y-3 md:px-2">
+      <div class="flex items-center gap-3">
+        {
+          logoUrl && (
+            <img
+              src={logoUrl}
+              alt={`${label} logo`}
+              width="40"
+              height="40"
+              class="size-10 rounded-lg object-contain ring-1 ring-black/10 dark:ring-white/10"
+              data-reveal
+            />
+          )
+        }
+        <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
+          {label}
+        </h1>
+      </div>
+      {
+        description && (
+          <p class="max-w-[60ch] text-pretty text-foreground-muted" data-reveal>
+            {description}
+          </p>
+        )
+      }
+      {
+        url && (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group/cta inline-flex items-center gap-1 text-sm text-link"
+            data-reveal
+          >
+            Visit website
+            <span class="transition-transform group-hover/cta:translate-x-0.5">
+              →
+            </span>
+          </a>
+        )
+      }
+    </header>
+    <main>
+      <div class="space-y-8">
+        {
+          years.map((year) => (
+            <section class="space-y-4">
+              <h2 class="small-heading text-sm md:px-2" data-reveal>
+                {year}
+              </h2>
+              <ul class="flex flex-col gap-px" role="list">
+                {byYear[year].map((project) => (
+                  <li>
+                    <Item
+                      title={project.title}
+                      href={`/work/${project.slug?.current}`}
+                      publishedAt={project.publishedAt}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </main>
+  </div>
+</Layout>

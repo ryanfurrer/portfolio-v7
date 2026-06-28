@@ -34,6 +34,13 @@ export const projectType = defineType({
       type: 'url',
       title: 'GitHub Repo URL',
     }),
+    defineField({
+      name: 'company',
+      type: 'reference',
+      title: 'Company',
+      to: [{type: 'company'}],
+      description: 'Leave empty for personal projects.',
+    }),
     descriptionField,
     ogImageField,
     headerImageField,

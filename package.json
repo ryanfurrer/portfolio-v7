@@ -3,7 +3,8 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "SANITY_PREVIEW_DRAFTS=true astro dev",
+    "dev:published": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",

@@ -13,6 +13,20 @@ import {
   updatedAtField,
 } from './shared'
 
+// Single source of truth for the appearance kinds: drives both the Studio
+// radio list and the preview subtitle label (so e.g. "Live Stream" reads
+// correctly instead of a naive capitalize of the stored value).
+const APPEARANCE_TYPES = [
+  {title: 'Podcast', value: 'podcast'},
+  {title: 'Video', value: 'video'},
+  {title: 'Live Stream', value: 'livestream'},
+  {title: 'Talk', value: 'talk'},
+  {title: 'Presentation', value: 'presentation'},
+]
+const APPEARANCE_TYPE_LABELS: Record<string, string> = Object.fromEntries(
+  APPEARANCE_TYPES.map((t) => [t.value, t.title]),
+)
+
 export const appearanceType = defineType({
   name: 'appearance',
   title: 'Appearance',
@@ -29,12 +43,7 @@ export const appearanceType = defineType({
       type: 'string',
       title: 'Appearance Type',
       options: {
-        list: [
-          {title: 'Podcast', value: 'podcast'},
-          {title: 'Video', value: 'video'},
-          {title: 'Talk', value: 'talk'},
-          {title: 'Presentation', value: 'presentation'},
-        ],
+        list: APPEARANCE_TYPES,
         layout: 'radio',
       },
       validation: (rule) => rule.required(),
@@ -61,9 +70,7 @@ export const appearanceType = defineType({
       media: 'ogImage',
     },
     prepare({title, date, type, media}) {
-      const label = type
-        ? type.charAt(0).toUpperCase() + type.slice(1)
-        : undefined
+      const label = type ? (APPEARANCE_TYPE_LABELS[type] ?? type) : undefined
       const subtitle = [label, formatPreviewDate(date)]
         .filter(Boolean)
         .join(' · ')

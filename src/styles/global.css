@@ -366,38 +366,6 @@ html {
     text-wrap: balance;
   }
 
-  /* Body links read as "ink" at rest — foreground text + a faint underline so
-     they're identifiable without color — and reveal the accent on hover. Keeps
-     the accent reserved for interaction + deliberate CTAs rather than spending
-     it on every inline link. */
-  main a:not(.no-underline) {
-    font-weight: inherit;
-    color: var(--color-foreground);
-    text-decoration: underline;
-    text-decoration-color: color-mix(
-      in oklch,
-      var(--color-foreground) 35%,
-      transparent
-    );
-    text-decoration-skip-ink: none;
-    transition-property: color, text-decoration-color;
-    transition-timing-function: var(--ease-out-curve);
-    transition-duration: 150ms;
-    &:hover {
-      color: var(--link);
-      text-decoration-color: var(--link);
-    }
-  }
-
-  main a:not(.no-underline, .links-card):hover,
-  main a:not(.no-underline, .links-card):focus {
-    border-bottom-color: color-mix(
-      in oklch,
-      var(--color-foreground) 90%,
-      transparent
-    );
-  }
-
   .font-mono-custom {
     font-family: var(--font-mono);
     font-size: 0.875rem;
@@ -459,25 +427,6 @@ html {
   .prose h6 {
     color: var(--color-foreground) !important;
     scroll-margin-block-start: 1.5em;
-  }
-
-  .prose a:not(.no-underline) {
-    color: var(--color-foreground) !important;
-    font-weight: inherit !important;
-    text-decoration: underline !important;
-    text-decoration-color: color-mix(
-      in oklch,
-      var(--color-foreground) 35%,
-      transparent
-    ) !important;
-    text-decoration-skip-ink: none;
-    transition-property: color, text-decoration-color;
-    transition-timing-function: var(--ease-out-curve);
-    transition-duration: 150ms;
-    &:hover {
-      color: var(--link) !important;
-      text-decoration-color: var(--link) !important;
-    }
   }
 
   .prose b,
@@ -650,6 +599,33 @@ html {
 [data-toc-link].is-active {
   color: var(--color-primary);
   font-weight: 600;
+}
+
+/* Body links — single source of truth for both plain (main) and rich-text
+   (.prose) contexts. Kept outside @layer so it beats Tailwind Typography's
+   prose link styles, which live in a later cascade layer and would otherwise
+   win on layer order (regardless of specificity) — this is what the old
+   .prose a !important duplicate was really working around. Reads as foreground
+   "ink" + a faint underline at rest, and reveals the reserved accent on hover
+   and keyboard focus (focus also gets the global outline ring on top). */
+:is(main, .prose) a:not(.no-underline) {
+  font-weight: inherit;
+  color: var(--color-foreground);
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in oklch,
+    var(--color-foreground) 35%,
+    transparent
+  );
+  text-decoration-skip-ink: none;
+  transition-property: color, text-decoration-color;
+  transition-timing-function: var(--ease-out-curve);
+  transition-duration: 150ms;
+  &:hover,
+  &:focus-visible {
+    color: var(--link);
+    text-decoration-color: var(--link);
+  }
 }
 
 @utility touch-hitbox {

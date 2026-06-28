@@ -29,11 +29,18 @@ export const publishedAtField = defineField({
   validation: (rule) => rule.required(),
 })
 
+/**
+ * Last-updated timestamp. Deliberately has NO initialValue — a brand-new
+ * entry should leave this empty (it isn't an "update" yet). It's stamped
+ * automatically on publish, but only when a published version already
+ * exists, by the custom publish action in sanity.config.ts. The frontend
+ * shows an "Updated" badge only when this is set.
+ */
 export const updatedAtField = defineField({
   name: 'updatedAt',
   title: 'Updated At',
   type: 'datetime',
-  initialValue: () => new Date().toISOString(),
+  readOnly: true,
 })
 
 export const descriptionField = defineField({
