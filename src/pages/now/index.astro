@@ -1,8 +1,16 @@
 ---
+import PortableText from "@/components/sanity/PortableText.astro";
 import Layout from "@/layouts/Layout.astro";
+import { NOW_QUERY } from "@/sanity/lib/queries";
+import type { NOW_QUERY_RESULT } from "@/sanity/sanity.types";
+import { formatDateLong } from "@/utils/date";
+import { sanityClient } from "sanity:client";
 
 const title = "Now";
 const description = "What I'm up to currently";
+
+// Newest entry is the live "Now" card; the rest become "Previously".
+const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
 ---
 
 <Layout title={title} description={description}>
@@ -14,138 +22,59 @@ const description = "What I'm up to currently";
       </p>
     </header>
     <main class="space-y-6 md:px-2">
-      <article class="now-card" data-reveal>
-        <header class="now-head flex items-baseline justify-between gap-4">
-          <span class="small-heading">Now</span>
-          <time
-            datetime="2026-02-02"
-            class="text-sm font-medium text-foreground-muted"
-            >February 2, 2026</time
-          >
-        </header>
-        <div class="now-body">
-          <p>
-            I just returned from my first company offsite which took place in
-            Portland, OR. It was a long week but great to meet everyone
-            in-person and get to know everyone better.
+      {
+        entries.map((entry, i) => {
+          const dateLong = entry.publishedAt
+            ? formatDateLong(entry.publishedAt)
+            : null;
+          const dateIso = entry.publishedAt?.slice(0, 10);
+          return (
+            <article class="now-card" data-reveal>
+              <header class="now-head flex items-baseline justify-between gap-4">
+                <span class="small-heading">
+                  {i === 0 ? "Now" : "Previously"}
+                </span>
+                {dateLong && (
+                  <time
+                    datetime={dateIso}
+                    class="text-sm font-medium text-foreground-muted"
+                  >
+                    {dateLong}
+                  </time>
+                )}
+              </header>
+              {entry.body && entry.body.length > 0 && (
+                <div class="now-body">
+                  <PortableText portableText={entry.body} />
+                </div>
+              )}
+              {entry.media && entry.media.length > 0 && (
+                <dl class="now-meta">
+                  {entry.media.map((row) => (
+                    <div class="now-row flex flex-col sm:flex-row sm:gap-4">
+                      <dt class="small-heading shrink-0 sm:w-28">
+                        {row.label}
+                      </dt>
+                      <dd class="flex-1 text-pretty">
+                        {row.value && row.value.length > 0 && (
+                          <PortableText portableText={row.value} />
+                        )}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+            </article>
+          );
+        })
+      }
+      {
+        entries.length === 0 && (
+          <p class="text-pretty text-foreground-subtle md:px-2">
+            Nothing here yet — check back soon.
           </p>
-          <p>
-            During February, I plan to continue my focus on my mental and
-            physical health including returning to the gym which I'm excited
-            for. I'm also focusing a lot on my finances this year to prepare to
-            move into a new apartment next year. The plans are made, now it's up
-            to me to execute.
-          </p>
-          <p>
-            I'm also excited for a handful of projects I'm working on, one of
-            which is a personal dashboard I can use to track various things like
-            my social following, habits, to-dos, and more. Think of it like a
-            one-stop-shop for myself.
-          </p>
-          <p>
-            More on that will be shared in the near-ish future on my <a
-              href="https://x.com/ryandotfurrer">X/Twitter</a
-            >.
-          </p>
-        </div>
-        <dl class="now-meta">
-          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 sm:w-28">Watching</dt>
-            <dd class="flex-1 text-pretty">
-              Finishing up <a href="https://www.youtube.com/watch?v=uXr9Ha9qRHE"
-                >Dan Da Dan (Season 2)</a
-              >, then rewatching <a
-                href="https://www.youtube.com/watch?v=Iwr1aLEDpe4"
-                >Frieren: Beyond Journey's End, Season 1</a
-              > before diving into <a
-                href="https://www.youtube.com/watch?v=EOMVXqH9DSg">Season 2</a
-              >
-            </dd>
-          </div>
-          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 sm:w-28">Reading</dt>
-            <dd class="flex-1 text-pretty">
-              Finishing up <a
-                href="https://store.dailystoic.com/collections/all-books/products/the-obstacle-is-the-way-expanded-10th-anniversary-edition"
-                >The Obstacle is the Way by Ryan Holiday</a
-              >
-            </dd>
-          </div>
-          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 sm:w-28">Playing</dt>
-            <dd class="flex-1 text-pretty">
-              <a href="https://www.expedition33.com/"
-                >Clair Obscur: Expedition 33</a
-              >
-            </dd>
-          </div>
-          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 sm:w-28">Obsessed with</dt>
-            <dd class="flex-1 text-pretty">
-              This cover of <a
-                href="https://youtu.be/KsrN_jsDFOA?si=dRT_Mg1ffS_CYfIG"
-                >Radiohead's "Creep" by Erin Morton</a
-              > and a cover of <a
-                href="https://youtu.be/9WoCqEZMBL0?si=Olk9GyCHzv2VywOW"
-                >"New York, New York" by Lawrence</a
-              >
-            </dd>
-          </div>
-        </dl>
-      </article>
-      <article class="now-card" data-reveal>
-        <header class="now-head flex items-baseline justify-between gap-4">
-          <span class="small-heading">Previously</span>
-          <time
-            datetime="2026-01-01"
-            class="text-sm font-medium text-foreground-muted"
-            >January 1, 2026</time
-          >
-        </header>
-        <div class="now-body">
-          <p>
-            Focusing on both my mental and physical health, giving it all at my
-            job, and moving into a new apartment next year. I'm setting up the
-            systems now to help me stay on track and meet my goals.
-          </p>
-        </div>
-        <dl class="now-meta">
-          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 sm:w-28">Watching</dt>
-            <dd class="flex-1 text-pretty">
-              <a href="https://www.youtube.com/watch?v=uXr9Ha9qRHE"
-                >Dan Da Dan (Season 2)</a
-              >
-            </dd>
-          </div>
-          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 sm:w-28">Reading</dt>
-            <dd class="flex-1 text-pretty">
-              <a
-                href="https://store.dailystoic.com/collections/all-books/products/the-obstacle-is-the-way-expanded-10th-anniversary-edition"
-                >The Obstacle is the Way by Ryan Holiday</a
-              >
-            </dd>
-          </div>
-          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 sm:w-28">Playing</dt>
-            <dd class="flex-1 text-pretty">
-              <a href="https://www.expedition33.com/"
-                >Clair Obscur: Expedition 33</a
-              >
-            </dd>
-          </div>
-          <div class="now-row flex flex-col sm:flex-row sm:gap-4">
-            <dt class="small-heading shrink-0 sm:w-28">Obsessed with</dt>
-            <dd class="flex-1 text-pretty">
-              <a
-                href="https://www.youtube.com/watch?v=jH3xpS7Q_3E&list=OLAK5uy_k_hE5HhMiwlHuzdS7R17Yk8w68ilnSrMw&index=2"
-                >Final Fantasy VII Remake Acoustic Arrangements</a
-              >
-            </dd>
-          </div>
-        </dl>
-      </article>
+        )
+      }
     </main>
   </div>
 </Layout>
