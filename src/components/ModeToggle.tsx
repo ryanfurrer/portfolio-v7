@@ -89,10 +89,10 @@ export default function ModeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label="Toggle theme"
-        className="relative inline-flex size-10 items-center justify-center rounded-lg text-foreground-muted transition-colors hover:bg-surface hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link sm:ms-0 sm:size-8 sm:rounded-md"
+        className="relative inline-flex size-10 items-center justify-center rounded-lg text-foreground-muted transition-[color,background-color,scale] duration-150 ease-out hover:bg-surface hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link active:scale-[0.96] sm:ms-0 sm:size-8 sm:rounded-md"
       >
-        <SunIcon className="size-[1.1rem] scale-100 rotate-0 transition-all duration-300 ease-out dark:scale-0 dark:-rotate-90" />
-        <MoonIcon className="absolute size-[1.1rem] scale-0 rotate-90 transition-all duration-300 ease-out dark:scale-100 dark:rotate-0" />
+        <SunIcon className="size-[1.1rem] scale-100 rotate-0 opacity-100 blur-0 transition-[scale,rotate,opacity,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)] dark:scale-[0.25] dark:-rotate-90 dark:opacity-0 dark:blur-[4px]" />
+        <MoonIcon className="absolute size-[1.1rem] scale-[0.25] rotate-90 opacity-0 blur-[4px] transition-[scale,rotate,opacity,filter] duration-300 ease-[cubic-bezier(0.2,0,0,1)] dark:scale-100 dark:rotate-0 dark:opacity-100 dark:blur-0" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {OPTIONS.map((option) => (
