@@ -75,8 +75,14 @@ export default function Presence() {
         />
       </span>
       <span className="tabular-nums">
-        {PRESENCE.location}
-        {now && ` ${timeFormatter.format(now)}`}
+        {PRESENCE.location}{" "}
+        {now ? (
+          timeFormatter.format(now)
+        ) : (
+          // Same-width placeholder (tabular-nums: "--:--" === "21:05") so the
+          // time appearing on mount doesn't shift the navbar layout (no CLS).
+          <span className="text-foreground-subtle/50">--:--</span>
+        )}
       </span>
       <span className="sr-only">
         {now ? (online ? "Online" : "Offline") : ""}
