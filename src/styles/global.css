@@ -3,7 +3,11 @@
 @import "shadcn/tailwind.css";
 @plugin "@tailwindcss/typography";
 
-@custom-variant dark (@media (prefers-color-scheme: dark));
+/* Manual theme: `dark:` utilities key off a `.dark` class on <html>, set before
+   paint by the inline script in Head.astro (which resolves the stored choice or
+   the OS preference). System preference is honored through that script, not a
+   media query, so a manual Light/Dark choice can override the OS. */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @font-face {
   font-family: "Geist";
@@ -67,10 +71,8 @@ html {
 ::selection {
   background-color: color-mix(in oklch, var(--link) 22%, transparent);
 }
-@media (prefers-color-scheme: dark) {
-  ::selection {
-    background-color: color-mix(in oklch, var(--link) 32%, transparent);
-  }
+.dark ::selection {
+  background-color: color-mix(in oklch, var(--link) 32%, transparent);
 }
 
 ::-webkit-scrollbar {
@@ -93,16 +95,14 @@ html {
   scrollbar-width: thin;
   scrollbar-color: oklch(0 0 0 / 0.22) transparent;
 }
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-thumb {
-    background-color: oklch(1 0 0 / 0.2);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: oklch(1 0 0 / 0.33);
-  }
-  html {
-    scrollbar-color: oklch(1 0 0 / 0.2) transparent;
-  }
+.dark ::-webkit-scrollbar-thumb {
+  background-color: oklch(1 0 0 / 0.2);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(1 0 0 / 0.33);
+}
+html.dark {
+  scrollbar-color: oklch(1 0 0 / 0.2) transparent;
 }
 
 /* Mobile menu reveal — clip from the top edge so the panel appears to grow down
@@ -276,56 +276,54 @@ html {
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --background: oklch(0.165 0 0); /* deep near-black, ~#1a1a1a */
-    /* Apple-style neutral text hierarchy (dark) — brighter than light's so
-       body copy stays readable against the dark field */
-    --foreground: #f5f5f7; /* primary — headings & key copy */
-    --foreground-muted: #a1a1a6; /* secondary — body & descriptions */
-    --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
-    /* Vermilion, lightened for the dark field (AA on ~#1a1a1a) */
-    --link: oklch(0.66 0.21 32.91); /* ≈ #f84f2f — 5.10:1 */
-    --link-hover: oklch(0.7 0.189 32.91); /* lighter — 6.0:1 */
-    /* Recessed surfaces (dark) — a single perceptual step above the page,
-       paired with a hairline inset ring on cards for definition */
-    --surface: oklch(0.215 0 0);
-    --surface-hover: oklch(0.245 0 0);
-    --badge: oklch(0.245 0 0);
-    --badge-foreground: var(--foreground-muted);
-    --card: oklch(0.215 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    /* Soft elevation is a light-mode device; flatten it in the dark */
-    --shadow-elevated: none;
-    --popover: oklch(0.215 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
-  }
+.dark {
+  color-scheme: dark;
+  --background: oklch(0.165 0 0); /* deep near-black, ~#1a1a1a */
+  /* Apple-style neutral text hierarchy (dark) — brighter than light's so
+     body copy stays readable against the dark field */
+  --foreground: #f5f5f7; /* primary — headings & key copy */
+  --foreground-muted: #a1a1a6; /* secondary — body & descriptions */
+  --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
+  /* Vermilion, lightened for the dark field (AA on ~#1a1a1a) */
+  --link: oklch(0.66 0.21 32.91); /* ≈ #f84f2f — 5.10:1 */
+  --link-hover: oklch(0.7 0.189 32.91); /* lighter — 6.0:1 */
+  /* Recessed surfaces (dark) — a single perceptual step above the page,
+     paired with a hairline inset ring on cards for definition */
+  --surface: oklch(0.215 0 0);
+  --surface-hover: oklch(0.245 0 0);
+  --badge: oklch(0.245 0 0);
+  --badge-foreground: var(--foreground-muted);
+  --card: oklch(0.215 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  /* Soft elevation is a light-mode device; flatten it in the dark */
+  --shadow-elevated: none;
+  --popover: oklch(0.215 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
@@ -461,15 +459,13 @@ html {
   /* Shiki dual-theme: the <Code> component ships catppuccin-latte (light) as
      inline styles plus a parallel set of --shiki-dark vars. Swap to the dark
      palette under prefers-color-scheme; inline styles force the !important. */
-  @media (prefers-color-scheme: dark) {
-    .astro-code,
-    .astro-code span {
-      color: var(--shiki-dark) !important;
-      background-color: var(--shiki-dark-bg) !important;
-      font-style: var(--shiki-dark-font-style) !important;
-      font-weight: var(--shiki-dark-font-weight) !important;
-      text-decoration: var(--shiki-dark-text-decoration) !important;
-    }
+  .dark .astro-code,
+  .dark .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
   }
 
   .prose blockquote {
@@ -487,10 +483,8 @@ html {
     border: 1px solid rgba(0, 0, 0, 0.1);
   }
 
-  @media (prefers-color-scheme: dark) {
-    .prose img {
-      border-color: rgba(255, 255, 255, 0.1);
-    }
+  .dark .prose img {
+    border-color: rgba(255, 255, 255, 0.1);
   }
 
   /* Traveling highlight hover effect for Item components */

@@ -157,23 +157,17 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
     text-decoration-color: currentColor;
   }
 
-  @media (prefers-color-scheme: dark) {
-    .now-card {
-      background-color: oklch(0.21 0 0);
-      background-image:
-        linear-gradient(
-          to right,
-          transparent 0 2.25rem,
-          color-mix(in oklch, var(--link) 42%, transparent) 2.25rem 2.28rem,
-          transparent 2.28rem
-        ),
-        linear-gradient(
-          to bottom,
-          oklch(0.92 0 0 / 0.07) 0 1px,
-          transparent 1px
-        );
-      border-color: oklch(1 0 0 / 0.08);
-      box-shadow: none;
-    }
+  :global(.dark) .now-card {
+    background-color: oklch(0.21 0 0);
+    background-image:
+      linear-gradient(
+        to right,
+        transparent 0 2.25rem,
+        color-mix(in oklch, var(--link) 42%, transparent) 2.25rem 2.28rem,
+        transparent 2.28rem
+      ),
+      linear-gradient(to bottom, oklch(0.92 0 0 / 0.07) 0 1px, transparent 1px);
+    border-color: oklch(1 0 0 / 0.08);
+    box-shadow: none;
   }
 </style>

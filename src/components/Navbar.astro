@@ -1,5 +1,6 @@
 ---
 import MobileNav from "@/components/MobileNav";
+import ModeToggle from "@/components/ModeToggle";
 import Presence from "@/components/Presence";
 import { cn } from "@/lib/utils";
 
@@ -90,8 +91,11 @@ const isActive = (href: string) =>
         ))
       }
     </ul>
-    <div class="flex items-center gap-2 sm:gap-3">
-      <Presence client:idle />
+    <div class="flex items-center gap-1 sm:gap-2">
+      <div class="flex items-center rounded-md bg-secondary ps-2.5 md:gap-1">
+        <Presence client:idle />
+        <ModeToggle client:idle />
+      </div>
       <div class="sm:hidden">
         <MobileNav client:load navItems={mobileNavItems} pathname={pathname} />
       </div>
