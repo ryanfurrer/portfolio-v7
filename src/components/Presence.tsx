@@ -34,7 +34,9 @@ const hourFormatter = new Intl.DateTimeFormat("en-US", {
 
 /** True when `hour` falls in the waking window, handling windows that wrap midnight. */
 function isAwake(hour: number, wake: number, sleep: number) {
-  return wake <= sleep ? hour >= wake && hour < sleep : hour >= wake || hour < sleep;
+  return wake <= sleep
+    ? hour >= wake && hour < sleep
+    : hour >= wake || hour < sleep;
 }
 
 export default function Presence() {
@@ -49,18 +51,26 @@ export default function Presence() {
   }, []);
 
   const online = now
-    ? isAwake(Number(hourFormatter.format(now)), PRESENCE.wakeHour, PRESENCE.sleepHour)
+    ? isAwake(
+        Number(hourFormatter.format(now)),
+        PRESENCE.wakeHour,
+        PRESENCE.sleepHour,
+      )
     : false;
 
   return (
-    <div className="inline-flex items-center gap-2 text-sm text-foreground-muted">
+    <div className="font-mono-custom inline-flex items-center gap-2 text-foreground-muted">
       <span className="relative flex size-2" aria-hidden="true">
         {now && online && (
           <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500/70 motion-reduce:hidden" />
         )}
         <span
           className={`relative inline-flex size-2 rounded-full ${
-            now ? (online ? "bg-emerald-500" : "bg-foreground-subtle") : "bg-foreground-subtle/50"
+            now
+              ? online
+                ? "bg-emerald-500"
+                : "bg-foreground-subtle"
+              : "bg-foreground-subtle/50"
           }`}
         />
       </span>
