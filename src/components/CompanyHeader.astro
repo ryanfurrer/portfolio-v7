@@ -1,0 +1,62 @@
+---
+import { urlForImage } from "@/sanity/lib/url-for-image";
+import type { WORK_HUBS_QUERY_RESULT } from "@/sanity/sanity.types";
+
+type Company = WORK_HUBS_QUERY_RESULT["companies"][number];
+
+interface Props {
+  label: string;
+  url: Company["url"];
+  description: Company["description"];
+  logo: Company["logo"];
+}
+
+const { label, url, description, logo } = Astro.props;
+
+const logoUrl = logo
+  ? urlForImage(logo).width(80).height(80).fit("max").url()
+  : null;
+---
+
+<header class="space-y-3 md:px-2">
+  <div class="flex items-center gap-3">
+    {
+      logoUrl && (
+        <img
+          src={logoUrl}
+          alt={`${label} logo`}
+          width="40"
+          height="40"
+          class="size-10 object-contain"
+          data-reveal
+        />
+      )
+    }
+    <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
+      {label}
+    </h1>
+  </div>
+  {
+    description && (
+      <p class="max-w-[60ch] text-pretty text-foreground-muted" data-reveal>
+        {description}
+      </p>
+    )
+  }
+  {
+    url && (
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group/cta inline-flex items-center gap-1 text-sm text-link"
+        data-reveal
+      >
+        Visit website
+        <span class="transition-transform group-hover/cta:translate-x-0.5">
+          →
+        </span>
+      </a>
+    )
+  }
+</header>

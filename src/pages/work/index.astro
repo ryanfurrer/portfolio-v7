@@ -15,7 +15,7 @@ const showEarlyState = projects.length <= 1;
 
 // Build the tag chips from the projects we already have: one per distinct
 // company, plus a "Personal" bucket for projects with no company. Each links
-// to its /work/tag/* hub.
+// to its /work/companies/* hub.
 const companyTags = new Map<string, string>();
 let hasPersonal = false;
 for (const project of projects) {
@@ -45,7 +45,7 @@ const tags = [
           <nav aria-label="Filter work by tag" class="flex flex-wrap gap-2 pt-1">
             {tags.map((tag) => (
               <a
-                href={`/work/tag/${tag.slug}`}
+                href={`/work/companies/${tag.slug}`}
                 class="rounded-full border border-border bg-surface px-3 py-1 text-sm text-foreground-muted no-underline transition hover:bg-surface-hover hover:text-foreground"
                 data-reveal
               >
