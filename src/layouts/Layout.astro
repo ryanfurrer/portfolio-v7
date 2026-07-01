@@ -45,7 +45,7 @@ const isContentPage = contentPrefixes.some(
     >
       <a
         href="#main-content"
-        class="sr-only pointer-events-auto focus:not-sr-only focus:inline-block focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-background"
+        class="pointer-events-auto inline-block -translate-y-[calc(100%+1.5rem)] rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background shadow-elevated transition-transform duration-200 ease-out focus:translate-y-0 motion-reduce:transition-none"
       >
         Skip to content
       </a>
@@ -90,7 +90,7 @@ const isContentPage = contentPrefixes.some(
         id="main-content"
         tabindex="-1"
         class={cn(
-          "space-y-16 min-w-0 scroll-mt-24 focus:outline-none lg:col-start-2",
+          "space-y-16 min-w-0 focus:outline-none lg:col-start-2",
           maxWidth === "sm"
             ? "max-w-sm mx-auto lg:max-w-none lg:mx-0"
             : "max-w-2xl mx-auto lg:max-w-none lg:mx-0",
