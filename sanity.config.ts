@@ -1,7 +1,7 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
-import {UserIcon} from '@sanity/icons'
+import {CogIcon, UserIcon} from '@sanity/icons'
 import {schemaTypes} from './src/sanity/schemaTypes'
 import {codeInput} from '@sanity/code-input'
 import {dataset, projectId} from './src/sanity/lib/config'
@@ -17,9 +17,10 @@ export default defineConfig({
   plugins: [
     codeInput(),
     structureTool({
-      // `about` is a singleton: surface it as one fixed document instead
-      // of a create-able list, and omit it from the type list below so a
-      // second one can't be made. Everything else is a normal list.
+      // `about` and `uses` are singletons: surface each as one fixed
+      // document instead of a create-able list, and omit them from the
+      // type list below so a second one can't be made. Everything else is
+      // a normal list.
       structure: (S) =>
         S.list()
           .title('Content')
@@ -33,6 +34,16 @@ export default defineConfig({
                   .schemaType('about')
                   .documentId('about')
                   .title('About'),
+              ),
+            S.listItem()
+              .title('Uses')
+              .id('uses')
+              .icon(CogIcon)
+              .child(
+                S.document()
+                  .schemaType('uses')
+                  .documentId('uses')
+                  .title('Uses'),
               ),
             S.divider(),
             S.documentTypeListItem('post').title('Posts'),
