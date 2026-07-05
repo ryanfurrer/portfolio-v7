@@ -8,9 +8,15 @@ const { code, language } = node;
 const lang = language || "text";
 ---
 
-<Code
-  code={code}
-  lang={lang}
-  themes={{ light: "catppuccin-latte", dark: "catppuccin-mocha" }}
-  wrap={true}
-/>
+{
+  /* A code block can be empty before any code is typed (e.g. editing a draft in
+     the Studio with preview on). Guard so Shiki doesn't crash on `undefined`. */
+  code && (
+    <Code
+      code={code}
+      lang={lang}
+      themes={{ light: "catppuccin-latte", dark: "catppuccin-mocha" }}
+      wrap={true}
+    />
+  )
+}

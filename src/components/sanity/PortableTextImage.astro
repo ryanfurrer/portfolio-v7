@@ -3,11 +3,18 @@ import { urlForImage } from "@/sanity/lib/url-for-image";
 
 const { asset, alt } = Astro.props.node;
 
-const url = urlForImage(asset).url();
-const webpUrl = urlForImage(asset).format("webp").url();
+// A Portable Text image block can exist before its asset is uploaded (e.g. while
+// editing a draft in the Studio with preview on), leaving `asset` undefined.
+// Guard so draft preview doesn't crash trying to resolve a URL from `undefined`.
+const url = asset ? urlForImage(asset).url() : null;
+const webpUrl = asset ? urlForImage(asset).format("webp").url() : null;
 ---
 
-<picture>
-  <source srcset={webpUrl} type="image/webp" />
-  <img class="responsive__img" src={url} alt={alt} />
-</picture>
+{
+  url && (
+    <picture>
+      <source srcset={webpUrl} type="image/webp" />
+      <img class="responsive__img" src={url} alt={alt} />
+    </picture>
+  )
+}
