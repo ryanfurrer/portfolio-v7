@@ -209,6 +209,9 @@ export type BlockContent = Array<
   | ({
       _key: string;
     } & Callout)
+  | ({
+      _key: string;
+    } & Youtube)
   | {
       asset?: SanityImageAssetReference;
       media?: unknown;
@@ -219,6 +222,12 @@ export type BlockContent = Array<
       _key: string;
     }
 >;
+
+export type Youtube = {
+  _type: "youtube";
+  url?: string;
+  title?: string;
+};
 
 export type Callout = {
   _type: "callout";
@@ -364,6 +373,7 @@ export type AllSanitySchemaTypes =
   | Slug
   | Post
   | BlockContent
+  | Youtube
   | Callout
   | Code
   | SanityImagePaletteSwatch

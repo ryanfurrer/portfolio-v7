@@ -639,3 +639,23 @@ html.dark {
     z-index: 9999;
   }
 }
+
+/* Vidstack video player (VideoPlayer.tsx): neutral control chrome. The site
+   reserves its vermilion accent for interactive text, so the functional video
+   controls stay neutral — white reads cleanly over any video frame. */
+.vp-player {
+  --media-brand: #ffffff;
+}
+
+/* Safari fix: Vidstack crops YouTube's chrome (title, endscreen, branding) by
+   oversizing the iframe (~10× the frame height) and flex-centring it inside an
+   aspect-ratio, overflow-hidden box. The provider box is a flex item, and Safari
+   sizes a flex item to its content's min-height (`min-height: auto`) — so the
+   oversized iframe inflates the box and its height leaks into the page (a huge
+   gap below the player). `min-height: 0` lets the box keep its aspect-ratio
+   height instead. This leaves Vidstack's native crop untouched, so the framing
+   stays correct in every browser (Chromium already sizes it right). */
+.vp-player,
+.vp-player [data-media-provider] {
+  min-height: 0;
+}

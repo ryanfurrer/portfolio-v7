@@ -1,0 +1,84 @@
+---
+/**
+ * TEMP demo page for Batch F components (callouts + YouTube player).
+ * Not linked from the site — remove once the components are approved/wired.
+ */
+import Callout from "@/components/Callout.astro";
+import VideoPlayer from "@/components/VideoPlayer.tsx";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Batch F demo — Ryan Furrer" description="Component preview">
+  <div class="space-y-16 md:px-2">
+    <header class="space-y-2">
+      <p class="small-heading">Component preview</p>
+      <h1 class="text-2xl text-balance text-foreground sm:text-3xl">
+        Callouts &amp; video player
+      </h1>
+      <p class="max-w-[60ch] text-pretty text-foreground-muted">
+        A scratch page to preview the Batch F blog components in light and dark.
+        Nothing here is wired to Sanity yet.
+      </p>
+    </header>
+
+    <section class="space-y-4">
+      <h2 class="text-lg font-semibold text-foreground">Callouts</h2>
+
+      <Callout variant="info">
+        <p>
+          This is a <strong>note</strong> — neutral context or an aside. Body
+          text supports <a href="/writing">links</a>, <em>emphasis</em>, and
+          <code>inline code</code>.
+        </p>
+      </Callout>
+
+      <Callout variant="tip">
+        <p>
+          A <strong>tip</strong> points to a better way of doing something. Try
+          reaching for <a href="/uses">the tools I actually use</a> before rolling
+          your own.
+        </p>
+      </Callout>
+
+      <Callout variant="important">
+        <p>
+          Something worth remembering. Callouts can hold more than one line —
+          this paragraph runs a little longer so you can see how the body copy
+          wraps against the icon column and the tinted surface.
+        </p>
+      </Callout>
+
+      <Callout variant="warning">
+        <p>
+          A <strong>warning</strong> flags a gotcha. Amber reads as "slow down"
+          without shouting.
+        </p>
+      </Callout>
+
+      <Callout variant="caution">
+        <p>
+          <strong>Caution</strong> is the strongest signal — for the truly
+          destructive. It uses rose (not pure red) so it never competes with the
+          vermilion accent reserved for links.
+        </p>
+      </Callout>
+
+      <Callout variant="tip" title="Heads up">
+        <p>
+          The label is overridable, too — this one says "Heads up" instead of the
+          default "Tip".
+        </p>
+      </Callout>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-lg font-semibold text-foreground">YouTube player</h2>
+      <p class="max-w-[60ch] text-pretty text-foreground-muted">
+        Vidstack over the YouTube provider: the oversized-and-clipped iframe
+        crops YouTube's title, endscreen, and branding so only our neutral
+        controls show. Provider loads on scroll (Safari-safe play).
+      </p>
+      <VideoPlayer client:visible videoId="VEaI8OUcMvM" title="Demo video" />
+    </section>
+  </div>
+</Layout>

@@ -74,11 +74,12 @@ export default defineConfig({
         "@": new URL("./src", import.meta.url).pathname,
       },
     },
-    // Pre-bundle the embedded Studio's heavy dependency set at dev-server start.
-    // Vite only discovers these when /admin is first visited, and that late
-    // re-optimize rewrites the dep cache and 404s chunks the content routes
-    // already loaded (the recurring "/admin failed to fetch dynamically imported
-    // module"). Pinning them keeps a single stable optimized set across routes.
+    // Pre-bundle the heavy, late-discovered dependency sets at dev-server start.
+    // The embedded Studio (/admin) and content pages pull different large deps
+    // that Vite would otherwise optimize on first visit; that late re-optimize
+    // rewrites the dep cache and 404s the chunks the other route already loaded
+    // (the recurring "/admin failed to fetch dynamically imported module").
+    // Pinning them here keeps a single stable optimized set across routes.
     optimizeDeps: {
       include: [
         "sanity",
@@ -86,6 +87,7 @@ export default defineConfig({
         "@sanity/vision",
         "@sanity/icons",
         "@sanity/code-input",
+        "@vidstack/react",
       ],
     },
     // @ts-expect-error - Vite version mismatch between Astro (v6) and @tailwindcss/vite (v7)

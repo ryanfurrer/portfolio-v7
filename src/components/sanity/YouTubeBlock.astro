@@ -1,0 +1,16 @@
+---
+/**
+ * Renders a Sanity `youtube` block: parses the video id out of any YouTube URL
+ * shape (watch, youtu.be, embed, shorts) and renders the on-system player.
+ */
+import VideoPlayer from "@/components/VideoPlayer.tsx";
+
+const { node } = Astro.props;
+
+const match = node?.url?.match(
+  /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|v\/))([\w-]{11})/,
+);
+const videoId = match?.[1];
+---
+
+{videoId && <VideoPlayer client:visible videoId={videoId} title={node.title ?? ""} />}
