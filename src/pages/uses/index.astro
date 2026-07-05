@@ -1,0 +1,72 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { USES_QUERY } from "@/sanity/lib/queries";
+import type { USES_QUERY_RESULT } from "@/sanity/sanity.types";
+import { sanityClient } from "sanity:client";
+
+const uses = await sanityClient.fetch<USES_QUERY_RESULT>(USES_QUERY);
+
+const title = uses?.title ?? "Uses";
+const description =
+  uses?.description ?? "The hardware and software I use day to day.";
+
+// Only render categories that actually have items.
+const categories = (uses?.categories ?? []).filter(
+  (category) => (category.items?.length ?? 0) > 0,
+);
+---
+
+<Layout title={title} description={description}>
+  <div class="space-y-8">
+    <header class="space-y-2 md:px-2">
+      <h1 class="text-2xl text-foreground sm:text-3xl" data-reveal>{title}</h1>
+      <p class="max-w-[60ch] text-pretty text-foreground-muted" data-reveal>
+        {description}
+      </p>
+    </header>
+
+    <main class="space-y-12 md:px-2">
+      {
+        categories.map((category) => (
+          <section class="space-y-4" data-reveal>
+            <h2 class="small-heading">{category.title}</h2>
+            <ul class="divide-y divide-border" role="list">
+              {category.items?.map((item) => (
+                <li class="flex flex-col gap-1 py-4 first:pt-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+                  <div class="min-w-0 space-y-1">
+                    {item.url ? (
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-medium text-foreground"
+                      >
+                        {item.name}
+                      </a>
+                    ) : (
+                      <span class="font-medium text-foreground">
+                        {item.name}
+                      </span>
+                    )}
+                    {item.description && (
+                      <p class="text-pretty text-sm text-foreground-muted">
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+      {
+        categories.length === 0 && (
+          <p class="text-pretty text-foreground-subtle" data-reveal>
+            Nothing here yet — check back soon.
+          </p>
+        )
+      }
+    </main>
+  </div>
+</Layout>

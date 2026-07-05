@@ -38,6 +38,28 @@ export type HeaderImage = {
   _type: "image";
 };
 
+export type Uses = {
+  _id: string;
+  _type: "uses";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: string;
+  categories?: Array<{
+    title?: string;
+    items?: Array<{
+      name?: string;
+      description?: string;
+      url?: string;
+      _type: "usesItem";
+      _key: string;
+    }>;
+    _type: "usesCategory";
+    _key: string;
+  }>;
+};
+
 export type Now = {
   _id: string;
   _type: "now";
@@ -353,6 +375,7 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | OgImage
   | HeaderImage
+  | Uses
   | Now
   | About
   | Appearance
@@ -562,6 +585,22 @@ export type ABOUT_QUERY_RESULT = {
 } | null;
 
 // Source: src/sanity/lib/queries.ts
+// Variable: USES_QUERY
+// Query: *[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url}}}
+export type USES_QUERY_RESULT = {
+  title: string | null;
+  description: string | null;
+  categories: Array<{
+    title: string | null;
+    items: Array<{
+      name: string | null;
+      description: string | null;
+      url: string | null;
+    }> | null;
+  }> | null;
+} | null;
+
+// Source: src/sanity/lib/queries.ts
 // Variable: NOW_QUERY
 // Query: *[_type == "now"]|order(publishedAt desc){_id, publishedAt, body, media}
 export type NOW_QUERY_RESULT = Array<{
@@ -643,6 +682,7 @@ declare module "@sanity/client" {
     '*[_type == "project" && defined(slug.current)]{"params": {"slug": slug.current}}': PROJECT_SLUGS_QUERY_RESULT;
     '*[_type == "appearance" && defined(slug.current)]{"params": {"slug": slug.current}}': APPEARANCE_SLUGS_QUERY_RESULT;
     '*[_type == "about"][0]{title, description, body}': ABOUT_QUERY_RESULT;
+    '*[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url}}}': USES_QUERY_RESULT;
     '*[_type == "now"]|order(publishedAt desc){_id, publishedAt, body, media}': NOW_QUERY_RESULT;
     '{\n  "companies": *[_type == "company" && defined(slug.current)]|order(name asc){\n    name,\n    "slug": slug.current,\n    url,\n    logo,\n    description,\n    "projects": *[_type == "project" && references(^._id) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}\n  },\n  "personal": *[_type == "project" && !defined(company) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}\n}': WORK_HUBS_QUERY_RESULT;
   }

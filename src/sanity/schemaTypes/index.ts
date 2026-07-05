@@ -6,6 +6,7 @@ import {appearanceType} from './appearanceType'
 import {aboutType} from './aboutType'
 import {nowType} from './nowType'
 import {companyType} from './companyType'
+import {usesType} from './usesType'
 
 export const schemaTypes = [
   // Objects / shared types
@@ -18,4 +19,5 @@ export const schemaTypes = [
   aboutType,
   nowType,
   companyType,
+  usesType,
 ]
