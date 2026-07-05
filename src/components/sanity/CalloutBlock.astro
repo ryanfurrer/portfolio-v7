@@ -1,0 +1,16 @@
+---
+/**
+ * Renders a Sanity `callout` block: feeds the block's variant/title to the
+ * shared Callout component and renders its nested rich-text body into the slot.
+ */
+import { PortableText } from "astro-portabletext";
+import Callout from "@/components/Callout.astro";
+
+const { node } = Astro.props;
+---
+
+<Callout variant={node.variant} title={node.title}>
+  {/* `body` is undefined until content is typed (draft preview) — pass an empty
+      array so astro-portabletext doesn't choke on `undefined`. */}
+  <PortableText value={node.body ?? []} />
+</Callout>

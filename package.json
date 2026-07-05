@@ -36,7 +36,7 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-is": "^19.2.3",
-    "sanity": "^5.2.0",
+    "sanity": "^6.3.0",
     "styled-components": "^6.3.5",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.2.0"

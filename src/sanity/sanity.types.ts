@@ -206,6 +206,9 @@ export type BlockContent = Array<
   | ({
       _key: string;
     } & Code)
+  | ({
+      _key: string;
+    } & Callout)
   | {
       asset?: SanityImageAssetReference;
       media?: unknown;
@@ -216,6 +219,30 @@ export type BlockContent = Array<
       _key: string;
     }
 >;
+
+export type Callout = {
+  _type: "callout";
+  variant?: "info" | "tip" | "important" | "warning" | "caution";
+  title?: string;
+  body?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
 
 export type Code = {
   _type: "code";
@@ -337,6 +364,7 @@ export type AllSanitySchemaTypes =
   | Slug
   | Post
   | BlockContent
+  | Callout
   | Code
   | SanityImagePaletteSwatch
   | SanityImagePalette
