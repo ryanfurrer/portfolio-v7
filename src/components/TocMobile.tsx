@@ -191,7 +191,7 @@ export default function TocMobile({ headings, title }: Props) {
                     className={`flex items-center gap-2 rounded-md px-2 py-1.5 no-underline transition-colors ${
                       isActive
                         ? "text-foreground"
-                        : "text-foreground-muted hover:text-foreground"
+                        : "quiet-link"
                     } ${h.level === 3 ? "ps-4" : h.level === 4 ? "ps-6" : ""}`}
                   >
                     <span

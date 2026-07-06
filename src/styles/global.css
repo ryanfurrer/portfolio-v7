@@ -258,8 +258,10 @@ html.dark {
     0 0 0 / 0.08
   ); /* hairline — opacity-based per surface rules */
   --input: oklch(0 0 0 / 0.12);
-  --ring: oklch(0.708 0 0);
-  --radius: 0.625rem;
+  --ring: oklch(0.55 0 0); /* focus ring — neutral gray, ~4.7:1 on white */
+  /* Base corner radius — every rounded-sm…4xl token derives from this via calc.
+     Two steps tighter than the old 0.625rem/10px; rounded-full is unaffected. */
+  --radius: 0.375rem;
   --accent-foreground: oklch(0.205 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -310,7 +312,7 @@ html.dark {
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: oklch(0.72 0 0); /* focus ring — lighter neutral gray for dark bg */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -333,20 +335,23 @@ html.dark {
     @apply border-border outline-ring/50;
   }
 
-  /* Consistent keyboard focus ring across interactive elements — uses the
-     reserved accent so focus reads as "interactive". Low specificity via
-     :where() so components can still override when needed. */
-  :where(
-    a,
-    button,
-    summary,
-    input,
-    select,
-    textarea,
-    [tabindex]:not([tabindex="-1"])
-  ):focus-visible {
-    outline: 2px solid var(--link);
-    outline-offset: 2px;
+  /* Single, consistent keyboard focus ring for every interactive element. Uses
+     a box-shadow ring (not outline) so it follows border-radius everywhere,
+     including older Safari, and a neutral gray so it never clashes with the
+     accent. 2px background gap + 2px ring mirrors Tailwind's ring-offset-2.
+     Deliberately NOT :where() — specificity must sit above a lone utility class
+     so a resting shadow-* (e.g. a button's shadow-lg) can't hide the ring. */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-ring);
   }
 
   /* Apple-style headings: extrabold + tight tracking, matching the weight of
@@ -372,14 +377,21 @@ html.dark {
     font-variant-numeric: tabular-nums;
   }
 
-  .text-color-hover {
-    display: inline-block;
+  /* Role E — standalone nav-text links: footer sitemap, social links, and the
+     table of contents (desktop + mobile). Muted ink at rest, foreground on
+     hover/focus, never underlined. Distinct from inline body links (which are
+     underlined) and from navbar items (which add an active pill). Display is
+     left to the call site so it works in block, flex, and inline contexts. */
+  .quiet-link {
+    color: var(--color-foreground-muted);
+    text-decoration: none;
     transition-property: color;
     transition-timing-function: var(--ease-out-curve);
     transition-duration: 150ms;
   }
 
-  .text-color-hover:hover {
+  .quiet-link:hover,
+  .quiet-link:focus-visible {
     color: var(--color-foreground);
   }
 
@@ -604,21 +616,17 @@ html.dark {
    and keyboard focus (focus also gets the global outline ring on top). */
 :is(main, .prose) a:not(.no-underline) {
   font-weight: inherit;
-  color: var(--color-foreground);
+  color: var(--color-foreground-muted);
   text-decoration: underline;
-  text-decoration-color: color-mix(
-    in oklch,
-    var(--color-foreground) 35%,
-    transparent
-  );
+  text-decoration-color: color-mix(var(--color-foreground) 25%, transparent);
   text-decoration-skip-ink: none;
   transition-property: color, text-decoration-color;
   transition-timing-function: var(--ease-out-curve);
   transition-duration: 150ms;
   &:hover,
   &:focus-visible {
-    color: var(--link);
-    text-decoration-color: var(--link);
+    color: var(--color-foreground);
+    text-decoration-color: var(--color-foreground);
   }
 }
 

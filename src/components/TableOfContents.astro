@@ -21,7 +21,7 @@ const { headings } = Astro.props;
           href={`#${h.id}`}
           data-toc-link={h.id}
           class:list={[
-            "block text-foreground-muted no-underline transition-colors hover:text-foreground",
+            "quiet-link block",
             h.level === 3 ? "ps-3" : h.level === 4 ? "ps-6" : "",
           ]}
         >

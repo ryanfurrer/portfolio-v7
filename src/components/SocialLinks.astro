@@ -17,7 +17,7 @@ const { orientation = "horizontal" } = Astro.props;
   {
     socialLinks.map((link) => (
       <li>
-        <a href={link.href} class="text-color-hover focus:text-foreground">
+        <a href={link.href} class="quiet-link">
           {link.label}
         </a>
       </li>
