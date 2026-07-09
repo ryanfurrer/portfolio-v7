@@ -75,7 +75,11 @@ function NavigationMenuContent({
     <NavigationMenuPrimitive.Content
       data-slot="navigation-menu-content"
       className={cn(
-        "absolute top-full z-50 mt-1.5 min-w-40 rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-elevated",
+        // Translucent "glass" material to match the sticky header; solid
+        // fallback where backdrop-filter is unsupported (and under
+        // prefers-reduced-transparency, see global.css). origin-top so the
+        // open/close zoom scales out of the trigger, not the panel's center.
+        "absolute top-full z-50 mt-1.5 min-w-40 origin-top rounded-lg border border-border bg-popover supports-[backdrop-filter]:bg-popover/75 p-1 text-popover-foreground shadow-elevated backdrop-blur-xl",
         "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 ease-out",
         className,
       )}

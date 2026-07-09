@@ -59,8 +59,19 @@ const isContentPage = contentPrefixes.some(
       !noNavbar && (
         <header
           data-site-header
-          class="sticky top-0 z-40 transform-[translateZ(0)] border-b border-transparent transition-[background-color,border-color,translate] duration-300 ease-out will-change-transform data-hidden:-translate-y-full data-scrolled:border-border data-scrolled:bg-background/70 data-scrolled:backdrop-blur-xl"
+          class="group sticky top-0 z-40 border-b border-transparent transition-[border-color,translate] duration-300 ease-out data-hidden:-translate-y-full data-scrolled:border-border"
         >
+          {/* Translucent glass lives on a dedicated background layer, NOT the
+              header itself: a transformed / will-change *ancestor* disables
+              backdrop-filter on descendants (e.g. the "Me" dropdown, which
+              renders inside the header). Keeping the iOS compositing hint +
+              blur on this sibling layer lets the menu blur the page while the
+              header still repaints smoothly during iOS momentum scroll. */}
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute inset-0 -z-10 transform-[translateZ(0)] bg-background/70 opacity-0 backdrop-blur-xl transition-opacity duration-300 ease-out will-change-transform group-data-[scrolled]:opacity-100"
+          >
+          </div>
           <div class="mx-auto max-w-280 px-4 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
             <div
               class={cn(

@@ -68,6 +68,52 @@ html {
   }
 }
 
+/* Reduced transparency — the scrolled header and the floating menus are
+   translucent "glass" (backdrop-blur). When the OS asks for reduced
+   transparency, swap them to a solid surface and drop the blur so text over
+   changing backgrounds stays fully legible. Kept outside @layer so these beat
+   the Tailwind utility classes that set the glass on those elements. */
+@media (prefers-reduced-transparency: reduce) {
+  [data-site-header][data-scrolled] {
+    background-color: var(--background);
+    backdrop-filter: none;
+  }
+  [data-slot="navigation-menu-content"],
+  [data-slot="dropdown-menu-content"] {
+    background-color: var(--popover);
+    backdrop-filter: none;
+  }
+  [data-toc-mobile] {
+    background-color: var(--background);
+    backdrop-filter: none;
+  }
+}
+
+/* Increased contrast — firm up the hairline system into defined borders so
+   structural edges (cards, menus, inputs, the scrolled header) read clearly. */
+@media (prefers-contrast: more) {
+  :root {
+    --border: oklch(0 0 0 / 0.55);
+    --input: oklch(0 0 0 / 0.6);
+  }
+  .dark {
+    --border: oklch(1 0 0 / 0.5);
+    --input: oklch(1 0 0 / 0.55);
+  }
+  [data-site-header][data-scrolled],
+  [data-slot="navigation-menu-content"],
+  [data-slot="dropdown-menu-content"] {
+    background-color: var(--popover);
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+  }
+  [data-toc-mobile] {
+    background-color: var(--background);
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+  }
+}
+
 ::selection {
   background-color: color-mix(in oklch, var(--link) 22%, transparent);
 }
@@ -405,12 +451,21 @@ html.dark {
     color: var(--color-foreground);
   }
 
+  /* Instant press acknowledgment — the link inks up the moment it's pressed
+     (pointer-down), not only on release. Matches the press feedback on Items
+     and buttons so every interactive element responds to the touch. */
+  .quiet-link:active {
+    color: var(--color-foreground);
+  }
+
   .small-heading {
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: var(--foreground-subtle);
+    /* Muted (not subtle) so these small uppercase labels clear WCAG AA (4.5:1);
+       subtle #86868b sat at ~3.5:1 on white. */
+    color: var(--foreground-muted);
   }
 
   /* Neutral metadata pill — e.g. "Updated", year chips */

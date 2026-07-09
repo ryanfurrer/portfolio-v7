@@ -42,7 +42,7 @@ export default function NavMenu({ label, items, pathname }: Props) {
         <NavigationMenuItem>
           <NavigationMenuTrigger
             className={cn(
-              "hover:bg-nav-hover hover:text-foreground data-[state=open]:bg-nav-hover data-[state=open]:text-foreground [&>svg]:transition-transform [&>svg]:duration-200 [&>svg]:ease-out data-[state=open]:[&>svg]:rotate-180",
+              "transition-[color,background-color,scale] hover:bg-nav-hover hover:text-foreground active:scale-[0.97] data-[state=open]:bg-nav-hover data-[state=open]:text-foreground [&>svg]:transition-transform [&>svg]:duration-200 [&>svg]:ease-out data-[state=open]:[&>svg]:rotate-180",
               groupActive
                 ? "bg-nav-active text-foreground"
                 : "text-foreground-muted",
@@ -51,7 +51,7 @@ export default function NavMenu({ label, items, pathname }: Props) {
             {label}
             <ChevronDown className="size-3.5" aria-hidden="true" />
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="right-0">
+          <NavigationMenuContent className="right-0 origin-top-right">
             {items.map((item) => {
               const active = isActive(item.href, pathname);
               return (

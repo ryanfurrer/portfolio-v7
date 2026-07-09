@@ -73,7 +73,7 @@ const isActive = (href: string) =>
                 data-dir-hover="nav"
                 aria-current={isActive(item.href) ? "page" : undefined}
                 class={cn(
-                  "block rounded-md px-3 py-1.5 font-medium transition-colors hover:text-foreground",
+                  "block rounded-md px-3 py-1.5 font-medium transition-[color,scale] hover:text-foreground active:scale-[0.97]",
                   isActive(item.href)
                     ? "bg-nav-active text-foreground"
                     : "text-foreground-muted",
