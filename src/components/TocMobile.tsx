@@ -121,7 +121,12 @@ export default function TocMobile({ headings, title }: Props) {
         reduce ? { duration: 0.2 } : { duration: 0.3, ease: EASE_IOS }
       }
       style={{ x: "-50%" }}
-      className="fixed inset-s-1/2 top-[calc(env(safe-area-inset-top)+5.5rem)] z-30 w-[65vw] overflow-hidden rounded-xl border border-border bg-background/70 shadow-lg backdrop-blur-xl lg:hidden dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
+      data-toc-mobile
+      // A thick frosted material: still translucent (blur + edge halo) but opaque
+      // enough that muted ToC items stay legible when the panel opens over busy
+      // article images. Solid fallback where backdrop-filter is unsupported (and
+      // under prefers-reduced-transparency; see global.css).
+      className="fixed inset-s-1/2 top-[calc(env(safe-area-inset-top)+5.5rem)] z-30 w-[65vw] overflow-hidden rounded-xl border border-border bg-background supports-[backdrop-filter]:bg-background/90 shadow-lg backdrop-blur-xl lg:hidden dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
     >
       <button
         ref={triggerRef}
@@ -188,7 +193,7 @@ export default function TocMobile({ headings, title }: Props) {
                     href={`#${h.id}`}
                     onClick={(e) => handleHeadingClick(e, h.id)}
                     aria-current={isActive ? "location" : undefined}
-                    className={`flex items-center gap-2 rounded-md px-2 py-1.5 no-underline transition-colors ${
+                    className={`flex items-center gap-2 rounded-md px-2 py-3 no-underline transition-colors ${
                       isActive
                         ? "text-foreground"
                         : "quiet-link"
