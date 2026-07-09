@@ -1,4 +1,4 @@
-import {slugify, textToPortableTextBlock} from "@/lib/utils";
+import {slugify} from "@/lib/utils";
 
 /**
  * Shared helpers for the three content detail pages (post / project /
@@ -33,21 +33,6 @@ export function extractHeadings(body: unknown): TocHeading[] {
         level: parseInt((b.style ?? "h2").replace("h", ""), 10),
       };
     });
-}
-
-/**
- * Render the document description as the first paragraph of the body.
- * Returns a new array; the original body is left untouched.
- */
-export function prependDescription<T>(
-  body: T[] | null | undefined,
-  description: string | null | undefined,
-) {
-  const blocks = Array.isArray(body) ? [...body] : [];
-  if (description && typeof description === "string") {
-    return [textToPortableTextBlock(description), ...blocks];
-  }
-  return blocks;
 }
 
 /**

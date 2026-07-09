@@ -504,6 +504,26 @@ html.dark {
     scroll-margin-block-start: 1.5em;
   }
 
+  /* Size-specific tracking: the article title is a display size, so it wants a
+     touch tighter tracking than the global -0.022em (letters read too loose as
+     they grow). */
+  .prose h1 {
+    letter-spacing: -0.03em;
+  }
+
+  /* Article standfirst / dek — the opening description reads as an intro,
+     visually distinct from body copy (larger, a touch more space below) so it
+     no longer fuses with the article's first sentence. */
+  .prose > .lead {
+    margin-top: 0.75rem;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    letter-spacing: -0.011em;
+    color: var(--color-foreground-muted);
+    text-wrap: pretty;
+  }
+
   .prose b,
   .prose strong {
     font-weight: 600 !important;

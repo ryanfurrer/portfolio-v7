@@ -4,11 +4,7 @@ import PortableText from "@/components/sanity/PortableText.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import TocMobile from "@/components/TocMobile.tsx";
 import Layout from "@/layouts/Layout.astro";
-import {
-  extractHeadings,
-  prependDescription,
-  toStaticPaths,
-} from "@/sanity/lib/content";
+import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlForImage } from "@/sanity/lib/url-for-image";
 import type {
@@ -33,10 +29,6 @@ if (!project) {
   throw new Error(`Project not found for slug: ${Astro.params.slug}`);
 }
 
-const bodyWithDescription = prependDescription(
-  project.body,
-  project.description,
-);
 const headings = extractHeadings(project.body);
 
 const projectImageUrl = project.headerImage
@@ -52,6 +44,9 @@ const publishedLong = project.publishedAt
 const updatedLong = project.updatedAt
   ? formatDateLong(project.updatedAt)
   : null;
+// Only surface an "Updated" badge when it lands on a genuinely different day
+// than publication — a same-day tidy-up would just show the same date twice.
+const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 ---
 
 <Layout
@@ -78,12 +73,12 @@ const updatedLong = project.updatedAt
     <header data-reveal>
       <h1 class="mb-2">{project.title}</h1>
       {
-        publishedLong && !updatedLong && (
+        publishedLong && !hasUpdate && (
           <span class="text-sm text-foreground-subtle">{publishedLong}</span>
         )
       }
       {
-        updatedLong && (
+        hasUpdate && (
           <div class="flex flex-col gap-y-1">
             <span class="text-sm text-foreground-subtle">
               Originally published: {publishedLong}
@@ -120,8 +115,15 @@ const updatedLong = project.updatedAt
       }
     </header>
     {
-      bodyWithDescription.length > 0 && (
-        <PortableText portableText={bodyWithDescription} />
+      project.description && (
+        <p class="lead" data-reveal>
+          {project.description}
+        </p>
+      )
+    }
+    {
+      project.body && project.body.length > 0 && (
+        <PortableText portableText={project.body} />
       )
     }
   </main>

@@ -4,11 +4,7 @@ import PortableText from "@/components/sanity/PortableText.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import TocMobile from "@/components/TocMobile.tsx";
 import Layout from "@/layouts/Layout.astro";
-import {
-  extractHeadings,
-  prependDescription,
-  toStaticPaths,
-} from "@/sanity/lib/content";
+import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { APPEARANCE_QUERY, APPEARANCE_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlForImage } from "@/sanity/lib/url-for-image";
 import type {
@@ -33,10 +29,6 @@ if (!appearance) {
   throw new Error(`Appearance not found for slug: ${Astro.params.slug}`);
 }
 
-const bodyWithDescription = prependDescription(
-  appearance.body,
-  appearance.description,
-);
 const headings = extractHeadings(appearance.body);
 
 const appearanceImageUrl = appearance.headerImage
@@ -52,6 +44,9 @@ const publishedLong = appearance.publishedAt
 const updatedLong = appearance.updatedAt
   ? formatDateLong(appearance.updatedAt)
   : null;
+// Only surface an "Updated" badge when it lands on a genuinely different day
+// than publication — a same-day tidy-up would just show the same date twice.
+const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 ---
 
 <Layout
@@ -78,12 +73,12 @@ const updatedLong = appearance.updatedAt
     <header data-reveal>
       <h1 class="mb-1">{appearance.title}</h1>
       {
-        publishedLong && !updatedLong && (
+        publishedLong && !hasUpdate && (
           <span class="text-sm text-foreground-subtle">{publishedLong}</span>
         )
       }
       {
-        updatedLong && (
+        hasUpdate && (
           <div class="flex flex-col gap-y-1">
             <span class="text-sm text-foreground-subtle">
               Originally published: {publishedLong}
@@ -94,8 +89,15 @@ const updatedLong = appearance.updatedAt
       }
     </header>
     {
-      bodyWithDescription.length > 0 && (
-        <PortableText portableText={bodyWithDescription} />
+      appearance.description && (
+        <p class="lead" data-reveal>
+          {appearance.description}
+        </p>
+      )
+    }
+    {
+      appearance.body && appearance.body.length > 0 && (
+        <PortableText portableText={appearance.body} />
       )
     }
   </main>

@@ -4,11 +4,7 @@ import PortableText from "@/components/sanity/PortableText.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import TocMobile from "@/components/TocMobile.tsx";
 import Layout from "@/layouts/Layout.astro";
-import {
-  extractHeadings,
-  prependDescription,
-  toStaticPaths,
-} from "@/sanity/lib/content";
+import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { POST_QUERY, POST_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlForImage } from "@/sanity/lib/url-for-image";
 import type {
@@ -30,7 +26,6 @@ const post = await sanityClient.fetch<POST_QUERY_RESULT>(
 );
 if (!post) throw new Error(`Post not found for slug: ${Astro.params.slug}`);
 
-const bodyWithDescription = prependDescription(post.body, post.description);
 const headings = extractHeadings(post.body);
 
 const postImageUrl = post.headerImage
@@ -44,6 +39,9 @@ const publishedLong = post.publishedAt
   ? formatDateLong(post.publishedAt)
   : null;
 const updatedLong = post.updatedAt ? formatDateLong(post.updatedAt) : null;
+// Only surface an "Updated" badge when it lands on a genuinely different day
+// than publication — a same-day tidy-up would just show the same date twice.
+const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 ---
 
 <Layout
@@ -66,12 +64,12 @@ const updatedLong = post.updatedAt ? formatDateLong(post.updatedAt) : null;
     <header data-reveal>
       <h1 class="mb-1">{post.title}</h1>
       {
-        publishedLong && !updatedLong && (
+        publishedLong && !hasUpdate && (
           <span class="text-sm text-foreground-subtle">{publishedLong}</span>
         )
       }
       {
-        updatedLong && (
+        hasUpdate && (
           <div class="flex flex-col gap-y-1">
             <span class="text-sm text-foreground-subtle">
               Originally published: {publishedLong}
@@ -82,8 +80,15 @@ const updatedLong = post.updatedAt ? formatDateLong(post.updatedAt) : null;
       }
     </header>
     {
-      bodyWithDescription.length > 0 && (
-        <PortableText portableText={bodyWithDescription} />
+      post.description && (
+        <p class="lead" data-reveal>
+          {post.description}
+        </p>
+      )
+    }
+    {
+      post.body && post.body.length > 0 && (
+        <PortableText portableText={post.body} />
       )
     }
   </main>
