@@ -16,13 +16,11 @@ const formattedDate = publishedAt ? formatDateDotNotation(publishedAt) : null;
   href={href}
   data-dir-hover="item"
   data-reveal
-  class="group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] group-hover/item:text-foreground active:scale-[0.98] md:mx-0 md:p-2"
+  class="group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98] md:mx-0 md:p-2"
 >
   <div class="w-full items-center justify-between gap-4 md:flex">
-    <div class="w-fit text-foreground md:text-foreground-muted">
-      <h3 class="font-semibold transition-colors">
-        {title}
-      </h3>
+    <div class="w-fit text-foreground">
+      <h3 class="font-semibold">{title}</h3>
     </div>
     <div class="hidden min-w-4 flex-1 border-b md:block"></div>
     {
