@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
  * "personal/meta" pages (About, Uses, Links) under one trigger. Built on Radix
  * NavigationMenu so hover-open, close-intent, and keyboard support come for
  * free (no focus-steal on hover, unlike a DropdownMenu). The trigger mirrors the
- * server-rendered nav anchors — same indigo hover (--nav-hover) and active
+ * server-rendered nav anchors — same neutral hover (--nav-hover) and active
  * (--nav-active) states — so it reads as a peer of the dir-hover items.
  */
 interface NavMenuItem {
@@ -51,7 +51,7 @@ export default function NavMenu({ label, items, pathname }: Props) {
             {label}
             <ChevronDown className="size-3.5" aria-hidden="true" />
           </NavigationMenuTrigger>
-          <NavigationMenuContent className="right-0 bg-nav-panel">
+          <NavigationMenuContent className="right-0">
             {items.map((item) => {
               const active = isActive(item.href, pathname);
               return (
@@ -61,7 +61,6 @@ export default function NavMenu({ label, items, pathname }: Props) {
                   active={active}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "hover:bg-nav-active focus:bg-nav-active",
                     active ? "text-foreground" : "text-foreground-muted",
                   )}
                 >

@@ -97,16 +97,20 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
     /* A single tiled rule line (via background-size/-repeat) rather than
        repeating-linear-gradient — WebKit drops thin repeating bands partway
        down a tall element, so the lines would stop rendering in Safari. */
+    /* College-ruled (light): a subdued rose margin rule + subdued blue
+       horizontal rules — US-notebook nod, dialed back from a real sheet.
+       (Dark mode stays fully neutral: see the .dark block below.) */
     background-image:
       linear-gradient(
         to right,
         transparent 0 2.25rem,
-        color-mix(in oklch, var(--link) 35%, transparent) 2.25rem 2.28rem,
+        color-mix(in oklch, oklch(0.63 0.16 22) 55%, transparent) 2.25rem
+          2.28rem,
         transparent 2.28rem
       ),
       linear-gradient(
         to bottom,
-        oklch(0.45 0.12 250 / 0.13) 0 1px,
+        oklch(0.6 0.1 245 / 0.32) 0 1px,
         transparent 1px
       );
     background-size:
