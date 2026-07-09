@@ -163,6 +163,9 @@ html.dark {
   --color-foreground-subtle: var(--foreground-subtle);
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
+  --color-nav-active: var(--nav-active);
+  --color-nav-hover: var(--nav-hover);
+  --color-nav-panel: var(--nav-panel);
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);
   --color-badge: var(--badge);
@@ -248,11 +251,20 @@ html.dark {
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
-  /* Single reserved accent — interactivity only. Vermilion #ed3f1c in OKLCH
-     (nudged a touch darker than the raw hex so it clears AA on white). */
-  --link: oklch(0.585 0.211 32.91); /* ≈ #dd320c — 4.63:1 on white (WCAG AA) */
-  --link-hover: oklch(0.54 0.197 32.91); /* darker — 5.6:1 */
+  /* Single reserved accent — interactivity only. Electric indigo (~286°). */
+  --link: oklch(0.54 0.24 286); /* ≈ #6c44f0 — 5.65:1 on white (WCAG AA) */
+  --link-hover: oklch(0.49 0.235 286); /* darker — 7.0:1 */
   --link-underline: #bbb;
+  /* Active nav pill — soft indigo wash (the reserved accent at rest). */
+  --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
+  /* Nav hover highlight — a fainter sibling of the active pill, so hover reads
+     as the same family while staying clearly subordinate to "you are here". */
+  --nav-hover: color-mix(in oklch, var(--link) 5%, transparent);
+  /* Nav dropdown panel — popover with a faint indigo mixed in (opaque, stays
+     readable over content) so the menu reads as part of the nav's indigo. Mixed
+     in sRGB, not OKLCH: popover is achromatic, so an OKLCH hue lerp toward the
+     indigo (286°) detours through red and tints the panel pink. */
+  --nav-panel: color-mix(in srgb, var(--popover), var(--link) 5%);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(
     0 0 0 / 0.08
@@ -286,9 +298,13 @@ html.dark {
   --foreground: #f5f5f7; /* primary — headings & key copy */
   --foreground-muted: #a1a1a6; /* secondary — body & descriptions */
   --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
-  /* Vermilion, lightened for the dark field (AA on ~#1a1a1a) */
-  --link: oklch(0.66 0.21 32.91); /* ≈ #f84f2f — 5.10:1 */
-  --link-hover: oklch(0.7 0.189 32.91); /* lighter — 6.0:1 */
+  /* Electric indigo, lightened for the dark field (AA on ~#1a1a1a) */
+  --link: oklch(0.7 0.2 286); /* ≈ #9785ff — 6.53:1 */
+  --link-hover: oklch(0.75 0.185 286); /* lighter — 7.9:1 */
+  /* Active nav pill — stronger wash so the tint reads on the dark surface. */
+  --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
+  --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
+  --nav-panel: color-mix(in srgb, var(--popover), var(--link) 10%);
   /* Recessed surfaces (dark) — a single perceptual step above the page,
      paired with a hairline inset ring on cards for definition */
   --surface: oklch(0.215 0 0);
@@ -535,7 +551,7 @@ html.dark {
     bottom: 0;
     left: var(--dir-hover-x, 0);
     width: var(--dir-hover-w, 0);
-    background-color: var(--surface);
+    background-color: var(--nav-hover);
     border-radius: var(--radius-md);
     pointer-events: none;
     z-index: -1;

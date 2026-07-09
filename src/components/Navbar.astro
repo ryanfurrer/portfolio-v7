@@ -1,39 +1,31 @@
 ---
 import MobileNav from "@/components/MobileNav";
 import ModeToggle from "@/components/ModeToggle";
+import NavMenu from "@/components/NavMenu";
 import Presence from "@/components/Presence";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  {
-    label: "Writing",
-    href: "/writing",
-  },
-  {
-    label: "Work",
-    href: "/work",
-  },
-  {
-    label: "Appearances",
-    href: "/appearances",
-  },
-  {
-    label: "Now",
-    href: "/now",
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
+// Top-level desktop items keep the directional traveling-highlight (dir-hover).
+const primaryNavItems = [
+  { label: "Writing", href: "/writing" },
+  { label: "Work", href: "/work" },
+  { label: "Appearances", href: "/appearances" },
+  { label: "Now", href: "/now" },
+];
+
+// The "personal/meta" pages are grouped under one desktop dropdown (NavMenu).
+const menuNavItems = [
+  { label: "About", href: "/about" },
+  { label: "Uses", href: "/uses" },
+  { label: "Links", href: "/links" },
 ];
 
 // Mobile menu leads with Home (the logo is the only desktop home affordance)
-// and includes Links, which is intentionally kept out of the desktop nav.
+// and lists every page flat — grouping is a desktop-only affordance.
 const mobileNavItems = [
   { label: "Home", href: "/" },
-  ...navItems,
-  { label: "Uses", href: "/uses" },
-  { label: "Links", href: "/links" },
+  ...primaryNavItems,
+  ...menuNavItems,
 ];
 
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -56,7 +48,7 @@ const isActive = (href: string) =>
         role="img"
         aria-label="Ryan Furrer"
         fill="none"
-        stroke="#ed3f1c"
+        stroke="var(--link)"
         stroke-width="208.33"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -70,28 +62,36 @@ const isActive = (href: string) =>
         ></path>
       </svg>
     </a>
-    <ul class="hidden items-center gap-1 text-sm sm:flex" role="list">
-      {
-        navItems.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              name={`go to ${item.label.toLowerCase()} page`}
-              data-dir-hover="nav"
-              aria-current={isActive(item.href) ? "page" : undefined}
-              class={cn(
-                "block rounded-md px-3 py-1.5 font-medium transition-colors hover:text-foreground",
-                isActive(item.href)
-                  ? "bg-surface text-foreground"
-                  : "text-foreground-muted",
-              )}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="hidden items-center gap-1 sm:flex">
+      <ul class="flex items-center gap-1 text-sm" role="list">
+        {
+          primaryNavItems.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                name={`go to ${item.label.toLowerCase()} page`}
+                data-dir-hover="nav"
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class={cn(
+                  "block rounded-md px-3 py-1.5 font-medium transition-colors hover:text-foreground",
+                  isActive(item.href)
+                    ? "bg-nav-active text-foreground"
+                    : "text-foreground-muted",
+                )}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <NavMenu
+        client:idle
+        label="Me"
+        items={menuNavItems}
+        pathname={pathname}
+      />
+    </div>
     <div class="flex items-center gap-1 sm:gap-2">
       <div class="flex items-center rounded-md bg-secondary ps-2.5 md:gap-1">
         <Presence client:idle />
