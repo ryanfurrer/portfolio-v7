@@ -9,7 +9,7 @@ import type { PROJECTS_QUERY_RESULT } from "@/sanity/sanity.types";
 const projects = await sanityClient.fetch<PROJECTS_QUERY_RESULT>(PROJECTS_QUERY);
 const { byYear: projectsByYear, years } = groupByYear(projects);
 
-const description = "A collection of my projects, code snippets, and more";
+const description = "A collection of my projects, code snippets, and more.";
 
 const showEarlyState = projects.length <= 1;
 

@@ -8,7 +8,7 @@ const uses = await sanityClient.fetch<USES_QUERY_RESULT>(USES_QUERY);
 
 const title = uses?.title ?? "Uses";
 const description =
-  uses?.description ?? "The hardware and software I use day to day.";
+  uses?.description ?? "The tools, toys, and setup I rely on daily.";
 
 // Only render categories that actually have items.
 const categories = (uses?.categories ?? []).filter(
@@ -16,7 +16,7 @@ const categories = (uses?.categories ?? []).filter(
 );
 ---
 
-<Layout title={title} description={description}>
+<Layout title={`${title} — Ryan Furrer`} description={description}>
   <div class="space-y-8">
     <header class="space-y-3 md:px-2">
       <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>

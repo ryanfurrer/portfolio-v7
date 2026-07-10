@@ -7,13 +7,14 @@ import { formatDateLong } from "@/utils/date";
 import { sanityClient } from "sanity:client";
 
 const title = "Now";
-const description = "What I'm up to currently";
+const description =
+  "What I’m focused on at the moment — projects, reading, and life.";
 
 // Newest entry is the live "Now" card; the rest become "Previously".
 const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
 ---
 
-<Layout title={title} description={description}>
+<Layout title={`${title} — Ryan Furrer`} description={description}>
   <div class="space-y-8">
     <header class="space-y-3 md:px-2">
       <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
