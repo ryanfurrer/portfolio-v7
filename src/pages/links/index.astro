@@ -5,8 +5,6 @@ import LinkedinIcon from "@/assets/icons/linkedin2.svg";
 import TwitchIcon from "@/assets/icons/twitch.svg";
 import XIcon from "@/assets/icons/x.svg";
 import YoutubeIcon from "@/assets/icons/youtube.svg";
-import profilePicture from "@/assets/profile-picture.webp";
-import Button from "@/components/ui/Button.astro";
 import LinksCard from "@/components/ui/LinksCard.astro";
 import Layout from "@/layouts/Layout.astro";
 import { urlForImage } from "@/sanity/lib/url-for-image";
@@ -50,12 +48,19 @@ const latestContentItems = [
     content.item !== null,
 );
 
-const description = "A collection of links to my work, writing, and more";
-const shortBio = `Frontend Engineer
-Designer
-Creator`;
+const description =
+  "Everywhere I show up online — follow along, say hello, or catch what I've made lately.";
 
 const socialLinks = [
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/ryanfurrer/",
+    followerCount: 1920,
+    icon: LinkedinIcon,
+    iconFill: "fill-white stroke-none",
+    iconBackground: "bg-blue-600",
+    actionLabel: "Follow",
+  },
   {
     label: "Twitter/X",
     href: "https://x.com/ryanfurrer_",
@@ -84,24 +89,6 @@ const socialLinks = [
     actionLabel: "Follow",
   },
   {
-    label: "YouTube",
-    href: "https://www.youtube.com/@ryandotfurrer",
-    followerCount: 46,
-    icon: YoutubeIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-rose-600",
-    actionLabel: "Subscribe",
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/ryanfurrer/",
-    followerCount: 1920,
-    icon: LinkedinIcon,
-    iconFill: "fill-white stroke-none",
-    iconBackground: "bg-blue-600",
-    actionLabel: "Follow",
-  },
-  {
     label: "GitHub",
     href: "https://github.com/ryanfurrer",
     followerCount: 59,
@@ -110,75 +97,74 @@ const socialLinks = [
     iconBackground: "bg-zinc-950",
     actionLabel: "Follow",
   },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@ryandotfurrer",
+    followerCount: 46,
+    icon: YoutubeIcon,
+    iconFill: "fill-white",
+    iconBackground: "bg-rose-600",
+    actionLabel: "Subscribe",
+  },
 ];
 ---
 
-<Layout
-  title="Links — Ryan Furrer"
-  description={description}
-  noNavbar
-  noFooter
-  maxWidth="sm"
->
+<Layout title="Links — Ryan Furrer" description={description}>
   <div class="space-y-16">
-    <header class="space-y-8">
-      <div class="flex items-center gap-8" data-reveal>
-        <div
-          class="size-full max-w-36 overflow-hidden rounded-full ring-1 ring-black/10 dark:ring-white/10"
-        >
-          <img src={profilePicture.src} alt="Ryan Furrer" class="" />
-        </div>
-        <div class="space-y-2">
-          <h1 class="text-2xl text-balance text-foreground sm:text-3xl">
-            Ryan Furrer
-          </h1>
-          <p class="text-lg/5 font-medium text-pretty whitespace-pre-line">
-            {shortBio}
-          </p>
-        </div>
-      </div>
-      <div data-reveal>
-        <Button
-          href="/"
-          class="dark:inset-ring dark:inset-ring-white/10 dark:bg-surface dark:text-foreground dark:hover:bg-surface-hover"
-          >Go to ryanfurrer.com</Button
-        >
-      </div>
+    <header class="space-y-3 md:px-2">
+      <h1
+        class="text-2xl text-balance text-foreground sm:text-3xl"
+        data-reveal
+      >
+        Links
+      </h1>
+      <p class="lead max-w-[52ch]" data-reveal>
+        {description}
+      </p>
     </header>
+
     <main class="space-y-16">
-      <section class="space-y-4">
-        <h2 data-reveal>Connect with me</h2>
-        <div class="grid grid-cols-2 gap-4">
+      <section class="space-y-4 md:px-2">
+        <h2 class="small-heading" data-reveal>Connect with me</h2>
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
           {
             socialLinks.map((link) => {
               const IconComponent = link.icon;
+              const followLabel =
+                link.actionLabel === "Subscribe" ? "subscribers" : "followers";
               return (
                 <LinksCard
                   href={link.href}
-                  class="squircle rounded-3xl bg-surface p-4 hover:bg-surface-hover"
+                  class="group squircle rounded-3xl bg-surface p-4 hover:bg-surface-hover"
                 >
-                  <div class="flex items-start justify-between gap-2">
-                    <IconComponent
-                      class:list={[
-                        "squircle size-9 shrink-0 rounded-xl p-2",
-                        link.iconFill,
-                        link.iconBackground,
-                      ]}
-                    />
-                    <span class="pointer-events-none inline-flex items-center justify-center rounded-md px-2 py-1 text-xs font-medium text-foreground-subtle">
-                      {link.actionLabel}
-                    </span>
-                  </div>
-                  <div class="mt-3 space-y-0.5">
-                    <h3 class="small-heading leading-none">{link.label}</h3>
-                    <p class="text-4xl font-bold leading-none text-foreground">
-                      {formatFollowerCount(link.followerCount)}
-                      <span class="mt-1 block text-sm font-normal text-foreground-subtle">
-                        {link.actionLabel === "Subscribe"
-                          ? "subscribers"
-                          : "followers"}
+                  <div class="flex h-full flex-col justify-between gap-6">
+                    <div class="flex items-start justify-between gap-2">
+                      <IconComponent
+                        class:list={[
+                          "squircle size-10 shrink-0 rounded-xl p-2.5",
+                          link.iconFill,
+                          link.iconBackground,
+                        ]}
+                      />
+                      <span class="pointer-events-none inline-flex items-center gap-1 text-xs font-medium text-foreground-subtle transition-colors duration-200 ease-out group-hover:text-foreground-muted">
+                        {link.actionLabel}
+                        <span
+                          aria-hidden="true"
+                          class="transition-transform duration-200 ease-out group-hover:translate-x-0.5"
+                        >
+                          →
+                        </span>
                       </span>
-                    </p>
+                    </div>
+                    <div>
+                      <h3 class="small-heading leading-none">{link.label}</h3>
+                      <p class="mt-2.5 text-4xl leading-none font-bold text-foreground">
+                        {formatFollowerCount(link.followerCount)}
+                      </p>
+                      <p class="mt-2 text-sm leading-none text-foreground-subtle">
+                        {followLabel}
+                      </p>
+                    </div>
                   </div>
                 </LinksCard>
               );
@@ -186,37 +172,44 @@ const socialLinks = [
           }
         </div>
       </section>
+
       {
         latestContentItems.length > 0 && (
-          <section class="space-y-4">
-            <h2 data-reveal>My Latest Work</h2>
-            <div class="grid grid-cols-1 gap-4">
+          <section class="space-y-4 md:px-2">
+            <h2 class="small-heading" data-reveal>
+              Latest from me
+            </h2>
+            <div class="space-y-4">
               {latestContentItems.map((content) => (
-                <LinksCard
+                <a
                   href={`/${content.path}/${content.item.slug?.current}`}
+                  data-reveal
+                  class="group squircle block overflow-hidden rounded-2xl no-underline ring-1 ring-black/10 transition duration-200 ease-out hover:shadow-sm active:scale-[0.99] motion-reduce:active:scale-100 dark:ring-white/10 dark:hover:shadow-none"
                 >
-                  <header class="flex items-center pt-1 pb-2">
-                    <p class="small-heading leading-none">{content.type}</p>
-                    <h3 class="sr-only">{content.item.title}</h3>
-                  </header>
-                  {content.ogImageUrl && (
-                    <div class="overflow-hidden rounded-md ring-1 ring-black/10 dark:ring-white/10">
-                      <img src={content.ogImageUrl} alt={content.item.title} />
+                  {content.ogImageUrl ? (
+                    <img
+                      src={content.ogImageUrl}
+                      alt={content.item.title ?? ""}
+                      loading="lazy"
+                      class="aspect-1200/630 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.015] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    />
+                  ) : (
+                    <div class="flex aspect-1200/630 w-full flex-col justify-center gap-2 bg-surface p-6 sm:p-8">
+                      <p class="small-heading">{content.type}</p>
+                      <h3 class="text-xl font-bold text-balance text-foreground sm:text-2xl">
+                        {content.item.title}
+                      </h3>
                     </div>
                   )}
-                </LinksCard>
+                  <span class="sr-only">
+                    {content.type}: {content.item.title}
+                  </span>
+                </a>
               ))}
             </div>
           </section>
         )
       }
-      <div data-reveal>
-        <Button
-          href="/"
-          class="dark:inset-ring dark:inset-ring-white/10 dark:bg-surface dark:text-foreground dark:hover:bg-surface-hover"
-          >Go to ryanfurrer.com</Button
-        >
-      </div>
     </main>
   </div>
 </Layout>
