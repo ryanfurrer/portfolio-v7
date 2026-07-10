@@ -14,7 +14,11 @@ const description =
 const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
 ---
 
-<Layout title={`${title} — Ryan Furrer`} description={description}>
+<Layout
+  title={`${title} — Ryan Furrer`}
+  description={description}
+  ogImage="/og/now.png"
+>
   <div class="space-y-8">
     <header class="space-y-3 md:px-2">
       <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>

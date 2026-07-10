@@ -14,7 +14,11 @@ const description =
 const body = about?.body ?? [];
 ---
 
-<Layout title={`${title} — Ryan Furrer`} description={description}>
+<Layout
+  title={`${title} — Ryan Furrer`}
+  description={description}
+  ogImage="/og/about.png"
+>
   <div class="space-y-8 md:px-2">
     <header class="space-y-3">
       <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
