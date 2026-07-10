@@ -126,7 +126,7 @@ export default function TocMobile({ headings, title }: Props) {
       // enough that muted ToC items stay legible when the panel opens over busy
       // article images. Solid fallback where backdrop-filter is unsupported (and
       // under prefers-reduced-transparency; see global.css).
-      className="fixed inset-s-1/2 top-[calc(env(safe-area-inset-top)+5.5rem)] z-30 w-[65vw] overflow-hidden rounded-xl border border-border bg-background supports-[backdrop-filter]:bg-background/90 shadow-lg backdrop-blur-xl lg:hidden dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
+      className="fixed inset-s-1/2 top-[calc(env(safe-area-inset-top)+5.5rem)] z-30 w-[65vw] overflow-hidden rounded-lg border border-border bg-background supports-[backdrop-filter]:bg-background/90 shadow-lg backdrop-blur-xl lg:hidden dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
     >
       <button
         ref={triggerRef}
