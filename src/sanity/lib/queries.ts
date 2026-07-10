@@ -51,7 +51,10 @@ export const POST_QUERY = defineQuery(
 );
 
 export const PROJECT_QUERY = defineQuery(
-  `*[_type == "project" && slug.current == $slug][0]`,
+  `*[_type == "project" && slug.current == $slug][0]{
+    ...,
+    "company": company->{name, "slug": slug.current}
+  }`,
 );
 
 export const APPEARANCE_QUERY = defineQuery(

@@ -47,6 +47,18 @@ const updatedLong = project.updatedAt
 // Only surface an "Updated" badge when it lands on a genuinely different day
 // than publication — a same-day tidy-up would just show the same date twice.
 const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
+
+// The back link defaults to /work, but a project is only ever reached from one
+// company hub — its own (or the "personal" bucket when it has no company). If
+// the reader arrived from that hub, the client script below rewrites the back
+// link to point there, so "back" returns them where they came from (§ spatial
+// consistency) instead of dumping them on the full work index.
+const companyBack = project.company?.slug
+  ? {
+      href: `/work/companies/${project.company.slug}`,
+      label: `${project.company.name ?? project.company.slug} work`,
+    }
+  : { href: "/work/companies/personal", label: "Personal work" };
 ---
 
 <Layout
@@ -130,4 +142,25 @@ const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 
   <!-- Mobile ToC drawer -->
   <TocMobile headings={headings} title={project.title ?? ""} client:load />
+
+  {/* Referrer-aware back link: if the reader came from this project's company
+      hub, point "back" there instead of the full work index. Falls back to the
+      server-rendered /work default when there's no referrer or it's elsewhere. */}
+  <script is:inline define:vars={{ companyBack }}>
+    if (document.referrer) {
+      try {
+        const from = new URL(document.referrer);
+        if (
+          from.origin === location.origin &&
+          from.pathname.startsWith("/work/companies/")
+        ) {
+          document.querySelectorAll("[data-back]").forEach((link) => {
+            link.setAttribute("href", companyBack.href);
+            const label = link.querySelector("[data-back-label]");
+            if (label) label.textContent = companyBack.label;
+          });
+        }
+      } catch {}
+    }
+  </script>
 </Layout>

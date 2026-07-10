@@ -507,7 +507,7 @@ export type POST_QUERY_RESULT = {
 
 // Source: src/sanity/lib/queries.ts
 // Variable: PROJECT_QUERY
-// Query: *[_type == "project" && slug.current == $slug][0]
+// Query: *[_type == "project" && slug.current == $slug][0]{    ...,    "company": company->{name, "slug": slug.current}  }
 export type PROJECT_QUERY_RESULT = {
   _id: string;
   _type: "project";
@@ -520,7 +520,10 @@ export type PROJECT_QUERY_RESULT = {
   updatedAt?: string;
   projectUrl?: string;
   githubUrl?: string;
-  company?: CompanyReference;
+  company: {
+    name: string | null;
+    slug: string | null;
+  } | null;
   description?: string;
   ogImage?: OgImage;
   headerImage?: HeaderImage;
@@ -676,7 +679,7 @@ declare module "@sanity/client" {
     '*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_APPEARANCES_QUERY_RESULT;
     '{\n  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},\n  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},\n  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage}\n}': LINKS_LATEST_QUERY_RESULT;
     '*[_type == "post" && slug.current == $slug][0]': POST_QUERY_RESULT;
-    '*[_type == "project" && slug.current == $slug][0]': PROJECT_QUERY_RESULT;
+    '*[_type == "project" && slug.current == $slug][0]{\n    ...,\n    "company": company->{name, "slug": slug.current}\n  }': PROJECT_QUERY_RESULT;
     '*[_type == "appearance" && slug.current == $slug][0]': APPEARANCE_QUERY_RESULT;
     '*[_type == "post" && defined(slug.current)]{"params": {"slug": slug.current}}': POST_SLUGS_QUERY_RESULT;
     '*[_type == "project" && defined(slug.current)]{"params": {"slug": slug.current}}': PROJECT_SLUGS_QUERY_RESULT;
