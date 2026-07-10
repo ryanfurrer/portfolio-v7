@@ -648,9 +648,13 @@ html.dark {
     position: relative;
   }
 
-  /* CSS fallback hover effect when JS hasn't initialized (desktop only) */
+  /* CSS fallback hover effect when JS hasn't initialized (desktop only).
+     Skip the active item: it already carries bg-nav-active, and stacking a
+     solid fill on top during the pre-JS window flashes a doubled box right
+     after navigating with the cursor resting on the just-clicked item. */
   @media (hover: hover) {
-    body:not([data-dir-hover-active]) a[data-dir-hover]:hover {
+    body:not([data-dir-hover-active])
+      a[data-dir-hover]:not([aria-current="page"]):hover {
       background-color: var(--surface);
     }
   }

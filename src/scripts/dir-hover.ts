@@ -20,6 +20,14 @@ function findItemElement(element: unknown): HTMLAnchorElement | null {
   return element.closest("a[data-dir-hover]");
 }
 
+// The current-page item already carries a persistent highlight (bg-nav-active);
+// the traveling hover highlight must never stack on top of it. Otherwise, right
+// after a navigation — when the cursor is still resting on the just-clicked
+// (now active) item — the two highlights double up and read as wonky.
+function isCurrentPage(item: HTMLAnchorElement): boolean {
+  return item.getAttribute("aria-current") === "page";
+}
+
 function configFor(item: HTMLAnchorElement): Config {
   const key = item.getAttribute("data-dir-hover");
   return key && key in CONFIG ? CONFIG[key as keyof typeof CONFIG] : CONFIG.item;
@@ -89,6 +97,13 @@ function handlePointerOver(e: PointerEvent): void {
   const list = findListContainer(item);
   if (!list) return;
 
+  // Retract (don't stack) when the pointer reaches the active item.
+  if (isCurrentPage(item)) {
+    hideHighlight(list);
+    currentHovered.delete(list);
+    return;
+  }
+
   if (currentHovered.get(list) === item) return;
 
   const cfg = configFor(item);
@@ -120,6 +135,13 @@ function handleFocusIn(e: FocusEvent): void {
 
   const list = findListContainer(item);
   if (!list) return;
+
+  // The active item's persistent highlight + focus ring already locate it.
+  if (isCurrentPage(item)) {
+    hideHighlight(list);
+    currentHovered.delete(list);
+    return;
+  }
 
   updateHighlight(item, list, configFor(item));
   currentHovered.set(list, item);
