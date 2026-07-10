@@ -1,0 +1,53 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   portfolio-v7 — design system (tokens + patterns)
+   Entry stylesheet. Designs receive this file and its @import closure only,
+   so everything a design needs is reachable from here.
+
+   Theme: neutral-ink, Apple-influenced. No brand hue — the accent is the ink.
+   Toggle dark mode by adding class="dark" to a root ancestor.
+
+   Everything here is plain, self-contained CSS: no Tailwind build is required
+   for these tokens and patterns to render exactly as they do on the site.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Foundations */
+@import "./tokens/typography.css";
+@import "./tokens/colors.css";
+@import "./tokens/radius-elevation.css";
+
+/* Patterns — the reusable pieces that make a design read as "this site" */
+@import "./patterns/base.css";       /* selection, focus ring, headings, links */
+@import "./patterns/components.css"; /* .lead, .small-heading, .badge, .quiet-link */
+@import "./patterns/prose.css";      /* long-form article / content typography */
+
+/* ── Reset + page ground ─────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--background);
+  color: var(--foreground-muted);
+  font-family: var(--font-sans);
+  font-size: 100%;
+  line-height: var(--leading-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* keep anchor jumps clear of a sticky header */
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

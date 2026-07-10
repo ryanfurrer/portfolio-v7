@@ -1,0 +1,54 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Named text patterns used across the site's page chrome (outside long-form
+   article bodies, which live in prose.css).
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Standfirst / dek — the one editorial step above body copy. A larger, muted
+   intro line used for page & article ledes and the homepage tagline. */
+.lead {
+  font-size: var(--text-lead);
+  line-height: var(--leading-lead);
+  letter-spacing: var(--tracking-lead);
+  color: var(--foreground-muted);
+  text-wrap: pretty;
+}
+
+/* Small uppercase eyebrow label — section kickers ("Find me elsewhere:"). Uses
+   muted (not subtle) so it clears WCAG AA at this size. */
+.small-heading {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--foreground-muted);
+}
+
+/* Neutral metadata pill — "Updated", year chips, small status tags. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  background-color: var(--badge);
+  padding: 0.125rem 0.5rem;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: var(--badge-foreground);
+  white-space: nowrap;
+}
+
+/* Quiet nav-text link — footer sitemap, social links, table of contents. Muted
+   ink at rest, foreground on hover/focus/press, never underlined. Distinct from
+   body links (underlined) and navbar items (which add an active pill). Display
+   is left to the call site so it works block, flex, or inline. */
+.quiet-link {
+  color: var(--foreground-muted);
+  text-decoration: none;
+  transition: color 150ms var(--ease-out-curve);
+}
+.quiet-link:hover,
+.quiet-link:focus-visible,
+.quiet-link:active {
+  color: var(--foreground);
+}

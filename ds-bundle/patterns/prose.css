@@ -1,0 +1,189 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Long-form article / content typography — the look of the writing, work, and
+   about pages. Self-contained: reproduces the essentials of the site's
+   Tailwind-Typography base (spacing, sizes, lists, rules) PLUS the site's own
+   overrides, all on the shared tokens. Wrap article HTML in <div class="prose">.
+
+   Headings inherit their extrabold weight from patterns/base.css (all h1–h6 are
+   800); this file sets only their size, rhythm, and (for h1) tighter tracking.
+   Dark mode follows automatically from class="dark" on a root ancestor.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.prose {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 48rem;
+  color: var(--foreground-muted);
+  font-size: var(--text-base);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+/* Vertical rhythm */
+.prose p {
+  margin: 1.25em 0;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+/* Headings — foreground ink, generous space above, tight space below. Weight
+   (800) comes from base.css. Scroll margin keeps anchored jumps clear. */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--foreground);
+  scroll-margin-block-start: 1.5em;
+}
+.prose h1 {
+  font-size: 2.25em;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-display); /* display size wants tighter tracking */
+  margin: 0 0 0.8em;
+}
+.prose h2 {
+  font-size: 1.5em;
+  line-height: 1.33;
+  margin: 2em 0 1em;
+}
+.prose h3 {
+  font-size: 1.25em;
+  line-height: 1.5;
+  margin: 1.6em 0 0.6em;
+}
+.prose h4 {
+  font-size: 1em;
+  line-height: 1.5;
+  margin: 1.5em 0 0.5em;
+}
+
+/* Standfirst inside an article — the opening description under the title. */
+.prose > .lead {
+  margin-top: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.prose b,
+.prose strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+/* Lists */
+.prose ul,
+.prose ol {
+  margin: 1.25em 0;
+  padding-inline-start: 1.625em;
+}
+.prose ul {
+  list-style-type: disc;
+}
+.prose ol {
+  list-style-type: decimal;
+}
+.prose li {
+  margin: 0.5em 0;
+  padding-inline-start: 0.375em;
+}
+.prose li::marker {
+  color: var(--foreground-subtle);
+}
+.prose ul ul,
+.prose ul ol,
+.prose ol ul,
+.prose ol ol {
+  margin: 0.75em 0;
+}
+
+/* Inline code — a subtle pill; no plugin backtick pseudo-content. */
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  font-weight: 500;
+  background-color: var(--surface);
+  color: var(--foreground);
+  padding: 0.125em 0.375em;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* Code blocks — soft corners fenced in a hairline. */
+.prose pre {
+  margin: 1.71em 0;
+  padding: 0.857em 1.143em;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  line-height: 1.71;
+  background-color: var(--surface);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre;
+}
+
+/* Quotes — a quiet inline rule, upright (not italic). */
+.prose blockquote {
+  margin: 1.6em 0;
+  padding-inline-start: 1em;
+  font-style: normal;
+  border-inline-start: 2px solid var(--border);
+  color: var(--foreground-muted);
+}
+
+/* Media — full-bleed within the measure, soft corners, a pure black/white
+   hairline (never a tinted neutral, which reads as dirt on the edge). */
+.prose img,
+.prose video {
+  display: block;
+  width: 100%;
+  margin: 2em 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.dark .prose img,
+.dark .prose video {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Section rule */
+.prose hr {
+  margin: 3em 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  margin: 2em 0;
+  border-collapse: collapse;
+  font-size: 0.875em;
+  line-height: 1.5;
+}
+.prose th,
+.prose td {
+  padding: 0.5em 0.75em;
+  text-align: start;
+  border-bottom: 1px solid var(--border);
+}
+.prose th {
+  color: var(--foreground);
+  font-weight: 600;
+}

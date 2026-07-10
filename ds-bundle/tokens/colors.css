@@ -1,0 +1,99 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Color — a NEUTRAL-INK system. There is no brand hue: the accent IS the
+   foreground (near-black in light, near-white in dark). Interactivity is
+   expressed with ink weight and faint neutral washes, never color.
+
+   Light is the default (:root). Dark mode is a class toggle: add `class="dark"`
+   to a root ancestor (the site sets it on <html>) to switch every token below.
+   Values are authored in oklch to keep the neutral ramp perceptually even.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light;
+
+  --background: oklch(1 0 0); /* pure white page */
+
+  /* Text hierarchy — Apple-style near-black, three steps (never pure #000) */
+  --foreground: #1d1d1f;         /* primary — headings & key copy */
+  --foreground-muted: #6e6e73;   /* secondary — body & descriptions */
+  --foreground-subtle: #86868b;  /* tertiary — captions, meta, timestamps */
+
+  /* Recessed off-white surfaces — wells, hover highlights, inline code */
+  --surface: oklch(0.971 0 0);       /* ≈ #f5f5f7, Apple section gray */
+  --surface-hover: oklch(0.952 0 0);
+
+  /* The reserved accent = the ink itself. Links read as foreground + faint
+     underline, deepening to pure black on hover. */
+  --link: var(--foreground);
+  --link-hover: #000;
+  --link-underline: #bbb;
+
+  /* Nav washes — the ink at low opacity. Active is stronger than hover. */
+  --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
+  --nav-hover: color-mix(in oklch, var(--link) 5%, transparent);
+
+  /* Neutral metadata pill (e.g. "Updated", year chips) */
+  --badge: oklch(0.971 0 0);
+  --badge-foreground: var(--foreground-muted);
+
+  /* Structural neutrals (shadcn surface set) */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* Hairlines — opacity-based so they sit correctly on any surface */
+  --border: oklch(0 0 0 / 0.08);
+  --input: oklch(0 0 0 / 0.12);
+  --ring: oklch(0.55 0 0); /* neutral focus ring, ~4.7:1 on white */
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.165 0 0); /* deep near-black, ≈ #1a1a1a */
+
+  /* Brighter hierarchy so body copy holds up on the dark field */
+  --foreground: #f5f5f7;
+  --foreground-muted: #a1a1a6;
+  --foreground-subtle: #86868b;
+
+  /* Ink flips to white; interactivity brightens toward pure white */
+  --link: var(--foreground);
+  --link-hover: #fff;
+
+  --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
+  --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
+
+  --surface: oklch(0.215 0 0);
+  --surface-hover: oklch(0.245 0 0);
+  --badge: oklch(0.245 0 0);
+  --badge-foreground: var(--foreground-muted);
+
+  --card: oklch(0.215 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.215 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+
+  --border: oklch(1 0 0 / 0.1);
+  --input: oklch(1 0 0 / 0.15);
+  --ring: oklch(0.72 0 0);
+}

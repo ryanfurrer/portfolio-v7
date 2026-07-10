@@ -1,0 +1,73 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Base element treatments — the site-wide defaults that aren't tied to a
+   named component: text selection, the single keyboard focus ring, heading
+   style, body links, and a couple of small utilities.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Selection — the ink at low opacity, a touch stronger in the dark. */
+::selection {
+  background-color: color-mix(in oklch, var(--link) 22%, transparent);
+}
+.dark ::selection {
+  background-color: color-mix(in oklch, var(--link) 32%, transparent);
+}
+
+/* Apple-style headings: extrabold + tight, size-specific tracking. Components
+   that set their own weight (.small-heading, utilities) still win. */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--foreground);
+  font-weight: 800;
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+/* One consistent focus ring for every interactive element. A box-shadow ring
+   (not outline) so it follows border-radius everywhere; neutral gray so it
+   never clashes with the ink. 2px background gap + 2px ring. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--ring);
+}
+
+/* Body links — foreground "ink" + a faint underline at rest, revealing to full
+   foreground on hover/focus. Add class="no-underline" to opt a link out (e.g.
+   for nav/CTA links that use .quiet-link or their own styling instead). */
+a:not(.no-underline) {
+  font-weight: inherit;
+  color: var(--foreground-muted);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklch, var(--foreground) 25%, transparent);
+  text-decoration-skip-ink: none;
+  text-underline-offset: 2px;
+  transition:
+    color 150ms var(--ease-out-curve),
+    text-decoration-color 150ms var(--ease-out-curve);
+}
+a:not(.no-underline):hover,
+a:not(.no-underline):focus-visible {
+  color: var(--foreground);
+  text-decoration-color: var(--foreground);
+}
+
+/* Tabular monospace label — versions, timestamps, key/value readouts. */
+.font-mono-custom {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Squircle corners (progressive enhancement; falls back to the border-radius). */
+.squircle {
+  corner-shape: squircle;
+}

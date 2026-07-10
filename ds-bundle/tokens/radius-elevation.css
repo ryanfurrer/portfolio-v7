@@ -1,0 +1,37 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Radius, elevation & motion.
+
+   Radius derives from one base (--radius: 0.375rem) via calc, so the whole
+   scale retunes from a single value. Elevation is a LIGHT-MODE device — a soft
+   Apple shadow paired with a hairline ring, flattened to none in the dark.
+   Motion is deliberately two curves only: a snappy ease-out for micro press/
+   hover, and an iOS settle for overlays & drawers.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  --radius: 0.375rem; /* base */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Soft Apple-style elevation — always pair with a hairline ring, never a
+     solid border. Two layered shadows: a tight contact + a wide ambient. */
+  --shadow-elevated:
+    0 1px 2px -1px oklch(0 0 0 / 0.06),
+    0 6px 20px -4px oklch(0 0 0 / 0.08);
+
+  /* Motion — two curves. ease-out: 150ms micro-interactions (press/hover).
+     ease-ios: slower settle for overlays/drawers (250–340ms). */
+  --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
+  --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.dark {
+  /* Soft elevation reads as light catching an edge — flatten it in the dark
+     and lean on the surface step + hairline ring for separation instead. */
+  --shadow-elevated: none;
+}

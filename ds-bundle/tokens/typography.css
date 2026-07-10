@@ -1,0 +1,69 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   Typography — Geist sans + Geist Mono, with Permanent Marker as an accent
+   face. All three sans/mono files are variable (100–900). Fonts are bundled
+   locally and referenced relatively so they resolve inside this design system.
+   ───────────────────────────────────────────────────────────────────────── */
+
+@font-face {
+  font-family: "Geist";
+  src: url("../fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("../fonts/Geist-Italic-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Permanent Marker";
+  src: url("../fonts/PermanentMarker-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Font families */
+  --font-sans: "Geist", "Inter", ui-sans-serif, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-cursive: "Permanent Marker", ui-cursive, cursive;
+
+  /* Type scale (px @ 16px root). Body is 1rem; the "lead"/standfirst is the
+     one editorial step up. Headings step from text-2xl → text-4xl. */
+  --text-xs: 0.75rem;    /* 12px — captions, meta, small uppercase labels */
+  --text-sm: 0.875rem;   /* 14px — secondary UI text, links, badges */
+  --text-base: 1rem;     /* 16px — body copy */
+  --text-lead: 1.2rem;   /* 19.2px — standfirst / dek intro line */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px — section / hub headings */
+  --text-3xl: 1.875rem;  /* 30px — page H1 (mobile) */
+  --text-4xl: 2.25rem;   /* 36px — page H1 (sm+) */
+
+  /* Leading — tight on display sizes, comfortable on body (Apple type rules) */
+  --leading-tight: 1.1;
+  --leading-snug: 1.3;
+  --leading-normal: 1.5;
+  --leading-lead: 1.6;
+
+  /* Tracking is size-specific: negative as type grows, ~0 for body, positive
+     for small uppercase labels. Never a single value for all sizes. */
+  --tracking-display: -0.03em;  /* article H1 / large display */
+  --tracking-heading: -0.022em; /* default heading tracking */
+  --tracking-lead: -0.011em;    /* standfirst */
+  --tracking-normal: 0;         /* body */
+  --tracking-label: 0.06em;     /* small uppercase eyebrow labels */
+}

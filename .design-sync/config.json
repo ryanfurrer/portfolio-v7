@@ -1,0 +1,17 @@
+{
+  "projectId": "3fc2c50b-5af2-489c-afe2-b0e35a569c24",
+  "projectName": "portfolio-v7 Tokens",
+  "shape": "tokens-only",
+  "localDir": "./ds-bundle",
+  "note": "portfolio-v7 is an Astro application, not a component library — no Storybook, no dist/ of reusable components, private (non-published) package. The standard package/storybook converter has nothing to bundle. Per the user's choice (2026-07-09) this is a hand-authored sync of design tokens + reusable CSS patterns (NOT a component bundle), so claude.ai/design produces designs that are 1:1 with the site.",
+  "readmeHeader": "ds-bundle/README.md",
+  "uploads": {
+    "writes": ["styles.css", "README.md", "tokens/**", "patterns/**", "fonts/**", "_ds_needs_recompile"],
+    "deletes": ["styles.css", "README.md", "tokens/**", "patterns/**", "fonts/**"]
+  },
+  "source": {
+    "tokens": "src/styles/global.css (:root, .dark, @theme inline)",
+    "patterns": "src/styles/global.css (@layer base: .lead, .small-heading, .badge, .quiet-link, focus ring, body links, .prose)",
+    "fonts": "public/assets/fonts (variable Geist[wght]/Geist-Italic[wght]/GeistMono[wght] + PermanentMarker-Regular)"
+  }
+}
