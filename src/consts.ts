@@ -7,4 +7,4 @@
 export const SITE_TITLE = "Ryan Furrer — Frontend Engineer and Designer";
 
 export const SITE_DESCRIPTION =
-  "Frontend engineer at home where design and engineering meet. Crafting interfaces down to the last detail.";
+  "I feel at home where design and engineering meet. Crafting interfaces down to the last detail.";
