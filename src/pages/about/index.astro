@@ -15,11 +15,11 @@ const body = about?.body ?? [];
 
 <Layout title={`${title} — Ryan Furrer`} description={description}>
   <div class="space-y-8 md:px-2">
-    <header class="space-y-2">
+    <header class="space-y-3">
       <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
         {title}
       </h1>
-      <p class="max-w-[60ch] text-pretty text-foreground-muted" data-reveal>
+      <p class="lead max-w-[60ch]" data-reveal>
         {description}
       </p>
     </header>
