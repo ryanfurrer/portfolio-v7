@@ -7,6 +7,7 @@ import Head from "@/components/Head.astro";
 import Navbar from "@/components/Navbar.astro";
 import ScrollFade from "@/components/ScrollFade.astro";
 import { cn } from "@/lib/utils";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 import "@/styles/global.css";
 
 interface Props {
@@ -19,8 +20,8 @@ interface Props {
 }
 
 const {
-  title = "Ryan Furrer — Frontend Engineer and Designer",
-  description = "Frontend engineer focused on crafting accessible, fast, and delightful user experiences.",
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
   ogImage,
   noNavbar = false,
   noFooter = false,

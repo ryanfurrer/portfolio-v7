@@ -1,4 +1,6 @@
 ---
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+
 interface Props {
   title?: string;
   description?: string;
@@ -6,8 +8,8 @@ interface Props {
 }
 
 const {
-  title = "Ryan Furrer — Frontend Engineer and Designer",
-  description = "Frontend Engineer who loves working at the crossroads of design and engineering.",
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
   ogImage,
 } = Astro.props;
 

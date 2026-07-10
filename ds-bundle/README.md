@@ -82,8 +82,8 @@ Page header:
   <h1 style="font-size: var(--text-4xl); letter-spacing: var(--tracking-display);">
     Ryan Furrer
   </h1>
-  <p class="lead">Frontend Engineer who loves creating where design and
-    engineering meet.</p>
+  <p class="lead">Frontend engineer at home where design and engineering
+    meet. Crafting interfaces down to the last detail.</p>
   <span class="small-heading">Find me elsewhere:</span>
 </header>
 ```
