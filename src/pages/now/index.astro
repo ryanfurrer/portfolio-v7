@@ -16,7 +16,9 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
 <Layout title={title} description={description}>
   <div class="space-y-8">
     <header class="space-y-2 md:px-2">
-      <h1 class="text-2xl text-foreground sm:text-3xl" data-reveal>{title}</h1>
+      <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
+        {title}
+      </h1>
       <p class="max-w-[60ch] text-pretty text-foreground-muted" data-reveal>
         {description}
       </p>
