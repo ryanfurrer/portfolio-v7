@@ -38,7 +38,7 @@ a **class toggle**: add `class="dark"` to a root ancestor and every token flips.
 - Hairlines: `--border`, `--input` · Focus: `--ring`
 
 **Type** (`tokens/typography.css`)
-- Families: `--font-sans` (Geist) · `--font-mono` (Geist Mono) ·
+- Families: `--font-sans` (Geist) · `--font-mono` (Berkeley Mono) ·
   `--font-cursive` (Permanent Marker — accent only, use sparingly)
 - Scale: `--text-xs … --text-4xl`, plus `--text-lead` (the standfirst step)
 - Leading: `--leading-tight/snug/normal/lead`

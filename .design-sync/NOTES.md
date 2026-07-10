@@ -36,5 +36,8 @@ Mapping (site → bundle):
 - **JS-driven effects** — entrance reveal (`[data-reveal]`) and traveling-
   highlight hover (`[data-dir-hover-list]`) need scripts; omitted on purpose.
 - **shadcn React components** — not CSS; rebuild in Claude Design from tokens.
-- **Fonts trimmed** to the 4 actually used (3 variable Geist + Permanent
-  Marker), renamed bracket-free so URLs resolve in the design environment.
+- **Fonts trimmed** to the ones actually used — 2 variable Geist (upright +
+  italic), 4 static Berkeley Mono (Regular/Bold × upright/oblique), and
+  Permanent Marker — renamed bracket-free so URLs resolve in the design
+  environment. (Mono swapped Geist Mono → Berkeley Mono, 2026-07-09, matching
+  the site's font change in commit 85407a6.)

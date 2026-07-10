@@ -12,6 +12,6 @@
   "source": {
     "tokens": "src/styles/global.css (:root, .dark, @theme inline)",
     "patterns": "src/styles/global.css (@layer base: .lead, .small-heading, .badge, .quiet-link, focus ring, body links, .prose)",
-    "fonts": "public/assets/fonts (variable Geist[wght]/Geist-Italic[wght]/GeistMono[wght] + PermanentMarker-Regular)"
+    "fonts": "public/assets/fonts (variable Geist[wght]/Geist-Italic[wght] + static BerkeleyMono Regular/Bold/Oblique/Bold-Oblique + PermanentMarker-Regular)"
   }
 }
