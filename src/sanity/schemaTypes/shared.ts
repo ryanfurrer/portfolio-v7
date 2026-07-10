@@ -53,13 +53,6 @@ export const descriptionField = defineField({
   ],
 })
 
-export const ogImageField = defineField({
-  name: 'ogImage',
-  title: 'OG Image',
-  type: 'image',
-  validation: (rule) => rule.required(),
-})
-
 export const headerImageField = defineField({
   name: 'headerImage',
   title: 'Header Image',

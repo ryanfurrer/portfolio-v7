@@ -4,11 +4,11 @@ import Layout from "@/layouts/Layout.astro";
 import { NOW_QUERY } from "@/sanity/lib/queries";
 import type { NOW_QUERY_RESULT } from "@/sanity/sanity.types";
 import { formatDateLong } from "@/utils/date";
+import { SECTION_META } from "@/lib/og/sections";
 import { sanityClient } from "sanity:client";
 
 const title = "Now";
-const description =
-  "What I’m focused on at the moment — projects, reading, and life.";
+const description = SECTION_META.now.description;
 
 // Newest entry is the live "Now" card; the rest become "Previously".
 const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);

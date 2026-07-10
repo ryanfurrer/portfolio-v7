@@ -36,12 +36,12 @@ export const LATEST_APPEARANCES_QUERY = defineQuery(
   `*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}`,
 );
 
-// --- Links page (single latest of each, with OG image) ---
+// --- Links page (single latest of each) ---
 
 export const LINKS_LATEST_QUERY = defineQuery(`{
-  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},
-  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},
-  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage}
+  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug},
+  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug},
+  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug}
 }`);
 
 // --- Detail pages (full document by slug) ---
@@ -73,6 +73,21 @@ export const PROJECT_SLUGS_QUERY = defineQuery(
 
 export const APPEARANCE_SLUGS_QUERY = defineQuery(
   `*[_type == "appearance" && defined(slug.current)]{"params": {"slug": slug.current}}`,
+);
+
+// --- OG card data (slug + title + description per entry, for the build-time
+//     Open Graph image generator at /og/<section>/[slug].png) ---
+
+export const POST_OG_CARDS_QUERY = defineQuery(
+  `*[_type == "post" && defined(slug.current)]{"slug": slug.current, title, description}`,
+);
+
+export const PROJECT_OG_CARDS_QUERY = defineQuery(
+  `*[_type == "project" && defined(slug.current)]{"slug": slug.current, title, description}`,
+);
+
+export const APPEARANCE_OG_CARDS_QUERY = defineQuery(
+  `*[_type == "appearance" && defined(slug.current)]{"slug": slug.current, title, description}`,
 );
 
 // --- About (singleton) ---

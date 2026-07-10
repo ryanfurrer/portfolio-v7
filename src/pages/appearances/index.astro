@@ -5,13 +5,13 @@ import Layout from "@/layouts/Layout.astro";
 import { groupByYear } from "@/sanity/lib/content";
 import { APPEARANCES_QUERY } from "@/sanity/lib/queries";
 import type { APPEARANCES_QUERY_RESULT } from "@/sanity/sanity.types";
+import { SECTION_META } from "@/lib/og/sections";
 
 const appearances =
   await sanityClient.fetch<APPEARANCES_QUERY_RESULT>(APPEARANCES_QUERY);
 const { byYear: appearancesByYear, years } = groupByYear(appearances);
 
-const description =
-  "Talks, podcasts, and places I’ve shown up to share what I’ve learned.";
+const description = SECTION_META.appearances.description;
 ---
 
 <Layout
