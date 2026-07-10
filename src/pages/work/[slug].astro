@@ -34,9 +34,9 @@ const headings = extractHeadings(project.body);
 const projectImageUrl = project.headerImage
   ? urlForImage(project.headerImage).width(550).height(310).url()
   : null;
-const projectOgImageUrl = project.ogImage
-  ? urlForImage(project.ogImage).width(1200).height(630).url()
-  : undefined;
+// OG card is generated at build time from the title/description
+// (src/pages/og/work/[slug].png.ts) — no per-entry image to author.
+const projectOgImageUrl = `/og/work/${Astro.params.slug}.png`;
 
 const publishedLong = project.publishedAt
   ? formatDateLong(project.publishedAt)

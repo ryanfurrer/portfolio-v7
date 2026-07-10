@@ -22,14 +22,6 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
 };
 
-export type OgImage = {
-  asset?: SanityImageAssetReference;
-  media?: unknown; // Unable to locate the referenced type "ogImage.media" in schema
-  hotspot?: SanityImageHotspot;
-  crop?: SanityImageCrop;
-  _type: "image";
-};
-
 export type HeaderImage = {
   asset?: SanityImageAssetReference;
   media?: unknown; // Unable to locate the referenced type "headerImage.media" in schema
@@ -117,7 +109,6 @@ export type Appearance = {
   appearanceType?: "podcast" | "video" | "livestream" | "talk" | "presentation";
   externalUrl?: string;
   description?: string;
-  ogImage?: OgImage;
   headerImage?: HeaderImage;
   body?: BlockContent;
 };
@@ -143,7 +134,6 @@ export type Project = {
   githubUrl?: string;
   company?: CompanyReference;
   description?: string;
-  ogImage?: OgImage;
   headerImage?: HeaderImage;
   body?: BlockContent;
 };
@@ -201,7 +191,6 @@ export type Post = {
   publishedAt?: string;
   updatedAt?: string;
   description?: string;
-  ogImage?: OgImage;
   headerImage?: HeaderImage;
   body?: BlockContent;
 };
@@ -373,7 +362,6 @@ export type Geopoint = {
 
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
-  | OgImage
   | HeaderImage
   | Uses
   | Now
@@ -464,25 +452,22 @@ export type LATEST_APPEARANCES_QUERY_RESULT = Array<{
 
 // Source: src/sanity/lib/queries.ts
 // Variable: LINKS_LATEST_QUERY
-// Query: {  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage}}
+// Query: {  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug},  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug},  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug}}
 export type LINKS_LATEST_QUERY_RESULT = {
   post: {
     _id: string;
     title: string | null;
     slug: Slug | null;
-    ogImage: OgImage | null;
   } | null;
   project: {
     _id: string;
     title: string | null;
     slug: Slug | null;
-    ogImage: OgImage | null;
   } | null;
   appearance: {
     _id: string;
     title: string | null;
     slug: Slug | null;
-    ogImage: OgImage | null;
   } | null;
 };
 
@@ -500,7 +485,6 @@ export type POST_QUERY_RESULT = {
   publishedAt?: string;
   updatedAt?: string;
   description?: string;
-  ogImage?: OgImage;
   headerImage?: HeaderImage;
   body?: BlockContent;
 } | null;
@@ -525,7 +509,6 @@ export type PROJECT_QUERY_RESULT = {
     slug: string | null;
   } | null;
   description?: string;
-  ogImage?: OgImage;
   headerImage?: HeaderImage;
   body?: BlockContent;
 } | null;
@@ -546,7 +529,6 @@ export type APPEARANCE_QUERY_RESULT = {
   appearanceType?: "livestream" | "podcast" | "presentation" | "talk" | "video";
   externalUrl?: string;
   description?: string;
-  ogImage?: OgImage;
   headerImage?: HeaderImage;
   body?: BlockContent;
 } | null;
@@ -576,6 +558,33 @@ export type APPEARANCE_SLUGS_QUERY_RESULT = Array<{
   params: {
     slug: string | null;
   };
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: POST_OG_CARDS_QUERY
+// Query: *[_type == "post" && defined(slug.current)]{"slug": slug.current, title, description}
+export type POST_OG_CARDS_QUERY_RESULT = Array<{
+  slug: string | null;
+  title: string | null;
+  description: string | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: PROJECT_OG_CARDS_QUERY
+// Query: *[_type == "project" && defined(slug.current)]{"slug": slug.current, title, description}
+export type PROJECT_OG_CARDS_QUERY_RESULT = Array<{
+  slug: string | null;
+  title: string | null;
+  description: string | null;
+}>;
+
+// Source: src/sanity/lib/queries.ts
+// Variable: APPEARANCE_OG_CARDS_QUERY
+// Query: *[_type == "appearance" && defined(slug.current)]{"slug": slug.current, title, description}
+export type APPEARANCE_OG_CARDS_QUERY_RESULT = Array<{
+  slug: string | null;
+  title: string | null;
+  description: string | null;
 }>;
 
 // Source: src/sanity/lib/queries.ts
@@ -677,13 +686,16 @@ declare module "@sanity/client" {
     '*[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_POSTS_QUERY_RESULT;
     '*[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_PROJECTS_QUERY_RESULT;
     '*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_APPEARANCES_QUERY_RESULT;
-    '{\n  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},\n  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage},\n  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug, ogImage}\n}': LINKS_LATEST_QUERY_RESULT;
+    '{\n  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug},\n  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug},\n  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug}\n}': LINKS_LATEST_QUERY_RESULT;
     '*[_type == "post" && slug.current == $slug][0]': POST_QUERY_RESULT;
     '*[_type == "project" && slug.current == $slug][0]{\n    ...,\n    "company": company->{name, "slug": slug.current}\n  }': PROJECT_QUERY_RESULT;
     '*[_type == "appearance" && slug.current == $slug][0]': APPEARANCE_QUERY_RESULT;
     '*[_type == "post" && defined(slug.current)]{"params": {"slug": slug.current}}': POST_SLUGS_QUERY_RESULT;
     '*[_type == "project" && defined(slug.current)]{"params": {"slug": slug.current}}': PROJECT_SLUGS_QUERY_RESULT;
     '*[_type == "appearance" && defined(slug.current)]{"params": {"slug": slug.current}}': APPEARANCE_SLUGS_QUERY_RESULT;
+    '*[_type == "post" && defined(slug.current)]{"slug": slug.current, title, description}': POST_OG_CARDS_QUERY_RESULT;
+    '*[_type == "project" && defined(slug.current)]{"slug": slug.current, title, description}': PROJECT_OG_CARDS_QUERY_RESULT;
+    '*[_type == "appearance" && defined(slug.current)]{"slug": slug.current, title, description}': APPEARANCE_OG_CARDS_QUERY_RESULT;
     '*[_type == "about"][0]{title, description, body}': ABOUT_QUERY_RESULT;
     '*[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url}}}': USES_QUERY_RESULT;
     '*[_type == "now"]|order(publishedAt desc){_id, publishedAt, body, media}': NOW_QUERY_RESULT;

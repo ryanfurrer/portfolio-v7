@@ -4,13 +4,13 @@ import Signature from "@/components/Signature.astro";
 import Layout from "@/layouts/Layout.astro";
 import { ABOUT_QUERY } from "@/sanity/lib/queries";
 import type { ABOUT_QUERY_RESULT } from "@/sanity/sanity.types";
+import { SECTION_META } from "@/lib/og/sections";
 import { sanityClient } from "sanity:client";
 
 const about = await sanityClient.fetch<ABOUT_QUERY_RESULT>(ABOUT_QUERY);
 
-const title = about?.title ?? "About";
-const description =
-  about?.description ?? "The short version of a longer story.";
+const title = about?.title ?? SECTION_META.about.title;
+const description = about?.description ?? SECTION_META.about.description;
 const body = about?.body ?? [];
 ---
 

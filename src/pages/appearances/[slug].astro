@@ -34,9 +34,9 @@ const headings = extractHeadings(appearance.body);
 const appearanceImageUrl = appearance.headerImage
   ? urlForImage(appearance.headerImage).width(550).height(310).url()
   : null;
-const appearanceOgImageUrl = appearance.ogImage
-  ? urlForImage(appearance.ogImage).width(1200).height(630).url()
-  : undefined;
+// OG card is generated at build time from the title/description
+// (src/pages/og/appearances/[slug].png.ts) — no per-entry image to author.
+const appearanceOgImageUrl = `/og/appearances/${Astro.params.slug}.png`;
 
 const publishedLong = appearance.publishedAt
   ? formatDateLong(appearance.publishedAt)

@@ -7,8 +7,8 @@ import XIcon from "@/assets/icons/x.svg";
 import YoutubeIcon from "@/assets/icons/youtube.svg";
 import LinksCard from "@/components/ui/LinksCard.astro";
 import Layout from "@/layouts/Layout.astro";
-import { urlForImage } from "@/sanity/lib/url-for-image";
 import { LINKS_LATEST_QUERY } from "@/sanity/lib/queries";
+import { SECTION_META } from "@/lib/og/sections";
 import type { LINKS_LATEST_QUERY_RESULT } from "@/sanity/sanity.types";
 import { sanityClient } from "sanity:client";
 import { formatFollowerCount } from "@/utils/links";
@@ -21,35 +21,25 @@ const {
   appearance: latestAppearance,
 } = await sanityClient.fetch<LINKS_LATEST_QUERY_RESULT>(LINKS_LATEST_QUERY);
 
-const getOgImageUrl = (item: LatestLinkItem | null) =>
-  item?.ogImage ? urlForImage(item.ogImage).url() : undefined;
-
 const latestContentItems = [
-  {
-    type: "writing",
-    path: "writing",
-    item: latestPost,
-    ogImageUrl: getOgImageUrl(latestPost),
-  },
-  {
-    type: "work",
-    path: "work",
-    item: latestProject,
-    ogImageUrl: getOgImageUrl(latestProject),
-  },
-  {
-    type: "appearance",
-    path: "appearances",
-    item: latestAppearance,
-    ogImageUrl: getOgImageUrl(latestAppearance),
-  },
-].filter(
-  (content): content is typeof content & { item: LatestLinkItem } =>
-    content.item !== null,
-);
+  { type: "writing", path: "writing", item: latestPost },
+  { type: "work", path: "work", item: latestProject },
+  { type: "appearance", path: "appearances", item: latestAppearance },
+]
+  .filter(
+    (content): content is typeof content & { item: LatestLinkItem } =>
+      content.item !== null,
+  )
+  // The card art is the same build-time OG image the shared page uses
+  // (/og/<section>/<slug>.png), so these previews always match.
+  .map((content) => ({
+    ...content,
+    ogImageUrl: content.item.slug?.current
+      ? `/og/${content.path}/${content.item.slug.current}.png`
+      : undefined,
+  }));
 
-const description =
-  "Everywhere I show up online — follow along, say hello, or catch what I've made lately.";
+const description = SECTION_META.links.description;
 
 const socialLinks = [
   {
