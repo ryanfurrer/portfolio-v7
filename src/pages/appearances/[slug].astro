@@ -71,20 +71,22 @@ const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
       )
     }
     <header data-reveal>
-      <h1 class="mb-1">{appearance.title}</h1>
+      <h1 class="mb-3">{appearance.title}</h1>
       {
-        publishedLong && !hasUpdate && (
-          <span class="text-sm text-foreground-subtle">{publishedLong}</span>
-        )
-      }
-      {
-        hasUpdate && (
-          <div class="flex flex-col gap-y-1">
-            <span class="text-sm text-foreground-subtle">
-              Originally published: {publishedLong}
-            </span>
-            <span class="badge w-fit">Updated {updatedLong}</span>
-          </div>
+        publishedLong && (
+          <p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-foreground-subtle">
+            <span>{publishedLong}</span>
+            {hasUpdate && (
+              <>
+                <span aria-hidden="true" class="opacity-50">
+                  ·
+                </span>
+                <span class="font-medium text-foreground-muted">
+                  Updated {updatedLong}
+                </span>
+              </>
+            )}
+          </p>
         )
       }
     </header>
