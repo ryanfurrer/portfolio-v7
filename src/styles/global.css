@@ -718,7 +718,10 @@ html.dark {
   ul[data-dir-hover-list="items"]::before {
     content: "";
     position: absolute;
-    inset-inline: 0;
+    /* Match the Item's -mx-2 bleed: the highlight extends 0.5rem past the list
+       on each side so the pill wraps the item's padding (text/date sit inset),
+       not just the list box. Keep in sync with Item.astro's -mx-2. */
+    inset-inline: -0.5rem;
     top: 0;
     translate: 0 var(--dir-hover-y, 0);
     height: var(--dir-hover-h, 0);
