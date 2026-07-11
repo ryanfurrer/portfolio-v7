@@ -60,7 +60,18 @@ const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
   <!-- Center: article -->
   <main class="prose min-w-0 prose-neutral dark:prose-invert">
     <BackLink href="/writing" label="Writing" class="mb-6 lg:hidden" />
-    {postImageUrl && <img src={postImageUrl} alt={post.title} data-reveal />}
+    {
+      postImageUrl && (
+        <img
+          src={postImageUrl}
+          alt={post.title}
+          width="550"
+          height="310"
+          fetchpriority="high"
+          data-reveal
+        />
+      )
+    }
     <header data-reveal>
       <h1 class="mb-3">{post.title}</h1>
       {

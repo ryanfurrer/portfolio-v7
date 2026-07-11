@@ -67,7 +67,14 @@ const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
     <BackLink href="/appearances" label="Appearances" class="mb-6 lg:hidden" />
     {
       appearanceImageUrl && (
-        <img src={appearanceImageUrl} alt={appearance.title} data-reveal />
+        <img
+          src={appearanceImageUrl}
+          alt={appearance.title}
+          width="550"
+          height="310"
+          fetchpriority="high"
+          data-reveal
+        />
       )
     }
     <header data-reveal>

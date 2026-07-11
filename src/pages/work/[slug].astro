@@ -79,7 +79,14 @@ const companyBack = project.company?.slug
     <BackLink href="/work" label="Work" class="mb-6 lg:hidden" />
     {
       projectImageUrl && (
-        <img src={projectImageUrl} alt={project.title} data-reveal />
+        <img
+          src={projectImageUrl}
+          alt={project.title}
+          width="550"
+          height="310"
+          fetchpriority="high"
+          data-reveal
+        />
       )
     }
     <header data-reveal>
