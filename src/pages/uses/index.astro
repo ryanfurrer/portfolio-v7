@@ -1,5 +1,7 @@
 ---
+import Item from "@/components/Item.astro";
 import Layout from "@/layouts/Layout.astro";
+import { resolveUsesIcon } from "@/lib/uses-icons";
 import { USES_QUERY } from "@/sanity/lib/queries";
 import type { USES_QUERY_RESULT } from "@/sanity/sanity.types";
 import { SECTION_META } from "@/lib/og/sections";
@@ -31,35 +33,45 @@ const categories = (uses?.categories ?? []).filter(
       </p>
     </header>
 
-    <main class="space-y-12 md:px-2">
+    <main class="space-y-10">
       {
         categories.map((category) => (
-          <section class="space-y-4" data-reveal>
-            <h2 class="small-heading">{category.title}</h2>
-            <ul class="divide-y divide-border" role="list">
+          <section class="space-y-2">
+            <h2 class="small-heading md:px-2" data-reveal>
+              {category.title}
+            </h2>
+            <ul class="flex flex-col gap-px" role="list">
               {category.items?.map((item) => (
-                <li class="flex flex-col gap-1 py-4 first:pt-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-                  <div class="min-w-0 space-y-1">
-                    {item.url ? (
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="font-medium text-foreground"
+                <li>
+                  <Item
+                    title={item.name}
+                    href={item.url ?? undefined}
+                    external={Boolean(item.url)}
+                  >
+                    <svg
+                      slot="leading"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="size-4"
+                      aria-hidden="true"
+                      set:html={resolveUsesIcon(item.icon, item.description)}
+                    />
+                    {item.description && (
+                      <span
+                        slot="trailing"
+                        class="font-mono-custom text-xs uppercase tracking-wide text-foreground-muted transition-colors group-hover/item:text-foreground"
                       >
-                        {item.name}
-                      </a>
-                    ) : (
-                      <span class="font-medium text-foreground">
-                        {item.name}
+                        {item.description}
                       </span>
                     )}
-                    {item.description && (
-                      <p class="text-pretty text-sm text-foreground-muted">
-                        {item.description}
-                      </p>
-                    )}
-                  </div>
+                  </Item>
                 </li>
               ))}
             </ul>
@@ -68,7 +80,7 @@ const categories = (uses?.categories ?? []).filter(
       }
       {
         categories.length === 0 && (
-          <p class="text-pretty text-foreground-subtle" data-reveal>
+          <p class="text-pretty text-foreground-subtle md:px-2" data-reveal>
             Nothing here yet — check back soon.
           </p>
         )

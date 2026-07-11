@@ -1,6 +1,7 @@
 import {defineType, defineField, defineArrayMember} from 'sanity'
 import {CogIcon} from '@sanity/icons'
 import {descriptionField, titleField} from './shared'
+import {UsesIconInput} from '../components/UsesIconInput'
 
 /**
  * The Uses page — the gear/software I use. A singleton (exactly one exists,
@@ -54,6 +55,14 @@ export const usesType = defineType({
                       title: 'Description',
                       type: 'text',
                       rows: 2,
+                    }),
+                    defineField({
+                      name: 'icon',
+                      title: 'Icon',
+                      type: 'string',
+                      description:
+                        'Optional. Pick an icon; if left empty, one is inferred from the description (e.g. "Terminal" → terminal).',
+                      components: {input: UsesIconInput},
                     }),
                     defineField({
                       name: 'url',

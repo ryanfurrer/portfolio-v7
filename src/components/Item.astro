@@ -3,34 +3,72 @@ import { formatDateDotNotation } from "@/utils/date";
 
 interface Props {
   title: string | null;
-  href: string;
+  /** Omit for a non-link row (renders a <div> instead of an <a>). */
+  href?: string | null;
+  /** Rendered as a mono date on the right — unless a `trailing` slot is given. */
   publishedAt?: string | null;
+  /** External link: opens in a new tab + shows a ↗ affordance after the title. */
+  external?: boolean;
 }
 
-const { title, href, publishedAt } = Astro.props;
+const { title, href, publishedAt, external = false } = Astro.props;
 
 const formattedDate = publishedAt ? formatDateDotNotation(publishedAt) : null;
+const isLink = Boolean(href);
+const hasLeading = Astro.slots.has("leading");
+const hasTrailing = Astro.slots.has("trailing");
+
+// A non-link row keeps the same padding/layout but no hover highlight or press
+// feedback (there's nothing to activate).
+const Tag = isLink ? "a" : "div";
+const linkAttrs = isLink
+  ? {
+      href,
+      "data-dir-hover": "item",
+      ...(external ? { target: "_blank", rel: "noopener noreferrer" } : {}),
+      class:
+        "group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98] md:mx-0 md:p-2",
+    }
+  : { class: "group/item -mx-2 block p-2 font-normal md:mx-0 md:p-2" };
 ---
 
-<a
-  href={href}
-  data-dir-hover="item"
-  data-reveal
-  class="group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98] md:mx-0 md:p-2"
->
+<Tag data-reveal {...linkAttrs}>
   <div class="w-full items-center justify-between gap-4 md:flex">
-    <div class="w-fit text-foreground">
+    <div class="flex w-fit items-center gap-3 text-foreground">
+      {
+        hasLeading && (
+          <span class="shrink-0 text-foreground-muted transition-colors group-hover/item:text-foreground">
+            <slot name="leading" />
+          </span>
+        )
+      }
       <h3 class="font-semibold">{title}</h3>
+      {
+        external && (
+          <span
+            aria-hidden="true"
+            class="text-xs text-foreground-subtle transition-colors group-hover/item:text-foreground"
+          >
+            ↗
+          </span>
+        )
+      }
     </div>
     <div class="hidden min-w-4 flex-1 border-b md:block"></div>
     {
-      formattedDate && (
-        <div class="font-mono-custom w-fit">
-          <span class="transition-colors group-hover/item:text-foreground">
-            {formattedDate}
-          </span>
+      hasTrailing ? (
+        <div class="w-fit shrink-0">
+          <slot name="trailing" />
         </div>
+      ) : (
+        formattedDate && (
+          <div class="font-mono-custom w-fit shrink-0">
+            <span class="transition-colors group-hover/item:text-foreground">
+              {formattedDate}
+            </span>
+          </div>
+        )
       )
     }
   </div>
-</a>
+</Tag>

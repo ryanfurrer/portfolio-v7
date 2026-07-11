@@ -43,6 +43,7 @@ export type Uses = {
     items?: Array<{
       name?: string;
       description?: string;
+      icon?: string;
       url?: string;
       _type: "usesItem";
       _key: string;
@@ -598,7 +599,7 @@ export type ABOUT_QUERY_RESULT = {
 
 // Source: src/sanity/lib/queries.ts
 // Variable: USES_QUERY
-// Query: *[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url}}}
+// Query: *[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url, icon}}}
 export type USES_QUERY_RESULT = {
   title: string | null;
   description: string | null;
@@ -608,6 +609,7 @@ export type USES_QUERY_RESULT = {
       name: string | null;
       description: string | null;
       url: string | null;
+      icon: string | null;
     }> | null;
   }> | null;
 } | null;
@@ -697,7 +699,7 @@ declare module "@sanity/client" {
     '*[_type == "project" && defined(slug.current)]{"slug": slug.current, title, description}': PROJECT_OG_CARDS_QUERY_RESULT;
     '*[_type == "appearance" && defined(slug.current)]{"slug": slug.current, title, description}': APPEARANCE_OG_CARDS_QUERY_RESULT;
     '*[_type == "about"][0]{title, description, body}': ABOUT_QUERY_RESULT;
-    '*[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url}}}': USES_QUERY_RESULT;
+    '*[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url, icon}}}': USES_QUERY_RESULT;
     '*[_type == "now"]|order(publishedAt desc){_id, publishedAt, body, media}': NOW_QUERY_RESULT;
     '{\n  "companies": *[_type == "company" && defined(slug.current)]|order(name asc){\n    name,\n    "slug": slug.current,\n    url,\n    logo,\n    description,\n    "projects": *[_type == "project" && references(^._id) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}\n  },\n  "personal": *[_type == "project" && !defined(company) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}\n}': WORK_HUBS_QUERY_RESULT;
   }

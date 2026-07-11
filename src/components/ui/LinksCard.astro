@@ -10,11 +10,11 @@ interface Props {
 const { href, variant = "default", class: className } = Astro.props;
 
 const baseClasses =
-  "block rounded-lg border bg-card p-2 transition duration-200 ease-out active:scale-97 links-card no-underline size-full";
+  "block rounded-lg p-2 transition duration-200 ease-out active:scale-97 links-card no-underline size-full";
 const variantClasses =
   variant === "square"
-    ? "aspect-square squircle rounded-3xl p-4 hover:saturate-150 dark:hover:brightness-105 dark:focus:brightness-105 focus:saturate-150 focus:scale-102"
-    : "hover:shadow-sm dark:hover:shadow-none dark:inset-ring dark:inset-ring-white/5";
+    ? "aspect-square squircle rounded-3xl border bg-card p-4 hover:saturate-150 dark:hover:brightness-105 dark:focus:brightness-105 focus:saturate-150 focus:scale-102"
+    : "card-raised";
 const classes = cn(baseClasses, variantClasses, className);
 ---
 

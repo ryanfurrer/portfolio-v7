@@ -295,16 +295,26 @@ html.dark {
      (150ms micro, 200ms highlight, 250–300ms overlays). */
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
   --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
-  --background: oklch(1 0 0);
+  --background: oklch(0.971 0 0); /* off-white canvas (≈#f5f5f7, Apple section gray) — white cards/hovers lift above it */
   /* Apple-style neutral text hierarchy (light) */
   --foreground: #1d1d1f; /* primary — headings & key copy (Apple near-black, not pure black) */
-  --foreground-muted: #6e6e73; /* secondary — body & descriptions */
+  --foreground-muted: #6b6b70; /* secondary — body & descriptions (nudged slightly darker to hold ≥4.5:1 on the off-white canvas) */
   --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
-  /* Recessed off-white surfaces — wells, hover highlights, inline code */
-  --surface: oklch(0.971 0 0); /* ≈ #f5f5f7, Apple section gray */
-  --surface-hover: oklch(0.952 0 0);
-  /* Neutral metadata pill (replaces hardcoded amber "Updated" badge) */
-  --badge: oklch(0.971 0 0);
+  /* Recessed surfaces — wells, inline code, menu-item hovers (on white popovers).
+     One step BELOW the canvas so they still read as sunken now that the canvas
+     itself is off-white. */
+  --surface: oklch(0.955 0 0);
+  --surface-hover: oklch(0.94 0 0);
+  /* Raised surface — Item rows + navbar items lift to pure white on hover, above
+     the gray canvas. White-on-gray is low-contrast, so it needs a depth cue:
+     a hairline ring + whisper shadow read it as an elevated card (Apple §12). */
+  --surface-raised: oklch(1 0 0);
+  --surface-raised-shadow:
+    0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
+  --nav-hover-shadow:
+    0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
+  /* Neutral metadata pill — a touch deeper so it still reads on the gray canvas. */
+  --badge: oklch(0.94 0 0);
   --badge-foreground: var(--foreground-muted);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -327,9 +337,10 @@ html.dark {
   --link-underline: #bbb;
   /* Active nav pill — a faint neutral wash (the ink at low opacity). */
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
-  /* Nav hover highlight — a fainter sibling of the active pill, so hover reads
-     as the same family while staying clearly subordinate to "you are here". */
-  --nav-hover: color-mix(in oklch, var(--link) 5%, transparent);
+  /* Nav hover highlight — lifts to white above the canvas (see --nav-hover-shadow),
+     matching the Item-row hover. The active pill stays a darker ink wash so
+     "you are here" reads as filled/selected while hover reads as raised. */
+  --nav-hover: var(--surface-raised);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(
     0 0 0 / 0.08
@@ -373,6 +384,11 @@ html.dark {
      paired with a hairline inset ring on cards for definition */
   --surface: oklch(0.215 0 0);
   --surface-hover: oklch(0.245 0 0);
+  /* Dark keeps the current behavior: hover stays the recessed surface, no
+     white-lift and no light-mode elevation shadow. */
+  --surface-raised: var(--surface);
+  --surface-raised-shadow: none;
+  --nav-hover-shadow: none;
   --badge: oklch(0.245 0 0);
   --badge-foreground: var(--foreground-muted);
   --card: oklch(0.215 0 0);
@@ -483,9 +499,17 @@ html.dark {
   }
 
   .small-heading {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
+    /* Berkeley Mono so eyebrows read as the same technical family as the mono
+       metadata beside them (role tags, dates). Regular 400 (not bold) for a
+       quieter label that unifies with those inline tokens. */
+    font-family: var(--font-mono);
+    /* 13px — a half-step above the 12px inline role tags so section eyebrows
+       carry a little more presence/hierarchy without competing with content. */
+    font-size: 0.8125rem;
+    font-weight: 400;
+    /* Tracking matches the mono role tags (Tailwind `tracking-wide`, 0.025em)
+       so eyebrows and the item labels beside them read as one system. */
+    letter-spacing: 0.025em;
     text-transform: uppercase;
     /* Muted (not subtle) so these small uppercase labels clear WCAG AA (4.5:1);
        subtle #86868b sat at ~3.5:1 on white. */
@@ -509,6 +533,56 @@ html.dark {
 
   .squircle {
     corner-shape: squircle;
+  }
+
+  /* Raised card — a white surface lifted above the off-white canvas with a
+     hairline ring + soft shadow (Apple "white cards on gray"). Dark mode keeps
+     the flat recessed surface it already used (shadow-elevated is none there),
+     with a bright inset hairline instead. */
+  .card-raised {
+    background-color: var(--card);
+    box-shadow:
+      inset 0 0 0 1px oklch(0 0 0 / 0.05),
+      var(--shadow-elevated);
+    transition:
+      box-shadow 0.25s var(--ease-out-curve),
+      translate 0.25s var(--ease-out-curve);
+  }
+  /* Hover: the card physically lifts (rise + deeper, softer shadow) — the depth
+     cue reads as "pick me up" rather than a flat color swap. */
+  .card-raised:hover {
+    translate: 0 -2px;
+    box-shadow:
+      inset 0 0 0 1px oklch(0 0 0 / 0.05),
+      0 4px 10px -3px oklch(0 0 0 / 0.09),
+      0 16px 34px -10px oklch(0 0 0 / 0.13);
+  }
+  /* Focus-visible: a proper offset ring that follows the (squircle) radius, on
+     top of the resting elevation — keyboard users get an unmistakable target. */
+  .card-raised:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 1px oklch(0 0 0 / 0.05),
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ring),
+      var(--shadow-elevated);
+  }
+  .dark .card-raised {
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.06);
+  }
+  .dark .card-raised:hover {
+    translate: 0 -2px;
+    background-color: var(--surface-hover);
+    box-shadow:
+      inset 0 0 0 1px oklch(1 0 0 / 0.09),
+      0 8px 24px -10px oklch(0 0 0 / 0.6);
+  }
+  .dark .card-raised:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 1px oklch(1 0 0 / 0.09),
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ring);
   }
 
   .prose {
@@ -559,16 +633,23 @@ html.dark {
     color: var(--color-foreground) !important;
   }
 
-  /* Inline code — subtle pill; drop the plugin's backtick pseudo-content */
+  /* Inline code — a distinct token pill. A deeper fill than the general surface
+     plus a hairline ring so it stays legible on the off-white canvas (where a
+     surface-close fill would otherwise vanish). Dark keeps its recessed surface. */
   .prose :not(pre) > code {
     font-family: var(--font-mono);
     font-size: 0.85em;
     font-weight: 500;
-    background-color: var(--surface);
+    background-color: oklch(0.925 0 0);
+    box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.08);
     color: var(--color-foreground);
     padding: 0.125em 0.375em;
     border-radius: var(--radius-sm);
     white-space: nowrap;
+  }
+  .dark .prose :not(pre) > code {
+    background-color: var(--surface);
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.08);
   }
 
   .prose :not(pre) > code::before,
@@ -625,7 +706,8 @@ html.dark {
     inset-inline: 0;
     top: var(--dir-hover-y, 0);
     height: var(--dir-hover-h, 0);
-    background-color: var(--surface);
+    background-color: var(--surface-raised);
+    box-shadow: var(--surface-raised-shadow, none);
     border-radius: var(--radius-md);
     pointer-events: none;
     z-index: -1;
@@ -650,6 +732,7 @@ html.dark {
     left: var(--dir-hover-x, 0);
     width: var(--dir-hover-w, 0);
     background-color: var(--nav-hover);
+    box-shadow: var(--nav-hover-shadow, none);
     border-radius: var(--radius-md);
     pointer-events: none;
     z-index: -1;
@@ -679,7 +762,8 @@ html.dark {
   @media (hover: hover) {
     body:not([data-dir-hover-active])
       a[data-dir-hover]:not([aria-current="page"]):hover {
-      background-color: var(--surface);
+      background-color: var(--surface-raised);
+      box-shadow: var(--surface-raised-shadow, none);
     }
   }
 }
