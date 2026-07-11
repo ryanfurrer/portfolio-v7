@@ -84,7 +84,7 @@ export const ABOUT_QUERY = defineQuery(
 // --- Uses (singleton — gear/software, grouped by category) ---
 
 export const USES_QUERY = defineQuery(
-  `*[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url}}}`,
+  `*[_type == "uses"][0]{title, description, categories[]{title, items[]{name, description, url, icon}}}`,
 );
 
 // --- Now (newest = "Now" card, rest = "Previously") ---
