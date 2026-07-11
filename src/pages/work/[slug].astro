@@ -1,9 +1,5 @@
 ---
-import CtaLink from "@/components/CtaLink.astro";
-import PortableText from "@/components/sanity/PortableText.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
-import TocMobile from "@/components/TocMobile.tsx";
-import Layout from "@/layouts/Layout.astro";
+import ArticleLayout from "@/layouts/ArticleLayout.astro";
 import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlForImage } from "@/sanity/lib/url-for-image";
@@ -11,7 +7,6 @@ import type {
   PROJECT_QUERY_RESULT,
   PROJECT_SLUGS_QUERY_RESULT,
 } from "@/sanity/sanity.types";
-import { formatDateLong } from "@/utils/date";
 import { sanityClient } from "sanity:client";
 
 export async function getStaticPaths() {
@@ -30,23 +25,11 @@ if (!project) {
 }
 
 const headings = extractHeadings(project.body);
-
-const projectImageUrl = project.headerImage
+const headerImageUrl = project.headerImage
   ? urlForImage(project.headerImage).width(550).height(310).url()
   : null;
 // OG card is generated at build time from the title/description
 // (src/pages/og/work/[slug].png.ts) — no per-entry image to author.
-const projectOgImageUrl = `/og/work/${Astro.params.slug}.png`;
-
-const publishedLong = project.publishedAt
-  ? formatDateLong(project.publishedAt)
-  : null;
-const updatedLong = project.updatedAt
-  ? formatDateLong(project.updatedAt)
-  : null;
-// Only surface an "Updated" badge when it lands on a genuinely different day
-// than publication — a same-day tidy-up would just show the same date twice.
-const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 
 // The back link defaults to /work, but a project is only ever reached from one
 // company hub — its own (or the "personal" bucket when it has no company). If
@@ -61,101 +44,49 @@ const companyBack = project.company?.slug
   : { href: "/work/companies/personal", label: "Personal work" };
 ---
 
-<Layout
+<ArticleLayout
   title={project.title}
   description={project.description}
-  ogImage={projectOgImageUrl}
+  ogImage={`/og/work/${Astro.params.slug}.png`}
+  headerImageUrl={headerImageUrl}
+  publishedAt={project.publishedAt}
+  updatedAt={project.updatedAt}
+  headings={headings}
+  body={project.body}
+  backHref="/work"
+  backLabel="Work"
 >
-  <!-- Desktop: back link in left gutter -->
-  <div slot="left" class="sticky top-20">
-    <CtaLink href="/work" direction="back">Work</CtaLink>
-  </div>
-
-  <!-- Desktop: ToC in right gutter -->
-  <TableOfContents slot="right" headings={headings} />
-
-  <!-- Center: article -->
-  <main class="prose min-w-0 prose-neutral dark:prose-invert">
-    <CtaLink href="/work" direction="back" class="mb-6 lg:hidden">Work</CtaLink>
-    {
-      projectImageUrl && (
-        <img
-          src={projectImageUrl}
-          alt={project.title}
-          width="550"
-          height="310"
-          fetchpriority="high"
-          data-reveal
-        />
-      )
-    }
-    <header data-reveal>
-      <h1 class="mb-3">{project.title}</h1>
-      {
-        publishedLong && (
-          <p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-foreground-subtle">
-            <span>{publishedLong}</span>
-            {hasUpdate && (
-              <>
-                <span aria-hidden="true" class="opacity-50">
-                  ·
-                </span>
-                <span class="font-medium text-foreground-muted">
-                  Updated {updatedLong}
-                </span>
-              </>
-            )}
-          </p>
-        )
-      }
-      {
-        (project.projectUrl || project.githubUrl) && (
-          <div class="mt-4 flex flex-wrap gap-4">
-            {project.projectUrl && (
-              <a
-                href={project.projectUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-sm"
-              >
-                Live Site
-              </a>
-            )}
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-sm"
-              >
-                GitHub
-              </a>
-            )}
-          </div>
-        )
-      }
-    </header>
-    {
-      project.description && (
-        <p class="lead" data-reveal>
-          {project.description}
-        </p>
-      )
-    }
-    {
-      project.body && project.body.length > 0 && (
-        <PortableText portableText={project.body} />
-      )
-    }
-  </main>
-
-  <!-- Mobile ToC drawer -->
-  <TocMobile headings={headings} title={project.title ?? ""} client:load />
+  {
+    (project.projectUrl || project.githubUrl) && (
+      <div slot="header-extra" class="mt-4 flex flex-wrap gap-4">
+        {project.projectUrl && (
+          <a
+            href={project.projectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm"
+          >
+            Live Site
+          </a>
+        )}
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm"
+          >
+            GitHub
+          </a>
+        )}
+      </div>
+    )
+  }
 
   {/* Referrer-aware back link: if the reader came from this project's company
       hub, point "back" there instead of the full work index. Falls back to the
       server-rendered /work default when there's no referrer or it's elsewhere. */}
-  <script is:inline define:vars={{ companyBack }}>
+  <script slot="scripts" is:inline define:vars={{ companyBack }}>
     if (document.referrer) {
       try {
         const from = new URL(document.referrer);
@@ -172,4 +103,4 @@ const companyBack = project.company?.slug
       } catch {}
     }
   </script>
-</Layout>
+</ArticleLayout>

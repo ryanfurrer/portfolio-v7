@@ -1,0 +1,106 @@
+---
+import CtaLink from "@/components/CtaLink.astro";
+import PortableText from "@/components/sanity/PortableText.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import TocMobile from "@/components/TocMobile.tsx";
+import Layout from "@/layouts/Layout.astro";
+import type { TocHeading } from "@/sanity/lib/content";
+import { formatDateLong } from "@/utils/date";
+
+interface Props {
+  title?: string | null;
+  description?: string | null;
+  /** Build-time OG card, e.g. /og/writing/<slug>.png */
+  ogImage: string;
+  /** Header image URL (already sized 550×310), or null when absent. */
+  headerImageUrl?: string | null;
+  publishedAt?: string | null;
+  updatedAt?: string | null;
+  headings: TocHeading[];
+  body: unknown;
+  backHref: string;
+  backLabel: string;
+}
+
+const {
+  title,
+  description,
+  ogImage,
+  headerImageUrl,
+  publishedAt,
+  updatedAt,
+  headings,
+  body,
+  backHref,
+  backLabel,
+} = Astro.props;
+
+const bodyBlocks = (body ?? []) as unknown[];
+
+const publishedLong = publishedAt ? formatDateLong(publishedAt) : null;
+const updatedLong = updatedAt ? formatDateLong(updatedAt) : null;
+// Only surface an "Updated" badge when it lands on a genuinely different day
+// than publication — a same-day tidy-up would just show the same date twice.
+const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
+---
+
+<Layout title={title ?? undefined} description={description ?? undefined} ogImage={ogImage}>
+  <!-- Desktop: back link in left gutter -->
+  <div slot="left" class="sticky top-20">
+    <CtaLink href={backHref} direction="back">{backLabel}</CtaLink>
+  </div>
+
+  <!-- Desktop: ToC in right gutter -->
+  <TableOfContents slot="right" headings={headings} />
+
+  <!-- Center: article -->
+  <main class="prose min-w-0 prose-neutral dark:prose-invert">
+    <CtaLink href={backHref} direction="back" class="mb-6 lg:hidden">{backLabel}</CtaLink>
+    {
+      headerImageUrl && (
+        <img
+          src={headerImageUrl}
+          alt={title ?? ""}
+          width="550"
+          height="310"
+          fetchpriority="high"
+          data-reveal
+        />
+      )
+    }
+    <header data-reveal>
+      <h1 class="mb-3">{title}</h1>
+      {
+        publishedLong && (
+          <p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-foreground-subtle">
+            <span>{publishedLong}</span>
+            {hasUpdate && (
+              <>
+                <span aria-hidden="true" class="opacity-50">
+                  ·
+                </span>
+                <span class="font-medium text-foreground-muted">
+                  Updated {updatedLong}
+                </span>
+              </>
+            )}
+          </p>
+        )
+      }
+      <slot name="header-extra" />
+    </header>
+    {
+      description && (
+        <p class="lead" data-reveal>
+          {description}
+        </p>
+      )
+    }
+    {bodyBlocks.length > 0 && <PortableText portableText={body} />}
+  </main>
+
+  <!-- Mobile ToC drawer -->
+  <TocMobile headings={headings} title={title ?? ""} client:load />
+
+  <slot name="scripts" />
+</Layout>
