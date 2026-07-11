@@ -14,9 +14,9 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 
 | # | Plan | Batch | Blocks on owner? | Status |
 |---|------|-------|------------------|--------|
-| 001 | [Me nav hover shadow](001-nav-me-hover-shadow.md) | 1 mechanical | no | ☐ |
-| 002 | [CLS image dimensions](002-cls-image-dimensions.md) | 1 mechanical | no | ☐ |
-| 003 | [Dead-weight sweep](003-dead-weight-sweep.md) | 1 mechanical | no | ☐ |
+| 001 | [Me nav hover shadow](001-nav-me-hover-shadow.md) | 1 mechanical | no | ✅ `ad7e716` |
+| 002 | [CLS image dimensions](002-cls-image-dimensions.md) | 1 mechanical | no | ✅ `dd4d3ee` |
+| 003 | [Dead-weight sweep](003-dead-weight-sweep.md) | 1 mechanical | no | ✅ `9579148` |
 | 004 | [Lucide icon standardization](004-lucide-icon-standardization.md) | 2 decided | no | ☐ |
 | 005 | [Underline metrics unification](005-underline-metrics-unification.md) | 2 decided | no | ☐ |
 | 006 | [/links logo fix](006-links-logo-fix.md) | 2 decided | only for NEW logos | ☐ |
@@ -30,6 +30,13 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 | 014 | [Comment + quality sweep](014-comment-and-quality-sweep.md) | 5 deep, LAST | no | ☐ |
 
 Dependencies: 013 after 012 · 014 last · 004↔008 overlap on CompanyHeader (008 supersedes; see notes in both) · 007 can run anytime the owner is available · 012 notes what 003 already removed.
+
+## Batch 1 execution notes (2026-07-11, Opus 4.8, unpushed)
+
+Two intentional deviations from the plans as written — both improvements, verified in-browser:
+- **003 shadow:** instead of deleting `--nav-hover-shadow` and repointing consumers to `--surface-raised-shadow`, **aliased** it (`--nav-hover-shadow: var(--surface-raised-shadow)`) — DRY *and* keeps the semantic name at the nav call sites; also let the redundant dark `--nav-hover-shadow: none` line be dropped (inherits none via the alias). Verified: light = whisper+ring, dark = none, both match siblings.
+- **002 body-image dimensions:** the POST/APPEARANCE queries are bare `[0]` projections, so rather than restructure them to expand `asset->metadata.dimensions`, added `imageDimensions()` in `url-for-image.ts` that **parses w×h from the Sanity asset `_ref`** (`image-{id}-{w}x{h}-{fmt}`). No query/typegen change; verified real varied dimensions render with `aspect-ratio` reserved.
+- `Button.astro:19` still has `[key: string]: any` — deliberately left for plan 009d (Button rel helper) to keep commits scoped.
 
 ## Decisions already made (do not relitigate)
 
