@@ -33,20 +33,43 @@ const { headings } = Astro.props;
 }
 
 <script>
+  const nav = document.querySelector<HTMLElement>("nav.toc");
   const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
   const headingEls = [...links].map((l) =>
     document.getElementById(l.dataset.tocLink!),
   );
 
+  // Slide the gutter indicator (nav.toc::before) to a link. On first appearance
+  // it snaps into place without transition (mirrors dir-hover's data-dir-snap),
+  // then subsequent moves glide.
+  let indicatorVisible = false;
+  function moveIndicator(link: HTMLAnchorElement) {
+    if (!nav) return;
+    const navRect = nav.getBoundingClientRect();
+    const rect = link.getBoundingClientRect();
+    if (!indicatorVisible) {
+      nav.setAttribute("data-toc-snap", "");
+    }
+    nav.style.setProperty("--toc-active-y", `${rect.top - navRect.top}px`);
+    nav.style.setProperty("--toc-active-h", `${rect.height}px`);
+    if (!indicatorVisible) {
+      void nav.offsetHeight;
+      nav.removeAttribute("data-toc-snap");
+      nav.style.setProperty("--toc-active-opacity", "1");
+      indicatorVisible = true;
+    }
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        const link = document.querySelector(
+        const link = document.querySelector<HTMLAnchorElement>(
           `[data-toc-link="${entry.target.id}"]`,
         );
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && link) {
           links.forEach((l) => l.classList.remove("is-active"));
-          link?.classList.add("is-active");
+          link.classList.add("is-active");
+          moveIndicator(link);
         }
       });
     },
@@ -54,4 +77,16 @@ const { headings } = Astro.props;
   );
 
   headingEls.forEach((h) => h && observer.observe(h));
+
+  // Keep the bar aligned if the column reflows (font load, resize).
+  window.addEventListener(
+    "resize",
+    () => {
+      const active = document.querySelector<HTMLAnchorElement>(
+        "[data-toc-link].is-active",
+      );
+      if (active) moveIndicator(active);
+    },
+    { passive: true },
+  );
 </script>

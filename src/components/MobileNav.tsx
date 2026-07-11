@@ -59,7 +59,7 @@ export default function MobileNav({ navItems, pathname }: Props) {
       <SheetContent
         side="top"
         showCloseButton={false}
-        className="menu-grow h-dvh ease-ios! data-[state=closed]:duration-300! data-[state=open]:duration-420! shadow-none"
+        className="menu-grow h-dvh shadow-none"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <SheetHeader className="sr-only">
@@ -94,7 +94,7 @@ export default function MobileNav({ navItems, pathname }: Props) {
                 aria-current={active ? "page" : undefined}
                 style={{ "--index": i } as CSSProperties}
                 className={cn(
-                  "menu-item rounded-lg px-2 py-2 text-2xl font-semibold tracking-tight no-underline transition-colors",
+                  "menu-item rounded-lg px-2 py-2 text-2xl font-semibold tracking-tight no-underline transition-colors [-webkit-tap-highlight-color:transparent] active:text-foreground",
                   active
                     ? "text-foreground"
                     : "text-foreground-muted",

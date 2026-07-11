@@ -93,9 +93,12 @@ html {
     transition-property:
       opacity, color, background-color, border-color, fill, stroke,
       text-decoration-color !important;
-    scale: none !important;
-    translate: none !important;
-    rotate: none !important;
+  }
+  /* Auto-hiding chrome is motion-adjacent: keep the header pinned visible for
+     reduced-motion users instead of letting it jump in and out on scroll.
+     Un-layered, so it beats the Tailwind utility (which lives in a layer). */
+  [data-site-header][data-hidden] {
+    translate: none;
   }
 }
 
@@ -723,7 +726,8 @@ html.dark {
     content: "";
     position: absolute;
     inset-inline: 0;
-    top: var(--dir-hover-y, 0);
+    top: 0;
+    translate: 0 var(--dir-hover-y, 0);
     height: var(--dir-hover-h, 0);
     background-color: var(--surface-raised);
     box-shadow: var(--surface-raised-shadow, none);
@@ -732,7 +736,7 @@ html.dark {
     z-index: -1;
     opacity: var(--dir-hover-opacity, 0);
     transition:
-      top 0.2s var(--ease-out-curve),
+      translate 0.2s var(--ease-out-curve),
       height 0.2s var(--ease-out-curve),
       opacity 0.15s var(--ease-out-curve);
   }
@@ -748,7 +752,8 @@ html.dark {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: var(--dir-hover-x, 0);
+    left: 0;
+    translate: var(--dir-hover-x, 0) 0;
     width: var(--dir-hover-w, 0);
     background-color: var(--nav-hover);
     box-shadow: var(--nav-hover-shadow, none);
@@ -757,7 +762,7 @@ html.dark {
     z-index: -1;
     opacity: var(--dir-hover-opacity, 0);
     transition:
-      left 0.2s var(--ease-out-curve),
+      translate 0.2s var(--ease-out-curve),
       width 0.2s var(--ease-out-curve),
       opacity 0.15s var(--ease-out-curve);
   }
@@ -825,7 +830,31 @@ html.dark {
 /* Table of Contents active link — outside @layer so it beats Tailwind utility classes */
 [data-toc-link].is-active {
   color: var(--color-primary);
-  font-weight: 600;
+}
+
+/* TOC traveling indicator — an ink bar in the left gutter that slides between
+   active links as the scroll-spy moves, echoing the dir-hover highlight.
+   Position rides the composited `translate`; vars are set by the script in
+   TableOfContents.astro. While [data-toc-snap] is present the transition is
+   suppressed so the bar can appear in place (first activation). */
+nav.toc::before {
+  content: "";
+  position: absolute;
+  left: -0.75rem;
+  top: 0;
+  width: 2px;
+  height: var(--toc-active-h, 0);
+  translate: 0 var(--toc-active-y, 0);
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  opacity: var(--toc-active-opacity, 0);
+  transition:
+    translate 0.2s var(--ease-out-curve),
+    height 0.2s var(--ease-out-curve),
+    opacity 0.15s var(--ease-out-curve);
+}
+nav.toc[data-toc-snap]::before {
+  transition: none;
 }
 
 /* Body links — single source of truth for both plain (main) and rich-text
