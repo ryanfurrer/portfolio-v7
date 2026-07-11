@@ -483,9 +483,13 @@ html.dark {
   }
 
   .small-heading {
+    /* Berkeley Mono so eyebrows read as the same technical family as the mono
+       metadata beside them (role tags, dates). Regular 400 (not bold) for a
+       quieter label that unifies with those inline tokens. */
+    font-family: var(--font-mono);
     font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
+    font-weight: 400;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     /* Muted (not subtle) so these small uppercase labels clear WCAG AA (4.5:1);
        subtle #86868b sat at ~3.5:1 on white. */
