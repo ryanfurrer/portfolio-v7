@@ -42,10 +42,13 @@ export default function NavMenu({ label, items, pathname }: Props) {
         <NavigationMenuItem>
           <NavigationMenuTrigger
             className={cn(
-              "transition-[color,background-color,scale] hover:bg-nav-hover hover:text-foreground active:scale-[0.97] data-[state=open]:bg-nav-hover data-[state=open]:text-foreground [&>svg]:transition-transform [&>svg]:duration-200 [&>svg]:ease-out data-[state=open]:[&>svg]:rotate-180",
+              "transition-[color,background-color,scale] active:scale-[0.97] [&>svg]:transition-transform [&>svg]:duration-200 [&>svg]:ease-out data-[state=open]:[&>svg]:rotate-180",
+              // Active (a sub-item is the current route) → filled ink, matching
+              // the primary nav; stays filled on hover/open (only the chevron
+              // rotates). Inactive → muted with the white nav-hover lift.
               groupActive
-                ? "bg-nav-active text-foreground"
-                : "text-foreground-muted",
+                ? "bg-foreground text-background"
+                : "text-foreground-muted hover:bg-nav-hover hover:text-foreground data-[state=open]:bg-nav-hover data-[state=open]:text-foreground",
             )}
           >
             {label}

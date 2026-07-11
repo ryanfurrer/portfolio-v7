@@ -505,7 +505,9 @@ html.dark {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 400;
-    letter-spacing: 0.08em;
+    /* Matches the mono role tags' tracking (Tailwind `tracking-wide`, 0.025em)
+       so eyebrows and the item labels beside them read as one system. */
+    letter-spacing: 0.025em;
     text-transform: uppercase;
     /* Muted (not subtle) so these small uppercase labels clear WCAG AA (4.5:1);
        subtle #86868b sat at ~3.5:1 on white. */
