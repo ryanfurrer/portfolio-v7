@@ -275,7 +275,6 @@ html.dark {
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
-  /* --color-accent-foreground: var(--accent-foreground); */
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
@@ -321,18 +320,16 @@ html.dark {
   --surface-raised: oklch(1 0 0);
   --surface-raised-shadow:
     0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
-  --nav-hover-shadow:
-    0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
+  /* The nav-item hover lifts to the same raised surface as Item rows, so it
+     wears the same shadow. Aliased (not duplicated) → one value to tune. */
+  --nav-hover-shadow: var(--surface-raised-shadow);
   /* Neutral metadata pill — a touch deeper so it still reads on the gray canvas. */
   --badge: oklch(0.94 0 0);
   --badge-foreground: var(--foreground-muted);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
-  --card-foreground-muted: #6e6e73;
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --popover-foreground-muted: var(--color-neutral-600);
-  /* custom red-orange */
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
@@ -344,7 +341,6 @@ html.dark {
      white in dark (see .dark). The accent IS the foreground, not a hue. */
   --link: var(--foreground); /* near-black ink */
   --link-hover: #000; /* pure black — a subtle deepening on hover */
-  --link-underline: #bbb;
   /* Active nav pill — a faint neutral wash (the ink at low opacity). */
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
   /* Nav hover highlight — lifts to white above the canvas (see --nav-hover-shadow),
@@ -397,8 +393,7 @@ html.dark {
   /* Dark keeps the current behavior: hover stays the recessed surface, no
      white-lift and no light-mode elevation shadow. */
   --surface-raised: var(--surface);
-  --surface-raised-shadow: none;
-  --nav-hover-shadow: none;
+  --surface-raised-shadow: none; /* --nav-hover-shadow aliases this → also none */
   --badge: oklch(0.245 0 0);
   --badge-foreground: var(--foreground-muted);
   --card: oklch(0.215 0 0);
@@ -436,8 +431,6 @@ html.dark {
 
 @layer base {
   * {
-    /* border-color: color-mix(in oklch, var(--color-border) 50%, transparent);
-    outline-color: color-mix(in oklch, var(--color-ring) 50%, transparent); */
     @apply border-border outline-ring/50;
   }
 

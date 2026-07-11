@@ -1,15 +1,12 @@
 ---
-interface Props {
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a"> {
   href: string;
-  class?: string;
-  target?: string;
-  rel?: string;
-  [key: string]: any;
 }
 
 const { href, class: className, target, rel, ...restProps } = Astro.props;
 
-// Handle rel attribute for external links
 let finalRel = rel;
 if (target === "_blank" && !rel) {
   finalRel = "noopener noreferrer";
