@@ -1,6 +1,8 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 
+import { externalRel } from "@/utils/links";
+
 interface Props extends HTMLAttributes<"a"> {
   href: string;
   /**
@@ -27,8 +29,7 @@ const isExternal = direction === "external";
 // External CTAs open in a new tab and get a hardened rel unless the caller
 // already set one.
 const finalTarget = target ?? (isExternal ? "_blank" : undefined);
-const finalRel =
-  rel ?? (finalTarget === "_blank" ? "noopener noreferrer" : undefined);
+const finalRel = externalRel(finalTarget, rel);
 
 // Shared arrow chrome — the per-direction shape + travel are rendered inline
 // below so each arrow reads top-to-bottom.

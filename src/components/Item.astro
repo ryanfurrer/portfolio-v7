@@ -1,5 +1,6 @@
 ---
 import { formatDateDotNotation } from "@/utils/date";
+import { externalRel } from "@/utils/links";
 
 interface Props {
   title: string | null;
@@ -25,7 +26,9 @@ const linkAttrs = isLink
   ? {
       href,
       "data-dir-hover": "item",
-      ...(external ? { target: "_blank", rel: "noopener noreferrer" } : {}),
+      ...(external
+        ? { target: "_blank", rel: externalRel("_blank") }
+        : {}),
       class:
         "group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98] md:mx-0 md:p-2",
     }
