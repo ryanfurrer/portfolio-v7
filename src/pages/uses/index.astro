@@ -4,13 +4,13 @@ import Layout from "@/layouts/Layout.astro";
 import { resolveUsesIcon } from "@/lib/uses-icons";
 import { USES_QUERY } from "@/sanity/lib/queries";
 import type { USES_QUERY_RESULT } from "@/sanity/sanity.types";
+import { SECTION_META } from "@/lib/og/sections";
 import { sanityClient } from "sanity:client";
 
 const uses = await sanityClient.fetch<USES_QUERY_RESULT>(USES_QUERY);
 
-const title = uses?.title ?? "Uses";
-const description =
-  uses?.description ?? "The tools, toys, and setup I rely on daily.";
+const title = uses?.title ?? SECTION_META.uses.title;
+const description = uses?.description ?? SECTION_META.uses.description;
 
 // Only render categories that actually have items.
 const categories = (uses?.categories ?? []).filter(

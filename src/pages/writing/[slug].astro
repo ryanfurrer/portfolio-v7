@@ -31,9 +31,9 @@ const headings = extractHeadings(post.body);
 const postImageUrl = post.headerImage
   ? urlForImage(post.headerImage).width(550).height(310).url()
   : null;
-const postOgImageUrl = post.ogImage
-  ? urlForImage(post.ogImage).width(1200).height(630).url()
-  : undefined;
+// OG card is generated at build time from the title/description
+// (src/pages/og/writing/[slug].png.ts) — no per-entry image to author.
+const postOgImageUrl = `/og/writing/${Astro.params.slug}.png`;
 
 const publishedLong = post.publishedAt
   ? formatDateLong(post.publishedAt)

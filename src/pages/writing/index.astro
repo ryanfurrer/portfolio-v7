@@ -5,11 +5,12 @@ import Layout from "@/layouts/Layout.astro";
 import { groupByYear } from "@/sanity/lib/content";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
 import type { POSTS_QUERY_RESULT } from "@/sanity/sanity.types";
+import { SECTION_META } from "@/lib/og/sections";
 
 const posts = await sanityClient.fetch<POSTS_QUERY_RESULT>(POSTS_QUERY);
 const { byYear: postsByYear, years } = groupByYear(posts);
 
-const description = "Notes on the craft — code, design, and everything between.";
+const description = SECTION_META.writing.description;
 ---
 
 <Layout

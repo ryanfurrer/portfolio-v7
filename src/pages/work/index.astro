@@ -5,11 +5,12 @@ import Layout from "@/layouts/Layout.astro";
 import { groupByYear } from "@/sanity/lib/content";
 import { PROJECTS_QUERY } from "@/sanity/lib/queries";
 import type { PROJECTS_QUERY_RESULT } from "@/sanity/sanity.types";
+import { SECTION_META } from "@/lib/og/sections";
 
 const projects = await sanityClient.fetch<PROJECTS_QUERY_RESULT>(PROJECTS_QUERY);
 const { byYear: projectsByYear, years } = groupByYear(projects);
 
-const description = "A collection of my projects, code snippets, and more.";
+const description = SECTION_META.work.description;
 
 const showEarlyState = projects.length <= 1;
 

@@ -5,7 +5,6 @@ import {
   descriptionField,
   formatPreviewDate,
   headerImageField,
-  ogImageField,
   publishedAtField,
   publishedAtOrderings,
   slugField,
@@ -42,12 +41,11 @@ export const projectType = defineType({
       description: 'Leave empty for personal projects.',
     }),
     descriptionField,
-    ogImageField,
     headerImageField,
     bodyField,
   ],
   preview: {
-    select: {title: 'title', date: 'publishedAt', media: 'ogImage'},
+    select: {title: 'title', date: 'publishedAt', media: 'headerImage'},
     prepare({title, date, media}) {
       return {title, subtitle: formatPreviewDate(date), media}
     },

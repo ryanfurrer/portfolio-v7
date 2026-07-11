@@ -5,7 +5,6 @@ import {
   descriptionField,
   formatPreviewDate,
   headerImageField,
-  ogImageField,
   publishedAtField,
   publishedAtOrderings,
   slugField,
@@ -58,7 +57,6 @@ export const appearanceType = defineType({
         }),
     }),
     descriptionField,
-    ogImageField,
     headerImageField,
     bodyField,
   ],
@@ -67,7 +65,7 @@ export const appearanceType = defineType({
       title: 'title',
       date: 'publishedAt',
       type: 'appearanceType',
-      media: 'ogImage',
+      media: 'headerImage',
     },
     prepare({title, date, type, media}) {
       const label = type ? (APPEARANCE_TYPE_LABELS[type] ?? type) : undefined
