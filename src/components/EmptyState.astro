@@ -1,0 +1,16 @@
+---
+interface Props {
+  class?: string;
+  /** Play the standard entrance reveal (default true). */
+  reveal?: boolean;
+}
+
+const { class: className, reveal = true } = Astro.props;
+---
+
+<p
+  class:list={["text-pretty text-foreground-subtle md:px-2", className]}
+  data-reveal={reveal ? "" : undefined}
+>
+  <slot>Nothing here yet — check back soon.</slot>
+</p>

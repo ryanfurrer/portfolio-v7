@@ -1,5 +1,6 @@
 ---
 import { sanityClient } from "sanity:client";
+import EmptyState from "@/components/EmptyState.astro";
 import Item from "@/components/Item.astro";
 import Layout from "@/layouts/Layout.astro";
 import { groupByYear } from "@/sanity/lib/content";
@@ -85,10 +86,10 @@ const tags = [
         }
         {
           showEarlyState && (
-            <p class="max-w-[60ch] text-pretty text-sm text-foreground-subtle md:px-2">
+            <EmptyState class="max-w-[60ch] text-sm" reveal={false}>
               More projects are on the way. In the meantime, this is where it
               started.
-            </p>
+            </EmptyState>
           )
         }
       </div>
