@@ -24,7 +24,7 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 | 008 | [CtaLink unification](008-ctalink-unification.md) | 3 engineering | name sign-off at review | ✅ `5b58553` |
 | 009 | [Structural consolidations](009-consolidations.md) | 3 engineering | no | ✅ a=`09a7981` b=`ba9b7fa` c=`9db0a48` d=`9c158ae` e=`75306b9` |
 | 010 | [/fixseo run + triage](010-fixseo.md) | 4 runtime | triage review | ✅ canonical `2c…`, JSON-LD+icon done |
-| 011 | [Responsive breakpoint pass](011-responsive-breakpoint-pass.md) | 4 runtime | **YES — screenshot review** | ☐ |
+| 011 | [Responsive breakpoint pass](011-responsive-breakpoint-pass.md) | 4 runtime | **YES — screenshot review** | ✅ nav-pill wrap fix (PR5) |
 | 012 | [Color token consolidation](012-color-token-consolidation.md) | 5 deep | end-of-plan visual review | ☐ |
 | 013 | [global.css reorg](013-global-css-reorg.md) | 5 deep | no (after 012) | ☐ |
 | 014 | [Comment + quality sweep](014-comment-and-quality-sweep.md) | 5 deep, LAST | no | ☐ |
@@ -61,6 +61,8 @@ Two intentional deviations from the plans as written — both improvements, veri
 - **Fixed:** canonical URLs (`<link rel=canonical>` in Head, per-page absolute); JSON-LD (Person on home w/ all socials as `sameAs`; BlogPosting on writing, Article on work/appearances via ArticleLayout `schemaType` prop; threaded Layout→Head via `jsonLd` prop, `is:inline`); apple-touch-icon (180×180 PNG, atom mark on `#1d1d1f`, generated with `@resvg/resvg-js` — regen script was throwaway in scratchpad; `public/apple-touch-icon.png` is the committed artifact).
 - **Owner declined (keep as-is):** meta description length (94 chars) — the section `description` in `sections.ts` is triple-purpose (on-page lede + meta + OG card subtitle) so can't be lengthened without bloating display; home `SITE_DESCRIPTION` is decoupled but owner prefers the current punchy line, revisit only if real SEO issues appear. Title length (44 chars) — branded, fine.
 - **False positives (no action):** "no sitemap.xml" (site ships `sitemap-index.xml`, referenced in robots.txt + `<link rel=sitemap>`); hreflang (single-language, i18n parked); content-too-short (index/listing pages are inherently short).
+
+**011 responsive** — the sweep (375/768/1024/1280) showed the layout is solid and intentional (consistent center-column width via reserved gutters = deliberate; `md:px-2` scatter left as-is per readability > DRY). BUT the owner caught a real bug the sweep missed: at `lg` the navbar is confined to the center grid column (~528px at 1024, narrower than the sub-`lg` 672px until ~1152), squeezing the status pill so `NYC HH:MM` wrapped to two lines across ~1024–1152. Fixed with `whitespace-nowrap` (Presence time) + `shrink-0` (pill). This is **PR5 = `polish/5-responsive`** (base `polish/4-seo`). `md:px-2` centralization explicitly NOT done (working consistent repetition; indirection would cost readability).
 
 ## Decisions already made (do not relitigate)
 
