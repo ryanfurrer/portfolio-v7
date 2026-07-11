@@ -32,5 +32,8 @@ pnpm-debug.log*
 # Vercel
 .vercel/
 
-# Claude Code — machine-local settings (shared .claude config can still be committed)
-.claude/settings.local.json
+# Claude Code — local agent/editor tooling (launch config, local settings).
+# Blanket-ignored for this solo repo. If you later add shareable config
+# (.claude/commands, .claude/agents, a committed settings.json), un-ignore it
+# with a negation line below, e.g. `!.claude/commands/`.
+.claude/
