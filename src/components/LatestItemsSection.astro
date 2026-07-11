@@ -1,6 +1,6 @@
 ---
 import Item from "./Item.astro";
-import Link from "./Link.astro";
+import CtaLink from "./CtaLink.astro";
 
 interface LatestItem {
   _id: string;
@@ -36,6 +36,6 @@ const { title, items, basePath } = Astro.props;
     }
   </ul>
   <div class="md:px-2" data-reveal>
-    <Link href={`${basePath}`}>View all</Link>
+    <CtaLink href={`${basePath}`}>View all</CtaLink>
   </div>
 </section>

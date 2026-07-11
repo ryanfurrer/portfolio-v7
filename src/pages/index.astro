@@ -1,7 +1,7 @@
 ---
 import { sanityClient } from "sanity:client";
 import LatestItemsSection from "@/components/LatestItemsSection.astro";
-import Link from "@/components/Link.astro";
+import CtaLink from "@/components/CtaLink.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
 import Layout from "@/layouts/Layout.astro";
 import {
@@ -39,7 +39,7 @@ const [latestPosts, latestProjects, latestAppearances] = await Promise.all([
           >, part of the team creating the platform that helps studios build
           successful games, <a href="https://firstlook.gg">FirstLook</a>.
         </p>
-        <Link href="/about">Learn more about me</Link>
+        <CtaLink href="/about">Learn more about me</CtaLink>
       </div>
 
       <div class="space-y-2" data-reveal>

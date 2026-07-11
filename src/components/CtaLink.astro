@@ -1,0 +1,122 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a"> {
+  href: string;
+  /**
+   * forward  → trailing arrow-right, "continue within the site" (default).
+   * back     → leading arrow-left; emits the data-back / data-back-label hooks
+   *            the referrer-aware back script rewrites (see work/[slug].astro).
+   * external → trailing arrow-up-right; opens a new tab, "leaves the site".
+   */
+  direction?: "forward" | "back" | "external";
+}
+
+const {
+  href,
+  direction = "forward",
+  class: className,
+  target,
+  rel,
+  ...rest
+} = Astro.props;
+
+const isBack = direction === "back";
+const isExternal = direction === "external";
+
+// External CTAs open in a new tab and get a hardened rel unless the caller
+// already set one.
+const finalTarget = target ?? (isExternal ? "_blank" : undefined);
+const finalRel =
+  rel ?? (finalTarget === "_blank" ? "noopener noreferrer" : undefined);
+
+// Shared arrow chrome — the per-direction shape + travel are rendered inline
+// below so each arrow reads top-to-bottom.
+const arrowClass =
+  "size-4 shrink-0 transition-transform duration-150 ease-ios motion-reduce:transition-none";
+---
+
+<!--
+  One directional CTA link. Muted ink that fills to foreground on hover, a
+  wipe-in underline under the label (its own "continue" underline language,
+  matching inline prose links), and an arrow that travels toward its direction.
+  `not-prose` opts the back variant out of Tailwind Typography styling when it
+  sits inside an article's <main class="prose">.
+-->
+<a
+  href={href}
+  data-back={isBack ? "" : undefined}
+  target={finalTarget}
+  rel={finalRel}
+  class:list={[
+    "group/cta not-prose inline-flex w-fit items-center gap-1 text-sm font-medium text-foreground-muted no-underline transition-[color,scale] duration-150 ease-out hover:text-foreground focus-visible:text-foreground active:scale-[0.98] motion-reduce:transition-colors",
+    className,
+  ]}
+  {...rest}
+>
+  {
+    isBack && (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class:list={[
+          arrowClass,
+          "can-hover:group-hover/cta:-translate-x-1 group-focus-visible/cta:-translate-x-1",
+        ]}
+        aria-hidden="true"
+      >
+        <path d="M19 12H5" />
+        <path d="m12 19-7-7 7-7" />
+      </svg>
+    )
+  }<span
+    data-back-label={isBack ? "" : undefined}
+    class="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1.5px] bg-[position:0_100%] bg-no-repeat pb-px transition-[background-size] duration-200 ease-out can-hover:group-hover/cta:bg-[length:100%_1.5px] group-focus-visible/cta:bg-[length:100%_1.5px] motion-reduce:transition-none"
+    ><slot /></span
+  >{
+    direction === "forward" && (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class:list={[
+          arrowClass,
+          "can-hover:group-hover/cta:translate-x-1 group-focus-visible/cta:translate-x-1",
+        ]}
+        aria-hidden="true"
+      >
+        <path d="M5 12h14" />
+        <path d="m12 5 7 7-7 7" />
+      </svg>
+    )
+  }{
+    isExternal && (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class:list={[
+          arrowClass,
+          "can-hover:group-hover/cta:translate-x-0.5 can-hover:group-hover/cta:-translate-y-0.5 group-focus-visible/cta:translate-x-0.5 group-focus-visible/cta:-translate-y-0.5",
+        ]}
+        aria-hidden="true"
+      >
+        <path d="M7 7h10v10" />
+        <path d="M7 17 17 7" />
+      </svg>
+    )
+  }</a
+>

@@ -1,5 +1,5 @@
 ---
-import BackLink from "@/components/BackLink.astro";
+import CtaLink from "@/components/CtaLink.astro";
 import PortableText from "@/components/sanity/PortableText.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import TocMobile from "@/components/TocMobile.tsx";
@@ -51,7 +51,7 @@ const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 >
   <!-- Desktop: back link in left gutter -->
   <div slot="left" class="sticky top-20">
-    <BackLink href="/writing" label="Writing" />
+    <CtaLink href="/writing" direction="back">Writing</CtaLink>
   </div>
 
   <!-- Desktop: ToC in right gutter -->
@@ -59,7 +59,7 @@ const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 
   <!-- Center: article -->
   <main class="prose min-w-0 prose-neutral dark:prose-invert">
-    <BackLink href="/writing" label="Writing" class="mb-6 lg:hidden" />
+    <CtaLink href="/writing" direction="back" class="mb-6 lg:hidden">Writing</CtaLink>
     {
       postImageUrl && (
         <img
