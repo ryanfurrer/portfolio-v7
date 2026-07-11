@@ -74,7 +74,7 @@ export default function Presence() {
           }`}
         />
       </span>
-      <span className="tabular-nums">
+      <span className="tabular-nums whitespace-nowrap">
         {PRESENCE.location}{" "}
         {now ? (
           timeFormatter.format(now)
