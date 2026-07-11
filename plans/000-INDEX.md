@@ -23,7 +23,7 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 | 007 | [Brand color exploration](007-brand-color-exploration.md) | 2 taste | **YES — owner picks** | ☐ |
 | 008 | [CtaLink unification](008-ctalink-unification.md) | 3 engineering | name sign-off at review | ✅ `5b58553` |
 | 009 | [Structural consolidations](009-consolidations.md) | 3 engineering | no | ✅ a=`09a7981` b=`ba9b7fa` c=`9db0a48` d=`9c158ae` e=`75306b9` |
-| 010 | [/fixseo run + triage](010-fixseo.md) | 4 runtime | triage review | ☐ |
+| 010 | [/fixseo run + triage](010-fixseo.md) | 4 runtime | triage review | ✅ canonical `2c…`, JSON-LD+icon done |
 | 011 | [Responsive breakpoint pass](011-responsive-breakpoint-pass.md) | 4 runtime | **YES — screenshot review** | ☐ |
 | 012 | [Color token consolidation](012-color-token-consolidation.md) | 5 deep | end-of-plan visual review | ☐ |
 | 013 | [global.css reorg](013-global-css-reorg.md) | 5 deep | no (after 012) | ☐ |
@@ -54,6 +54,13 @@ Two intentional deviations from the plans as written — both improvements, veri
   - **009c**: unified `socialLinks` stores the data **footer-order first**, and the Links page **sorts by follower count at render** — so both orderings are preserved AND the follower-desc order is now explicit code, not a manual array invariant. Icon keys → SVG components mapped in `links/index.astro` (data file stays framework-import-free). Also renamed SocialLinks' type to `Props` (cleared the stale hint → 0 hints now).
   - **009a**: `ArticleLayout.astro` takes common data as props; work's extras stay in its page via `header-extra` + `scripts` named slots (the referrer script targets the CtaLink back links). `title` prop typed `string | null | undefined` (query returns `string | undefined`). Removed ~200 lines of triplication.
 - Full `pnpm build` clean (20 pages). `astro check`: 0 errors / 0 warnings / **0 hints**.
+
+## Batch 4 execution notes (2026-07-11, Opus 4.8, unpushed)
+
+**010 /fixseo** — scanned the production build (served `dist/` via `npx serve`; report at `plans/010-fixseo-report.md`). 34 findings (0 high / 4 med / 30 low). Disposition:
+- **Fixed:** canonical URLs (`<link rel=canonical>` in Head, per-page absolute); JSON-LD (Person on home w/ all socials as `sameAs`; BlogPosting on writing, Article on work/appearances via ArticleLayout `schemaType` prop; threaded Layout→Head via `jsonLd` prop, `is:inline`); apple-touch-icon (180×180 PNG, atom mark on `#1d1d1f`, generated with `@resvg/resvg-js` — regen script was throwaway in scratchpad; `public/apple-touch-icon.png` is the committed artifact).
+- **Owner declined (keep as-is):** meta description length (94 chars) — the section `description` in `sections.ts` is triple-purpose (on-page lede + meta + OG card subtitle) so can't be lengthened without bloating display; home `SITE_DESCRIPTION` is decoupled but owner prefers the current punchy line, revisit only if real SEO issues appear. Title length (44 chars) — branded, fine.
+- **False positives (no action):** "no sitemap.xml" (site ships `sitemap-index.xml`, referenced in robots.txt + `<link rel=sitemap>`); hreflang (single-language, i18n parked); content-too-short (index/listing pages are inherently short).
 
 ## Decisions already made (do not relitigate)
 
