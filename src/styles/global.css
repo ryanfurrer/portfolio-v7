@@ -861,8 +861,12 @@ nav.toc[data-toc-snap]::before {
   font-weight: inherit;
   color: var(--color-foreground-muted);
   text-decoration: underline;
-  text-decoration-color: color-mix(var(--color-foreground) 25%, transparent);
+  text-decoration-color: color-mix(in oklch, var(--color-foreground) 25%, transparent);
   text-decoration-skip-ink: none;
+  /* Match the standalone CTA's wipe-in underline (Link.astro): 1.5px line held
+     ~1px off the baseline, so inline prose links and CTAs speak one underline. */
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
   transition-property: color, text-decoration-color;
   transition-timing-function: var(--ease-out-curve);
   transition-duration: 150ms;
