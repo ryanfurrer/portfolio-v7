@@ -9,6 +9,13 @@
    media query, so a manual Light/Dark choice can override the OS. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Gate a variant to hover-capable pointers. Tailwind v4 wraps plain `hover:` in
+   `@media (hover: hover)` but NOT compound `group-hover:` — so a tap on a touch
+   screen fires a sticky `:hover` and latches group-hover treatments on. Stack
+   this before `group-hover/…` (e.g. `can-hover:group-hover/item:text-foreground`)
+   to keep those effects on mouse/trackpad only. */
+@custom-variant can-hover (@media (hover: hover));
+
 @font-face {
   font-family: "Geist";
   src: url("/assets/fonts/Geist[wght].woff2") format("woff2");
@@ -486,7 +493,14 @@ html.dark {
     transition-duration: 150ms;
   }
 
-  .quiet-link:hover,
+  /* :hover gated to hover-capable pointers (no sticky ink on touch tap); the
+     keyboard :focus-visible affordance stays. The :active rule below covers the
+     touch press feedback. */
+  @media (hover: hover) {
+    .quiet-link:hover {
+      color: var(--color-foreground);
+    }
+  }
   .quiet-link:focus-visible {
     color: var(--color-foreground);
   }
@@ -549,13 +563,16 @@ html.dark {
       translate 0.25s var(--ease-out-curve);
   }
   /* Hover: the card physically lifts (rise + deeper, softer shadow) — the depth
-     cue reads as "pick me up" rather than a flat color swap. */
-  .card-raised:hover {
-    translate: 0 -2px;
-    box-shadow:
-      inset 0 0 0 1px oklch(0 0 0 / 0.05),
-      0 4px 10px -3px oklch(0 0 0 / 0.09),
-      0 16px 34px -10px oklch(0 0 0 / 0.13);
+     cue reads as "pick me up" rather than a flat color swap. Gated to
+     hover-capable pointers so a tap on touch doesn't latch the lift. */
+  @media (hover: hover) {
+    .card-raised:hover {
+      translate: 0 -2px;
+      box-shadow:
+        inset 0 0 0 1px oklch(0 0 0 / 0.05),
+        0 4px 10px -3px oklch(0 0 0 / 0.09),
+        0 16px 34px -10px oklch(0 0 0 / 0.13);
+    }
   }
   /* Focus-visible: a proper offset ring that follows the (squircle) radius, on
      top of the resting elevation — keyboard users get an unmistakable target. */
@@ -570,12 +587,14 @@ html.dark {
   .dark .card-raised {
     box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.06);
   }
-  .dark .card-raised:hover {
-    translate: 0 -2px;
-    background-color: var(--surface-hover);
-    box-shadow:
-      inset 0 0 0 1px oklch(1 0 0 / 0.09),
-      0 8px 24px -10px oklch(0 0 0 / 0.6);
+  @media (hover: hover) {
+    .dark .card-raised:hover {
+      translate: 0 -2px;
+      background-color: var(--surface-hover);
+      box-shadow:
+        inset 0 0 0 1px oklch(1 0 0 / 0.09),
+        0 8px 24px -10px oklch(0 0 0 / 0.6);
+    }
   }
   .dark .card-raised:focus-visible {
     outline: none;
@@ -825,7 +844,14 @@ html.dark {
   transition-property: color, text-decoration-color;
   transition-timing-function: var(--ease-out-curve);
   transition-duration: 150ms;
-  &:hover,
+  /* :hover gated so a tap on touch doesn't latch the accent; :focus-visible
+     (keyboard) stays. Tapping a body link navigates away anyway. */
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-foreground);
+      text-decoration-color: var(--color-foreground);
+    }
+  }
   &:focus-visible {
     color: var(--color-foreground);
     text-decoration-color: var(--color-foreground);

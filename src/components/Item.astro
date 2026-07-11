@@ -37,7 +37,7 @@ const linkAttrs = isLink
     <div class="flex w-fit items-center gap-3 text-foreground">
       {
         hasLeading && (
-          <span class="shrink-0 text-foreground-muted transition-colors group-hover/item:text-foreground">
+          <span class="shrink-0 text-foreground-muted transition-colors can-hover:group-hover/item:text-foreground">
             <slot name="leading" />
           </span>
         )
@@ -47,7 +47,7 @@ const linkAttrs = isLink
         external && (
           <span
             aria-hidden="true"
-            class="text-xs text-foreground-subtle transition-colors group-hover/item:text-foreground"
+            class="text-xs text-foreground-subtle transition-[color,translate] duration-200 ease-out group-focus-visible/item:translate-x-0.5 group-focus-visible/item:-translate-y-0.5 group-focus-visible/item:text-foreground can-hover:group-hover/item:translate-x-0.5 can-hover:group-hover/item:-translate-y-0.5 can-hover:group-hover/item:text-foreground"
           >
             ↗
           </span>
@@ -57,13 +57,17 @@ const linkAttrs = isLink
     <div class="hidden min-w-4 flex-1 border-b md:block"></div>
     {
       hasTrailing ? (
-        <div class="w-fit shrink-0">
+        // With a leading icon, the row stacks on mobile — indent the trailing
+        // text so it lines up under the title, not the icon. Icon + gap is 28px,
+        // nudged a touch more (ms-7.25 ≈ 29px) so the smaller mono role optically
+        // aligns. No indent from md up (it sits on the right).
+        <div class:list={["w-fit shrink-0", hasLeading && "ms-7.25 md:ms-0"]}>
           <slot name="trailing" />
         </div>
       ) : (
         formattedDate && (
           <div class="font-mono-custom w-fit shrink-0">
-            <span class="transition-colors group-hover/item:text-foreground">
+            <span class="transition-colors can-hover:group-hover/item:text-foreground">
               {formattedDate}
             </span>
           </div>
