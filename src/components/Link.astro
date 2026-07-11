@@ -16,6 +16,14 @@ if (target === "_blank" && !rel) {
 }
 ---
 
+<!--
+  Standalone "read more" CTA: muted ink + trailing arrow that travels on hover,
+  and a wipe-in underline under the label (not the arrow) so these editorial
+  "continue" links speak the same underline language as the site's inline prose
+  links. Arrow uses the decisive ease-ios ease-out (no bounce — a hover carries
+  no momentum). Reduced-motion keeps the color + underline crossfade, drops the
+  travel.
+-->
 <a
   href={href}
   class:list={[
@@ -25,7 +33,10 @@ if (target === "_blank" && !rel) {
   target={target}
   rel={finalRel}
   {...restProps}
-  ><slot /><svg
+  ><span
+    class="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1.5px] bg-[position:0_100%] bg-no-repeat pb-px transition-[background-size] duration-200 ease-out can-hover:group-hover/cta:bg-[length:100%_1.5px] group-focus-visible/cta:bg-[length:100%_1.5px] motion-reduce:transition-none"
+    ><slot /></span
+  ><svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill="none"
@@ -33,7 +44,7 @@ if (target === "_blank" && !rel) {
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"
-    class="size-4 shrink-0 transition-transform duration-150 ease-out can-hover:group-hover/cta:translate-x-0.5 group-focus-visible/cta:translate-x-0.5 motion-reduce:transition-none"
+    class="size-4 shrink-0 transition-transform duration-150 ease-ios can-hover:group-hover/cta:translate-x-1 group-focus-visible/cta:translate-x-1 motion-reduce:transition-none"
     aria-hidden="true"
   >
     <path d="M5 12h14"></path>
