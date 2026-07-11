@@ -5,12 +5,15 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** schema.org structured data, rendered as a JSON-LD script. */
+  jsonLd?: Record<string, unknown>;
 }
 
 const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
   ogImage,
+  jsonLd,
 } = Astro.props;
 
 const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -56,6 +59,7 @@ const ogImageUrl = ogImage
     })();
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link
     rel="preload"
     href="/assets/fonts/Geist[wght].woff2"
@@ -97,4 +101,5 @@ const ogImageUrl = ogImage
   <meta name="twitter:title" content={title} />
   {description && <meta name="twitter:description" content={description} />}
   <meta name="twitter:image" content={ogImageUrl} />
+  {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
 </head>

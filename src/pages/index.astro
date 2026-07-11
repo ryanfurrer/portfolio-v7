@@ -4,6 +4,8 @@ import LatestItemsSection from "@/components/LatestItemsSection.astro";
 import CtaLink from "@/components/CtaLink.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
 import Layout from "@/layouts/Layout.astro";
+import { socialLinks } from "@/lib/social-links";
+import { SITE_DESCRIPTION } from "@/consts";
 import {
   LATEST_APPEARANCES_QUERY,
   LATEST_POSTS_QUERY,
@@ -20,9 +22,22 @@ const [latestPosts, latestProjects, latestAppearances] = await Promise.all([
   sanityClient.fetch<LATEST_PROJECTS_QUERY_RESULT>(LATEST_PROJECTS_QUERY),
   sanityClient.fetch<LATEST_APPEARANCES_QUERY_RESULT>(LATEST_APPEARANCES_QUERY),
 ]);
+
+// Person entity for the site — links the profile to every social account so
+// search engines can associate them (knowledge-panel eligibility).
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Ryan Furrer",
+  url: Astro.site?.toString(),
+  jobTitle: "Design Engineer",
+  description: SITE_DESCRIPTION,
+  image: new URL("/og-image.png", Astro.site).toString(),
+  sameAs: socialLinks.map((link) => link.href),
+};
 ---
 
-<Layout>
+<Layout jsonLd={personJsonLd}>
   <main class="space-y-16">
     <section class="space-y-6 md:px-2">
       <div class="space-y-3" data-reveal>

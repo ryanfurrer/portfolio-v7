@@ -20,6 +20,8 @@ interface Props {
   body: unknown;
   backHref: string;
   backLabel: string;
+  /** schema.org @type for the JSON-LD (BlogPosting for writing, else Article). */
+  schemaType?: "Article" | "BlogPosting";
 }
 
 const {
@@ -33,6 +35,7 @@ const {
   body,
   backHref,
   backLabel,
+  schemaType = "Article",
 } = Astro.props;
 
 const bodyBlocks = (body ?? []) as unknown[];
@@ -42,9 +45,34 @@ const updatedLong = updatedAt ? formatDateLong(updatedAt) : null;
 // Only surface an "Updated" badge when it lands on a genuinely different day
 // than publication — a same-day tidy-up would just show the same date twice.
 const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+// Article structured data. `image` prefers the (absolute) Sanity header image,
+// falling back to the build-time OG card. Undefined fields drop out of the JSON.
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": schemaType,
+  headline: title ?? undefined,
+  description: description ?? undefined,
+  datePublished: publishedAt ?? undefined,
+  dateModified: updatedAt ?? publishedAt ?? undefined,
+  image: headerImageUrl ?? new URL(ogImage, Astro.site).toString(),
+  url: canonical,
+  mainEntityOfPage: canonical,
+  author: {
+    "@type": "Person",
+    name: "Ryan Furrer",
+    url: Astro.site?.toString(),
+  },
+};
 ---
 
-<Layout title={title ?? undefined} description={description ?? undefined} ogImage={ogImage}>
+<Layout
+  title={title ?? undefined}
+  description={description ?? undefined}
+  ogImage={ogImage}
+  jsonLd={articleJsonLd}
+>
   <!-- Desktop: back link in left gutter -->
   <div slot="left" class="sticky top-20">
     <CtaLink href={backHref} direction="back">{backLabel}</CtaLink>

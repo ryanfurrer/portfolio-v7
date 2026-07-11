@@ -14,6 +14,7 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  jsonLd?: Record<string, unknown>;
   noNavbar?: boolean;
   noFooter?: boolean;
   maxWidth?: "sm" | "lg";
@@ -23,6 +24,7 @@ const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
   ogImage,
+  jsonLd,
   noNavbar = false,
   noFooter = false,
   maxWidth = "lg",
@@ -37,7 +39,7 @@ const isContentPage = contentPrefixes.some(
 ---
 
 <html lang="en">
-  <Head title={title} description={description} ogImage={ogImage} />
+  <Head title={title} description={description} ogImage={ogImage} jsonLd={jsonLd} />
   <body class="bg-background text-foreground-muted antialiased">
     <!-- Pinned to the page container's start edge (not the raw viewport edge),
          so it lines up with content instead of the far corner on wide screens. -->
