@@ -295,16 +295,16 @@ html.dark {
      (150ms micro, 200ms highlight, 250–300ms overlays). */
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
   --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
-  --background: oklch(1 0 0);
+  --background: oklch(0.971 0 0); /* ≈ #f5f5f7, Apple section gray — page field */
   /* Apple-style neutral text hierarchy (light) */
   --foreground: #1d1d1f; /* primary — headings & key copy (Apple near-black, not pure black) */
   --foreground-muted: #6e6e73; /* secondary — body & descriptions */
   --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
-  /* Recessed off-white surfaces — wells, hover highlights, inline code */
-  --surface: oklch(0.971 0 0); /* ≈ #f5f5f7, Apple section gray */
-  --surface-hover: oklch(0.952 0 0);
+  /* Raised white surfaces — hover highlights, inline code, recessed wells inverted */
+  --surface: oklch(1 0 0);
+  --surface-hover: oklch(1 0 0);
   /* Neutral metadata pill (replaces hardcoded amber "Updated" badge) */
-  --badge: oklch(0.971 0 0);
+  --badge: oklch(1 0 0);
   --badge-foreground: var(--foreground-muted);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -325,11 +325,10 @@ html.dark {
   --link: var(--foreground); /* near-black ink */
   --link-hover: #000; /* pure black — a subtle deepening on hover */
   --link-underline: #bbb;
-  /* Active nav pill — a faint neutral wash (the ink at low opacity). */
-  --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
-  /* Nav hover highlight — a fainter sibling of the active pill, so hover reads
-     as the same family while staying clearly subordinate to "you are here". */
-  --nav-hover: color-mix(in oklch, var(--link) 5%, transparent);
+  /* Active nav pill — raised white on the gray page field. */
+  --nav-active: oklch(1 0 0);
+  /* Nav hover highlight — same raised white; weight differentiates active. */
+  --nav-hover: oklch(1 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(
     0 0 0 / 0.08

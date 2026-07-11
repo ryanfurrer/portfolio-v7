@@ -25,7 +25,7 @@ const ogImageUrl = ogImage
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#f5f5f7" />
   {/* Resolve the saved theme choice (or fall back to the OS preference) and
       apply the .dark class to <html> before first paint — no flash of the
       wrong theme. Also syncs the browser-chrome color. ModeToggle keeps both in
@@ -40,7 +40,7 @@ const ogImageUrl = ogImage
             matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.classList.toggle("dark", dark);
         const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute("content", dark ? "#1a1a1a" : "#ffffff");
+        if (meta) meta.setAttribute("content", dark ? "#1a1a1a" : "#f5f5f7");
       } catch {}
     })();
   </script>
