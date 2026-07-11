@@ -7,11 +7,28 @@ import XIcon from "@/assets/icons/x.svg";
 import YoutubeIcon from "@/assets/icons/youtube.svg";
 import LinksCard from "@/components/ui/LinksCard.astro";
 import Layout from "@/layouts/Layout.astro";
+import { socialLinks } from "@/lib/social-links";
 import { LINKS_LATEST_QUERY } from "@/sanity/lib/queries";
 import { SECTION_META } from "@/lib/og/sections";
 import type { LINKS_LATEST_QUERY_RESULT } from "@/sanity/sanity.types";
 import { sanityClient } from "sanity:client";
 import { formatFollowerCount } from "@/utils/links";
+
+// Icon keys in the shared social-links data resolve to SVG components here,
+// keeping the data file free of framework imports.
+const socialIcons: Record<string, typeof GithubIcon> = {
+  linkedin: LinkedinIcon,
+  x: XIcon,
+  bluesky: BlueskyIcon,
+  twitch: TwitchIcon,
+  github: GithubIcon,
+  youtube: YoutubeIcon,
+};
+
+// The cards read top-to-bottom by reach; the footer subset keeps its own order.
+const socialCards = [...socialLinks].sort(
+  (a, b) => (b.followerCount ?? 0) - (a.followerCount ?? 0),
+);
 
 type LatestLinkItem = NonNullable<LINKS_LATEST_QUERY_RESULT["post"]>;
 
@@ -40,63 +57,6 @@ const latestContentItems = [
   }));
 
 const description = SECTION_META.links.description;
-
-const socialLinks = [
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/ryanfurrer/",
-    followerCount: 1920,
-    icon: LinkedinIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-blue-600",
-    actionLabel: "Follow",
-  },
-  {
-    label: "Twitter/X",
-    href: "https://x.com/ryanfurrer_",
-    followerCount: 970,
-    icon: XIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-zinc-950",
-    actionLabel: "Follow",
-  },
-  {
-    label: "Bluesky",
-    href: "https://bsky.app/profile/ryandotfurrer.bsky.social",
-    followerCount: 764,
-    icon: BlueskyIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-sky-500",
-    actionLabel: "Follow",
-  },
-  {
-    label: "Twitch",
-    href: "https://www.twitch.tv/ryandotfurrer",
-    followerCount: 178,
-    icon: TwitchIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-violet-600",
-    actionLabel: "Follow",
-  },
-  {
-    label: "GitHub",
-    href: "https://github.com/ryanfurrer",
-    followerCount: 59,
-    icon: GithubIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-zinc-950",
-    actionLabel: "Follow",
-  },
-  {
-    label: "YouTube",
-    href: "https://www.youtube.com/@ryandotfurrer",
-    followerCount: 46,
-    icon: YoutubeIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-rose-600",
-    actionLabel: "Subscribe",
-  },
-];
 ---
 
 <Layout
@@ -122,8 +82,8 @@ const socialLinks = [
         <h2 class="small-heading" data-reveal>Connect with me</h2>
         <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
           {
-            socialLinks.map((link) => {
-              const IconComponent = link.icon;
+            socialCards.map((link) => {
+              const IconComponent = socialIcons[link.icon ?? ""];
               const followLabel =
                 link.actionLabel === "Subscribe" ? "subscribers" : "followers";
               return (
@@ -161,7 +121,7 @@ const socialLinks = [
                     <div>
                       <h3 class="small-heading leading-none">{link.label}</h3>
                       <p class="mt-2.5 text-4xl leading-none font-bold text-foreground">
-                        {formatFollowerCount(link.followerCount)}
+                        {formatFollowerCount(link.followerCount ?? 0)}
                       </p>
                       <p class="mt-2 text-sm leading-none text-foreground-subtle">
                         {followLabel}
