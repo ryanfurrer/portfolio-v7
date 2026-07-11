@@ -21,8 +21,8 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 | 005 | [Underline metrics unification](005-underline-metrics-unification.md) | 2 decided | no | ✅ `4a07fde` |
 | 006 | [/links logo fix](006-links-logo-fix.md) | 2 decided | only for NEW logos | ✅ `0865192` (with 004) |
 | 007 | [Brand color exploration](007-brand-color-exploration.md) | 2 taste | **YES — owner picks** | ☐ |
-| 008 | [CtaLink unification](008-ctalink-unification.md) | 3 engineering | name sign-off at review | ☐ |
-| 009 | [Structural consolidations](009-consolidations.md) | 3 engineering | no | ☐ |
+| 008 | [CtaLink unification](008-ctalink-unification.md) | 3 engineering | name sign-off at review | ✅ `5b58553` |
+| 009 | [Structural consolidations](009-consolidations.md) | 3 engineering | no | ✅ a=`09a7981` b=`ba9b7fa` c=`9db0a48` d=`9c158ae` e=`75306b9` |
 | 010 | [/fixseo run + triage](010-fixseo.md) | 4 runtime | triage review | ☐ |
 | 011 | [Responsive breakpoint pass](011-responsive-breakpoint-pass.md) | 4 runtime | **YES — screenshot review** | ☐ |
 | 012 | [Color token consolidation](012-color-token-consolidation.md) | 5 deep | end-of-plan visual review | ☐ |
@@ -44,6 +44,16 @@ Two intentional deviations from the plans as written — both improvements, veri
 - **005 caught a latent bug:** the body-link `text-decoration-color` used `color-mix(var(--color-foreground) 25%, transparent)` — missing the `in <colorspace>` argument, so the whole declaration was invalid and links fell back to a full-strength currentColor underline instead of the intended faint 25%. Fixed to `color-mix(in oklch, …)` as part of the underline-metrics work. Verified: computes to `oklch(… / 0.25)`.
 - **MobileNav** now uses `lucide-react` `Menu`/`X` at `size={20} strokeWidth={1.75}` (matches the old custom-glyph 1.5px-rendered weight). Semantic arrow convention applied: `arrow-up-right` = external on /uses, /links, CompanyHeader.
 - **Dev-server gotcha:** deleting `linkedin2.svg` + rapid edits left vite's in-memory module graph with a stale css-analysis edge to the deleted file → console spammed `Failed to fetch dynamically imported module` + `Failed to reload global.css`. NOT a code bug (astro check clean, disk clean). A `preview_stop`→`preview_start` restart cleared it; fresh server logs clean, all modules 200. If this recurs after deleting an imported asset, restart the dev server rather than debugging the code.
+
+## Batch 3 execution notes (2026-07-11, Opus 4.8, unpushed)
+
+- **008 CtaLink**: kept the `CtaLink` name (not renamed at review — no objection surfaced). `direction="back"` uses a full arrow-left (`M19 12H5` + `m12 19-7-7 7-7`), NOT the old chevron. Back links now carry the underline-wipe too (unified identity). Verified the referrer-aware back rewrite still finds the `[data-back]`/`[data-back-label]` hooks and works click-through from a company hub. All colors unified to foreground-muted→foreground (CompanyHeader's old `text-link` dropped).
+- **009 sub-items** committed separately (each builds). Notable:
+  - **009b**: one `HeadingBlock` reads Portable Text `node.style` (h2|h3|h4) — confirmed available (rendered 5×H2 + 10×H3 correctly, ToC anchors resolve).
+  - **009d**: the third rel-logic site, `ui/Button.astro`, was **dead code** (zero imports) → deleted (also cleared its `[key:string]:any`, so that INDEX todo is now resolved). Helper `externalRel()` lives in `utils/links.ts` (not a new file — co-located with `formatFollowerCount`). `rel` param widened to `string | null` (HTMLAttributes allows null).
+  - **009c**: unified `socialLinks` stores the data **footer-order first**, and the Links page **sorts by follower count at render** — so both orderings are preserved AND the follower-desc order is now explicit code, not a manual array invariant. Icon keys → SVG components mapped in `links/index.astro` (data file stays framework-import-free). Also renamed SocialLinks' type to `Props` (cleared the stale hint → 0 hints now).
+  - **009a**: `ArticleLayout.astro` takes common data as props; work's extras stay in its page via `header-extra` + `scripts` named slots (the referrer script targets the CtaLink back links). `title` prop typed `string | null | undefined` (query returns `string | undefined`). Removed ~200 lines of triplication.
+- Full `pnpm build` clean (20 pages). `astro check`: 0 errors / 0 warnings / **0 hints**.
 
 ## Decisions already made (do not relitigate)
 
