@@ -30,9 +30,9 @@ const linkAttrs = isLink
         ? { target: "_blank", rel: externalRel("_blank") }
         : {}),
       class:
-        "group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98] md:mx-0 md:p-2",
+        "group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98]",
     }
-  : { class: "group/item -mx-2 block p-2 font-normal md:mx-0 md:p-2" };
+  : { class: "group/item -mx-2 block p-2 font-normal" };
 ---
 
 <Tag data-reveal {...linkAttrs}>

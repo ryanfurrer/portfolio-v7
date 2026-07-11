@@ -21,7 +21,7 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
   ogImage="/og/now.png"
 >
   <div class="space-y-8">
-    <header class="space-y-3 md:px-2">
+    <header class="space-y-3">
       <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
         {title}
       </h1>
@@ -29,7 +29,7 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
         {description}
       </p>
     </header>
-    <main class="space-y-6 md:px-2">
+    <main class="space-y-6">
       {
         entries.map((entry, i) => {
           const dateLong = entry.publishedAt
