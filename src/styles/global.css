@@ -152,6 +152,11 @@
      white in dark (see .dark). The accent IS the foreground, not a hue. */
   --link: var(--foreground); /* near-black ink */
   --link-hover: #000; /* pure black — a subtle deepening on hover */
+  /* Brand accent — viridian. The single reserved hue in an otherwise neutral
+     (Apple-palette) system: it carries the logo mark, the signature, and the
+     text-selection tint. Never used for text contrast, so no APCA constraint —
+     this is pure personality. Dark variant in .dark. */
+  --brand: oklch(0.64 0.135 164.8); /* #00a577 */
   /* Active nav pill — a faint neutral wash (the ink at low opacity). */
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
   /* Nav hover highlight — lifts to white above the canvas (see --nav-hover-shadow),
@@ -194,6 +199,9 @@
   /* Neutral ink for the dark field — white where light mode is black */
   --link: var(--foreground); /* near-white ink */
   --link-hover: #fff; /* pure white — a subtle brightening on hover */
+  /* Brand accent, dark variant — L raised / C trimmed so viridian holds up on
+     the dark field. */
+  --brand: oklch(0.71 0.124 164.8); /* #44b98e */
   /* Active nav pill — stronger wash so the tint reads on the dark surface. */
   --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
   --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
@@ -313,10 +321,10 @@ html {
 }
 
 ::selection {
-  background-color: color-mix(in oklch, var(--link) 22%, transparent);
+  background-color: color-mix(in oklch, var(--brand) 22%, transparent);
 }
 .dark ::selection {
-  background-color: color-mix(in oklch, var(--link) 32%, transparent);
+  background-color: color-mix(in oklch, var(--brand) 32%, transparent);
 }
 
 ::-webkit-scrollbar {
