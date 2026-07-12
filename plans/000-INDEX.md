@@ -26,7 +26,7 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 | 010 | [/fixseo run + triage](010-fixseo.md) | 4 runtime | triage review | ✅ canonical `2c…`, JSON-LD+icon done |
 | 011 | [Responsive breakpoint pass](011-responsive-breakpoint-pass.md) | 4 runtime | **YES — screenshot review** | ✅ nav-pill wrap fix (PR5) |
 | 012 | [Color token consolidation](012-color-token-consolidation.md) | 5 deep | end-of-plan visual review | ✅ reframed → drift fix (PR6) |
-| 013 | [global.css reorg](013-global-css-reorg.md) | 5 deep | no (after 012) | ☐ |
+| 013 | [global.css reorg](013-global-css-reorg.md) | 5 deep | no (after 012) | ✅ `6894106` (PR6) |
 | 014 | [Comment + quality sweep](014-comment-and-quality-sweep.md) | 5 deep, LAST | no | ☐ |
 
 Dependencies: 013 after 012 · 014 last · 004↔008 overlap on CompanyHeader (008 supersedes; see notes in both) · 007 can run anytime the owner is available · 012 notes what 003 already removed.
@@ -72,6 +72,8 @@ Two intentional deviations from the plans as written — both improvements, veri
 - **Text harmony DONE (owner asked to reconcile):** shadcn on-surface text tokens (card/popover/secondary/accent/sidebar-foreground) aliased to `var(--foreground)` and `muted-foreground` to `var(--foreground-muted)` — so text reads identically whether a native element or shadcn primitive renders it. Tokens kept intact (shadcn needs them); values reconciled. primary/destructive-foreground stay on-fill contrast colors.
 - **`/now` paper DONE (owner picked via in-browser ui.sh picker):** paper white → `var(--card)` (light pure white oklch(1), dark oklch(0.215)); dropped the dark `oklch(0.21)` override since base var(--card) resolves per mode. The 0.999/0.21 drift is gone; paper now IS the raised-card surface.
 - **Left (not drift):** OG-card `#1a1a1a` bg (`render-card.ts`) is a standalone share-image surface, not the site canvas.
+
+**013 global.css reorg DONE (PR6, `6894106`)** — reordered tokens-first (imports → variants+@utility → @theme/:root/.dark → fonts → base element rules → a11y → menu anim → @layer base → un-layered overrides) with section-header comments. Two deviations from the written plan, both owner-approved: (1) kept each `@keyframes` beside the rule that fires it (menu, reveal) instead of pooling — pooling separates keyframe from usage and reads worse; (2) the reorg **activated a previously-dead `prefers-contrast:more` override** (base `:root` was AFTER the a11y block, so its `--border` won even under increase-contrast → the a11y boost never applied; tokens-first puts `:root` first so the override now wins). Verified pure-reorder via a sorted-line diff (identical content set) + before/after computed-style snapshot (every value matched, light+dark). Reassembled mechanically via `sed` range-extraction (no hand-retyping) to guarantee verbatim.
 
 ## Decisions already made (do not relitigate)
 
