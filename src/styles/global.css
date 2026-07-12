@@ -49,6 +49,7 @@
   --color-foreground-subtle: var(--foreground-subtle);
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
+  --color-brand: var(--brand); /* enables text-brand / stroke-brand / etc. */
   --color-nav-active: var(--nav-active);
   --color-nav-hover: var(--nav-hover);
   --color-surface: var(--surface);
