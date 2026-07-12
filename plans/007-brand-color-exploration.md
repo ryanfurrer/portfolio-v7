@@ -19,9 +19,11 @@
 
 ## Decisions to capture (write them into this file when made)
 
-- [ ] Chosen accent (oklch + hex, light + dark values) — or "stay neutral"
-- [ ] Signature `-Ryan`: brand or stay ink?
-- [ ] `::selection`: brand-tinted or keep current translucent gray?
+- [x] **Chosen accent: VIRIDIAN** — light `oklch(0.64 0.135 164.8)` `#00a577`, dark `oklch(0.71 0.124 164.8)` `#44b98e`. Jewel green with a faint blue lean. Picked via an in-browser live picker (a temp `BrandPicker.astro` widget drove `--brand` across logo/signature/selection in both modes; owner compared 12 crafted, named hues + a custom well, then chose).
+- [x] **Signature `-Ryan`: BRAND** (`style="color: var(--brand)"`).
+- [x] **`::selection`: BRAND-tinted** (`color-mix(in oklch, var(--brand) 22%/32%, transparent)`).
+
+**DONE + committed to `main` (`4a34916`, unpushed).** Consumers: `Navbar.astro` logo stroke, `Signature.astro`, `global.css` `::selection`. All picker scaffolding (`BrandPicker.astro`, Layout import/tag, `--selection-color`/`--signature-color` indirection vars) removed. astro check 0/0/0, build clean.
 
 ## Finalize (once picked)
 

@@ -20,7 +20,7 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 | 004 | [Lucide icon standardization](004-lucide-icon-standardization.md) | 2 decided | no | ✅ `0865192` |
 | 005 | [Underline metrics unification](005-underline-metrics-unification.md) | 2 decided | no | ✅ `4a07fde` |
 | 006 | [/links logo fix](006-links-logo-fix.md) | 2 decided | only for NEW logos | ✅ `0865192` (with 004) |
-| 007 | [Brand color exploration](007-brand-color-exploration.md) | 2 taste | **YES — owner picks** | ☐ |
+| 007 | [Brand color exploration](007-brand-color-exploration.md) | 2 taste | **YES — owner picks** | ✅ `4a34916` viridian |
 | 008 | [CtaLink unification](008-ctalink-unification.md) | 3 engineering | name sign-off at review | ✅ `5b58553` |
 | 009 | [Structural consolidations](009-consolidations.md) | 3 engineering | no | ✅ a=`09a7981` b=`ba9b7fa` c=`9db0a48` d=`9c158ae` e=`75306b9` |
 | 010 | [/fixseo run + triage](010-fixseo.md) | 4 runtime | triage review | ✅ canonical `2c…`, JSON-LD+icon done |
@@ -82,7 +82,7 @@ Two intentional deviations from the plans as written — both improvements, veri
 - **`.quiet-link` stays quiet** — the "give it the Cta treatment" idea was reviewed and REJECTED (hierarchy: the underline-wipe is the CTA's emphasis affordance; ToC/footer are high-frequency secondary chrome). Plan 005 is the replacement scope.
 - **Semantic arrows:** `arrow-up-right` = external, `arrow-right` = forward, `arrow-left` = back. All icons Lucide except brand logos (site is already ~95% there; 5 swaps in plan 004).
 - **BackLink chevron → arrow**, merged into `CtaLink` with `direction` prop (008). Human-readability rules are hard constraints (≤5 props, no polymorphism/factories; see 008/009).
-- **Brand color: OPEN** — owner may change hue entirely; resolve via plan 007's in-context comparison, never by fiat. `::selection` + signature decisions hang off it.
+- **Brand color: DECIDED (007 `4a34916`)** — VIRIDIAN, light `oklch(0.64 0.135 164.8)`/`#00a577`, dark `oklch(0.71 0.124 164.8)`/`#44b98e`. Wired to logo stroke + signature + `::selection` (both on-brand). Picked via an in-browser live picker.
 
 ## Diagnostic facts worth keeping at hand
 
