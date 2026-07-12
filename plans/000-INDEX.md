@@ -27,7 +27,7 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 | 011 | [Responsive breakpoint pass](011-responsive-breakpoint-pass.md) | 4 runtime | **YES — screenshot review** | ✅ nav-pill wrap fix (PR5) |
 | 012 | [Color token consolidation](012-color-token-consolidation.md) | 5 deep | end-of-plan visual review | ✅ reframed → drift fix (PR6) |
 | 013 | [global.css reorg](013-global-css-reorg.md) | 5 deep | no (after 012) | ✅ `6894106` (PR6) |
-| 014 | [Comment + quality sweep](014-comment-and-quality-sweep.md) | 5 deep, LAST | no | ☐ |
+| 014 | [Comment + quality sweep](014-comment-and-quality-sweep.md) | 5 deep, LAST | no | ✅ `cba88fb` |
 
 Dependencies: 013 after 012 · 014 last · 004↔008 overlap on CompanyHeader (008 supersedes; see notes in both) · 007 can run anytime the owner is available · 012 notes what 003 already removed.
 
@@ -74,6 +74,8 @@ Two intentional deviations from the plans as written — both improvements, veri
 - **Left (not drift):** OG-card `#1a1a1a` bg (`render-card.ts`) is a standalone share-image surface, not the site canvas.
 
 **013 global.css reorg DONE (PR6, `6894106`)** — reordered tokens-first (imports → variants+@utility → @theme/:root/.dark → fonts → base element rules → a11y → menu anim → @layer base → un-layered overrides) with section-header comments. Two deviations from the written plan, both owner-approved: (1) kept each `@keyframes` beside the rule that fires it (menu, reveal) instead of pooling — pooling separates keyframe from usage and reads worse; (2) the reorg **activated a previously-dead `prefers-contrast:more` override** (base `:root` was AFTER the a11y block, so its `--border` won even under increase-contrast → the a11y boost never applied; tokens-first puts `:root` first so the override now wins). Verified pure-reorder via a sorted-line diff (identical content set) + before/after computed-style snapshot (every value matched, light+dark). Reassembled mechanically via `sed` range-extraction (no hand-retyping) to guarantee verbatim.
+
+**014 comment + quality sweep DONE (`cba88fb`, on `main` tip / PR6 line).** Residue was minimal — earlier plans (002/003/008) had already cleared most offenders. Changes: (1) deleted genuinely-dead `textToPortableTextBlock` + its `PortableTextBlock` interface from `utils.ts` (they referenced only each other; also removes the last `Date.now()`/`Math.random()` in `src/lib`); (2) un-exported internal-only `USES_ICON_SVG` + `ROLE_TO_ICON` in `uses-icons.ts` (used only by `resolveUsesIcon`; the two real exports are `USES_ICONS` for the Studio picker + `resolveUsesIcon` for the frontend); (3) dropped one `console-art.ts` comment that verbatim restated its file header. Quality checklist all clean: no leftover imports of deleted components, no `[key:string]:any`, no other unused `src/lib` exports (`cn`/`slugify`/`socialLinks`/`SECTION_META`/`createOgRoute`/`renderOgCard` all consumed). **All 15 protected why-comments verified still present** (grepped distinctive phrases: `can-hover`, focus-ring "Deliberately NOT :where()", un-layered body-link history, iOS backdrop-filter, Presence tabular-nums CLS, TocMobile "Return focus to the trigger", Safari repeating-linear-gradient, nested-route Astro build error, uses-icons INNER-markup header). `astro check` 0/0/0; `pnpm build` clean (20 pages). **This was the LAST plan — 000–014 all ✅.**
 
 ## Decisions already made (do not relitigate)
 
