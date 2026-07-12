@@ -128,8 +128,13 @@ const thumbnailFallback = videoId
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Thumb is 320×180; scaling up softens it slightly — a touch of contrast
-       keeps it from looking washed out behind the play button. */
+    /* The facade lives inside `.prose`, whose `img` rule adds a 2em top margin
+       (for article rhythm) plus a hairline border + radius. On the thumbnail
+       that margin exposed the button's black background as a bar at the top —
+       reset all three; the button itself provides the rounding and clipping. */
+    margin: 0;
+    border: 0;
+    border-radius: 0;
     transition: opacity 150ms ease;
   }
 
