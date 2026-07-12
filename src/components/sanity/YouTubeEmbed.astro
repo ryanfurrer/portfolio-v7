@@ -18,10 +18,14 @@ function parseVideoId(url?: string): string | null {
 
 const videoId = parseVideoId(node?.url);
 const title = node?.title ?? "YouTube video";
-// `mqdefault` (320×180) is guaranteed to exist for every video; higher-res
-// thumbs 404 for some uploads, so we stick with the safe size.
+// `maxresdefault` (1280×720, 16:9) is crisp at full body width but 404s for
+// some uploads, so the client falls back to `hqdefault` (480×360, always
+// present) on error — object-fit: cover crops hqdefault's 4:3 letterboxing.
 const thumbnail = videoId
-  ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`
+  ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
+  : null;
+const thumbnailFallback = videoId
+  ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
   : null;
 ---
 
@@ -39,11 +43,12 @@ const thumbnail = videoId
         <img
           class="yt-thumb"
           src={thumbnail}
+          data-fallback={thumbnailFallback}
           alt=""
           loading="lazy"
           decoding="async"
-          width="320"
-          height="180"
+          width="1280"
+          height="720"
         />
         <span class="yt-play" aria-hidden="true">
           <svg viewBox="0 0 68 48" width="68" height="48">
@@ -61,6 +66,23 @@ const thumbnail = videoId
 }
 
 <script>
+  // Not every upload has a maxresdefault thumb — swap to the always-present
+  // hqdefault on error (capture phase, since `error` events don't bubble).
+  document.addEventListener(
+    "error",
+    (event) => {
+      const img = event.target as HTMLElement;
+      if (!(img instanceof HTMLImageElement) || !img.classList.contains("yt-thumb"))
+        return;
+      const fallback = img.dataset.fallback;
+      if (fallback && img.src !== fallback) {
+        img.dataset.fallback = "";
+        img.src = fallback;
+      }
+    },
+    true,
+  );
+
   document.addEventListener("click", (event) => {
     const btn = (event.target as HTMLElement)?.closest<HTMLElement>(
       ".yt-facade",
