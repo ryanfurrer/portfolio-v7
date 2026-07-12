@@ -2,12 +2,18 @@
   viewBox="0 0 4167 4167"
   xmlns="http://www.w3.org/2000/svg"
   fill="none"
-  stroke="#1d1d1f"
+  stroke="#00a577"
   stroke-width="208.33"
   stroke-linecap="round"
   stroke-linejoin="round"
 >
-  <circle cx="2083.33" cy="2083.33" r="1875" fill="#fafafa" />
+  <style>
+    /* Brighter viridian on dark tabs, matching the site's dark-mode logo. */
+    @media (prefers-color-scheme: dark) {
+      :root { stroke: #44b98e; }
+    }
+  </style>
+  <circle cx="2083.33" cy="2083.33" r="1875" />
   <path
     d="M3409.16,757.508c365.871,365.872 68.83,1257 -662.913,1988.74c-731.743,731.743 -1622.87,1028.78 -1988.74,662.913c-365.871,-365.872 -68.83,-1257 662.913,-1988.74c731.743,-731.743 1622.87,-1028.78 1988.74,-662.913Z"
   />
