@@ -25,7 +25,7 @@ Created 2026-07-11 from a full diagnostic (3 parallel code audits + icon invento
 | 009 | [Structural consolidations](009-consolidations.md) | 3 engineering | no | ✅ a=`09a7981` b=`ba9b7fa` c=`9db0a48` d=`9c158ae` e=`75306b9` |
 | 010 | [/fixseo run + triage](010-fixseo.md) | 4 runtime | triage review | ✅ canonical `2c…`, JSON-LD+icon done |
 | 011 | [Responsive breakpoint pass](011-responsive-breakpoint-pass.md) | 4 runtime | **YES — screenshot review** | ✅ nav-pill wrap fix (PR5) |
-| 012 | [Color token consolidation](012-color-token-consolidation.md) | 5 deep | end-of-plan visual review | ☐ |
+| 012 | [Color token consolidation](012-color-token-consolidation.md) | 5 deep | end-of-plan visual review | ✅ reframed → drift fix (PR6) |
 | 013 | [global.css reorg](013-global-css-reorg.md) | 5 deep | no (after 012) | ☐ |
 | 014 | [Comment + quality sweep](014-comment-and-quality-sweep.md) | 5 deep, LAST | no | ☐ |
 
@@ -65,6 +65,11 @@ Two intentional deviations from the plans as written — both improvements, veri
 **011 responsive** — the sweep (375/768/1024/1280) showed the layout is solid and intentional (consistent center-column width via reserved gutters = deliberate; `md:px-2` scatter left as-is per readability > DRY). BUT the owner caught a real bug the sweep missed: at `lg` the navbar is confined to the center grid column (~528px at 1024, narrower than the sub-`lg` 672px until ~1152), squeezing the status pill so `NYC HH:MM` wrapped to two lines across ~1024–1152. Fixed with `whitespace-nowrap` (Presence time) + `shrink-0` (pill). This is **PR5 = `polish/5-responsive`** (base `polish/4-seo`).
 
 **`md:px-2` centralization DONE after all** (`0c84ad0`) — owner asked to audit the x-padding; the ~15 scattered `md:px-2` turned out to be *missing* from `ArticleLayout`, so article headings sat 8px left of listing headings at md+ (a real seam). Moved the 8px inset onto the Layout center column (one declaration); dropped the ~15 scattered copies (Navbar keeps its own — separate header container); simplified `Item` to uniform `-mx-2 p-2` (pill bleeds into the column padding at md+ like it bled into `px-4` on mobile). Behavior-identical for listing pages (headings/items still 56px @768), article now matches (was 48). Verified 375/768/1024, no overflow, lg gutters clean.
+
+**012 REFRAMED by owner** — do NOT delete/alias shadcn tokens (`--sidebar-*`, `--chart-*`, `--secondary/--muted/--accent`, etc.); shadcn/ui expects them to exist even when values match, so removal risks breaking primitives. Instead this became a **value-drift audit**: find near-identical neutrals that drifted apart and reconcile. Ran a full OKLCH lightness cluster of every neutral (light + dark). Findings:
+- **Fixed (PR6 `polish/6-tokens-css`):** `theme-color` had drifted off `--background` — light `#ffffff` vs canvas `oklch(0.971)=#f5f5f5`; dark `#1a1a1a`(L0.218) vs canvas `oklch(0.165)=#0e0e0e`. Pointed both at the exact canvas hexes (static meta + 2 runtime setters in Head.astro/ModeToggle.tsx); fixed the wrong dark `--background` comment. Owner chose to KEEP the dark canvas at #0e0e0e (0.165), not lighten to #1a1a1a.
+- **Not drift (left):** `#f5f5f7`(dark fg)=`oklch(0.971)`(light bg) is intentional symmetry; `foreground-muted`/`ring`/`muted-foreground` (~0.53–0.556 light, ~0.708–0.711 dark) are close but genuinely different roles (Apple text / focus ring / shadcn text).
+- **Left as optional (offered, not done):** `/now` card bg (`oklch(0.999)` light, `0.21` dark) — bespoke "paper" surface, micro-values may be intentional; shadcn `card/popover/sidebar-foreground` ink (0.145/0.985) differs from site `--foreground` (#1d1d1f/#f5f5f7) by ~0.087 — a design choice (mostly overridden in practice), not accidental drift; OG-card `#1a1a1a` bg (`render-card.ts`) is a standalone share-image surface.
 
 ## Decisions already made (do not relitigate)
 
