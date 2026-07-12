@@ -95,7 +95,7 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
     padding-block: var(--r);
     /* inline-start gets the wide gutter for the margin rule (see note below). */
     padding-inline: 3rem 1.5rem;
-    background-color: oklch(0.999 0 0);
+    background-color: var(--card); /* bright paper = the raised card surface (both modes) */
     /* A single tiled rule line (via background-size/-repeat) rather than
        repeating-linear-gradient — WebKit drops thin repeating bands partway
        down a tall element, so the lines would stop rendering in Safari. */
@@ -164,7 +164,7 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
   }
 
   :global(.dark) .now-card {
-    background-color: oklch(0.21 0 0);
+    /* background-color comes from the base rule's var(--card) → dark card surface */
     background-image:
       linear-gradient(
         to right,
