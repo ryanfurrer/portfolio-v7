@@ -148,7 +148,7 @@ export const USES_ICONS: UsesIcon[] = [
 ];
 
 /** Fast lookup: icon name → inner SVG markup. */
-export const USES_ICON_SVG: Record<string, string> = Object.fromEntries(
+const USES_ICON_SVG: Record<string, string> = Object.fromEntries(
   USES_ICONS.map((icon) => [icon.name, icon.svg]),
 );
 
@@ -157,7 +157,7 @@ export const USES_ICON_SVG: Record<string, string> = Object.fromEntries(
  * icon name. Used only when an item has no explicit `icon` picked in Studio, so
  * existing entries still get a sensible glyph. Keyed on the lowercased role.
  */
-export const ROLE_TO_ICON: Record<string, string> = {
+const ROLE_TO_ICON: Record<string, string> = {
   computer: "laptop",
   laptop: "laptop",
   monitor: "monitor",

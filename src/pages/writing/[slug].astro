@@ -1,9 +1,5 @@
 ---
-import BackLink from "@/components/BackLink.astro";
-import PortableText from "@/components/sanity/PortableText.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
-import TocMobile from "@/components/TocMobile.tsx";
-import Layout from "@/layouts/Layout.astro";
+import ArticleLayout from "@/layouts/ArticleLayout.astro";
 import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { POST_QUERY, POST_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlForImage } from "@/sanity/lib/url-for-image";
@@ -11,7 +7,6 @@ import type {
   POST_QUERY_RESULT,
   POST_SLUGS_QUERY_RESULT,
 } from "@/sanity/sanity.types";
-import { formatDateLong } from "@/utils/date";
 import { sanityClient } from "sanity:client";
 
 export async function getStaticPaths() {
@@ -27,74 +22,23 @@ const post = await sanityClient.fetch<POST_QUERY_RESULT>(
 if (!post) throw new Error(`Post not found for slug: ${Astro.params.slug}`);
 
 const headings = extractHeadings(post.body);
-
-const postImageUrl = post.headerImage
+const headerImageUrl = post.headerImage
   ? urlForImage(post.headerImage).width(550).height(310).url()
   : null;
 // OG card is generated at build time from the title/description
 // (src/pages/og/writing/[slug].png.ts) — no per-entry image to author.
-const postOgImageUrl = `/og/writing/${Astro.params.slug}.png`;
-
-const publishedLong = post.publishedAt
-  ? formatDateLong(post.publishedAt)
-  : null;
-const updatedLong = post.updatedAt ? formatDateLong(post.updatedAt) : null;
-// Only surface an "Updated" badge when it lands on a genuinely different day
-// than publication — a same-day tidy-up would just show the same date twice.
-const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 ---
 
-<Layout
+<ArticleLayout
   title={post.title}
   description={post.description}
-  ogImage={postOgImageUrl}
->
-  <!-- Desktop: back link in left gutter -->
-  <div slot="left" class="sticky top-20">
-    <BackLink href="/writing" label="Writing" />
-  </div>
-
-  <!-- Desktop: ToC in right gutter -->
-  <TableOfContents slot="right" headings={headings} />
-
-  <!-- Center: article -->
-  <main class="prose min-w-0 prose-neutral dark:prose-invert">
-    <BackLink href="/writing" label="Writing" class="mb-6 lg:hidden" />
-    {postImageUrl && <img src={postImageUrl} alt={post.title} data-reveal />}
-    <header data-reveal>
-      <h1 class="mb-3">{post.title}</h1>
-      {
-        publishedLong && (
-          <p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-foreground-subtle">
-            <span>{publishedLong}</span>
-            {hasUpdate && (
-              <>
-                <span aria-hidden="true" class="opacity-50">
-                  ·
-                </span>
-                <span class="font-medium text-foreground-muted">
-                  Updated {updatedLong}
-                </span>
-              </>
-            )}
-          </p>
-        )
-      }
-    </header>
-    {
-      post.description && (
-        <p class="lead" data-reveal>
-          {post.description}
-        </p>
-      )
-    }
-    {
-      post.body && post.body.length > 0 && (
-        <PortableText portableText={post.body} />
-      )
-    }
-  </main>
-
-  <!-- Mobile ToC drawer -->
-  <TocMobile headings={headings} title={post.title ?? ""} client:load />
-</Layout>
+  ogImage={`/og/writing/${Astro.params.slug}.png`}
+  headerImageUrl={headerImageUrl}
+  publishedAt={post.publishedAt}
+  updatedAt={post.updatedAt}
+  headings={headings}
+  body={post.body}
+  backHref="/writing"
+  backLabel="Writing"
+  schemaType="BlogPosting"
+/>

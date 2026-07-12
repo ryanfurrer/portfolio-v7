@@ -1,5 +1,5 @@
 ---
-import { urlForImage } from "@/sanity/lib/url-for-image";
+import { imageDimensions, urlForImage } from "@/sanity/lib/url-for-image";
 
 const { asset, alt } = Astro.props.node;
 
@@ -8,13 +8,23 @@ const { asset, alt } = Astro.props.node;
 // Guard so draft preview doesn't crash trying to resolve a URL from `undefined`.
 const url = asset ? urlForImage(asset).url() : null;
 const webpUrl = asset ? urlForImage(asset).format("webp").url() : null;
+// Intrinsic size (parsed from the asset ref) reserves layout space so body
+// images don't shift the article as they decode.
+const size = imageDimensions(asset);
 ---
 
 {
   url && (
     <picture>
       <source srcset={webpUrl} type="image/webp" />
-      <img class="responsive__img" src={url} alt={alt} />
+      <img
+        src={url}
+        alt={alt}
+        width={size?.width}
+        height={size?.height}
+        loading="lazy"
+        decoding="async"
+      />
     </picture>
   )
 }

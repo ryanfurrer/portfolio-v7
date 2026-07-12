@@ -1,17 +1,34 @@
 ---
 import BlueskyIcon from "@/assets/icons/bluesky.svg";
 import GithubIcon from "@/assets/icons/github.svg";
-import LinkedinIcon from "@/assets/icons/linkedin2.svg";
+import LinkedinIcon from "@/assets/icons/linkedin.svg";
 import TwitchIcon from "@/assets/icons/twitch.svg";
 import XIcon from "@/assets/icons/x.svg";
 import YoutubeIcon from "@/assets/icons/youtube.svg";
 import LinksCard from "@/components/ui/LinksCard.astro";
 import Layout from "@/layouts/Layout.astro";
+import { socialLinks } from "@/lib/social-links";
 import { LINKS_LATEST_QUERY } from "@/sanity/lib/queries";
 import { SECTION_META } from "@/lib/og/sections";
 import type { LINKS_LATEST_QUERY_RESULT } from "@/sanity/sanity.types";
 import { sanityClient } from "sanity:client";
 import { formatFollowerCount } from "@/utils/links";
+
+// Icon keys in the shared social-links data resolve to SVG components here,
+// keeping the data file free of framework imports.
+const socialIcons: Record<string, typeof GithubIcon> = {
+  linkedin: LinkedinIcon,
+  x: XIcon,
+  bluesky: BlueskyIcon,
+  twitch: TwitchIcon,
+  github: GithubIcon,
+  youtube: YoutubeIcon,
+};
+
+// The cards read top-to-bottom by reach; the footer subset keeps its own order.
+const socialCards = [...socialLinks].sort(
+  (a, b) => (b.followerCount ?? 0) - (a.followerCount ?? 0),
+);
 
 type LatestLinkItem = NonNullable<LINKS_LATEST_QUERY_RESULT["post"]>;
 
@@ -40,63 +57,6 @@ const latestContentItems = [
   }));
 
 const description = SECTION_META.links.description;
-
-const socialLinks = [
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/ryanfurrer/",
-    followerCount: 1920,
-    icon: LinkedinIcon,
-    iconFill: "fill-white stroke-none",
-    iconBackground: "bg-blue-600",
-    actionLabel: "Follow",
-  },
-  {
-    label: "Twitter/X",
-    href: "https://x.com/ryanfurrer_",
-    followerCount: 970,
-    icon: XIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-zinc-950",
-    actionLabel: "Follow",
-  },
-  {
-    label: "Bluesky",
-    href: "https://bsky.app/profile/ryandotfurrer.bsky.social",
-    followerCount: 764,
-    icon: BlueskyIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-sky-500",
-    actionLabel: "Follow",
-  },
-  {
-    label: "Twitch",
-    href: "https://www.twitch.tv/ryandotfurrer",
-    followerCount: 178,
-    icon: TwitchIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-violet-600",
-    actionLabel: "Follow",
-  },
-  {
-    label: "GitHub",
-    href: "https://github.com/ryanfurrer",
-    followerCount: 59,
-    icon: GithubIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-zinc-950",
-    actionLabel: "Follow",
-  },
-  {
-    label: "YouTube",
-    href: "https://www.youtube.com/@ryandotfurrer",
-    followerCount: 46,
-    icon: YoutubeIcon,
-    iconFill: "fill-white",
-    iconBackground: "bg-rose-600",
-    actionLabel: "Subscribe",
-  },
-];
 ---
 
 <Layout
@@ -105,7 +65,7 @@ const socialLinks = [
   ogImage="/og/links.png"
 >
   <div class="space-y-16">
-    <header class="space-y-3 md:px-2">
+    <header class="space-y-3">
       <h1
         class="text-2xl text-balance text-foreground sm:text-3xl"
         data-reveal
@@ -118,12 +78,12 @@ const socialLinks = [
     </header>
 
     <main class="space-y-16">
-      <section class="space-y-4 md:px-2">
+      <section class="space-y-4">
         <h2 class="small-heading" data-reveal>Connect with me</h2>
         <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
           {
-            socialLinks.map((link) => {
-              const IconComponent = link.icon;
+            socialCards.map((link) => {
+              const IconComponent = socialIcons[link.icon ?? ""];
               const followLabel =
                 link.actionLabel === "Subscribe" ? "subscribers" : "followers";
               return (
@@ -142,18 +102,26 @@ const socialLinks = [
                       />
                       <span class="pointer-events-none inline-flex items-center gap-1 text-xs font-medium text-foreground-subtle transition-colors duration-200 ease-out can-hover:group-hover:text-foreground-muted">
                         {link.actionLabel}
-                        <span
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="size-3.5 transition-transform duration-200 ease-out can-hover:group-hover:translate-x-0.5 can-hover:group-hover:-translate-y-0.5"
                           aria-hidden="true"
-                          class="transition-transform duration-200 ease-out can-hover:group-hover:translate-x-0.5"
                         >
-                          →
-                        </span>
+                          <path d="M7 7h10v10" />
+                          <path d="M7 17 17 7" />
+                        </svg>
                       </span>
                     </div>
                     <div>
                       <h3 class="small-heading leading-none">{link.label}</h3>
                       <p class="mt-2.5 text-4xl leading-none font-bold text-foreground">
-                        {formatFollowerCount(link.followerCount)}
+                        {formatFollowerCount(link.followerCount ?? 0)}
                       </p>
                       <p class="mt-2 text-sm leading-none text-foreground-subtle">
                         {followLabel}
@@ -169,7 +137,7 @@ const socialLinks = [
 
       {
         latestContentItems.length > 0 && (
-          <section class="space-y-4 md:px-2">
+          <section class="space-y-4">
             <h2 class="small-heading" data-reveal>
               Latest from me
             </h2>

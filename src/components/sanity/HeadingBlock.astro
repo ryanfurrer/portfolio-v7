@@ -1,0 +1,22 @@
+---
+import { slugify } from "@/lib/utils";
+
+interface Span {
+  _type: string;
+  text?: string;
+}
+interface Props {
+  node: { style?: string; children: Span[] };
+}
+
+const { node } = Astro.props;
+const text = (node.children ?? []).map((c) => c.text ?? "").join("");
+const id = slugify(text);
+
+// The Portable Text block style is the heading tag itself ("h2" | "h3" | "h4").
+// One component renders all three; the ToC anchors off the slugified id.
+const allowed = ["h2", "h3", "h4"] as const;
+const Tag = (allowed.find((t) => t === node.style) ?? "h2");
+---
+
+<Tag id={id}><slot /></Tag>

@@ -3,9 +3,7 @@ import { PortableText as PortableTextInternal } from "astro-portabletext";
 import PortableTextImage from "./PortableTextImage.astro";
 import CodeBlock from "./CodeBlock.astro";
 import CalloutBlock from "./CalloutBlock.astro";
-import H2Block from "./H2Block.astro";
-import H3Block from "./H3Block.astro";
-import H4Block from "./H4Block.astro";
+import HeadingBlock from "./HeadingBlock.astro";
 
 const { portableText } = Astro.props;
 
@@ -16,9 +14,9 @@ const components = {
     callout: CalloutBlock,
   },
   block: {
-    h2: H2Block,
-    h3: H3Block,
-    h4: H4Block,
+    h2: HeadingBlock,
+    h3: HeadingBlock,
+    h4: HeadingBlock,
   },
 };
 ---

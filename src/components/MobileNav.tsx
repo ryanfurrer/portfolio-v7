@@ -1,3 +1,4 @@
+import { Menu, X } from "lucide-react";
 import { type CSSProperties, useState } from "react";
 
 import {
@@ -41,20 +42,7 @@ export default function MobileNav({ navItems, pathname }: Props) {
         aria-label="Open navigation menu"
         className={cn("-me-2", controlBase)}
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M3 6h14M3 10h14M3 14h14"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
+        <Menu size={20} strokeWidth={1.75} aria-hidden="true" />
       </SheetTrigger>
       <SheetContent
         side="top"
@@ -69,20 +57,7 @@ export default function MobileNav({ navItems, pathname }: Props) {
           aria-label="Close navigation menu"
           className={cn(controlPosition, controlBase)}
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M5 5l10 10M15 5L5 15"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            />
-          </svg>
+          <X size={20} strokeWidth={1.75} aria-hidden="true" />
         </SheetClose>
         <nav className="flex flex-col items-end pe-2 pt-20 pb-4 text-end">
           {navItems.map((item, i) => {

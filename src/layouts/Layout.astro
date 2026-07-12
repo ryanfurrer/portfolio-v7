@@ -14,6 +14,7 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  jsonLd?: Record<string, unknown>;
   noNavbar?: boolean;
   noFooter?: boolean;
   maxWidth?: "sm" | "lg";
@@ -23,6 +24,7 @@ const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
   ogImage,
+  jsonLd,
   noNavbar = false,
   noFooter = false,
   maxWidth = "lg",
@@ -37,7 +39,7 @@ const isContentPage = contentPrefixes.some(
 ---
 
 <html lang="en">
-  <Head title={title} description={description} ogImage={ogImage} />
+  <Head title={title} description={description} ogImage={ogImage} jsonLd={jsonLd} />
   <body class="bg-background text-foreground-muted antialiased">
     <!-- Pinned to the page container's start edge (not the raw viewport edge),
          so it lines up with content instead of the far corner on wide screens. -->
@@ -102,7 +104,10 @@ const isContentPage = contentPrefixes.some(
         id="main-content"
         tabindex="-1"
         class={cn(
-          "space-y-16 min-w-0 focus:outline-none lg:col-start-2",
+          // md:px-2 gives every page's content the same 8px inset at md+ (so
+          // headings line up with Item rows, whose hover pill bleeds -mx-2 into
+          // it). Centralized here instead of repeated per-section.
+          "space-y-16 min-w-0 focus:outline-none md:px-2 lg:col-start-2",
           maxWidth === "sm"
             ? "max-w-sm mx-auto lg:max-w-none lg:mx-0"
             : "max-w-2xl mx-auto lg:max-w-none lg:mx-0",

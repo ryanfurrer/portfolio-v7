@@ -44,7 +44,6 @@ const art = `
                                  ......
 `;
 
-// Rendered in the console's default text color — no themed styling.
 console.log(art);
 console.log("Thanks for looking under the hood. 👋");
 console.log("Built by Ryan Furrer — frontend engineer & designer");

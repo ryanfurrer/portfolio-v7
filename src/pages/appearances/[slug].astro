@@ -1,9 +1,5 @@
 ---
-import BackLink from "@/components/BackLink.astro";
-import PortableText from "@/components/sanity/PortableText.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
-import TocMobile from "@/components/TocMobile.tsx";
-import Layout from "@/layouts/Layout.astro";
+import ArticleLayout from "@/layouts/ArticleLayout.astro";
 import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { APPEARANCE_QUERY, APPEARANCE_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { urlForImage } from "@/sanity/lib/url-for-image";
@@ -11,7 +7,6 @@ import type {
   APPEARANCE_QUERY_RESULT,
   APPEARANCE_SLUGS_QUERY_RESULT,
 } from "@/sanity/sanity.types";
-import { formatDateLong } from "@/utils/date";
 import { sanityClient } from "sanity:client";
 
 export async function getStaticPaths() {
@@ -30,80 +25,22 @@ if (!appearance) {
 }
 
 const headings = extractHeadings(appearance.body);
-
-const appearanceImageUrl = appearance.headerImage
+const headerImageUrl = appearance.headerImage
   ? urlForImage(appearance.headerImage).width(550).height(310).url()
   : null;
 // OG card is generated at build time from the title/description
 // (src/pages/og/appearances/[slug].png.ts) — no per-entry image to author.
-const appearanceOgImageUrl = `/og/appearances/${Astro.params.slug}.png`;
-
-const publishedLong = appearance.publishedAt
-  ? formatDateLong(appearance.publishedAt)
-  : null;
-const updatedLong = appearance.updatedAt
-  ? formatDateLong(appearance.updatedAt)
-  : null;
-// Only surface an "Updated" badge when it lands on a genuinely different day
-// than publication — a same-day tidy-up would just show the same date twice.
-const hasUpdate = !!(updatedLong && updatedLong !== publishedLong);
 ---
 
-<Layout
+<ArticleLayout
   title={appearance.title}
   description={appearance.description}
-  ogImage={appearanceOgImageUrl}
->
-  <!-- Desktop: back link in left gutter -->
-  <div slot="left" class="sticky top-20">
-    <BackLink href="/appearances" label="Appearances" />
-  </div>
-
-  <!-- Desktop: ToC in right gutter -->
-  <TableOfContents slot="right" headings={headings} />
-
-  <!-- Center: article -->
-  <main class="prose min-w-0 prose-neutral dark:prose-invert">
-    <BackLink href="/appearances" label="Appearances" class="mb-6 lg:hidden" />
-    {
-      appearanceImageUrl && (
-        <img src={appearanceImageUrl} alt={appearance.title} data-reveal />
-      )
-    }
-    <header data-reveal>
-      <h1 class="mb-3">{appearance.title}</h1>
-      {
-        publishedLong && (
-          <p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-foreground-subtle">
-            <span>{publishedLong}</span>
-            {hasUpdate && (
-              <>
-                <span aria-hidden="true" class="opacity-50">
-                  ·
-                </span>
-                <span class="font-medium text-foreground-muted">
-                  Updated {updatedLong}
-                </span>
-              </>
-            )}
-          </p>
-        )
-      }
-    </header>
-    {
-      appearance.description && (
-        <p class="lead" data-reveal>
-          {appearance.description}
-        </p>
-      )
-    }
-    {
-      appearance.body && appearance.body.length > 0 && (
-        <PortableText portableText={appearance.body} />
-      )
-    }
-  </main>
-
-  <!-- Mobile ToC drawer -->
-  <TocMobile headings={headings} title={appearance.title ?? ""} client:load />
-</Layout>
+  ogImage={`/og/appearances/${Astro.params.slug}.png`}
+  headerImageUrl={headerImageUrl}
+  publishedAt={appearance.publishedAt}
+  updatedAt={appearance.updatedAt}
+  headings={headings}
+  body={appearance.body}
+  backHref="/appearances"
+  backLabel="Appearances"
+/>

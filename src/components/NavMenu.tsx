@@ -48,7 +48,7 @@ export default function NavMenu({ label, items, pathname }: Props) {
               // rotates). Inactive → muted with the white nav-hover lift.
               groupActive
                 ? "bg-foreground text-background"
-                : "text-foreground-muted hover:bg-nav-hover hover:text-foreground data-[state=open]:bg-nav-hover data-[state=open]:text-foreground",
+                : "text-foreground-muted hover:bg-nav-hover hover:text-foreground hover:[box-shadow:var(--nav-hover-shadow)] data-[state=open]:bg-nav-hover data-[state=open]:text-foreground data-[state=open]:[box-shadow:var(--nav-hover-shadow)]",
             )}
           >
             {label}

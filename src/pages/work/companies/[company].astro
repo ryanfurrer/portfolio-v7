@@ -1,5 +1,5 @@
 ---
-import BackLink from "@/components/BackLink.astro";
+import CtaLink from "@/components/CtaLink.astro";
 import CompanyHeader from "@/components/CompanyHeader.astro";
 import Item from "@/components/Item.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -55,11 +55,11 @@ const metaDescription = description ?? `Work for ${label}`;
 <Layout title={`${label} — Work — Ryan Furrer`} description={metaDescription}>
   <!-- Desktop: back link in left gutter -->
   <div slot="left" class="sticky top-20">
-    <BackLink href="/work" label="Work" />
+    <CtaLink href="/work" direction="back">Work</CtaLink>
   </div>
 
   <div class="space-y-8">
-    <BackLink href="/work" label="Work" class="lg:hidden" />
+    <CtaLink href="/work" direction="back" class="lg:hidden">Work</CtaLink>
     <CompanyHeader
       label={label}
       url={url}
@@ -71,7 +71,7 @@ const metaDescription = description ?? `Work for ${label}`;
         {
           years.map((year) => (
             <section class="space-y-4">
-              <h2 class="small-heading md:px-2" data-reveal>
+              <h2 class="small-heading" data-reveal>
                 {year}
               </h2>
               <ul class="flex flex-col gap-px" role="list">

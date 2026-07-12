@@ -1,5 +1,6 @@
 ---
 import { formatDateDotNotation } from "@/utils/date";
+import { externalRel } from "@/utils/links";
 
 interface Props {
   title: string | null;
@@ -25,11 +26,13 @@ const linkAttrs = isLink
   ? {
       href,
       "data-dir-hover": "item",
-      ...(external ? { target: "_blank", rel: "noopener noreferrer" } : {}),
+      ...(external
+        ? { target: "_blank", rel: externalRel("_blank") }
+        : {}),
       class:
-        "group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98] md:mx-0 md:p-2",
+        "group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98]",
     }
-  : { class: "group/item -mx-2 block p-2 font-normal md:mx-0 md:p-2" };
+  : { class: "group/item -mx-2 block p-2 font-normal" };
 ---
 
 <Tag data-reveal {...linkAttrs}>
@@ -45,12 +48,20 @@ const linkAttrs = isLink
       <h3 class="font-semibold">{title}</h3>
       {
         external && (
-          <span
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-3.5 shrink-0 text-foreground-subtle transition-[color,translate] duration-200 ease-out group-focus-visible/item:translate-x-0.5 group-focus-visible/item:-translate-y-0.5 group-focus-visible/item:text-foreground can-hover:group-hover/item:translate-x-0.5 can-hover:group-hover/item:-translate-y-0.5 can-hover:group-hover/item:text-foreground"
             aria-hidden="true"
-            class="text-xs text-foreground-subtle transition-[color,translate] duration-200 ease-out group-focus-visible/item:translate-x-0.5 group-focus-visible/item:-translate-y-0.5 group-focus-visible/item:text-foreground can-hover:group-hover/item:translate-x-0.5 can-hover:group-hover/item:-translate-y-0.5 can-hover:group-hover/item:text-foreground"
           >
-            ↗
-          </span>
+            <path d="M7 7h10v10" />
+            <path d="M7 17 17 7" />
+          </svg>
         )
       }
     </div>
