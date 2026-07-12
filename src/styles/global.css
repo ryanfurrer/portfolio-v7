@@ -374,7 +374,7 @@ html.dark {
 
 .dark {
   color-scheme: dark;
-  --background: oklch(0.165 0 0); /* deep near-black, ~#1a1a1a */
+  --background: oklch(0.165 0 0); /* deep near-black, ≈#0e0e0e */
   /* Apple-style neutral text hierarchy (dark) — brighter than light's so
      body copy stays readable against the dark field */
   --foreground: #f5f5f7; /* primary — headings & key copy */

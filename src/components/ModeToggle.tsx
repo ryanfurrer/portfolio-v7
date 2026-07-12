@@ -33,7 +33,7 @@ function applyTheme(theme: Theme) {
   const dark = theme === "dark" || (theme === "system" && prefersDark());
   document.documentElement.classList.toggle("dark", dark);
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", dark ? "#1a1a1a" : "#ffffff");
+  if (meta) meta.setAttribute("content", dark ? "#0e0e0e" : "#f5f5f5");
 }
 
 export default function ModeToggle() {
