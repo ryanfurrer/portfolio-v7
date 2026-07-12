@@ -4,6 +4,7 @@ import PortableTextImage from "./PortableTextImage.astro";
 import CodeBlock from "./CodeBlock.astro";
 import CalloutBlock from "./CalloutBlock.astro";
 import HeadingBlock from "./HeadingBlock.astro";
+import YouTubeEmbed from "./YouTubeEmbed.astro";
 
 const { portableText } = Astro.props;
 
@@ -12,6 +13,7 @@ const components = {
     image: PortableTextImage,
     code: CodeBlock,
     callout: CalloutBlock,
+    youtube: YouTubeEmbed,
   },
   block: {
     h2: HeadingBlock,

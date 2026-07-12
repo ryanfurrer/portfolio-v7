@@ -230,7 +230,16 @@ export type BlockContent = Array<
       _type: "image";
       _key: string;
     }
+  | ({
+      _key: string;
+    } & Youtube)
 >;
+
+export type Youtube = {
+  _type: "youtube";
+  url?: string;
+  title?: string;
+};
 
 export type Callout = {
   _type: "callout";
@@ -376,6 +385,7 @@ export type AllSanitySchemaTypes =
   | Slug
   | Post
   | BlockContent
+  | Youtube
   | Callout
   | Code
   | SanityImagePaletteSwatch

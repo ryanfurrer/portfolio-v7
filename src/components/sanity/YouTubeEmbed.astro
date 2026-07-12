@@ -1,0 +1,161 @@
+---
+/**
+ * Renders a Sanity `youtube` block as a click-to-load facade: a static
+ * thumbnail + play button, with the real YouTube iframe only injected on
+ * click. No YouTube JS/iframe loads until the reader chooses to play, so the
+ * embed costs nothing at page load.
+ */
+const { node } = Astro.props;
+
+/** Pull the 11-char video ID out of any common YouTube URL shape. */
+function parseVideoId(url?: string): string | null {
+  if (!url) return null;
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/,
+  );
+  return match ? match[1] : null;
+}
+
+const videoId = parseVideoId(node?.url);
+const title = node?.title ?? "YouTube video";
+// `mqdefault` (320×180) is guaranteed to exist for every video; higher-res
+// thumbs 404 for some uploads, so we stick with the safe size.
+const thumbnail = videoId
+  ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`
+  : null;
+---
+
+{
+  /* `videoId` is null until a valid URL is entered (draft preview) — render
+     nothing so the article doesn't show a broken player. */
+  videoId && (
+    <figure class="yt-embed">
+      <button
+        type="button"
+        class="yt-facade"
+        data-yt-id={videoId}
+        aria-label={`Play video: ${title}`}
+      >
+        <img
+          class="yt-thumb"
+          src={thumbnail}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          width="320"
+          height="180"
+        />
+        <span class="yt-play" aria-hidden="true">
+          <svg viewBox="0 0 68 48" width="68" height="48">
+            <path
+              class="yt-play-bg"
+              d="M66.52 7.74a8 8 0 0 0-5.63-5.66C55.79.5 34 .5 34 .5s-21.79 0-26.89 1.58a8 8 0 0 0-5.63 5.66C0 12.85 0 24 0 24s0 11.15 1.48 16.26a8 8 0 0 0 5.63 5.66C12.21 47.5 34 47.5 34 47.5s21.79 0 26.89-1.58a8 8 0 0 0 5.63-5.66C68 35.15 68 24 68 24s0-11.15-1.48-16.26Z"
+            />
+            <path class="yt-play-arrow" d="M45 24 27 14v20Z" />
+          </svg>
+        </span>
+      </button>
+      {node?.title && <figcaption>{node.title}</figcaption>}
+    </figure>
+  )
+}
+
+<script>
+  document.addEventListener("click", (event) => {
+    const btn = (event.target as HTMLElement)?.closest<HTMLElement>(
+      ".yt-facade",
+    );
+    if (!btn) return;
+    const id = btn.dataset.ytId;
+    if (!id) return;
+
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+    iframe.title = btn.getAttribute("aria-label")?.replace(/^Play video: /, "") ?? "YouTube video";
+    iframe.allow =
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.allowFullscreen = true;
+    iframe.className = "yt-iframe";
+    btn.replaceWith(iframe);
+  });
+</script>
+
+<style>
+  .yt-embed {
+    margin: 0;
+  }
+
+  .yt-facade,
+  .yt-embed :global(.yt-iframe) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .yt-facade {
+    position: relative;
+    padding: 0;
+    cursor: pointer;
+    background: #000;
+  }
+
+  .yt-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Thumb is 320×180; scaling up softens it slightly — a touch of contrast
+       keeps it from looking washed out behind the play button. */
+    transition: opacity 150ms ease;
+  }
+
+  .yt-facade:hover .yt-thumb {
+    opacity: 0.85;
+  }
+
+  .yt-play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+
+  .yt-play-bg {
+    fill: #212121;
+    fill-opacity: 0.8;
+    transition:
+      fill 150ms ease,
+      fill-opacity 150ms ease;
+  }
+
+  .yt-facade:hover .yt-play-bg {
+    fill: #f00;
+    fill-opacity: 1;
+  }
+
+  .yt-play-arrow {
+    fill: #fff;
+  }
+
+  .yt-facade:focus-visible {
+    outline: 2px solid var(--color-brand, currentColor);
+    outline-offset: 3px;
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    text-align: center;
+    color: color-mix(in oklch, currentColor 65%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .yt-thumb,
+    .yt-play-bg {
+      transition: none;
+    }
+  }
+</style>
