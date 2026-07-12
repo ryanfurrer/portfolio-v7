@@ -3,6 +3,10 @@
 @import "shadcn/tailwind.css";
 @plugin "@tailwindcss/typography";
 
+/* ═══════════════════════════════════════════════════════════════════  */
+
+/* Custom variants + utilities */
+
 /* Manual theme: `dark:` utilities key off a `.dark` class on <html>, set before
    paint by the inline script in Head.astro (which resolves the stored choice or
    the OS preference). System preference is honored through that script, not a
@@ -16,225 +20,27 @@
    to keep those effects on mouse/trackpad only. */
 @custom-variant can-hover (@media (hover: hover));
 
-@font-face {
-  font-family: "Geist";
-  src: url("/assets/fonts/Geist[wght].woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: optional;
-}
+@utility touch-hitbox {
+  position: relative;
 
-@font-face {
-  font-family: "Geist";
-  src: url("/assets/fonts/Geist-Italic[wght].woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: optional;
-}
-
-@font-face {
-  font-family: "Berkeley Mono";
-  src: url("/assets/fonts/BerkeleyMono-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: optional;
-}
-
-@font-face {
-  font-family: "Berkeley Mono";
-  src: url("/assets/fonts/BerkeleyMono-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: optional;
-}
-
-@font-face {
-  font-family: "Berkeley Mono";
-  src: url("/assets/fonts/BerkeleyMono-Oblique.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: optional;
-}
-
-@font-face {
-  font-family: "Berkeley Mono";
-  src: url("/assets/fonts/BerkeleyMono-Bold-Oblique.woff2") format("woff2");
-  font-weight: 700;
-  font-style: italic;
-  font-display: optional;
-}
-
-@font-face {
-  font-family: "Permanent Marker";
-  src: url("/assets/fonts/PermanentMarker-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: optional;
-}
-
-html {
-  background-color: var(--background);
-  scrollbar-gutter: stable;
-  scroll-behavior: smooth;
-  /* Keep anchor jumps (TOC links, skip link) clear of the sticky header. */
-  scroll-padding-top: 5rem;
-}
-
-/* Respect reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-property:
-      opacity, color, background-color, border-color, fill, stroke,
-      text-decoration-color !important;
-  }
-  /* Auto-hiding chrome is motion-adjacent: keep the header pinned visible for
-     reduced-motion users instead of letting it jump in and out on scroll.
-     Un-layered, so it beats the Tailwind utility (which lives in a layer). */
-  [data-site-header][data-hidden] {
-    translate: none;
+  &::before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    min-height: 44px;
+    min-width: 44px;
+    z-index: 9999;
   }
 }
 
-/* Reduced transparency — the scrolled header and the floating menus are
-   translucent "glass" (backdrop-blur). When the OS asks for reduced
-   transparency, swap them to a solid surface and drop the blur so text over
-   changing backgrounds stays fully legible. Kept outside @layer so these beat
-   the Tailwind utility classes that set the glass on those elements. */
-@media (prefers-reduced-transparency: reduce) {
-  [data-site-header][data-scrolled] {
-    background-color: var(--background);
-    backdrop-filter: none;
-  }
-  [data-slot="navigation-menu-content"],
-  [data-slot="dropdown-menu-content"] {
-    background-color: var(--popover);
-    backdrop-filter: none;
-  }
-  [data-toc-mobile] {
-    background-color: var(--background);
-    backdrop-filter: none;
-  }
-}
+/* ═══════════════════════════════════════════════════════════════════  */
 
-/* Increased contrast — firm up the hairline system into defined borders so
-   structural edges (cards, menus, inputs, the scrolled header) read clearly. */
-@media (prefers-contrast: more) {
-  :root {
-    --border: oklch(0 0 0 / 0.55);
-    --input: oklch(0 0 0 / 0.6);
-  }
-  .dark {
-    --border: oklch(1 0 0 / 0.5);
-    --input: oklch(1 0 0 / 0.55);
-  }
-  [data-site-header][data-scrolled],
-  [data-slot="navigation-menu-content"],
-  [data-slot="dropdown-menu-content"] {
-    background-color: var(--popover);
-    backdrop-filter: none;
-    border: 1px solid var(--border);
-  }
-  [data-toc-mobile] {
-    background-color: var(--background);
-    backdrop-filter: none;
-    border: 1px solid var(--border);
-  }
-}
-
-::selection {
-  background-color: color-mix(in oklch, var(--link) 22%, transparent);
-}
-.dark ::selection {
-  background-color: color-mix(in oklch, var(--link) 32%, transparent);
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background-color: oklch(0 0 0 / 0.22);
-  border-radius: 9999px;
-  border: 3px solid transparent;
-  background-clip: padding-box;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: oklch(0 0 0 / 0.35);
-}
-html {
-  scrollbar-width: thin;
-  scrollbar-color: oklch(0 0 0 / 0.22) transparent;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background-color: oklch(1 0 0 / 0.2);
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background-color: oklch(1 0 0 / 0.33);
-}
-html.dark {
-  scrollbar-color: oklch(1 0 0 / 0.2) transparent;
-}
-
-/* Mobile menu reveal — clip from the top edge so the panel appears to grow down
-   out of the navbar instead of sliding in from off-screen. Overrides the Sheet's
-   default slide-in-from-top (higher specificity wins; duration comes from the
-   `data-[state]:!duration-*` utilities on the element). */
-@keyframes menu-grow-in {
-  from {
-    clip-path: inset(0 0 100% 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
-@keyframes menu-grow-out {
-  from {
-    clip-path: inset(0 0 0 0);
-  }
-  to {
-    clip-path: inset(0 0 100% 0);
-  }
-}
-[data-slot="sheet-content"].menu-grow[data-state="open"] {
-  animation-name: menu-grow-in;
-  animation-timing-function: var(--ease-ios-curve);
-  animation-fill-mode: both;
-}
-[data-slot="sheet-content"].menu-grow[data-state="closed"] {
-  animation-name: menu-grow-out;
-  animation-timing-function: var(--ease-ios-curve);
-  animation-fill-mode: both;
-}
-
-/* Nav links settle in with a staggered fade-up as the panel grows. The stagger
-   runs top→bottom (--index) to track the clip sweep. Enter only — on close the
-   links simply clip away with the panel (exits stay subtler than enters). */
-@keyframes menu-item-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .menu-grow[data-state="open"] .menu-item {
-    animation: menu-item-in 340ms var(--ease-ios-curve) backwards;
-    animation-delay: calc(90ms + var(--index) * 45ms);
-  }
-}
+/* Design tokens — @theme map, then light (:root) + dark (.dark). Defined up top so the a11y overrides below win when active. */
 
 @theme inline {
   --color-background: var(--background);
@@ -433,6 +239,246 @@ html.dark {
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+/* ═══════════════════════════════════════════════════════════════════  */
+
+/* Fonts */
+
+@font-face {
+  font-family: "Geist";
+  src: url("/assets/fonts/Geist[wght].woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("/assets/fonts/Geist-Italic[wght].woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Berkeley Mono";
+  src: url("/assets/fonts/BerkeleyMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Berkeley Mono";
+  src: url("/assets/fonts/BerkeleyMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Berkeley Mono";
+  src: url("/assets/fonts/BerkeleyMono-Oblique.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Berkeley Mono";
+  src: url("/assets/fonts/BerkeleyMono-Bold-Oblique.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: optional;
+}
+
+@font-face {
+  font-family: "Permanent Marker";
+  src: url("/assets/fonts/PermanentMarker-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
+
+/* ═══════════════════════════════════════════════════════════════════  */
+
+/* Base element rules */
+
+html {
+  background-color: var(--background);
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  /* Keep anchor jumps (TOC links, skip link) clear of the sticky header. */
+  scroll-padding-top: 5rem;
+}
+
+::selection {
+  background-color: color-mix(in oklch, var(--link) 22%, transparent);
+}
+.dark ::selection {
+  background-color: color-mix(in oklch, var(--link) 32%, transparent);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: oklch(0 0 0 / 0.22);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(0 0 0 / 0.35);
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0 0 0 / 0.22) transparent;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: oklch(1 0 0 / 0.2);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(1 0 0 / 0.33);
+}
+html.dark {
+  scrollbar-color: oklch(1 0 0 / 0.2) transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════  */
+
+/* Accessibility preference queries (after base tokens so prefers-contrast :root/.dark overrides win when active) */
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property:
+      opacity, color, background-color, border-color, fill, stroke,
+      text-decoration-color !important;
+  }
+  /* Auto-hiding chrome is motion-adjacent: keep the header pinned visible for
+     reduced-motion users instead of letting it jump in and out on scroll.
+     Un-layered, so it beats the Tailwind utility (which lives in a layer). */
+  [data-site-header][data-hidden] {
+    translate: none;
+  }
+}
+
+/* Reduced transparency — the scrolled header and the floating menus are
+   translucent "glass" (backdrop-blur). When the OS asks for reduced
+   transparency, swap them to a solid surface and drop the blur so text over
+   changing backgrounds stays fully legible. Kept outside @layer so these beat
+   the Tailwind utility classes that set the glass on those elements. */
+@media (prefers-reduced-transparency: reduce) {
+  [data-site-header][data-scrolled] {
+    background-color: var(--background);
+    backdrop-filter: none;
+  }
+  [data-slot="navigation-menu-content"],
+  [data-slot="dropdown-menu-content"] {
+    background-color: var(--popover);
+    backdrop-filter: none;
+  }
+  [data-toc-mobile] {
+    background-color: var(--background);
+    backdrop-filter: none;
+  }
+}
+
+/* Increased contrast — firm up the hairline system into defined borders so
+   structural edges (cards, menus, inputs, the scrolled header) read clearly. */
+@media (prefers-contrast: more) {
+  :root {
+    --border: oklch(0 0 0 / 0.55);
+    --input: oklch(0 0 0 / 0.6);
+  }
+  .dark {
+    --border: oklch(1 0 0 / 0.5);
+    --input: oklch(1 0 0 / 0.55);
+  }
+  [data-site-header][data-scrolled],
+  [data-slot="navigation-menu-content"],
+  [data-slot="dropdown-menu-content"] {
+    background-color: var(--popover);
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+  }
+  [data-toc-mobile] {
+    background-color: var(--background);
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════  */
+
+/* Mobile-menu animation (keyframes kept beside the rules that fire them) */
+
+/* Mobile menu reveal — clip from the top edge so the panel appears to grow down
+   out of the navbar instead of sliding in from off-screen. Overrides the Sheet's
+   default slide-in-from-top (higher specificity wins; duration comes from the
+   `data-[state]:!duration-*` utilities on the element). */
+@keyframes menu-grow-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes menu-grow-out {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+[data-slot="sheet-content"].menu-grow[data-state="open"] {
+  animation-name: menu-grow-in;
+  animation-timing-function: var(--ease-ios-curve);
+  animation-fill-mode: both;
+}
+[data-slot="sheet-content"].menu-grow[data-state="closed"] {
+  animation-name: menu-grow-out;
+  animation-timing-function: var(--ease-ios-curve);
+  animation-fill-mode: both;
+}
+
+/* Nav links settle in with a staggered fade-up as the panel grows. The stagger
+   runs top→bottom (--index) to track the clip sweep. Enter only — on close the
+   links simply clip away with the panel (exits stay subtler than enters). */
+@keyframes menu-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .menu-grow[data-state="open"] .menu-item {
+    animation: menu-item-in 340ms var(--ease-ios-curve) backwards;
+    animation-delay: calc(90ms + var(--index) * 45ms);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════  */
+
+/* Component classes (@layer base — beaten by the un-layered overrides below) */
 
 @layer base {
   * {
@@ -793,6 +839,10 @@ html.dark {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════  */
+
+/* Un-layered overrides — OUT of @layer on purpose: an un-layered rule beats any @layer rule regardless of specificity/order, which is how these win over Tailwind utilities + Typography. (.quiet-link, the layered sibling of the body-link rule, lives in @layer base above.) */
+
 /* ── Entrance reveal ──────────────────────────────────────────────────
    Content marked [data-reveal] fades + rises in once on load, cascading top to
    bottom. The `reveal-init` class is added to <html> before paint by the inline
@@ -889,23 +939,5 @@ nav.toc[data-toc-snap]::before {
   &:focus-visible {
     color: var(--color-foreground);
     text-decoration-color: var(--color-foreground);
-  }
-}
-
-@utility touch-hitbox {
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    display: block;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 100%;
-    min-height: 44px;
-    min-width: 44px;
-    z-index: 9999;
   }
 }
