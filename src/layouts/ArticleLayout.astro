@@ -5,6 +5,7 @@ import TableOfContents from "@/components/TableOfContents.astro";
 import TocMobile from "@/components/TocMobile.tsx";
 import Layout from "@/layouts/Layout.astro";
 import type { TocHeading } from "@/sanity/lib/content";
+import type { ResponsiveImage } from "@/sanity/lib/url-for-image";
 import { formatDateLong } from "@/utils/date";
 
 interface Props {
@@ -12,8 +13,8 @@ interface Props {
   description?: string | null;
   /** Build-time OG card, e.g. /og/writing/<slug>.png */
   ogImage: string;
-  /** Header image URL (already sized 550×310), or null when absent. */
-  headerImageUrl?: string | null;
+  /** Responsive, cropped header image variants, or null when absent. */
+  headerImage?: ResponsiveImage | null;
   publishedAt?: string | null;
   updatedAt?: string | null;
   headings: TocHeading[];
@@ -28,7 +29,7 @@ const {
   title,
   description,
   ogImage,
-  headerImageUrl,
+  headerImage,
   publishedAt,
   updatedAt,
   headings,
@@ -56,7 +57,7 @@ const articleJsonLd = {
   description: description ?? undefined,
   datePublished: publishedAt ?? undefined,
   dateModified: updatedAt ?? publishedAt ?? undefined,
-  image: headerImageUrl ?? new URL(ogImage, Astro.site).toString(),
+  image: headerImage?.src ?? new URL(ogImage, Astro.site).toString(),
   url: canonical,
   mainEntityOfPage: canonical,
   author: {
@@ -85,9 +86,11 @@ const articleJsonLd = {
   <main class="prose min-w-0 prose-neutral dark:prose-invert">
     <CtaLink href={backHref} direction="back" class="mb-6 lg:hidden">{backLabel}</CtaLink>
     {
-      headerImageUrl && (
+      headerImage && (
         <img
-          src={headerImageUrl}
+          src={headerImage.src}
+          srcset={headerImage.srcset}
+          sizes="(min-width: 1184px) 704px, (min-width: 1024px) calc(100vw - 30rem), (min-width: 768px) min(100vw - 3rem, 672px), calc(100vw - 2rem)"
           alt={title ?? ""}
           width="550"
           height="310"

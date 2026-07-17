@@ -32,6 +32,9 @@ pnpm-debug.log*
 # Vercel
 .vercel/
 
+# Conductor local repository settings
+.conductor/settings.local.toml
+
 # Claude Code — local agent/editor tooling (launch config, local settings).
 # Blanket-ignored for this solo repo. If you later add shareable config
 # (.claude/commands, .claude/agents, a committed settings.json), un-ignore it

@@ -2,7 +2,7 @@
 import ArticleLayout from "@/layouts/ArticleLayout.astro";
 import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/url-for-image";
+import { articleHeaderImage } from "@/sanity/lib/url-for-image";
 import type {
   PROJECT_QUERY_RESULT,
   PROJECT_SLUGS_QUERY_RESULT,
@@ -25,8 +25,8 @@ if (!project) {
 }
 
 const headings = extractHeadings(project.body);
-const headerImageUrl = project.headerImage
-  ? urlForImage(project.headerImage).width(550).height(310).url()
+const headerImage = project.headerImage
+  ? articleHeaderImage(project.headerImage)
   : null;
 // OG card is generated at build time from the title/description
 // (src/pages/og/work/[slug].png.ts) — no per-entry image to author.
@@ -48,7 +48,7 @@ const companyBack = project.company?.slug
   title={project.title}
   description={project.description}
   ogImage={`/og/work/${Astro.params.slug}.png`}
-  headerImageUrl={headerImageUrl}
+  headerImage={headerImage}
   publishedAt={project.publishedAt}
   updatedAt={project.updatedAt}
   headings={headings}

@@ -2,7 +2,7 @@
 import ArticleLayout from "@/layouts/ArticleLayout.astro";
 import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { POST_QUERY, POST_SLUGS_QUERY } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/url-for-image";
+import { articleHeaderImage } from "@/sanity/lib/url-for-image";
 import type {
   POST_QUERY_RESULT,
   POST_SLUGS_QUERY_RESULT,
@@ -22,8 +22,8 @@ const post = await sanityClient.fetch<POST_QUERY_RESULT>(
 if (!post) throw new Error(`Post not found for slug: ${Astro.params.slug}`);
 
 const headings = extractHeadings(post.body);
-const headerImageUrl = post.headerImage
-  ? urlForImage(post.headerImage).width(550).height(310).url()
+const headerImage = post.headerImage
+  ? articleHeaderImage(post.headerImage)
   : null;
 // OG card is generated at build time from the title/description
 // (src/pages/og/writing/[slug].png.ts) — no per-entry image to author.
@@ -33,7 +33,7 @@ const headerImageUrl = post.headerImage
   title={post.title}
   description={post.description}
   ogImage={`/og/writing/${Astro.params.slug}.png`}
-  headerImageUrl={headerImageUrl}
+  headerImage={headerImage}
   publishedAt={post.publishedAt}
   updatedAt={post.updatedAt}
   headings={headings}
