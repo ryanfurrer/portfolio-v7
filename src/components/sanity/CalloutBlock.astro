@@ -5,12 +5,18 @@
  */
 import { PortableText } from "astro-portabletext";
 import Callout from "@/components/Callout.astro";
+import PortableTextLink from "./PortableTextLink.astro";
 
 const { node } = Astro.props;
+
+// Callout bodies render through astro-portabletext directly (not the shared
+// PortableText.astro), so wire in the same link renderer here or callout links
+// would fall back to the default same-tab `<a>`.
+const components = { mark: { link: PortableTextLink } };
 ---
 
 <Callout variant={node.variant} title={node.title}>
   {/* `body` is undefined until content is typed (draft preview) — pass an empty
       array so astro-portabletext doesn't choke on `undefined`. */}
-  <PortableText value={node.body ?? []} />
+  <PortableText value={node.body ?? []} components={components} />
 </Callout>

@@ -50,6 +50,7 @@
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
   --color-brand: var(--brand); /* enables text-brand / stroke-brand / etc. */
+  --color-brand-strong: var(--brand-strong); /* AA-safe brand for TEXT (text-brand-strong) */
   --color-nav-active: var(--nav-active);
   --color-nav-hover: var(--nav-hover);
   --color-surface: var(--surface);
@@ -158,6 +159,10 @@
      text-selection tint. Never used for text contrast, so no APCA constraint —
      this is pure personality. Dark variant in .dark. */
   --brand: oklch(0.64 0.135 164.8); /* #00a577 */
+  /* Darker viridian for brand-coloured TEXT — the personality --brand fails
+     contrast as text (only ~2.7:1 on the tinted callout surface). This holds
+     ≥4.5:1 (WCAG AA) on the light canvas/callout surfaces. Dark variant in .dark. */
+  --brand-strong: oklch(0.48 0.13 164.8); /* #00734a — ~4.9:1 on the tinted callout surface */
   /* Active nav pill — a faint neutral wash (the ink at low opacity). */
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
   /* Nav hover highlight — lifts to white above the canvas (see --nav-hover-shadow),
@@ -203,6 +208,9 @@
   /* Brand accent, dark variant — L raised / C trimmed so viridian holds up on
      the dark field. */
   --brand: oklch(0.71 0.124 164.8); /* #44b98e */
+  /* On the dark field the personality --brand (#44b98e) already clears AA as
+     text (~7.6:1 on the dark callout surface), so brand-strong reuses it. */
+  --brand-strong: var(--brand);
   /* Active nav pill — stronger wash so the tint reads on the dark surface. */
   --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
   --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);

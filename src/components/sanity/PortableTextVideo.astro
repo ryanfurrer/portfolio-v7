@@ -1,0 +1,115 @@
+---
+/**
+ * Renders a Sanity `video` block: a self-hosted, uploaded clip.
+ *
+ * The playable URL is built from the asset ref via `@sanity/asset-utils`
+ * (mirroring how images resolve from a ref in `url-for-image.ts`), so the GROQ
+ * projections don't need to dereference the asset.
+ *
+ * The frame's aspect ratio comes from the author-chosen `aspectRatio` field
+ * (Sanity doesn't store video dimensions) — set at build time so the border
+ * hugs the video with no letterbox gap, no layout shift, and no client JS.
+ *
+ * Playback is decorative — muted + looping — but autoplay is gated CLIENT-SIDE:
+ * the static build can't read `prefers-reduced-motion`, so the `autoplay`
+ * attribute is deliberately NOT set here. A small script plays the video only
+ * when motion is allowed; otherwise it stays paused. Native controls are
+ * always available either way.
+ */
+import { getFileAsset } from "@sanity/asset-utils";
+import { dataset, projectId } from "@/sanity/lib/config";
+
+const { node } = Astro.props;
+const { file, caption, aspectRatio } = node;
+
+// A video block can exist before its file is uploaded (e.g. editing a draft in
+// the Studio with preview on), leaving `file.asset` undefined. Guard so draft
+// preview doesn't crash trying to resolve a URL from `undefined`.
+const asset = file?.asset
+  ? getFileAsset(file.asset, { projectId, dataset })
+  : null;
+const url = asset?.url ?? null;
+// Ready-to-use CSS aspect-ratio; falls back to 16:9 for pre-field content.
+const ratio = aspectRatio || "16 / 9";
+---
+
+{
+  url && (
+    <figure class="pt-video">
+      {/* No `autoplay` attribute — playback is started by the script below only
+          when motion is allowed. `muted` + `playsinline` keep JS-driven play
+          from being blocked and stop iOS going fullscreen. */}
+      <video
+        class="pt-video-el"
+        src={url}
+        controls
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-label={caption || "Video"}
+        style={`aspect-ratio: ${ratio}`}
+        data-autoplay
+      />
+      {caption && <figcaption>{caption}</figcaption>}
+    </figure>
+  )
+}
+
+<script>
+  // Static SSR can't know the reader's motion preference, so gate the
+  // decorative autoplay here. Play only when motion is allowed; leave the
+  // video paused (but controllable) under reduced motion.
+  const allowsMotion = !window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  if (allowsMotion) {
+    for (const el of document.querySelectorAll<HTMLVideoElement>(
+      "video[data-autoplay]",
+    )) {
+      // A muted, inline video is allowed to autoplay; ignore the rejected
+      // promise if the browser still declines (controls remain available).
+      el.play().catch(() => {});
+    }
+  }
+</script>
+
+<style>
+  .pt-video {
+    margin: 0;
+  }
+
+  .pt-video-el {
+    display: block;
+    width: 100%;
+    /* `aspect-ratio` is set inline from the author-chosen field (SSR), so the
+       box matches the video and reserves layout space with no shift. */
+    height: auto;
+    /* `cover` fills the box edge-to-edge so the border always hugs the frame
+       (never a letterboxed gap). With the ratio matching the video, nothing is
+       actually cropped. */
+    object-fit: cover;
+    /* Match the treatment `.prose img` gives content images: same radius and a
+       pure black/white hairline outline (never a tinted neutral, which reads as
+       dirt on the edge). Flips to white in dark mode below. */
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #000;
+    /* Reset the prose `video`/media margins so the clip isn't offset inside
+       the article column — the figure owns spacing. */
+    margin: 0;
+  }
+
+  :global(.dark) .pt-video-el {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    text-align: center;
+    /* AA-tested secondary token (≥4.5:1 in both modes) — a transparent mix of
+       currentColor drops below AA. */
+    color: var(--foreground-muted);
+  }
+</style>

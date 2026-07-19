@@ -5,6 +5,8 @@ import CodeBlock from "./CodeBlock.astro";
 import CalloutBlock from "./CalloutBlock.astro";
 import HeadingBlock from "./HeadingBlock.astro";
 import YouTubeEmbed from "./YouTubeEmbed.astro";
+import PortableTextVideo from "./PortableTextVideo.astro";
+import PortableTextLink from "./PortableTextLink.astro";
 
 const { portableText } = Astro.props;
 
@@ -14,11 +16,15 @@ const components = {
     code: CodeBlock,
     callout: CalloutBlock,
     youtube: YouTubeEmbed,
+    video: PortableTextVideo,
   },
   block: {
     h2: HeadingBlock,
     h3: HeadingBlock,
     h4: HeadingBlock,
+  },
+  mark: {
+    link: PortableTextLink,
   },
 };
 ---

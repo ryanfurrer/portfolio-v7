@@ -3,6 +3,7 @@ import {ClockIcon} from '@sanity/icons'
 import {
   bodyField,
   formatPreviewDate,
+  linkAnnotation,
   publishedAtField,
   publishedAtOrderings,
 } from './shared'
@@ -55,22 +56,7 @@ export const nowType = defineType({
                       {title: 'Strong', value: 'strong'},
                       {title: 'Emphasis', value: 'em'},
                     ],
-                    annotations: [
-                      {
-                        name: 'link',
-                        type: 'object',
-                        title: 'Link',
-                        fields: [
-                          {
-                            name: 'href',
-                            type: 'url',
-                            title: 'URL',
-                            validation: (rule) =>
-                              rule.uri({scheme: ['http', 'https', 'mailto']}),
-                          },
-                        ],
-                      },
-                    ],
+                    annotations: [linkAnnotation],
                   },
                 }),
               ],

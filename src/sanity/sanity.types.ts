@@ -74,6 +74,7 @@ export type Now = {
       listItem?: never;
       markDefs?: Array<{
         href?: string;
+        openInNewTab?: boolean;
         _type: "link";
         _key: string;
       }>;
@@ -208,6 +209,7 @@ export type BlockContent = Array<
       listItem?: "bullet" | "number";
       markDefs?: Array<{
         href?: string;
+        openInNewTab?: boolean;
         _type: "link";
         _key: string;
       }>;
@@ -233,7 +235,28 @@ export type BlockContent = Array<
   | ({
       _key: string;
     } & Youtube)
+  | ({
+      _key: string;
+    } & Video)
 >;
+
+export type SanityFileAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+};
+
+export type Video = {
+  _type: "video";
+  file?: {
+    asset?: SanityFileAssetReference;
+    media?: unknown;
+    _type: "file";
+  };
+  aspectRatio?: "16 / 9" | "16 / 10";
+  caption?: string;
+};
 
 export type Youtube = {
   _type: "youtube";
@@ -256,6 +279,7 @@ export type Callout = {
     listItem?: "bullet" | "number";
     markDefs?: Array<{
       href?: string;
+      openInNewTab?: boolean;
       _type: "link";
       _key: string;
     }>;
@@ -385,6 +409,8 @@ export type AllSanitySchemaTypes =
   | Slug
   | Post
   | BlockContent
+  | SanityFileAssetReference
+  | Video
   | Youtube
   | Callout
   | Code
@@ -644,6 +670,7 @@ export type NOW_QUERY_RESULT = Array<{
       listItem?: never;
       markDefs?: Array<{
         href?: string;
+        openInNewTab?: boolean;
         _type: "link";
         _key: string;
       }>;
