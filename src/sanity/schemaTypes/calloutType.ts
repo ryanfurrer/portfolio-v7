@@ -24,8 +24,6 @@ export const calloutType = defineType({
       options: {
         list: [
           {title: 'Note (info)', value: 'info'},
-          {title: 'Tip', value: 'tip'},
-          {title: 'Important', value: 'important'},
           {title: 'Warning', value: 'warning'},
           {title: 'Caution', value: 'caution'},
         ],
@@ -38,7 +36,7 @@ export const calloutType = defineType({
       title: 'Title',
       type: 'string',
       description:
-        'Optional — overrides the default label (e.g. "Note", "Tip") for this callout.',
+        'Optional — overrides the default label (e.g. "Note", "Warning") for this callout.',
     }),
     defineField({
       name: 'body',

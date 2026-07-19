@@ -243,7 +243,7 @@ export type Youtube = {
 
 export type Callout = {
   _type: "callout";
-  variant?: "info" | "tip" | "important" | "warning" | "caution";
+  variant?: "info" | "warning" | "caution";
   title?: string;
   body?: Array<{
     children?: Array<{
