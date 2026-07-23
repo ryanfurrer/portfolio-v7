@@ -65,6 +65,35 @@ export const bodyField = defineField({
   type: 'blockContent',
 })
 
+/**
+ * Shared inline link annotation used by every rich-text surface (body,
+ * callout, now media). Links open in a new tab by default — most links point
+ * off-site — with an `openInNewTab` opt-out for internal links, which also
+ * allows relative (`/…`) URLs. Keeping one definition means the three
+ * surfaces can't drift apart.
+ */
+export const linkAnnotation = {
+  name: 'link',
+  type: 'object' as const,
+  title: 'Link',
+  fields: [
+    defineField({
+      name: 'href',
+      type: 'url',
+      title: 'URL',
+      validation: (rule) =>
+        rule.uri({allowRelative: true, scheme: ['http', 'https', 'mailto']}),
+    }),
+    defineField({
+      name: 'openInNewTab',
+      type: 'boolean',
+      title: 'Open in new tab',
+      description: 'On by default. Turn off for internal links (e.g. /blog/…).',
+      initialValue: true,
+    }),
+  ],
+}
+
 /** Studio sort options shared by every content type. */
 export const publishedAtOrderings = [
   {

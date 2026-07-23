@@ -2,7 +2,7 @@
 import ArticleLayout from "@/layouts/ArticleLayout.astro";
 import { extractHeadings, toStaticPaths } from "@/sanity/lib/content";
 import { APPEARANCE_QUERY, APPEARANCE_SLUGS_QUERY } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/url-for-image";
+import { articleHeaderImage } from "@/sanity/lib/url-for-image";
 import type {
   APPEARANCE_QUERY_RESULT,
   APPEARANCE_SLUGS_QUERY_RESULT,
@@ -25,8 +25,8 @@ if (!appearance) {
 }
 
 const headings = extractHeadings(appearance.body);
-const headerImageUrl = appearance.headerImage
-  ? urlForImage(appearance.headerImage).width(550).height(310).url()
+const headerImage = appearance.headerImage
+  ? articleHeaderImage(appearance.headerImage)
   : null;
 // OG card is generated at build time from the title/description
 // (src/pages/og/appearances/[slug].png.ts) — no per-entry image to author.
@@ -36,7 +36,7 @@ const headerImageUrl = appearance.headerImage
   title={appearance.title}
   description={appearance.description}
   ogImage={`/og/appearances/${Astro.params.slug}.png`}
-  headerImageUrl={headerImageUrl}
+  headerImage={headerImage}
   publishedAt={appearance.publishedAt}
   updatedAt={appearance.updatedAt}
   headings={headings}

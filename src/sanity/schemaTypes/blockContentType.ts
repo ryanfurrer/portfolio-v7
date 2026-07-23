@@ -1,4 +1,5 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
+import {linkAnnotation} from './shared'
 
 /**
  * Canonical rich-text body type, referenced by every content
@@ -11,7 +12,23 @@ export const blockContentType = defineType({
   title: 'Block Content',
   type: 'array',
   of: [
-    defineArrayMember({type: 'block'}),
+    // The body uses Sanity's default block, but with an explicit link
+    // annotation so links can carry `openInNewTab`. Overriding `marks` means
+    // the default decorators would be dropped, so they're re-declared here;
+    // `styles` and `lists` are omitted and keep their defaults.
+    defineArrayMember({
+      type: 'block',
+      marks: {
+        decorators: [
+          {title: 'Strong', value: 'strong'},
+          {title: 'Emphasis', value: 'em'},
+          {title: 'Code', value: 'code'},
+          {title: 'Underline', value: 'underline'},
+          {title: 'Strike', value: 'strike-through'},
+        ],
+        annotations: [linkAnnotation],
+      },
+    }),
     defineArrayMember({type: 'code'}),
     // Edit callouts in a full dialog, not the default popover. For a block-level
     // object inside Portable Text, the editor reads the modal option from the
@@ -31,5 +48,6 @@ export const blockContentType = defineType({
       ],
     }),
     defineArrayMember({type: 'youtube'}),
+    defineArrayMember({type: 'video'}),
   ],
 })

@@ -176,7 +176,9 @@ const thumbnailFallback = videoId
     margin-top: 0.5rem;
     font-size: 0.875rem;
     text-align: center;
-    color: color-mix(in oklch, currentColor 65%, transparent);
+    /* AA-tested secondary token (≥4.5:1 in both modes) — a transparent mix of
+       currentColor drops below AA. */
+    color: var(--foreground-muted);
   }
 
   @media (prefers-reduced-motion: reduce) {

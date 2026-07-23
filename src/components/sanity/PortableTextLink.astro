@@ -1,0 +1,25 @@
+---
+/**
+ * Shared Portable Text `link` mark renderer.
+ *
+ * Links open in a new tab by default — most links on the site point off-site —
+ * and only stay in the current tab when an author explicitly turns
+ * `openInNewTab` off (used for internal links). Links stored before that field
+ * existed have no value and therefore also open in a new tab.
+ *
+ * Wired into both render surfaces: `PortableText.astro` (article body, /about,
+ * /now) and `CalloutBlock.astro` (callout bodies).
+ */
+const { node, index, isInline, ...attrs } = Astro.props;
+const href = node?.markDef?.href;
+const newTab = node?.markDef?.openInNewTab !== false;
+---
+
+<a
+  href={href}
+  {...attrs}
+  target={newTab ? "_blank" : undefined}
+  rel={newTab ? "noopener noreferrer" : undefined}
+>
+  <slot />
+</a>

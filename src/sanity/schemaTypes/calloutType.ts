@@ -1,5 +1,6 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 import {InfoOutlineIcon} from '@sanity/icons'
+import {linkAnnotation} from './shared'
 
 /**
  * Callout — a labelled, colour-coded aside embedded inside `blockContent`.
@@ -24,8 +25,6 @@ export const calloutType = defineType({
       options: {
         list: [
           {title: 'Note (info)', value: 'info'},
-          {title: 'Tip', value: 'tip'},
-          {title: 'Important', value: 'important'},
           {title: 'Warning', value: 'warning'},
           {title: 'Caution', value: 'caution'},
         ],
@@ -38,7 +37,7 @@ export const calloutType = defineType({
       title: 'Title',
       type: 'string',
       description:
-        'Optional — overrides the default label (e.g. "Note", "Tip") for this callout.',
+        'Optional — overrides the default label (e.g. "Note", "Warning") for this callout.',
     }),
     defineField({
       name: 'body',
@@ -58,16 +57,7 @@ export const calloutType = defineType({
               {title: 'Emphasis', value: 'em'},
               {title: 'Code', value: 'code'},
             ],
-            annotations: [
-              {
-                name: 'link',
-                type: 'object',
-                title: 'Link',
-                fields: [
-                  {name: 'href', type: 'url', title: 'URL'},
-                ],
-              },
-            ],
+            annotations: [linkAnnotation],
           },
         }),
       ],
