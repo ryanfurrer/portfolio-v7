@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-import {VideoIcon} from '@sanity/icons'
+import {VideoIcon} from '@sanity/icons/Video'
 import {
   bodyField,
   descriptionField,

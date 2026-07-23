@@ -1,5 +1,5 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
-import {ClockIcon} from '@sanity/icons'
+import {ClockIcon} from '@sanity/icons/Clock'
 import {
   bodyField,
   formatPreviewDate,

@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-import {CaseIcon} from '@sanity/icons'
+import {CaseIcon} from '@sanity/icons/Case'
 
 /**
  * A company / brand a project was done for. Projects reference one of

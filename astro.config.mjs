@@ -88,8 +88,6 @@ export default defineConfig({
         "@sanity/code-input",
       ],
     },
-    // @ts-expect-error - Vite version mismatch between Astro (v6) and @tailwindcss/vite (v7)
-    // The plugin works at runtime despite the type incompatibility
     plugins: [tailwindcss()],
   },
 });

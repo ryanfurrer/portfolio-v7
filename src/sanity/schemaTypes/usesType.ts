@@ -1,5 +1,5 @@
 import {defineType, defineField, defineArrayMember} from 'sanity'
-import {CogIcon} from '@sanity/icons'
+import {CogIcon} from '@sanity/icons/Cog'
 import {descriptionField, titleField} from './shared'
 import {UsesIconInput} from '../components/UsesIconInput'
 
