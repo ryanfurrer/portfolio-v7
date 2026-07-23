@@ -7,7 +7,11 @@ export interface SocialLink {
   iconFill?: string;
   iconBackground?: string;
   followerCount?: number;
-  actionLabel?: "Follow" | "Subscribe";
+  actionLabel?: "Follow" | "Subscribe" | "Connect";
+  /** Supporting copy for a profile without a follower metric. */
+  description?: string;
+  /** Display order for cards on the Links page. */
+  linksPageOrder: number;
   /** Include in the site footer + home "find me elsewhere" row. */
   footer?: boolean;
 }
@@ -24,6 +28,7 @@ export const socialLinks: SocialLink[] = [
     iconBackground: "bg-zinc-950",
     followerCount: 970,
     actionLabel: "Follow",
+    linksPageOrder: 1,
     footer: true,
   },
   {
@@ -32,8 +37,9 @@ export const socialLinks: SocialLink[] = [
     icon: "linkedin",
     iconFill: "fill-white",
     iconBackground: "bg-blue-600",
-    followerCount: 1920,
-    actionLabel: "Follow",
+    actionLabel: "Connect",
+    description: "Professional profile",
+    linksPageOrder: 6,
     footer: true,
   },
   {
@@ -44,6 +50,7 @@ export const socialLinks: SocialLink[] = [
     iconBackground: "bg-zinc-950",
     followerCount: 59,
     actionLabel: "Follow",
+    linksPageOrder: 3,
     footer: true,
   },
   {
@@ -54,6 +61,7 @@ export const socialLinks: SocialLink[] = [
     iconBackground: "bg-sky-500",
     followerCount: 764,
     actionLabel: "Follow",
+    linksPageOrder: 2,
   },
   {
     label: "Twitch",
@@ -63,6 +71,7 @@ export const socialLinks: SocialLink[] = [
     iconBackground: "bg-violet-600",
     followerCount: 178,
     actionLabel: "Follow",
+    linksPageOrder: 5,
   },
   {
     label: "YouTube",
@@ -72,5 +81,6 @@ export const socialLinks: SocialLink[] = [
     iconBackground: "bg-rose-600",
     followerCount: 46,
     actionLabel: "Subscribe",
+    linksPageOrder: 4,
   },
 ];
