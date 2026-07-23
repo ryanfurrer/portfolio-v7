@@ -1,5 +1,5 @@
 import {defineType} from 'sanity'
-import {UserIcon} from '@sanity/icons'
+import {UserIcon} from '@sanity/icons/User'
 import {bodyField, descriptionField, titleField} from './shared'
 
 /**
