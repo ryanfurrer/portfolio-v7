@@ -100,7 +100,7 @@ export default function ModeToggle() {
             key={option.value}
             onClick={() => choose(option.value)}
             className={cn(
-              "justify-between pr-2",
+              "justify-between pe-2",
               theme === option.value
                 ? "text-foreground"
                 : "text-foreground-muted",

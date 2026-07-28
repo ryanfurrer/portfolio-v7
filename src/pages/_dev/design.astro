@@ -1,0 +1,480 @@
+---
+import Callout from "@/components/Callout.astro";
+import CtaLink from "@/components/CtaLink.astro";
+import Item from "@/components/Item.astro";
+import CodeBlock from "@/components/sanity/CodeBlock.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import TocMobile from "@/components/TocMobile.tsx";
+import Layout from "@/layouts/Layout.astro";
+
+// Dev-only page (injected in astro.config only when `command === "dev"`), so it
+// carries its own copy rather than a public SECTION_META entry, and skips the
+// OG card that the section generator would otherwise emit.
+const title = "Design System";
+const description =
+  "The tokens, type, and components this site is built from — one reserved accent and a lot of restraint.";
+
+// Hand-authored outline — the ids below must match each section's heading id so
+// the scroll-spy ToC (which observes them) tracks correctly.
+const headings = [
+  { id: "principles", text: "Principles", level: 2 },
+  { id: "color", text: "Color", level: 2 },
+  { id: "typography", text: "Typography", level: 2 },
+  { id: "elevation", text: "Elevation & surfaces", level: 2 },
+  { id: "radius", text: "Radius", level: 2 },
+  { id: "motion", text: "Motion", level: 2 },
+  { id: "components", text: "Components", level: 2 },
+  { id: "links", text: "Links & CTAs", level: 3 },
+  { id: "lists", text: "List rows", level: 3 },
+  { id: "feedback", text: "Badges & callouts", level: 3 },
+  { id: "code", text: "Prose & code", level: 3 },
+  { id: "accessibility", text: "Accessibility", level: 2 },
+];
+
+// Load-bearing neutrals — the palette that does 95% of the work.
+const coreTokens = [
+  { token: "--background", label: "Canvas", util: "bg-background", note: "Off-white page base — white cards lift above it." },
+  { token: "--card", label: "Card", util: "bg-card", note: "Raised white surface for elevated content." },
+  { token: "--surface", label: "Surface", util: "bg-surface", note: "Recessed well — inline code, hovers." },
+  { token: "--surface-hover", label: "Surface hover", util: "bg-surface-hover", note: "The well, one step deeper." },
+  { token: "--foreground", label: "Ink — primary", util: "text-foreground", note: "Headings and key copy." },
+  { token: "--foreground-muted", label: "Ink — muted", util: "text-foreground-muted", note: "Body and descriptions." },
+  { token: "--foreground-subtle", label: "Ink — subtle", util: "text-foreground-subtle", note: "Captions, meta, dates." },
+  { token: "--badge", label: "Badge", util: "bg-badge", note: "Neutral metadata pill." },
+  { token: "--border", label: "Border", util: "border-border", note: "Hairline — opacity-based per surface." },
+];
+
+// The one reserved hue + the semantic tokens.
+const accentTokens = [
+  { token: "--brand", label: "Viridian — brand", util: "text-brand", note: "Logo, signature, selection. Personality only." },
+  { token: "--brand-strong", label: "Viridian — AA text", util: "text-brand-strong", note: "Brand-coloured text that clears 4.5:1." },
+  { token: "--primary", label: "Primary", util: "bg-primary", note: "Inverse ink fill — active nav, buttons." },
+  { token: "--ring", label: "Focus ring", util: "ring-ring", note: "Keyboard focus — neutral gray." },
+  { token: "--destructive", label: "Destructive", util: "text-destructive", note: "Errors and danger." },
+];
+
+const radii = ["sm", "md", "lg", "xl", "2xl", "3xl", "4xl"] as const;
+
+const easings = [
+  { name: "ease-out", curve: "cubic-bezier(0, 0, 0.2, 1)", use: "Hover / press micro-interactions." },
+  { name: "ease-ios", curve: "cubic-bezier(0.23, 1, 0.32, 1)", use: "Overlays and drawers — a slower settle." },
+];
+
+const sampleCode = `// One pseudo-element per list follows the hovered row.
+const { top, height } = row.getBoundingClientRect();
+list.style.setProperty("--dir-hover-y", \`\${top}px\`);
+list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
+---
+
+<Layout title={`${title} — Ryan Furrer`} description={description}>
+  <!-- Desktop: back link in the left gutter, ToC in the right (matching articles) -->
+  <div slot="left" class="sticky top-20">
+    <CtaLink href="/" direction="back">Home</CtaLink>
+  </div>
+  <TableOfContents slot="right" headings={headings} />
+
+  <main class="space-y-16">
+    <header class="space-y-3">
+      <h1 class="text-3xl text-balance text-foreground sm:text-4xl" data-reveal>
+        {title}
+      </h1>
+      <p class="lead max-w-[52ch]" data-reveal>{description}</p>
+      <p class="max-w-[60ch] text-pretty" data-reveal>
+        This page renders from the same tokens and components as the rest of the
+        site — the swatches read their values live, so it can’t drift. Flip the
+        theme in the header to watch every value resolve for dark mode.
+      </p>
+    </header>
+
+    <!-- ── Principles ─────────────────────────────────────────────────── -->
+    <section class="space-y-4" data-reveal aria-labelledby="principles">
+      <h2 id="principles" class="text-2xl text-foreground">Principles</h2>
+      <ul class="space-y-3 text-pretty" role="list">
+        <li>
+          <strong class="font-semibold text-foreground">One reserved accent.</strong>{" "}
+The system is neutral grayscale ink on an off-white canvas. A single
+          viridian hue carries personality — the logo, the signature, text
+          selection — and never does load-bearing work.
+        </li>
+        <li>
+          <strong class="font-semibold text-foreground">Ink is the interaction colour.</strong>{" "}
+Links, active states, and fills use the foreground itself (black in
+          light, white in dark), not a hue. Emphasis comes from weight and
+          contrast, not colour.
+        </li>
+        <li>
+          <strong class="font-semibold text-foreground">Depth over borders.</strong>{" "}
+Surfaces separate with a hairline ring plus a soft shadow in light
+          mode, and a bright inset hairline in dark — rarely a solid 1px line.
+        </li>
+        <li>
+          <strong class="font-semibold text-foreground">Restraint, then whitespace.</strong>{" "}
+Two easing curves, one radius scale, a small type system. Impact is
+          bought with proportion and space, not more components.
+        </li>
+      </ul>
+    </section>
+
+    <!-- ── Color ──────────────────────────────────────────────────────── -->
+    <section class="space-y-4" data-reveal aria-labelledby="color">
+      <h2 id="color" class="text-2xl text-foreground">Color</h2>
+      <p class="text-pretty">
+        Values below are read live from the cascade with
+        <code class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+          >getComputedStyle</code
+        >, so they always match the active theme.
+      </p>
+
+      <h3 class="small-heading pt-2">Core — load-bearing neutrals</h3>
+      <ul class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2" role="list">
+        {
+          coreTokens.map((t) => (
+            <li class="flex items-center gap-4">
+              <span
+                class="size-14 shrink-0 rounded-lg [box-shadow:inset_0_0_0_1px_var(--border)]"
+                style={`background-color: var(${t.token})`}
+                aria-hidden="true"
+              />
+              <div class="min-w-0">
+                <p class="font-medium text-foreground">{t.label}</p>
+                <p class="font-mono-custom text-xs text-foreground-subtle">
+                  {t.util} · <span data-token={t.token}>…</span>
+                </p>
+                <p class="mt-0.5 text-sm text-pretty">{t.note}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3 class="small-heading pt-4">Accent &amp; semantic</h3>
+      <ul class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2" role="list">
+        {
+          accentTokens.map((t) => (
+            <li class="flex items-center gap-4">
+              <span
+                class="size-14 shrink-0 rounded-lg [box-shadow:inset_0_0_0_1px_var(--border)]"
+                style={`background-color: var(${t.token})`}
+                aria-hidden="true"
+              />
+              <div class="min-w-0">
+                <p class="font-medium text-foreground">{t.label}</p>
+                <p class="font-mono-custom text-xs text-foreground-subtle">
+                  {t.util} · <span data-token={t.token}>…</span>
+                </p>
+                <p class="mt-0.5 text-sm text-pretty">{t.note}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Typography ─────────────────────────────────────────────────── -->
+    <section class="space-y-6" data-reveal aria-labelledby="typography">
+      <h2 id="typography" class="text-2xl text-foreground">Typography</h2>
+
+      <div class="space-y-5">
+        <div>
+          <p class="font-sans text-5xl font-extrabold tracking-[-0.03em] text-foreground">
+            Geist
+          </p>
+          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">
+            font-sans · display &amp; body · variable 100–900
+          </p>
+        </div>
+        <div>
+          <p class="font-mono text-4xl text-foreground">Berkeley Mono</p>
+          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">
+            font-mono · UI labels, metadata, dates
+          </p>
+        </div>
+        <div>
+          <p class="font-cursive text-4xl text-brand">-Ryan</p>
+          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">
+            font-cursive · Permanent Marker · signature only
+          </p>
+        </div>
+      </div>
+
+      <h3 class="small-heading pt-2">Scale &amp; roles</h3>
+      <dl class="space-y-4">
+        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+          <dd class="text-3xl font-extrabold tracking-[-0.022em] text-foreground sm:text-4xl">
+            Display heading
+          </dd>
+          <dt class="font-mono-custom text-xs text-foreground-subtle">
+            h1 · text-3xl/4xl · 800
+          </dt>
+        </div>
+        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+          <dd class="text-2xl font-extrabold tracking-[-0.022em] text-foreground">
+            Section heading
+          </dd>
+          <dt class="font-mono-custom text-xs text-foreground-subtle">
+            h2 · text-2xl · 800
+          </dt>
+        </div>
+        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+          <dd class="lead max-w-none">Standfirst / lede — the opening voice.</dd>
+          <dt class="font-mono-custom text-xs text-foreground-subtle">.lead</dt>
+        </div>
+        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+          <dd class="text-foreground-muted">
+            Body copy — muted ink, the default reading colour.
+          </dd>
+          <dt class="font-mono-custom text-xs text-foreground-subtle">
+            p · text-foreground-muted
+          </dt>
+        </div>
+        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+          <dd class="small-heading">Eyebrow label</dd>
+          <dt class="font-mono-custom text-xs text-foreground-subtle">
+            .small-heading · mono
+          </dt>
+        </div>
+        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
+          <dd class="font-mono-custom text-foreground">12.34 · tabular figures</dd>
+          <dt class="font-mono-custom text-xs text-foreground-subtle">
+            .font-mono-custom
+          </dt>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ── Elevation ──────────────────────────────────────────────────── -->
+    <section class="space-y-4" data-reveal aria-labelledby="elevation">
+      <h2 id="elevation" class="text-2xl text-foreground">Elevation &amp; surfaces</h2>
+      <p class="text-pretty">
+        Hover the raised card — it physically lifts on hover-capable pointers.
+      </p>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="card-raised squircle rounded-lg p-5">
+          <p class="font-medium text-foreground">Raised card</p>
+          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">.card-raised</p>
+          <p class="mt-2 text-sm text-pretty">White surface, hairline ring, hover-lift.</p>
+        </div>
+        <div class="rounded-lg bg-card p-5 shadow-elevated">
+          <p class="font-medium text-foreground">Soft elevation</p>
+          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">shadow-elevated</p>
+          <p class="mt-2 text-sm text-pretty">Apple-style whisper shadow, flat in dark.</p>
+        </div>
+        <div class="rounded-lg bg-surface p-5 [box-shadow:inset_0_0_0_1px_var(--border)]">
+          <p class="font-medium text-foreground">Recessed well</p>
+          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">bg-surface</p>
+          <p class="mt-2 text-sm text-pretty">One step below the canvas — sunken.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Radius ─────────────────────────────────────────────────────── -->
+    <section class="space-y-4" data-reveal aria-labelledby="radius">
+      <h2 id="radius" class="text-2xl text-foreground">Radius</h2>
+      <p class="text-pretty">
+        Every step derives from <code
+          class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+          >--radius</code
+        > (0.375rem) via calc. <code
+          class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+          >.squircle</code
+        > opts an element into continuous corners where supported.
+      </p>
+      <ul class="flex flex-wrap gap-4" role="list">
+        {
+          radii.map((r) => (
+            <li class="flex flex-col items-center gap-2">
+              <span
+                class:list={[
+                  "size-16 bg-primary/10 [box-shadow:inset_0_0_0_1px_var(--border)]",
+                  `rounded-${r}`,
+                ]}
+                aria-hidden="true"
+              />
+              <span class="font-mono-custom text-xs text-foreground-subtle">
+                rounded-{r}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ── Motion ─────────────────────────────────────────────────────── -->
+    <section class="space-y-4" data-reveal aria-labelledby="motion">
+      <h2 id="motion" class="text-2xl text-foreground">Motion</h2>
+      <p class="text-pretty">
+        Two curves only. Hover the demo to compare the settle; durations stay as
+        Tailwind utilities (150ms micro, 200ms highlight, 250–300ms overlays).
+      </p>
+      <div class="motion-demo space-y-4">
+        {
+          easings.map((e, i) => (
+            <div>
+              <div class="mb-1.5 flex items-baseline justify-between gap-4">
+                <span class="font-medium text-foreground">{e.name}</span>
+                <span class="font-mono-custom text-xs text-foreground-subtle">{e.curve}</span>
+              </div>
+              <div class="flex items-center rounded-full bg-surface p-1.5 [box-shadow:inset_0_0_0_1px_var(--border)]">
+                <span class:list={["motion-dot size-6 rounded-full bg-brand", `motion-dot--${i}`]} aria-hidden="true" />
+              </div>
+              <p class="mt-1 text-sm text-pretty">{e.use}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ── Components ─────────────────────────────────────────────────── -->
+    <section class="space-y-4" data-reveal aria-labelledby="components">
+      <h2 id="components" class="text-2xl text-foreground">Components</h2>
+
+      <h3 id="links" class="text-lg font-semibold text-foreground">Links &amp; CTAs</h3>
+      <p class="text-pretty">
+        Inline links read as foreground ink with a faint underline and reveal on
+        hover — like <a href="/writing">this one</a>. Standalone
+        <span class="quiet-link">quiet links</span> drop the underline for nav-style
+        lists. Directional CTAs travel toward their intent:
+      </p>
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-3">
+        <CtaLink href="/about">Forward</CtaLink>
+        <CtaLink href="/" direction="back">Back</CtaLink>
+        <CtaLink href="https://ryanfurrer.com" direction="external">External</CtaLink>
+      </div>
+
+      <h3 id="lists" class="pt-4 text-lg font-semibold text-foreground">List rows</h3>
+      <p class="text-pretty">
+        The <code
+          class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+          >Item</code
+        > row with the shared traveling-highlight — one pill follows the cursor.
+      </p>
+      <ul class="flex flex-col gap-px" role="list" data-dir-hover-list="items">
+        <li>
+          <Item title="Crafting the traveling highlight" href="/writing" publishedAt="2026-07-15" />
+        </li>
+        <li>
+          <Item title="A row with a trailing tag" href="/uses">
+            <span
+              slot="trailing"
+              class="font-mono-custom text-xs uppercase tracking-wide text-foreground-muted transition-colors can-hover:group-hover/item:text-foreground"
+              >Editor</span
+            >
+          </Item>
+        </li>
+        <li>
+          <Item title="An external row" href="https://ryanfurrer.com" external />
+        </li>
+      </ul>
+
+      <h3 id="feedback" class="pt-4 text-lg font-semibold text-foreground">Badges &amp; callouts</h3>
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="badge">Updated</span>
+        <span class="badge">2026</span>
+        <span class="badge">Draft</span>
+      </div>
+      <Callout variant="info">
+        <p>The info callout reuses the reserved viridian at low opacity.</p>
+      </Callout>
+      <Callout variant="warning">
+        <p>Warning leans amber — a semantic colour outside the neutral system.</p>
+      </Callout>
+      <Callout variant="caution">
+        <p>Caution uses rose, kept distinct from the destructive red.</p>
+      </Callout>
+
+      <h3 id="code" class="pt-4 text-lg font-semibold text-foreground">Prose &amp; code</h3>
+      <p class="text-pretty">
+        Long-form content renders in <code
+          class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+          >.prose</code
+        >. Code blocks are dual-theme (Catppuccin Latte / Mocha) with a copy button:
+      </p>
+      <div class="prose prose-neutral max-w-none dark:prose-invert">
+        <CodeBlock node={{ code: sampleCode, language: "ts" }} />
+        <blockquote>
+          Impact comes from proportion and restraint — one accent, generous
+          whitespace, and motion you feel more than notice.
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ── Accessibility ──────────────────────────────────────────────── -->
+    <section class="space-y-4" data-reveal aria-labelledby="accessibility">
+      <h2 id="accessibility" class="text-2xl text-foreground">Accessibility</h2>
+      <p class="text-pretty">
+        Every surface targets WCAG 2.1 AA. The system adapts to OS preferences:
+      </p>
+      <ul class="space-y-2 text-pretty" role="list">
+        <li>
+          <strong class="font-semibold text-foreground">Reduced motion</strong> —
+          animations collapse to near-instant; the sticky header stays pinned.
+        </li>
+        <li>
+          <strong class="font-semibold text-foreground">Reduced transparency</strong> —
+          the glass header and floating menus swap to solid surfaces, blur off.
+        </li>
+        <li>
+          <strong class="font-semibold text-foreground">Increased contrast</strong> —
+          hairlines firm up into defined borders on structural edges.
+        </li>
+        <li>
+          <strong class="font-semibold text-foreground">Colour scheme</strong> —
+          a manual Light/Dark choice overrides the OS, set before paint to avoid a
+          flash.
+        </li>
+        <li>
+          <strong class="font-semibold text-foreground">Focus</strong> — one
+          consistent gray focus ring follows every radius. Tab through this page to
+          see it.
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <TocMobile headings={headings} title={title} client:load />
+</Layout>
+
+<style>
+  /* Live token values — filled from the cascade so light/dark always match. */
+  [data-token] {
+    text-transform: none;
+  }
+
+  /* Motion demo — the dot slides to the far edge on section hover, each row
+     using one of the system's two curves so the settle is directly comparable.
+     margin-inline-start keeps it logical + RTL-safe. Reduced-motion users get a
+     jump (the global reduce rule excludes margin from its transition allow-list). */
+  .motion-dot {
+    margin-inline-start: 0;
+    transition-property: margin-inline-start;
+    transition-duration: 700ms;
+  }
+  .motion-dot--0 {
+    transition-timing-function: var(--ease-out);
+  }
+  .motion-dot--1 {
+    transition-timing-function: var(--ease-ios);
+  }
+  .motion-demo:hover .motion-dot {
+    margin-inline-start: calc(100% - 1.5rem);
+  }
+</style>
+
+<script>
+  // Fill every [data-token] with its resolved custom-property value, and re-read
+  // when the theme class flips on <html> so the numbers track light/dark.
+  function refreshTokens() {
+    const styles = getComputedStyle(document.documentElement);
+    document.querySelectorAll<HTMLElement>("[data-token]").forEach((el) => {
+      const name = el.dataset.token;
+      if (!name) return;
+      el.textContent = styles.getPropertyValue(name).trim() || "—";
+    });
+  }
+
+  refreshTokens();
+  new MutationObserver(refreshTokens).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+</script>
