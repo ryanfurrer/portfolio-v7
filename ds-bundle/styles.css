@@ -3,7 +3,9 @@
    Entry stylesheet. Designs receive this file and its @import closure only,
    so everything a design needs is reachable from here.
 
-   Theme: neutral-ink, Apple-influenced. No brand hue — the accent is the ink.
+   Theme: a neutral Apple-style palette (ink on an off-white canvas, white cards
+   lifting above it) with ONE reserved brand hue — viridian (`--brand`), used
+   only for the logo, signature, and selection tint, never for text.
    Toggle dark mode by adding class="dark" to a root ancestor.
 
    Everything here is plain, self-contained CSS: no Tailwind build is required

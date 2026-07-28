@@ -25,9 +25,33 @@ Mapping (site → bundle):
 - `:root` / `.dark` color vars          → `ds-bundle/tokens/colors.css`
 - fonts + `--font-*` + type scale       → `ds-bundle/tokens/typography.css`
 - `--radius*`, `--shadow-elevated`, `--ease-*` → `ds-bundle/tokens/radius-elevation.css`
-- headings / focus ring / body links    → `ds-bundle/patterns/base.css`
-- `.lead` / `.small-heading` / `.badge` / `.quiet-link` → `ds-bundle/patterns/components.css`
+- headings / focus ring / body links / `::selection` → `ds-bundle/patterns/base.css`
+- `.lead` / `.small-heading` / `.badge` / `.quiet-link` / `.card-raised` → `ds-bundle/patterns/components.css`
 - `.prose` article system               → `ds-bundle/patterns/prose.css`
+
+## Re-sync 2026-07-27 — PR #35 redesign (viridian)
+
+Re-derived the whole bundle to match the post-PR-#35 site (the bundle had
+drifted since 2026-07-09). Key shifts captured:
+- **New `--brand` (viridian)**: `oklch(0.64 0.135 164.8)` / #00a577 light,
+  `oklch(0.71 0.124 164.8)` / #44b98e dark. The system is NO LONGER "no brand
+  hue" — viridian is the one reserved hue (logo, signature, `::selection` tint;
+  never for text). Updated the narrative in `colors.css`, `styles.css`, README.
+- **Off-white canvas + raised cards**: `--background` white → `oklch(0.971)`;
+  `--surface`/`--surface-hover` dropped to `0.955`/`0.94` (recessed BELOW the
+  canvas); new `--surface-raised`(+`-shadow`) and `--nav-hover-shadow`; new
+  `.card-raised` pattern (white card lifts off the gray ground).
+- On-surface shadcn `*-foreground` tokens now alias `--foreground(-muted)`.
+- `--foreground-muted` light nudged `#6e6e73` → `#6b6b70`.
+- `.small-heading` is now a **Berkeley Mono** 13px/400 eyebrow (was Geist
+  uppercase 12px/500); `--tracking-label` `0.06em` → `0.025em`.
+- Inline code (`prose.css`) got a deeper fill (`oklch(0.925)`) + hairline ring
+  in light, with a dark override.
+- Body links: `text-underline-offset` 2px → 3px, added `text-decoration-thickness: 1.5px`.
+
+Local render reference: `ds-bundle/_preview/index.html` (open in a browser,
+add `class="dark"` to `<html>` for dark). NOT uploaded (outside the write globs).
+`radius-elevation.css` and the 7 font files were unchanged — not re-uploaded.
 
 ## Deliberately not synced
 

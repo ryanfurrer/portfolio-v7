@@ -105,16 +105,24 @@
   margin: 0.75em 0;
 }
 
-/* Inline code — a subtle pill; no plugin backtick pseudo-content. */
+/* Inline code — a distinct token pill; no plugin backtick pseudo-content. A
+   deeper fill than the general surface plus a hairline ring so it stays legible
+   on the off-white canvas (a surface-close fill would otherwise vanish). Dark
+   keeps its recessed surface. */
 .prose :not(pre) > code {
   font-family: var(--font-mono);
   font-size: 0.85em;
   font-weight: 500;
-  background-color: var(--surface);
+  background-color: oklch(0.925 0 0);
+  box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.08);
   color: var(--foreground);
   padding: 0.125em 0.375em;
   border-radius: var(--radius-sm);
   white-space: nowrap;
+}
+.dark .prose :not(pre) > code {
+  background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.08);
 }
 
 /* Code blocks — soft corners fenced in a hairline. */

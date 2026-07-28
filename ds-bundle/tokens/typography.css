@@ -91,5 +91,5 @@
   --tracking-heading: -0.022em; /* default heading tracking */
   --tracking-lead: -0.011em;    /* standfirst */
   --tracking-normal: 0;         /* body */
-  --tracking-label: 0.06em;     /* small uppercase eyebrow labels */
+  --tracking-label: 0.025em;    /* small uppercase mono eyebrow labels (matches inline role tags) */
 }
