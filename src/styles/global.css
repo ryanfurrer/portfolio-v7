@@ -777,6 +777,160 @@ html.dark {
     border-color: rgba(255, 255, 255, 0.1);
   }
 
+  /* Click-to-zoom trigger: a bare button wrapping the image. Resets the button
+     chrome and carries the block spacing typography would give the <img>, so the
+     wrapper is invisible and the image sits exactly where it did before. */
+  .prose .zoomable-image {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin-block: 2em;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: zoom-in;
+  }
+
+  .prose .zoomable-image img {
+    margin: 0;
+  }
+
+  /* Magnifier hint in the corner. Opacity-only (movement-free) so it still fades
+     under prefers-reduced-motion, and revealed on keyboard focus as well. */
+  .prose .zoomable-image::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0.75rem;
+    inset-inline-end: 0.75rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full, 9999px);
+    background:
+      rgba(0, 0, 0, 0.6)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3M11 8v6M8 11h6'/%3E%3C/svg%3E")
+      center / 1rem no-repeat;
+    opacity: 0;
+    transition: opacity 0.2s var(--ease-ios);
+    pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    .prose .zoomable-image:hover::after {
+      opacity: 1;
+    }
+  }
+
+  .prose .zoomable-image:focus-visible::after {
+    opacity: 1;
+  }
+
+  /* Lightbox. The dialog fills the viewport and centres the image, so a click on
+     any dark area (the dialog itself) closes it while a click on the image does
+     not. Enter/exit is pure CSS via @starting-style + allow-discrete; the global
+     reduced-motion rule above strips the movement (scale) and keeps only the
+     opacity fade for those readers. */
+  .image-zoom-dialog {
+    width: 100vw;
+    height: 100dvh;
+    max-width: 100vw;
+    max-height: 100dvh;
+    margin: 0;
+    padding: clamp(1rem, 5vw, 4rem);
+    border: 0;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    transition:
+      opacity 0.2s var(--ease-ios),
+      overlay 0.2s allow-discrete,
+      display 0.2s allow-discrete;
+  }
+
+  .image-zoom-dialog[open] {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .image-zoom-dialog[open] {
+      opacity: 0;
+    }
+  }
+
+  .image-zoom-dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+    transition:
+      background-color 0.2s var(--ease-ios),
+      overlay 0.2s allow-discrete,
+      display 0.2s allow-discrete;
+  }
+
+  .image-zoom-dialog[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.78);
+  }
+
+  @starting-style {
+    .image-zoom-dialog[open]::backdrop {
+      background-color: rgba(0, 0, 0, 0);
+    }
+  }
+
+  .image-zoom-dialog__img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0.5rem 2.5rem rgba(0, 0, 0, 0.45);
+    scale: 0.97;
+    opacity: 0;
+    transition:
+      scale 0.2s var(--ease-ios),
+      opacity 0.2s var(--ease-ios);
+  }
+
+  .image-zoom-dialog[open] .image-zoom-dialog__img {
+    scale: 1;
+    opacity: 1;
+  }
+
+  @starting-style {
+    .image-zoom-dialog[open] .image-zoom-dialog__img {
+      scale: 0.97;
+      opacity: 0;
+    }
+  }
+
+  .image-zoom-dialog__close {
+    position: fixed;
+    inset-block-start: max(1rem, env(safe-area-inset-top));
+    inset-inline-end: max(1rem, env(safe-area-inset-right));
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-full, 9999px);
+    border: 0;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease-ios);
+  }
+
+  @media (hover: hover) {
+    .image-zoom-dialog__close:hover {
+      background: rgba(0, 0, 0, 0.75);
+    }
+  }
+
+  .image-zoom-dialog__close svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
   /* Traveling highlight hover effect for Item components */
   ul[data-dir-hover-list="items"] {
     position: relative;
