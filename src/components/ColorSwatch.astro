@@ -1,0 +1,29 @@
+---
+interface Props {
+  token: string;
+  label: string;
+  util: string;
+  note: string;
+}
+
+const { token, label, util, note } = Astro.props;
+---
+
+<button
+  type="button"
+  data-swatch={token}
+  aria-label={`Copy the ${label} colour value`}
+  class="group/swatch flex w-full items-center gap-4 rounded-lg p-1 text-start transition-colors hover:bg-surface focus-visible:bg-surface"
+>
+  <span
+    class="size-14 shrink-0 rounded-lg [box-shadow:inset_0_0_0_1px_var(--border)]"
+    style={`background-color: var(${token})`}
+    aria-hidden="true"></span>
+  <span class="min-w-0">
+    <span class="block font-medium text-foreground">{label}</span>
+    <span class="block font-mono-custom text-xs text-muted-foreground">
+      {util} · <span data-swatch-value>…</span>
+    </span>
+    <span class="mt-0.5 block text-sm text-pretty">{note}</span>
+  </span>
+</button>
