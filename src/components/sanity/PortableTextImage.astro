@@ -26,6 +26,7 @@ const size = imageDimensions(asset);
       class="zoomable-image"
       data-zoom-src={zoomUrl}
       data-zoom-alt={alt ?? ""}
+      data-zoom-flip
       aria-label={alt ? `Enlarge image: ${alt}` : "Enlarge image"}
     >
       <picture>
