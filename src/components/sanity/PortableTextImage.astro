@@ -5,7 +5,7 @@ import {
   zoomImageUrl,
 } from "@/sanity/lib/url-for-image";
 
-const { asset, alt } = Astro.props.node;
+const { asset, alt, caption } = Astro.props.node;
 
 // A Portable Text image block can exist before its asset is uploaded (e.g. while
 // editing a draft in the Studio with preview on), leaving `asset` undefined.
@@ -17,29 +17,37 @@ const zoomUrl = asset ? zoomImageUrl(asset) : null;
 // Intrinsic size (parsed from the asset ref) reserves layout space so body
 // images don't shift the article as they decode.
 const size = imageDimensions(asset);
+
+// Captioned images use the centre fade, not the thumbnail-expand FLIP — a caption
+// changes the final geometry the FLIP measures against.
+const flipAttr = caption ? undefined : "";
 ---
 
 {
   url && (
-    <button
-      type="button"
-      class="zoomable-image"
-      data-zoom-src={zoomUrl}
-      data-zoom-alt={alt ?? ""}
-      data-zoom-flip
-      aria-label={alt ? `Enlarge image: ${alt}` : "Enlarge image"}
-    >
-      <picture>
-        <source srcset={webpUrl} type="image/webp" />
-        <img
-          src={url}
-          alt={alt}
-          width={size?.width}
-          height={size?.height}
-          loading="lazy"
-          decoding="async"
-        />
-      </picture>
-    </button>
+    <figure class="zoomable-figure">
+      <button
+        type="button"
+        class="zoomable-image"
+        data-zoom-src={zoomUrl}
+        data-zoom-alt={alt ?? ""}
+        data-zoom-caption={caption ?? undefined}
+        data-zoom-flip={flipAttr}
+        aria-label={alt ? `Enlarge image: ${alt}` : "Enlarge image"}
+      >
+        <picture>
+          <source srcset={webpUrl} type="image/webp" />
+          <img
+            src={url}
+            alt={alt}
+            width={size?.width}
+            height={size?.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </button>
+      {caption && <figcaption>{caption}</figcaption>}
+    </figure>
   )
 }

@@ -944,6 +944,36 @@ html.dark {
     }
   }
 
+  /* With a caption, stack image + caption as one centred group (the image shrinks
+     via min-height:0 so the caption always fits) rather than centring the image
+     alone and leaving the caption stranded at the foot of the viewport. */
+  .image-zoom-dialog.has-caption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 0.875rem;
+  }
+
+  .image-zoom-dialog.has-caption .image-zoom-dialog__img {
+    min-height: 0;
+  }
+
+  .image-zoom-dialog__caption {
+    display: none;
+    margin: 0;
+    max-inline-size: 60ch;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: center;
+    text-wrap: pretty;
+  }
+
+  .image-zoom-dialog.has-caption .image-zoom-dialog__caption {
+    display: block;
+  }
+
   .image-zoom-dialog__close {
     position: fixed;
     inset-block-start: max(1rem, env(safe-area-inset-top));
@@ -1102,6 +1132,20 @@ html.dark {
    by Typography's own `picture > img` reset.) */
 .prose .zoomable-image picture {
   margin: 0;
+}
+
+/* Body images are wrapped in <figure>. Typography already gives the figure a 2em
+   block margin and zeroes its children (`figure > *`), so the wrapper owns the
+   image's spacing and the trigger's own margin stands down — no override needed
+   there. Only the caption is restyled (un-layered to beat Typography's default
+   figcaption). */
+.prose .zoomable-figure figcaption {
+  margin-block: 0.75rem 0;
+  color: var(--color-foreground-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: pretty;
 }
 
 /* TOC traveling indicator — an ink bar in the left gutter that slides between

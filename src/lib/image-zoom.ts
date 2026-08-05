@@ -23,6 +23,7 @@ const EASE = "cubic-bezier(0.23, 1, 0.32, 1)";
 
 let dialog: HTMLDialogElement | null = null;
 let dialogImg: HTMLImageElement | null = null;
+let dialogCaption: HTMLElement | null = null;
 let initialized = false;
 
 // The thumbnail the current zoom grew from (hidden while open so there's only
@@ -52,9 +53,11 @@ function ensureDialog(): HTMLDialogElement {
   dialog.className = "image-zoom-dialog";
   dialog.innerHTML = `
     <img class="image-zoom-dialog__img" alt="" decoding="async" />
+    <p class="image-zoom-dialog__caption"></p>
     <button type="button" class="image-zoom-dialog__close" aria-label="Close">${CLOSE_ICON}</button>
   `;
   dialogImg = dialog.querySelector("img");
+  dialogCaption = dialog.querySelector(".image-zoom-dialog__caption");
 
   // A click on the dialog itself (the area around the image) reads as a click on
   // the backdrop — close on it.
@@ -122,6 +125,10 @@ function openZoom(trigger: HTMLElement): void {
   active.dataset.pendingSrc = src;
   dialogImg!.src = thumb?.currentSrc || thumb?.src || src;
   dialogImg!.alt = trigger.getAttribute("data-zoom-alt") ?? "";
+
+  const caption = trigger.getAttribute("data-zoom-caption") ?? "";
+  dialogCaption!.textContent = caption;
+  active.classList.toggle("has-caption", caption.length > 0);
 
   document.documentElement.style.overflow = "hidden";
 
@@ -208,7 +215,7 @@ function requestClose(): void {
 function cleanupAfterClose(): void {
   const active = dialog!;
   document.documentElement.style.overflow = "";
-  active.classList.remove("is-closing");
+  active.classList.remove("is-closing", "has-caption");
   active.style.transition = "";
   currentAnim?.cancel();
   currentAnim = null;
