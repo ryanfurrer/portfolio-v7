@@ -45,6 +45,12 @@ export const blockContentType = defineType({
           type: 'string',
           title: 'Alt Text',
         }),
+        defineField({
+          name: 'caption',
+          type: 'string',
+          title: 'Caption',
+          description: 'Shown beneath the image and in the zoom view. Leave blank for none.',
+        }),
       ],
     }),
     defineArrayMember({type: 'youtube'}),

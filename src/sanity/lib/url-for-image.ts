@@ -13,6 +13,8 @@ export function urlForImage(source: SanityImageSource) {
 export interface ResponsiveImage {
   src: string;
   srcset: string;
+  /** Uncropped hi-res variant for click-to-zoom (the header `src` is cropped). */
+  zoomSrc: string;
 }
 
 const articleHeaderWidths = [640, 960, 1280, 1600];
@@ -36,7 +38,18 @@ export function articleHeaderImage(source: SanityImageSource): ResponsiveImage {
     srcset: articleHeaderWidths
       .map((width) => `${urlAtWidth(width)} ${width}w`)
       .join(", "),
+    // Zoom reveals the whole photo, so drop the 550/310 crop and serve wide.
+    zoomSrc: zoomImageUrl(source),
   };
+}
+
+/**
+ * Enlarged variant for click-to-zoom: wide enough to reward filling the screen
+ * on high-density displays, but `fit("max")` caps it at the source so we never
+ * upscale. Fetched only when the reader opens the lightbox.
+ */
+export function zoomImageUrl(source: SanityImageSource): string {
+  return urlForImage(source).width(2000).fit("max").auto("format").url();
 }
 
 // A Sanity image asset `_ref` encodes its intrinsic size, e.g.
