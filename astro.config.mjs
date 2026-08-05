@@ -51,7 +51,7 @@ if (wantsDrafts && !readToken) {
   );
 }
 
-// The design system reference page ships to the dev server only — its route is
+// The brand / design-system page ships to the dev server only — its route is
 // injected here when the Astro command is `dev`, so production builds never
 // emit it (no page, no sitemap entry, no OG card). The source lives outside the
 // routed tree in src/pages/_dev/ (underscore dir → ignored by file routing).
@@ -62,8 +62,8 @@ const devOnlyPages = {
     "astro:config:setup": ({ command, injectRoute }) => {
       if (command !== "dev") return;
       injectRoute({
-        pattern: "/design",
-        entrypoint: "./src/pages/_dev/design.astro",
+        pattern: "/brand",
+        entrypoint: "./src/pages/_dev/brand.astro",
       });
     },
   },

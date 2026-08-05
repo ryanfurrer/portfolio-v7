@@ -1,0 +1,32 @@
+---
+interface Props {
+  class?: string;
+  title?: string;
+  // Decorative instances (repeated specimens) drop the label so screen readers
+  // don't announce "Ryan Furrer" once per swatch.
+  decorative?: boolean;
+}
+
+const { class: className, title = "Ryan Furrer", decorative = false } =
+  Astro.props;
+---
+
+<svg
+  viewBox="0 0 4167 4167"
+  class={className}
+  fill="none"
+  stroke-width="208.33"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role={decorative ? undefined : "img"}
+  aria-label={decorative ? undefined : title}
+  aria-hidden={decorative ? "true" : undefined}
+>
+  <circle cx="2083.33" cy="2083.33" r="1875"></circle>
+  <path
+    d="M3409.16,757.508c365.871,365.872 68.83,1257 -662.913,1988.74c-731.743,731.743 -1622.87,1028.78 -1988.74,662.913c-365.871,-365.872 -68.83,-1257 662.913,-1988.74c731.743,-731.743 1622.87,-1028.78 1988.74,-662.913Z"
+  ></path>
+  <path
+    d="M757.508,757.508c365.872,-365.871 1257,-68.83 1988.74,662.913c731.743,731.743 1028.78,1622.87 662.913,1988.74c-365.872,365.871 -1257,68.83 -1988.74,-662.913c-731.743,-731.743 -1028.78,-1622.87 -662.913,-1988.74Z"
+  ></path>
+</svg>

@@ -1,4 +1,5 @@
 ---
+import AtomMark from "@/components/AtomMark.astro";
 import Callout from "@/components/Callout.astro";
 import CtaLink from "@/components/CtaLink.astro";
 import Item from "@/components/Item.astro";
@@ -10,16 +11,18 @@ import Layout from "@/layouts/Layout.astro";
 // Dev-only page (injected in astro.config only when `command === "dev"`), so it
 // carries its own copy rather than a public SECTION_META entry, and skips the
 // OG card that the section generator would otherwise emit.
-const title = "Design System";
+const title = "Brand";
 const description =
-  "The tokens, type, and components this site is built from — one reserved accent and a lot of restraint.";
+  "The identity this site is built from — one reserved accent, a restrained type system, and the components behind every page.";
 
 // Hand-authored outline — the ids below must match each section's heading id so
 // the scroll-spy ToC (which observes them) tracks correctly.
 const headings = [
   { id: "principles", text: "Principles", level: 2 },
+  { id: "mark", text: "Mark", level: 2 },
   { id: "color", text: "Color", level: 2 },
   { id: "typography", text: "Typography", level: 2 },
+  { id: "voice", text: "Voice", level: 2 },
   { id: "elevation", text: "Elevation & surfaces", level: 2 },
   { id: "radius", text: "Radius", level: 2 },
   { id: "motion", text: "Motion", level: 2 },
@@ -60,6 +63,13 @@ const easings = [
   { name: "ease-ios", curve: "cubic-bezier(0.23, 1, 0.32, 1)", use: "Overlays and drawers — a slower settle." },
 ];
 
+const voice = [
+  { trait: "Plainspoken", note: "Say the true thing simply. Jargon has to earn its place." },
+  { trait: "Craft-forward", note: "The details are the story — show the care, not the process." },
+  { trait: "Warm, first-person", note: "A person, not a brand. Written the way I'd say it out loud." },
+  { trait: "Considered", note: "Restraint in words as in pixels — cut until only the clear part is left." },
+];
+
 const sampleCode = `// One pseudo-element per list follows the hovered row.
 const { top, height } = row.getBoundingClientRect();
 list.style.setProperty("--dir-hover-y", \`\${top}px\`);
@@ -80,13 +90,14 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       </h1>
       <p class="lead max-w-[52ch]" data-reveal>{description}</p>
       <p class="max-w-[60ch] text-pretty" data-reveal>
-        This page renders from the same tokens and components as the rest of the
-        site — the swatches read their values live, so it can’t drift. Flip the
-        theme in the header to watch every value resolve for dark mode.
+        The top half is the brand — the mark, the colour, the type, the voice.
+        Below it is the system those choices produce. Every swatch reads its
+        value live from the cascade, so nothing here can drift; flip the theme in
+        the header to watch each one resolve for dark mode.
       </p>
     </header>
 
-    <!-- ── Principles ─────────────────────────────────────────────────── -->
+    <!-- ── Principles (ethos) ─────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="principles">
       <h2 id="principles" class="text-2xl text-foreground">Principles</h2>
       <ul class="space-y-3 text-pretty" role="list">
@@ -115,9 +126,99 @@ Two easing curves, one radius scale, a small type system. Impact is
       </ul>
     </section>
 
-    <!-- ── Color ──────────────────────────────────────────────────────── -->
+    <!-- ═══ Brand tier ════════════════════════════════════════════════ -->
+    <div class="flex items-center gap-4" aria-hidden="true">
+      <span class="small-heading">Brand</span>
+      <span class="h-px flex-1 bg-border"></span>
+    </div>
+
+    <!-- ── 001 Mark ───────────────────────────────────────────────────── -->
+    <section class="space-y-5" data-reveal aria-labelledby="mark">
+      <h2 id="mark" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">001</span>
+        Mark
+      </h2>
+      <p class="max-w-[60ch] text-pretty">
+        An atom — a nucleus with two orbits — drawn in a single stroke weight. It
+        points at the one thing my initials, my signature, and this mark all
+        stand for: the person making the work. Reproduce it in one colour —
+        viridian, or neutral ink where the accent would compete.
+      </p>
+
+      <div class="grid gap-4 sm:grid-cols-3">
+        <figure class="space-y-2">
+          <div class="relative grid aspect-square place-items-center rounded-lg bg-surface [box-shadow:inset_0_0_0_1px_var(--border)]">
+            <span class="absolute inset-[22%] rounded-sm border border-dashed border-border" aria-hidden="true"></span>
+            <AtomMark class="size-16 stroke-brand" decorative />
+          </div>
+          <figcaption class="text-sm text-pretty text-foreground-muted">
+            <span class="font-medium text-foreground">Clear space.</span> Keep open
+            space around the mark at least half its height on every side.
+          </figcaption>
+        </figure>
+
+        <figure class="space-y-2">
+          <div class="grid aspect-square place-items-center rounded-lg bg-surface [box-shadow:inset_0_0_0_1px_var(--border)]">
+            <div class="flex items-end gap-4">
+              <AtomMark class="size-8 stroke-foreground" decorative />
+              <AtomMark class="size-4 stroke-foreground" decorative />
+            </div>
+          </div>
+          <figcaption class="text-sm text-pretty text-foreground-muted">
+            <span class="font-medium text-foreground">Minimum 16px.</span> Any
+            smaller and the orbits blur into the nucleus.
+          </figcaption>
+        </figure>
+
+        <figure class="space-y-2">
+          <!-- Fixed dark tile + dark-mode viridian (#44b98e), so the reversed
+               treatment reads the same regardless of the page's active theme.
+               Ring is 20% white so the tile stays framed even in dark mode,
+               where its fill matches the page canvas. -->
+          <div class="grid aspect-square place-items-center rounded-lg bg-[#0e0e0e] [box-shadow:inset_0_0_0_1px_#ffffff33]">
+            <AtomMark class="size-16 stroke-[#44b98e]" decorative />
+          </div>
+          <figcaption class="text-sm text-pretty text-foreground-muted">
+            <span class="font-medium text-foreground">On dark.</span> Switch to the
+            dark-mode viridian so it holds contrast on near-black.
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <a
+          href="/brand/ryan-furrer-mark.svg"
+          download
+          class="inline-flex items-center gap-2 rounded-md bg-surface px-3 py-1.5 text-sm font-medium text-foreground transition-colors [box-shadow:inset_0_0_0_1px_var(--border)] hover:bg-surface-hover"
+        >
+          <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11" />
+          </svg>
+          Download SVG
+        </a>
+        <p class="font-mono-custom text-xs text-foreground-subtle">
+          single stroke · viridian · scales to any size
+        </p>
+      </div>
+
+      <dl class="grid gap-4 sm:grid-cols-2">
+        <div class="rounded-lg bg-surface p-4 [box-shadow:inset_0_0_0_1px_var(--border)]">
+          <dt class="text-xs font-semibold uppercase tracking-wide text-brand-strong">Do</dt>
+          <dd class="mt-1 text-sm text-pretty">Keep it one colour, give it room, and let the stroke weight breathe.</dd>
+        </div>
+        <div class="rounded-lg bg-surface p-4 [box-shadow:inset_0_0_0_1px_var(--border)]">
+          <dt class="text-xs font-semibold uppercase tracking-wide text-foreground-subtle">Don't</dt>
+          <dd class="mt-1 text-sm text-pretty">Recolour it per background, stretch it, or add shadows and gradients.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ── 002 Color ──────────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="color">
-      <h2 id="color" class="text-2xl text-foreground">Color</h2>
+      <h2 id="color" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">002</span>
+        Color
+      </h2>
       <p class="text-pretty">
         Values below are read live from the cascade with
         <code class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
@@ -170,9 +271,12 @@ Two easing curves, one radius scale, a small type system. Impact is
       </ul>
     </section>
 
-    <!-- ── Typography ─────────────────────────────────────────────────── -->
+    <!-- ── 003 Typography ─────────────────────────────────────────────── -->
     <section class="space-y-6" data-reveal aria-labelledby="typography">
-      <h2 id="typography" class="text-2xl text-foreground">Typography</h2>
+      <h2 id="typography" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">003</span>
+        Typography
+      </h2>
 
       <div class="space-y-5">
         <div>
@@ -242,9 +346,40 @@ Two easing curves, one radius scale, a small type system. Impact is
       </dl>
     </section>
 
-    <!-- ── Elevation ──────────────────────────────────────────────────── -->
+    <!-- ── 004 Voice ──────────────────────────────────────────────────── -->
+    <section class="space-y-4" data-reveal aria-labelledby="voice">
+      <h2 id="voice" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">004</span>
+        Voice
+      </h2>
+      <p class="max-w-[60ch] text-pretty">
+        The same restraint as the pixels, applied to words. When I write — here,
+        in a post, in a UI label — it should sound like this.
+      </p>
+      <dl class="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+        {
+          voice.map((v) => (
+            <div class="border-t border-border pt-3">
+              <dt class="font-medium text-foreground">{v.trait}</dt>
+              <dd class="mt-0.5 text-sm text-pretty">{v.note}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- ═══ System tier ═══════════════════════════════════════════════ -->
+    <div class="flex items-center gap-4" aria-hidden="true">
+      <span class="small-heading">System</span>
+      <span class="h-px flex-1 bg-border"></span>
+    </div>
+
+    <!-- ── 005 Elevation ──────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="elevation">
-      <h2 id="elevation" class="text-2xl text-foreground">Elevation &amp; surfaces</h2>
+      <h2 id="elevation" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">005</span>
+        Elevation &amp; surfaces
+      </h2>
       <p class="text-pretty">
         Hover the raised card — it physically lifts on hover-capable pointers.
       </p>
@@ -267,9 +402,12 @@ Two easing curves, one radius scale, a small type system. Impact is
       </div>
     </section>
 
-    <!-- ── Radius ─────────────────────────────────────────────────────── -->
+    <!-- ── 006 Radius ─────────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="radius">
-      <h2 id="radius" class="text-2xl text-foreground">Radius</h2>
+      <h2 id="radius" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">006</span>
+        Radius
+      </h2>
       <p class="text-pretty">
         Every step derives from <code
           class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
@@ -299,9 +437,12 @@ Two easing curves, one radius scale, a small type system. Impact is
       </ul>
     </section>
 
-    <!-- ── Motion ─────────────────────────────────────────────────────── -->
+    <!-- ── 007 Motion ─────────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="motion">
-      <h2 id="motion" class="text-2xl text-foreground">Motion</h2>
+      <h2 id="motion" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">007</span>
+        Motion
+      </h2>
       <p class="text-pretty">
         Two curves only. Hover the demo to compare the settle; durations stay as
         Tailwind utilities (150ms micro, 200ms highlight, 250–300ms overlays).
@@ -324,9 +465,12 @@ Two easing curves, one radius scale, a small type system. Impact is
       </div>
     </section>
 
-    <!-- ── Components ─────────────────────────────────────────────────── -->
+    <!-- ── 008 Components ─────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="components">
-      <h2 id="components" class="text-2xl text-foreground">Components</h2>
+      <h2 id="components" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">008</span>
+        Components
+      </h2>
 
       <h3 id="links" class="text-lg font-semibold text-foreground">Links &amp; CTAs</h3>
       <p class="text-pretty">
@@ -398,9 +542,12 @@ Two easing curves, one radius scale, a small type system. Impact is
       </div>
     </section>
 
-    <!-- ── Accessibility ──────────────────────────────────────────────── -->
+    <!-- ── 009 Accessibility ──────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="accessibility">
-      <h2 id="accessibility" class="text-2xl text-foreground">Accessibility</h2>
+      <h2 id="accessibility" class="flex items-baseline gap-3 text-2xl text-foreground">
+        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">009</span>
+        Accessibility
+      </h2>
       <p class="text-pretty">
         Every surface targets WCAG 2.1 AA. The system adapts to OS preferences:
       </p>

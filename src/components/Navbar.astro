@@ -1,4 +1,5 @@
 ---
+import AtomMark from "@/components/AtomMark.astro";
 import MobileNav from "@/components/MobileNav";
 import ModeToggle from "@/components/ModeToggle";
 import NavMenu from "@/components/NavMenu";
@@ -42,24 +43,7 @@ const isActive = (href: string) =>
       name="go to home page"
       class="block rounded-full"
     >
-      <svg
-        viewBox="0 0 4167 4167"
-        class="size-8 stroke-brand"
-        role="img"
-        aria-label="Ryan Furrer"
-        fill="none"
-        stroke-width="208.33"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="2083.33" cy="2083.33" r="1875"></circle>
-        <path
-          d="M3409.16,757.508c365.871,365.872 68.83,1257 -662.913,1988.74c-731.743,731.743 -1622.87,1028.78 -1988.74,662.913c-365.871,-365.872 -68.83,-1257 662.913,-1988.74c731.743,-731.743 1622.87,-1028.78 1988.74,-662.913Z"
-        ></path>
-        <path
-          d="M757.508,757.508c365.872,-365.871 1257,-68.83 1988.74,662.913c731.743,731.743 1028.78,1622.87 662.913,1988.74c-365.872,365.871 -1257,68.83 -1988.74,-662.913c-731.743,-731.743 -1028.78,-1622.87 -662.913,-1988.74Z"
-        ></path>
-      </svg>
+      <AtomMark class="size-8 stroke-brand" />
     </a>
     <div class="hidden items-center gap-1 sm:flex">
       <ul class="flex items-center gap-1 text-sm" role="list">
