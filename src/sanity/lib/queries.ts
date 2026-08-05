@@ -22,18 +22,10 @@ export const APPEARANCES_QUERY = defineQuery(
   `*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}`,
 );
 
-// --- Home page (latest three of each) ---
+// --- Home page (latest ten across every content type) ---
 
-export const LATEST_POSTS_QUERY = defineQuery(
-  `*[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}`,
-);
-
-export const LATEST_PROJECTS_QUERY = defineQuery(
-  `*[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}`,
-);
-
-export const LATEST_APPEARANCES_QUERY = defineQuery(
-  `*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}`,
+export const LATEST_ITEMS_QUERY = defineQuery(
+  `*[_type in ["post", "project", "appearance"] && defined(slug.current) && defined(publishedAt)]|order(publishedAt desc)[0...10]{_id, _type, title, slug}`,
 );
 
 // --- Links page (single latest of each) ---

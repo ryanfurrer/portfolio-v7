@@ -459,34 +459,28 @@ export type APPEARANCES_QUERY_RESULT = Array<{
 }>;
 
 // Source: src/sanity/lib/queries.ts
-// Variable: LATEST_POSTS_QUERY
-// Query: *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}
-export type LATEST_POSTS_QUERY_RESULT = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  publishedAt: string | null;
-}>;
-
-// Source: src/sanity/lib/queries.ts
-// Variable: LATEST_PROJECTS_QUERY
-// Query: *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}
-export type LATEST_PROJECTS_QUERY_RESULT = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  publishedAt: string | null;
-}>;
-
-// Source: src/sanity/lib/queries.ts
-// Variable: LATEST_APPEARANCES_QUERY
-// Query: *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}
-export type LATEST_APPEARANCES_QUERY_RESULT = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  publishedAt: string | null;
-}>;
+// Variable: LATEST_ITEMS_QUERY
+// Query: *[_type in ["post", "project", "appearance"] && defined(slug.current) && defined(publishedAt)]|order(publishedAt desc)[0...10]{_id, _type, title, slug}
+export type LATEST_ITEMS_QUERY_RESULT = Array<
+  | {
+      _id: string;
+      _type: "appearance";
+      title: string | null;
+      slug: Slug | null;
+    }
+  | {
+      _id: string;
+      _type: "post";
+      title: string | null;
+      slug: Slug | null;
+    }
+  | {
+      _id: string;
+      _type: "project";
+      title: string | null;
+      slug: Slug | null;
+    }
+>;
 
 // Source: src/sanity/lib/queries.ts
 // Variable: LINKS_LATEST_QUERY
@@ -723,9 +717,7 @@ declare module "@sanity/client" {
     '*[_type == "post" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}': POSTS_QUERY_RESULT;
     '*[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt, "company": company->{name, "slug": slug.current}}': PROJECTS_QUERY_RESULT;
     '*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}': APPEARANCES_QUERY_RESULT;
-    '*[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_POSTS_QUERY_RESULT;
-    '*[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_PROJECTS_QUERY_RESULT;
-    '*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0...3]{_id, title, slug, publishedAt}': LATEST_APPEARANCES_QUERY_RESULT;
+    '*[_type in ["post", "project", "appearance"] && defined(slug.current) && defined(publishedAt)]|order(publishedAt desc)[0...10]{_id, _type, title, slug}': LATEST_ITEMS_QUERY_RESULT;
     '{\n  "post": *[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug},\n  "project": *[_type == "project" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug},\n  "appearance": *[_type == "appearance" && defined(slug.current)]|order(publishedAt desc)[0]{_id, title, slug}\n}': LINKS_LATEST_QUERY_RESULT;
     '*[_type == "post" && slug.current == $slug][0]': POST_QUERY_RESULT;
     '*[_type == "project" && slug.current == $slug][0]{\n    ...,\n    "company": company->{name, "slug": slug.current}\n  }': PROJECT_QUERY_RESULT;

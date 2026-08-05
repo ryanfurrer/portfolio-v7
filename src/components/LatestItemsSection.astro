@@ -1,21 +1,31 @@
 ---
 import Item from "./Item.astro";
-import CtaLink from "./CtaLink.astro";
 
 interface LatestItem {
   _id: string;
+  _type: "post" | "project" | "appearance";
   title: string | null;
   slug: { current?: string } | null;
-  publishedAt: string | null;
 }
 
 interface Props {
   title: string;
   items: LatestItem[];
-  basePath: string;
 }
 
-const { title, items, basePath } = Astro.props;
+const { title, items } = Astro.props;
+
+const categoryByType: Record<LatestItem["_type"], string> = {
+  post: "Writing",
+  project: "Work",
+  appearance: "Appearances",
+};
+
+const basePathByType: Record<LatestItem["_type"], string> = {
+  post: "/writing",
+  project: "/work",
+  appearance: "/appearances",
+};
 ---
 
 <section class="space-y-2">
@@ -28,14 +38,17 @@ const { title, items, basePath } = Astro.props;
         <li>
           <Item
             title={item.title}
-            href={`${basePath}/${item.slug?.current}`}
-            publishedAt={item.publishedAt}
-          />
+            href={`${basePathByType[item._type]}/${item.slug?.current}`}
+          >
+            <p
+              slot="trailing"
+              class="small-heading transition-colors can-hover:group-hover/item:text-foreground"
+            >
+              {categoryByType[item._type]}
+            </p>
+          </Item>
         </li>
       ))
     }
   </ul>
-  <div data-reveal>
-    <CtaLink href={`${basePath}`}>View all</CtaLink>
-  </div>
 </section>
