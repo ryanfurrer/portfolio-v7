@@ -46,7 +46,7 @@ const coreTokens = [
 
 // The one reserved hue + the semantic tokens.
 const accentTokens = [
-  { token: "--brand", label: "Viridian — brand", util: "text-brand", note: "Logo, signature, selection. Personality only." },
+  { token: "--brand", label: "Viridian — brand", util: "text-brand", note: "Logo and text selection. Personality only." },
   { token: "--brand-strong", label: "Viridian — AA text", util: "text-brand-strong", note: "Brand-coloured text that clears 4.5:1." },
   { token: "--primary", label: "Primary", util: "bg-primary", note: "Inverse ink fill — active nav, buttons." },
   { token: "--ring", label: "Focus ring", util: "ring-ring", note: "Keyboard focus — neutral gray." },
@@ -93,8 +93,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         <li>
           <strong class="font-semibold text-foreground">One reserved accent.</strong>{" "}
 The system is neutral grayscale ink on an off-white canvas. A single
-          viridian hue carries personality — the logo, the signature, text
-          selection — and never does load-bearing work.
+          viridian hue carries personality — the logo and text selection — and
+          never does load-bearing work.
         </li>
         <li>
           <strong class="font-semibold text-foreground">Ink is the interaction colour.</strong>{" "}
@@ -190,7 +190,7 @@ Two easing curves, one radius scale, a small type system. Impact is
           </p>
         </div>
         <div>
-          <p class="font-cursive text-4xl text-brand">-Ryan</p>
+          <p class="font-cursive text-4xl text-foreground">-Ryan</p>
           <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">
             font-cursive · Permanent Marker · signature only
           </p>
