@@ -59,7 +59,7 @@ export default function Presence() {
     : false;
 
   return (
-    <div className="font-mono-custom inline-flex items-center gap-2 text-foreground-muted">
+    <div className="font-mono-custom inline-flex items-center gap-2 text-muted-foreground">
       <span className="relative flex size-2" aria-hidden="true">
         {now && online && (
           <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500/70 motion-reduce:hidden" />
@@ -69,8 +69,8 @@ export default function Presence() {
             now
               ? online
                 ? "bg-emerald-500"
-                : "bg-foreground-subtle"
-              : "bg-foreground-subtle/50"
+                : "bg-muted-foreground"
+              : "bg-muted-foreground/50"
           }`}
         />
       </span>
@@ -81,7 +81,7 @@ export default function Presence() {
         ) : (
           // Same-width placeholder (tabular-nums: "--:--" === "21:05") so the
           // time appearing on mount doesn't shift the navbar layout (no CLS).
-          <span className="text-foreground-subtle/50">--:--</span>
+          <span className="text-muted-foreground/50">--:--</span>
         )}
       </span>
       <span className="sr-only">

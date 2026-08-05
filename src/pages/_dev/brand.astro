@@ -41,8 +41,7 @@ const coreTokens = [
   { token: "--surface", label: "Surface", util: "bg-surface", note: "Recessed well — inline code, hovers." },
   { token: "--surface-hover", label: "Surface hover", util: "bg-surface-hover", note: "The well, one step deeper." },
   { token: "--foreground", label: "Ink — primary", util: "text-foreground", note: "Headings and key copy." },
-  { token: "--foreground-muted", label: "Ink — muted", util: "text-foreground-muted", note: "Body and descriptions." },
-  { token: "--foreground-subtle", label: "Ink — subtle", util: "text-foreground-subtle", note: "Captions, meta, dates." },
+  { token: "--muted-foreground", label: "Ink — quiet", util: "text-muted-foreground", note: "Body, descriptions, captions, meta — one quiet tone." },
   { token: "--badge", label: "Badge", util: "bg-badge", note: "Neutral metadata pill." },
   { token: "--border", label: "Border", util: "border-border", note: "Hairline — opacity-based per surface." },
 ];
@@ -135,7 +134,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 001 Mark ───────────────────────────────────────────────────── -->
     <section class="space-y-5" data-reveal aria-labelledby="mark">
       <h2 id="mark" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">001</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">001</span>
         Mark
       </h2>
       <p class="max-w-[60ch] text-pretty">
@@ -151,7 +150,7 @@ Two easing curves, one radius scale, a small type system. Impact is
             <span class="absolute inset-[22%] rounded-sm border border-dashed border-border" aria-hidden="true"></span>
             <AtomMark class="size-16 stroke-brand" decorative />
           </div>
-          <figcaption class="text-sm text-pretty text-foreground-muted">
+          <figcaption class="text-sm text-pretty text-muted-foreground">
             <span class="font-medium text-foreground">Clear space.</span> Keep open
             space around the mark at least half its height on every side.
           </figcaption>
@@ -164,7 +163,7 @@ Two easing curves, one radius scale, a small type system. Impact is
               <AtomMark class="size-4 stroke-foreground" decorative />
             </div>
           </div>
-          <figcaption class="text-sm text-pretty text-foreground-muted">
+          <figcaption class="text-sm text-pretty text-muted-foreground">
             <span class="font-medium text-foreground">Minimum 16px.</span> Any
             smaller and the orbits blur into the nucleus.
           </figcaption>
@@ -178,7 +177,7 @@ Two easing curves, one radius scale, a small type system. Impact is
           <div class="grid aspect-square place-items-center rounded-lg bg-[#0e0e0e] [box-shadow:inset_0_0_0_1px_#ffffff33]">
             <AtomMark class="size-16 stroke-[#44b98e]" decorative />
           </div>
-          <figcaption class="text-sm text-pretty text-foreground-muted">
+          <figcaption class="text-sm text-pretty text-muted-foreground">
             <span class="font-medium text-foreground">On dark.</span> Switch to the
             dark-mode viridian so it holds contrast on near-black.
           </figcaption>
@@ -196,7 +195,7 @@ Two easing curves, one radius scale, a small type system. Impact is
           </svg>
           Download SVG
         </a>
-        <p class="font-mono-custom text-xs text-foreground-subtle">
+        <p class="font-mono-custom text-xs text-muted-foreground">
           single stroke · viridian · scales to any size
         </p>
       </div>
@@ -207,7 +206,7 @@ Two easing curves, one radius scale, a small type system. Impact is
           <dd class="mt-1 text-sm text-pretty">Keep it one colour, give it room, and let the stroke weight breathe.</dd>
         </div>
         <div class="rounded-lg bg-surface p-4 [box-shadow:inset_0_0_0_1px_var(--border)]">
-          <dt class="text-xs font-semibold uppercase tracking-wide text-foreground-subtle">Don't</dt>
+          <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Don't</dt>
           <dd class="mt-1 text-sm text-pretty">Recolour it per background, stretch it, or add shadows and gradients.</dd>
         </div>
       </dl>
@@ -216,7 +215,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 002 Color ──────────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="color">
       <h2 id="color" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">002</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">002</span>
         Color
       </h2>
       <p class="text-pretty">
@@ -238,7 +237,7 @@ Two easing curves, one radius scale, a small type system. Impact is
               />
               <div class="min-w-0">
                 <p class="font-medium text-foreground">{t.label}</p>
-                <p class="font-mono-custom text-xs text-foreground-subtle">
+                <p class="font-mono-custom text-xs text-muted-foreground">
                   {t.util} · <span data-token={t.token}>…</span>
                 </p>
                 <p class="mt-0.5 text-sm text-pretty">{t.note}</p>
@@ -260,7 +259,7 @@ Two easing curves, one radius scale, a small type system. Impact is
               />
               <div class="min-w-0">
                 <p class="font-medium text-foreground">{t.label}</p>
-                <p class="font-mono-custom text-xs text-foreground-subtle">
+                <p class="font-mono-custom text-xs text-muted-foreground">
                   {t.util} · <span data-token={t.token}>…</span>
                 </p>
                 <p class="mt-0.5 text-sm text-pretty">{t.note}</p>
@@ -274,7 +273,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 003 Typography ─────────────────────────────────────────────── -->
     <section class="space-y-6" data-reveal aria-labelledby="typography">
       <h2 id="typography" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">003</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">003</span>
         Typography
       </h2>
 
@@ -283,19 +282,19 @@ Two easing curves, one radius scale, a small type system. Impact is
           <p class="font-sans text-5xl font-extrabold tracking-[-0.03em] text-foreground">
             Geist
           </p>
-          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">
+          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">
             font-sans · display &amp; body · variable 100–900
           </p>
         </div>
         <div>
           <p class="font-mono text-4xl text-foreground">Berkeley Mono</p>
-          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">
+          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">
             font-mono · UI labels, metadata, dates
           </p>
         </div>
         <div>
           <p class="font-cursive text-4xl text-foreground">-Ryan</p>
-          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">
+          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">
             font-cursive · Permanent Marker · signature only
           </p>
         </div>
@@ -307,7 +306,7 @@ Two easing curves, one radius scale, a small type system. Impact is
           <dd class="text-3xl font-extrabold tracking-[-0.022em] text-foreground sm:text-4xl">
             Display heading
           </dd>
-          <dt class="font-mono-custom text-xs text-foreground-subtle">
+          <dt class="font-mono-custom text-xs text-muted-foreground">
             h1 · text-3xl/4xl · 800
           </dt>
         </div>
@@ -315,31 +314,31 @@ Two easing curves, one radius scale, a small type system. Impact is
           <dd class="text-2xl font-extrabold tracking-[-0.022em] text-foreground">
             Section heading
           </dd>
-          <dt class="font-mono-custom text-xs text-foreground-subtle">
+          <dt class="font-mono-custom text-xs text-muted-foreground">
             h2 · text-2xl · 800
           </dt>
         </div>
         <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
           <dd class="lead max-w-none">Standfirst / lede — the opening voice.</dd>
-          <dt class="font-mono-custom text-xs text-foreground-subtle">.lead</dt>
+          <dt class="font-mono-custom text-xs text-muted-foreground">.lead</dt>
         </div>
         <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-          <dd class="text-foreground-muted">
+          <dd class="text-muted-foreground">
             Body copy — muted ink, the default reading colour.
           </dd>
-          <dt class="font-mono-custom text-xs text-foreground-subtle">
-            p · text-foreground-muted
+          <dt class="font-mono-custom text-xs text-muted-foreground">
+            p · text-muted-foreground
           </dt>
         </div>
         <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
           <dd class="small-heading">Eyebrow label</dd>
-          <dt class="font-mono-custom text-xs text-foreground-subtle">
+          <dt class="font-mono-custom text-xs text-muted-foreground">
             .small-heading · mono
           </dt>
         </div>
         <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
           <dd class="font-mono-custom text-foreground">12.34 · tabular figures</dd>
-          <dt class="font-mono-custom text-xs text-foreground-subtle">
+          <dt class="font-mono-custom text-xs text-muted-foreground">
             .font-mono-custom
           </dt>
         </div>
@@ -349,7 +348,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 004 Voice ──────────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="voice">
       <h2 id="voice" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">004</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">004</span>
         Voice
       </h2>
       <p class="max-w-[60ch] text-pretty">
@@ -377,7 +376,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 005 Elevation ──────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="elevation">
       <h2 id="elevation" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">005</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">005</span>
         Elevation &amp; surfaces
       </h2>
       <p class="text-pretty">
@@ -386,17 +385,17 @@ Two easing curves, one radius scale, a small type system. Impact is
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div class="card-raised squircle rounded-lg p-5">
           <p class="font-medium text-foreground">Raised card</p>
-          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">.card-raised</p>
+          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">.card-raised</p>
           <p class="mt-2 text-sm text-pretty">White surface, hairline ring, hover-lift.</p>
         </div>
         <div class="rounded-lg bg-card p-5 shadow-elevated">
           <p class="font-medium text-foreground">Soft elevation</p>
-          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">shadow-elevated</p>
+          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">shadow-elevated</p>
           <p class="mt-2 text-sm text-pretty">Apple-style whisper shadow, flat in dark.</p>
         </div>
         <div class="rounded-lg bg-surface p-5 [box-shadow:inset_0_0_0_1px_var(--border)]">
           <p class="font-medium text-foreground">Recessed well</p>
-          <p class="mt-1 font-mono-custom text-xs text-foreground-subtle">bg-surface</p>
+          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">bg-surface</p>
           <p class="mt-2 text-sm text-pretty">One step below the canvas — sunken.</p>
         </div>
       </div>
@@ -405,7 +404,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 006 Radius ─────────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="radius">
       <h2 id="radius" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">006</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">006</span>
         Radius
       </h2>
       <p class="text-pretty">
@@ -428,7 +427,7 @@ Two easing curves, one radius scale, a small type system. Impact is
                 ]}
                 aria-hidden="true"
               />
-              <span class="font-mono-custom text-xs text-foreground-subtle">
+              <span class="font-mono-custom text-xs text-muted-foreground">
                 rounded-{r}
               </span>
             </li>
@@ -440,7 +439,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 007 Motion ─────────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="motion">
       <h2 id="motion" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">007</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">007</span>
         Motion
       </h2>
       <p class="text-pretty">
@@ -453,7 +452,7 @@ Two easing curves, one radius scale, a small type system. Impact is
             <div>
               <div class="mb-1.5 flex items-baseline justify-between gap-4">
                 <span class="font-medium text-foreground">{e.name}</span>
-                <span class="font-mono-custom text-xs text-foreground-subtle">{e.curve}</span>
+                <span class="font-mono-custom text-xs text-muted-foreground">{e.curve}</span>
               </div>
               <div class="flex items-center rounded-full bg-surface p-1.5 [box-shadow:inset_0_0_0_1px_var(--border)]">
                 <span class:list={["motion-dot size-6 rounded-full bg-brand", `motion-dot--${i}`]} aria-hidden="true" />
@@ -468,7 +467,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 008 Components ─────────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="components">
       <h2 id="components" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">008</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">008</span>
         Components
       </h2>
 
@@ -500,7 +499,7 @@ Two easing curves, one radius scale, a small type system. Impact is
           <Item title="A row with a trailing tag" href="/uses">
             <span
               slot="trailing"
-              class="font-mono-custom text-xs uppercase tracking-wide text-foreground-muted transition-colors can-hover:group-hover/item:text-foreground"
+              class="font-mono-custom text-xs uppercase tracking-wide text-muted-foreground transition-colors can-hover:group-hover/item:text-foreground"
               >Editor</span
             >
           </Item>
@@ -545,7 +544,7 @@ Two easing curves, one radius scale, a small type system. Impact is
     <!-- ── 009 Accessibility ──────────────────────────────────────────── -->
     <section class="space-y-4" data-reveal aria-labelledby="accessibility">
       <h2 id="accessibility" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-foreground-subtle" aria-hidden="true">009</span>
+        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">009</span>
         Accessibility
       </h2>
       <p class="text-pretty">

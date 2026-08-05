@@ -45,8 +45,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-foreground-muted: var(--foreground-muted);
-  --color-foreground-subtle: var(--foreground-subtle);
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
   --color-brand: var(--brand); /* enables text-brand / stroke-brand / etc. */
@@ -100,10 +98,11 @@
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
   --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
   --background: oklch(0.971 0 0); /* off-white canvas (≈#f5f5f7, Apple section gray) — white cards/hovers lift above it */
-  /* Apple-style neutral text hierarchy (light) */
+  /* Two-tier neutral text (Apple palette), shadcn-canonical: --foreground is
+     primary ink; --muted-foreground is every quieter role — body, descriptions,
+     captions, meta — one AA-safe quiet tone, not three. */
   --foreground: #1d1d1f; /* primary — headings & key copy (Apple near-black, not pure black) */
-  --foreground-muted: #6b6b70; /* secondary — body & descriptions (nudged slightly darker to hold ≥4.5:1 on the off-white canvas) */
-  --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
+  --muted-foreground: #6b6b70; /* quiet — body, descriptions, captions, meta; holds ≥4.5:1 on the off-white canvas */
   /* Recessed surfaces — wells, inline code, menu-item hovers (on white popovers).
      One step BELOW the canvas so they still read as sunken now that the canvas
      itself is off-white. */
@@ -120,12 +119,11 @@
   --nav-hover-shadow: var(--surface-raised-shadow);
   /* Neutral metadata pill — a touch deeper so it still reads on the gray canvas. */
   --badge: oklch(0.94 0 0);
-  --badge-foreground: var(--foreground-muted);
-  /* shadcn's on-surface text tokens are aliased to our own ink hierarchy so
-     text reads identically whether a native element or a shadcn primitive
-     renders it: *-foreground → --foreground, muted-foreground →
-     --foreground-muted. (primary/destructive-foreground stay their own
-     on-fill contrast colors.) Tweak the source tokens, not these. */
+  --badge-foreground: var(--muted-foreground);
+  /* shadcn on-surface *-foreground tokens alias the primary ink so text reads
+     identically whether a native element or a shadcn primitive renders it.
+     Quiet text uses --muted-foreground directly. (primary/destructive-foreground
+     keep their own on-fill contrast colors.) Tweak the source tokens, not these. */
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
@@ -135,7 +133,6 @@
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: var(--foreground);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: var(--foreground-muted);
   --accent: oklch(0.97 0 0);
   /* Single reserved accent — interactivity only. Neutral ink: black in light,
      white in dark (see .dark). The accent IS the foreground, not a hue. */
@@ -171,11 +168,10 @@
 .dark {
   color-scheme: dark;
   --background: oklch(0.165 0 0); /* deep near-black, ≈#0e0e0e */
-  /* Apple-style neutral text hierarchy (dark) — brighter than light's so
-     body copy stays readable against the dark field */
+  /* Two-tier neutral text (dark) — brighter than light's so quiet copy stays
+     readable against the dark field. */
   --foreground: #f5f5f7; /* primary — headings & key copy */
-  --foreground-muted: #a1a1a6; /* secondary — body & descriptions */
-  --foreground-subtle: #86868b; /* tertiary — captions, meta, timestamps */
+  --muted-foreground: #a1a1a6; /* quiet — body, descriptions, captions, meta */
   /* Neutral ink for the dark field — white where light mode is black */
   --link: var(--foreground); /* near-white ink */
   --link-hover: #fff; /* pure white — a subtle brightening on hover */
@@ -197,7 +193,7 @@
   --surface-raised: var(--surface);
   --surface-raised-shadow: none; /* --nav-hover-shadow aliases this → also none */
   --badge: oklch(0.245 0 0);
-  --badge-foreground: var(--foreground-muted);
+  --badge-foreground: var(--muted-foreground);
   --card: oklch(0.215 0 0);
   --card-foreground: var(--foreground);
   /* Soft elevation is a light-mode device; flatten it in the dark */
@@ -209,7 +205,6 @@
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: var(--foreground);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: var(--foreground-muted);
   --accent: oklch(0.269 0 0);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.704 0.191 22.216);
@@ -511,7 +506,7 @@ html.dark {
      underlined) and from navbar items (which add an active pill). Display is
      left to the call site so it works in block, flex, and inline contexts. */
   .quiet-link {
-    color: var(--color-foreground-muted);
+    color: var(--color-muted-foreground);
     text-decoration: none;
     transition-property: color;
     transition-timing-function: var(--ease-out-curve);
@@ -550,9 +545,8 @@ html.dark {
        so eyebrows and the item labels beside them read as one system. */
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    /* Muted (not subtle) so these small uppercase labels clear WCAG AA (4.5:1);
-       subtle #86868b sat at ~3.5:1 on white. */
-    color: var(--foreground-muted);
+    /* Quiet ink clears WCAG AA (4.5:1) for these small uppercase labels. */
+    color: var(--muted-foreground);
   }
 
   /* Neutral metadata pill — e.g. "Updated", year chips */
@@ -633,7 +627,7 @@ html.dark {
     margin-inline: auto;
     width: 100% !important;
     max-width: 48rem !important;
-    color: var(--color-foreground-muted) !important;
+    color: var(--color-muted-foreground) !important;
   }
 
   .prose h1,
@@ -660,7 +654,7 @@ html.dark {
     font-size: 1.2rem;
     line-height: 1.6;
     letter-spacing: -0.011em;
-    color: var(--color-foreground-muted);
+    color: var(--color-muted-foreground);
     text-wrap: pretty;
   }
 
@@ -722,7 +716,7 @@ html.dark {
   .prose blockquote {
     font-style: normal;
     border-inline-start: 2px solid var(--border);
-    color: var(--color-foreground-muted);
+    color: var(--color-muted-foreground);
   }
 
   .prose img {
@@ -895,7 +889,7 @@ nav.toc[data-toc-snap]::before {
    and keyboard focus (focus also gets the global outline ring on top). */
 :is(main, .prose) a:not(.no-underline) {
   font-weight: inherit;
-  color: var(--color-foreground-muted);
+  color: var(--color-muted-foreground);
   text-decoration: underline;
   text-decoration-color: color-mix(in oklch, var(--color-foreground) 25%, transparent);
   text-decoration-skip-ink: none;
