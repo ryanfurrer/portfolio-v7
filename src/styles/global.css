@@ -96,10 +96,14 @@
   --color-badge-foreground: var(--badge-foreground);
   --shadow-elevated:
     0 1px 2px -1px oklch(0 0 0 / 0.06), 0 6px 20px -4px oklch(0 0 0 / 0.08);
-  --font-sans: "Geist", "Inter", ui-sans-serif, sans-serif;
+  --font-sans:
+    var(--font-google-sans, "Geist"), "Inter", ui-sans-serif, sans-serif;
   --font-mono: "Berkeley Mono", ui-monospace, monospace;
   --font-cursive: "Permanent Marker", ui-cursive, cursive;
   --ease-ios: var(--ease-ios-curve);
+  --container-page: 80rem; /* overall shell/frame width — the gutters absorb the slack (max-w-page) */
+  --container-content: 44rem; /* shared reading measure — navbar, page content & prose all align to it (max-w-content) */
+  --breakpoint-rail: 74rem; /* where the gutter rail (back-link + ToC) appears; below it, content centers and ToC is a drawer */
 }
 
 :root {
@@ -108,23 +112,23 @@
   /* shadcn/ui */
   --radius: 0.375rem;
   --background: oklch(1 0 0);
-  --foreground: #1d1d1f;
-  --card: oklch(0.99 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
   --popover-foreground: var(--foreground);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: var(--foreground);
+  --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: #6b6b70; /* holds ≥4.5:1 on the canvas */
+  --muted-foreground: oklch(0.56 0 0);
   --accent: oklch(0.97 0 0);
-  --accent-foreground: var(--foreground);
+  --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0 0 0 / 0.08);
-  --input: oklch(0 0 0 / 0.12);
-  --ring: oklch(0.55 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
   /* dormant — shadcn defaults, unused until a chart/sidebar ships */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -143,8 +147,12 @@
   /* custom */
   --link: var(--foreground);
   --link-hover: #000;
-  --brand: oklch(0.64 0.135 164.8); /* viridian #00a577 — logo/signature/selection, never text */
-  --brand-strong: oklch(0.48 0.13 164.8); /* AA-safe viridian for text (--brand fails as text) */
+  --brand: oklch(
+    0.64 0.135 164.8
+  ); /* viridian #00a577 — logo/signature/selection, never text */
+  --brand-strong: oklch(
+    0.48 0.13 164.8
+  ); /* AA-safe viridian for text (--brand fails as text) */
   --surface: oklch(0.955 0 0);
   --surface-hover: oklch(0.94 0 0);
   --surface-raised: oklch(1 0 0);
@@ -163,24 +171,24 @@
   color-scheme: dark;
 
   /* shadcn/ui */
-  --background: oklch(0.165 0 0);
-  --foreground: #f5f5f7;
-  --card: oklch(0.215 0 0);
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.215 0 0);
+  --popover: oklch(0.205 0 0);
   --popover-foreground: var(--foreground);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: var(--foreground);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: #a1a1a6;
+  --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.72 0 0);
+  --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -198,7 +206,9 @@
   /* custom */
   --link: var(--foreground);
   --link-hover: #fff;
-  --brand: oklch(0.71 0.124 164.8); /* #44b98e — already AA as text on dark, so brand-strong reuses it */
+  --brand: oklch(
+    0.71 0.124 164.8
+  ); /* #44b98e — already AA as text on dark, so brand-strong reuses it */
   --brand-strong: var(--brand);
   --surface: oklch(0.215 0 0);
   --surface-hover: oklch(0.245 0 0);
@@ -284,10 +294,15 @@ html {
 }
 
 ::selection {
-  background-color: color-mix(in oklch, var(--brand) 22%, transparent);
+  background-color: color-mix(
+    in oklch,
+    var(--color-orange-500) 100%,
+    transparent
+  );
+  color: var(--color-background);
 }
-.dark ::selection {
-  background-color: color-mix(in oklch, var(--brand) 32%, transparent);
+::selection .dark {
+  background-color: color-mix(in oklch, var(--var-blue-100) 50%, transparent);
 }
 
 ::-webkit-scrollbar {
@@ -567,10 +582,6 @@ html.dark {
     white-space: nowrap;
   }
 
-  .squircle {
-    corner-shape: squircle;
-  }
-
   /* Raised card — a white surface lifted above the off-white canvas with a
      hairline ring + soft shadow (Apple "white cards on gray"). Dark mode keeps
      the flat recessed surface it already used (shadow-elevated is none there),
@@ -596,7 +607,7 @@ html.dark {
         0 16px 34px -10px oklch(0 0 0 / 0.13);
     }
   }
-  /* Focus-visible: a proper offset ring that follows the (squircle) radius, on
+  /* Focus-visible: a proper offset ring that follows the border radius, on
      top of the resting elevation — keyboard users get an unmistakable target. */
   .card-raised:focus-visible {
     outline: none;
@@ -629,7 +640,7 @@ html.dark {
   .prose {
     margin-inline: auto;
     width: 100% !important;
-    max-width: 48rem !important;
+    max-width: var(--container-content) !important;
     color: var(--color-muted-foreground) !important;
   }
 
@@ -752,6 +763,15 @@ html.dark {
     font: inherit;
     color: inherit;
     cursor: zoom-in;
+  }
+
+  /* A header image leads the article, so the button hugs the top (the mobile
+     back-link is :first-child, hidden at the rail, so Typography's first-child
+     reset lands on it, not this). Only the header image is a direct child; body
+     images nest in <figure> and keep their spacing. The inner <img>'s own 2em
+     margin is zeroed below — un-layered, to beat Typography's utilities rule. */
+  .prose > .zoomable-image {
+    margin-top: 0;
   }
 
   /* Magnifier hint in the corner. Opacity-only (movement-free) so it still fades
@@ -1082,6 +1102,14 @@ html.dark {
    to beat Typography's utilities-layer rule. (The nested <img> is already zeroed
    by Typography's own `picture > img` reset.) */
 .prose .zoomable-image picture {
+  margin: 0;
+}
+
+/* The header image is a direct <img> (no <picture>), so Typography's 2em img
+   margin (utilities layer) applies and — because the trigger <button> is its own
+   formatting context — sits inside the button, floating the image down. Zero it
+   here, un-layered to beat that rule; the button owns the block spacing. */
+.prose > .zoomable-image > img {
   margin: 0;
 }
 

@@ -44,37 +44,122 @@ const systemHeadings = [
 
 // Load-bearing neutrals — the palette that does 95% of the work.
 const coreTokens = [
-  { token: "--background", label: "Canvas", util: "bg-background", note: "Off-white page base — white cards lift above it." },
-  { token: "--card", label: "Card", util: "bg-card", note: "Raised white surface for elevated content." },
-  { token: "--surface", label: "Surface", util: "bg-surface", note: "Recessed well — inline code, hovers." },
-  { token: "--surface-hover", label: "Surface hover", util: "bg-surface-hover", note: "The well, one step deeper." },
-  { token: "--foreground", label: "Ink — primary", util: "text-foreground", note: "Headings and key copy." },
-  { token: "--muted-foreground", label: "Ink — quiet", util: "text-muted-foreground", note: "Body, descriptions, captions, meta — one quiet tone." },
-  { token: "--badge", label: "Badge", util: "bg-badge", note: "Neutral metadata pill." },
-  { token: "--border", label: "Border", util: "border-border", note: "Hairline — opacity-based per surface." },
+  {
+    token: "--background",
+    label: "Canvas",
+    util: "bg-background",
+    note: "Off-white page base — white cards lift above it.",
+  },
+  {
+    token: "--card",
+    label: "Card",
+    util: "bg-card",
+    note: "Raised white surface for elevated content.",
+  },
+  {
+    token: "--surface",
+    label: "Surface",
+    util: "bg-surface",
+    note: "Recessed well — inline code, hovers.",
+  },
+  {
+    token: "--surface-hover",
+    label: "Surface hover",
+    util: "bg-surface-hover",
+    note: "The well, one step deeper.",
+  },
+  {
+    token: "--foreground",
+    label: "Ink — primary",
+    util: "text-foreground",
+    note: "Headings and key copy.",
+  },
+  {
+    token: "--muted-foreground",
+    label: "Ink — quiet",
+    util: "text-muted-foreground",
+    note: "Body, descriptions, captions, meta — one quiet tone.",
+  },
+  {
+    token: "--badge",
+    label: "Badge",
+    util: "bg-badge",
+    note: "Neutral metadata pill.",
+  },
+  {
+    token: "--border",
+    label: "Border",
+    util: "border-border",
+    note: "Hairline — opacity-based per surface.",
+  },
 ];
 
 // The one reserved hue + the semantic tokens.
 const accentTokens = [
-  { token: "--brand", label: "Viridian — brand", util: "text-brand", note: "Logo and text selection. Personality only." },
-  { token: "--brand-strong", label: "Viridian — AA text", util: "text-brand-strong", note: "Brand-coloured text that clears 4.5:1." },
-  { token: "--primary", label: "Primary", util: "bg-primary", note: "Inverse ink fill — active nav, buttons." },
-  { token: "--ring", label: "Focus ring", util: "ring-ring", note: "Keyboard focus — neutral gray." },
-  { token: "--destructive", label: "Destructive", util: "text-destructive", note: "Errors and danger." },
+  {
+    token: "--brand",
+    label: "Viridian — brand",
+    util: "text-brand",
+    note: "Logo and text selection. Personality only.",
+  },
+  {
+    token: "--brand-strong",
+    label: "Viridian — AA text",
+    util: "text-brand-strong",
+    note: "Brand-coloured text that clears 4.5:1.",
+  },
+  {
+    token: "--primary",
+    label: "Primary",
+    util: "bg-primary",
+    note: "Inverse ink fill — active nav, buttons.",
+  },
+  {
+    token: "--ring",
+    label: "Focus ring",
+    util: "ring-ring",
+    note: "Keyboard focus — neutral gray.",
+  },
+  {
+    token: "--destructive",
+    label: "Destructive",
+    util: "text-destructive",
+    note: "Errors and danger.",
+  },
 ];
 
 const radii = ["sm", "md", "lg", "xl", "2xl", "3xl", "4xl"] as const;
 
 const easings = [
-  { name: "ease-out", curve: "cubic-bezier(0, 0, 0.2, 1)", use: "Hover / press micro-interactions." },
-  { name: "ease-ios", curve: "cubic-bezier(0.23, 1, 0.32, 1)", use: "Overlays and drawers — a slower settle." },
+  {
+    name: "ease-out",
+    curve: "cubic-bezier(0, 0, 0.2, 1)",
+    use: "Hover / press micro-interactions.",
+  },
+  {
+    name: "ease-ios",
+    curve: "cubic-bezier(0.23, 1, 0.32, 1)",
+    use: "Overlays and drawers — a slower settle.",
+  },
 ];
 
 const voice = [
-  { trait: "Plainspoken", note: "Say the true thing simply. Jargon has to earn its place." },
-  { trait: "Craft-forward", note: "The details are the story — show the care, not the process." },
-  { trait: "Warm, first-person", note: "A person, not a brand. Written the way I'd say it out loud." },
-  { trait: "Considered", note: "Restraint in words as in pixels — cut until only the clear part is left." },
+  {
+    trait: "Plainspoken",
+    note: "Say the true thing simply. Jargon has to earn its place.",
+  },
+  {
+    trait: "Craft-forward",
+    note: "The details are the story — show the care, not the process.",
+  },
+  {
+    trait: "Warm, first-person",
+    note: "A person, not a brand. Written the way I'd say it out loud.",
+  },
+  {
+    trait: "Considered",
+    note: "Restraint in words as in pixels — cut until only the clear part is left.",
+  },
 ];
 
 const sampleCode = `// One pseudo-element per list follows the hovered row.
@@ -106,536 +191,768 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       <p class="max-w-[60ch] text-pretty" data-reveal>
         The top half is the brand — the mark, the colour, the type, the voice.
         Below it is the system those choices produce. Every swatch reads its
-        value live from the cascade, so nothing here can drift; flip the theme in
-        the header to watch each one resolve for dark mode.
+        value live from the cascade, so nothing here can drift; flip the theme
+        in the header to watch each one resolve for dark mode.
       </p>
     </header>
 
     <Tabs tabs={tabs} label="Brand and design system">
       <div slot="brand" class="space-y-16">
-    <!-- ── Principles (ethos) ─────────────────────────────────────────── -->
-    <section class="space-y-4" data-reveal aria-labelledby="principles">
-      <h2 id="principles" class="text-2xl text-foreground">Principles</h2>
-      <ul class="space-y-3 text-pretty" role="list">
-        <li>
-          <strong class="font-semibold text-foreground">One reserved accent.</strong>{" "}
-The system is neutral grayscale ink on an off-white canvas. A single
-          viridian hue carries personality — the logo and text selection — and
-          never does load-bearing work.
-        </li>
-        <li>
-          <strong class="font-semibold text-foreground">Ink is the interaction colour.</strong>{" "}
-Links, active states, and fills use the foreground itself (black in
-          light, white in dark), not a hue. Emphasis comes from weight and
-          contrast, not colour.
-        </li>
-        <li>
-          <strong class="font-semibold text-foreground">Depth over borders.</strong>{" "}
-Surfaces separate with a hairline ring plus a soft shadow in light
-          mode, and a bright inset hairline in dark — rarely a solid 1px line.
-        </li>
-        <li>
-          <strong class="font-semibold text-foreground">Restraint, then whitespace.</strong>{" "}
-Two easing curves, one radius scale, a small type system. Impact is
-          bought with proportion and space, not more components.
-        </li>
-      </ul>
-    </section>
+        <!-- ── Principles (ethos) ─────────────────────────────────────────── -->
+        <section class="space-y-4" data-reveal aria-labelledby="principles">
+          <h2 id="principles" class="text-2xl text-foreground">Principles</h2>
+          <ul class="space-y-3 text-pretty" role="list">
+            <li>
+              <strong class="font-semibold text-foreground"
+                >One reserved accent.</strong
+              >{" "}
+              The system is neutral grayscale ink on an off-white canvas. A single
+              viridian hue carries personality — the logo and text selection — and
+              never does load-bearing work.
+            </li>
+            <li>
+              <strong class="font-semibold text-foreground"
+                >Ink is the interaction colour.</strong
+              >{" "}
+              Links, active states, and fills use the foreground itself (black in
+              light, white in dark), not a hue. Emphasis comes from weight and contrast,
+              not colour.
+            </li>
+            <li>
+              <strong class="font-semibold text-foreground"
+                >Depth over borders.</strong
+              >{" "}
+              Surfaces separate with a hairline ring plus a soft shadow in light mode,
+              and a bright inset hairline in dark — rarely a solid 1px line.
+            </li>
+            <li>
+              <strong class="font-semibold text-foreground"
+                >Restraint, then whitespace.</strong
+              >{" "}
+              Two easing curves, one radius scale, a small type system. Impact is
+              bought with proportion and space, not more components.
+            </li>
+          </ul>
+        </section>
 
-    <!-- ── 001 Mark ───────────────────────────────────────────────────── -->
-    <section class="space-y-5" data-reveal aria-labelledby="mark">
-      <h2 id="mark" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">001</span>
-        Mark
-      </h2>
-      <p class="max-w-[60ch] text-pretty">
-        An atom — a nucleus with two orbits — drawn in a single stroke weight. It
-        points at the one thing my initials, my signature, and this mark all
-        stand for: the person making the work. Reproduce it in one colour —
-        viridian, or neutral ink where the accent would compete.
-      </p>
+        <!-- ── 001 Mark ───────────────────────────────────────────────────── -->
+        <section class="space-y-5" data-reveal aria-labelledby="mark">
+          <h2
+            id="mark"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
+            <span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">001</span
+            >
+            Mark
+          </h2>
+          <p class="max-w-[60ch] text-pretty">
+            An atom — a nucleus with two orbits — drawn in a single stroke
+            weight. It points at the one thing my initials, my signature, and
+            this mark all stand for: the person making the work. Reproduce it in
+            one colour — viridian, or neutral ink where the accent would
+            compete.
+          </p>
 
-      <div class="grid gap-4 sm:grid-cols-3">
-        <figure class="space-y-2">
-          <div class="relative grid aspect-square place-items-center rounded-lg bg-surface [box-shadow:inset_0_0_0_1px_var(--border)]">
-            <span class="absolute inset-[22%] rounded-sm border border-dashed border-border" aria-hidden="true"></span>
-            <AtomMark class="size-16 stroke-brand" decorative />
-          </div>
-          <figcaption class="text-sm text-pretty text-muted-foreground">
-            <span class="font-medium text-foreground">Clear space.</span> Keep open
-            space around the mark at least half its height on every side.
-          </figcaption>
-        </figure>
+          <div class="grid gap-4 sm:grid-cols-3">
+            <figure class="space-y-2">
+              <div
+                class="relative grid aspect-square place-items-center rounded-lg bg-surface [box-shadow:inset_0_0_0_1px_var(--border)]"
+              >
+                <span
+                  class="absolute inset-[22%] rounded-sm border border-dashed border-border"
+                  aria-hidden="true"></span>
+                <AtomMark class="size-16 stroke-brand" decorative />
+              </div>
+              <figcaption class="text-sm text-pretty text-muted-foreground">
+                <span class="font-medium text-foreground">Clear space.</span> Keep
+                open space around the mark at least half its height on every side.
+              </figcaption>
+            </figure>
 
-        <figure class="space-y-2">
-          <div class="grid aspect-square place-items-center rounded-lg bg-surface [box-shadow:inset_0_0_0_1px_var(--border)]">
-            <div class="flex items-end gap-4">
-              <AtomMark class="size-8 stroke-foreground" decorative />
-              <AtomMark class="size-4 stroke-foreground" decorative />
-            </div>
-          </div>
-          <figcaption class="text-sm text-pretty text-muted-foreground">
-            <span class="font-medium text-foreground">Minimum 16px.</span> Any
-            smaller and the orbits blur into the nucleus.
-          </figcaption>
-        </figure>
+            <figure class="space-y-2">
+              <div
+                class="grid aspect-square place-items-center rounded-lg bg-surface [box-shadow:inset_0_0_0_1px_var(--border)]"
+              >
+                <div class="flex items-end gap-4">
+                  <AtomMark class="size-8 stroke-foreground" decorative />
+                  <AtomMark class="size-4 stroke-foreground" decorative />
+                </div>
+              </div>
+              <figcaption class="text-sm text-pretty text-muted-foreground">
+                <span class="font-medium text-foreground">Minimum 16px.</span> Any
+                smaller and the orbits blur into the nucleus.
+              </figcaption>
+            </figure>
 
-        <figure class="space-y-2">
-          <!-- Fixed dark tile + dark-mode viridian (#44b98e), so the reversed
+            <figure class="space-y-2">
+              <!-- Fixed dark tile + dark-mode viridian (#44b98e), so the reversed
                treatment reads the same regardless of the page's active theme.
                Ring is 20% white so the tile stays framed even in dark mode,
                where its fill matches the page canvas. -->
-          <div class="grid aspect-square place-items-center rounded-lg bg-[#0e0e0e] [box-shadow:inset_0_0_0_1px_#ffffff33]">
-            <AtomMark class="size-16 stroke-[#44b98e]" decorative />
-          </div>
-          <figcaption class="text-sm text-pretty text-muted-foreground">
-            <span class="font-medium text-foreground">On dark.</span> Switch to the
-            dark-mode viridian so it holds contrast on near-black.
-          </figcaption>
-        </figure>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-2">
-        <a
-          href="/brand/ryan-furrer-mark.svg"
-          download
-          class="inline-flex items-center gap-2 rounded-md bg-surface px-3 py-1.5 text-sm font-medium text-foreground transition-colors [box-shadow:inset_0_0_0_1px_var(--border)] hover:bg-surface-hover"
-        >
-          <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11" />
-          </svg>
-          Download SVG
-        </a>
-        <button
-          type="button"
-          data-copy-svg
-          class="inline-flex items-center gap-2 rounded-md bg-surface px-3 py-1.5 text-sm font-medium text-foreground transition-colors [box-shadow:inset_0_0_0_1px_var(--border)] hover:bg-surface-hover"
-        >
-          <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
-            <path d="M10.5 5.5V4A1.5 1.5 0 0 0 9 2.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5" />
-          </svg>
-          <span data-copy-svg-label>Copy SVG</span>
-        </button>
-        <p class="ms-1 font-mono-custom text-xs text-muted-foreground">
-          single stroke · viridian · scales to any size
-        </p>
-      </div>
-
-      <dl class="grid gap-4 sm:grid-cols-2">
-        <div class="rounded-lg bg-surface p-4 [box-shadow:inset_0_0_0_1px_var(--border)]">
-          <dt class="text-xs font-semibold uppercase tracking-wide text-brand-strong">Do</dt>
-          <dd class="mt-1 text-sm text-pretty">Keep it one colour, give it room, and let the stroke weight breathe.</dd>
-        </div>
-        <div class="rounded-lg bg-surface p-4 [box-shadow:inset_0_0_0_1px_var(--border)]">
-          <dt class="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Don't</dt>
-          <dd class="mt-1 text-sm text-pretty">Recolour it per background, stretch it, or add shadows and gradients.</dd>
-        </div>
-      </dl>
-    </section>
-
-    <!-- ── 002 Color ──────────────────────────────────────────────────── -->
-    <section class="space-y-4" data-reveal aria-labelledby="color">
-      <h2 id="color" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">002</span>
-        Color
-      </h2>
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <p class="max-w-[48ch] text-pretty">
-          Read live from the cascade with <code
-            class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
-            >getComputedStyle</code
-          >, so they always match the active theme. Click any swatch to copy its
-          value.
-        </p>
-        <div
-          class="inline-flex shrink-0 rounded-md bg-surface p-0.5 [box-shadow:inset_0_0_0_1px_var(--border)]"
-          role="group"
-          aria-label="Colour value format"
-        >
-          {
-            (["hex", "oklch", "rgb"] as const).map((f, i) => (
-              <button
-                type="button"
-                data-format={f}
-                aria-pressed={i === 0 ? "true" : "false"}
-                class="rounded-[5px] px-2.5 py-1 font-mono-custom text-xs font-medium text-muted-foreground transition-colors hover:text-foreground aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+              <div
+                class="grid aspect-square place-items-center rounded-lg bg-[#0e0e0e] [box-shadow:inset_0_0_0_1px_#ffffff33]"
               >
-                {f.toUpperCase()}
-              </button>
-            ))
-          }
-        </div>
-      </div>
-
-      <h3 class="small-heading pt-2">Core — load-bearing neutrals</h3>
-      <ul class="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2" role="list">
-        {coreTokens.map((t) => (
-          <li>
-            <ColorSwatch {...t} />
-          </li>
-        ))}
-      </ul>
-
-      <h3 class="small-heading pt-4">Accent &amp; semantic</h3>
-      <ul class="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2" role="list">
-        {accentTokens.map((t) => (
-          <li>
-            <ColorSwatch {...t} />
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <!-- ── 003 Typography ─────────────────────────────────────────────── -->
-    <section class="space-y-6" data-reveal aria-labelledby="typography">
-      <h2 id="typography" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">003</span>
-        Typography
-      </h2>
-
-      <div class="space-y-6">
-        <div>
-          <p class="font-sans text-5xl font-extrabold tracking-[-0.03em] text-foreground">
-            Geist
-          </p>
-          <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <p class="font-mono-custom text-xs text-muted-foreground">
-              font-sans · display &amp; body · variable 100–900
-            </p>
-            <a
-              href="/assets/fonts/Geist%5Bwght%5D.woff2"
-              download="Geist-Variable.woff2"
-              class="inline-flex items-center gap-1.5 rounded-md bg-surface px-2.5 py-1 text-xs font-medium text-foreground transition-colors [box-shadow:inset_0_0_0_1px_var(--border)] hover:bg-surface-hover"
-            >
-              <svg class="size-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11" />
-              </svg>
-              Download
-            </a>
-            <span class="font-mono-custom text-xs text-muted-foreground">
-              SIL OFL · <a class="underline underline-offset-2 hover:text-foreground" href="https://github.com/vercel/geist-font" target="_blank" rel="noopener noreferrer">source</a>
-            </span>
+                <AtomMark class="size-16 stroke-[#44b98e]" decorative />
+              </div>
+              <figcaption class="text-sm text-pretty text-muted-foreground">
+                <span class="font-medium text-foreground">On dark.</span> Switch to
+                the dark-mode viridian so it holds contrast on near-black.
+              </figcaption>
+            </figure>
           </div>
-        </div>
-        <div>
-          <p class="font-mono text-4xl text-foreground">Berkeley Mono</p>
-          <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <p class="font-mono-custom text-xs text-muted-foreground">
-              font-mono · UI labels, metadata, dates
-            </p>
+
+          <div class="flex flex-wrap items-center gap-2">
             <a
-              href="https://usgraphics.com/products/berkeley-mono"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 rounded-md bg-surface px-2.5 py-1 text-xs font-medium text-foreground transition-colors [box-shadow:inset_0_0_0_1px_var(--border)] hover:bg-surface-hover"
-            >
-              Get Berkeley Mono
-              <svg class="size-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5.5 10.5 10.5 5.5M6 5.5h4.5V10" />
-              </svg>
-            </a>
-            <span class="font-mono-custom text-xs text-muted-foreground">
-              commercial · licensed
-            </span>
-          </div>
-        </div>
-        <div>
-          <p class="font-cursive text-4xl text-foreground">-Ryan</p>
-          <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <p class="font-mono-custom text-xs text-muted-foreground">
-              font-cursive · Permanent Marker · signature only
-            </p>
-            <a
-              href="/assets/fonts/PermanentMarker-Regular.ttf"
+              href="/brand/ryan-furrer-mark.svg"
               download
-              class="inline-flex items-center gap-1.5 rounded-md bg-surface px-2.5 py-1 text-xs font-medium text-foreground transition-colors [box-shadow:inset_0_0_0_1px_var(--border)] hover:bg-surface-hover"
+              class="inline-flex items-center gap-2 rounded-md bg-surface px-3 py-1.5 text-sm font-medium text-foreground [box-shadow:inset_0_0_0_1px_var(--border)] transition-colors hover:bg-surface-hover"
             >
-              <svg class="size-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11" />
+              <svg
+                class="size-4"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11"></path>
               </svg>
-              Download
+              Download SVG
             </a>
-            <span class="font-mono-custom text-xs text-muted-foreground">
-              Apache 2.0 · <a class="underline underline-offset-2 hover:text-foreground" href="https://fonts.google.com/specimen/Permanent+Marker" target="_blank" rel="noopener noreferrer">source</a>
-            </span>
+            <button
+              type="button"
+              data-copy-svg
+              class="inline-flex items-center gap-2 rounded-md bg-surface px-3 py-1.5 text-sm font-medium text-foreground [box-shadow:inset_0_0_0_1px_var(--border)] transition-colors hover:bg-surface-hover"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="5.5" y="5.5" width="8" height="8" rx="1.5"></rect>
+                <path
+                  d="M10.5 5.5V4A1.5 1.5 0 0 0 9 2.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"
+                ></path>
+              </svg>
+              <span data-copy-svg-label>Copy SVG</span>
+            </button>
+            <p class="font-mono-custom ms-1 text-xs text-muted-foreground">
+              single stroke · viridian · scales to any size
+            </p>
           </div>
-        </div>
-      </div>
 
-      <h3 class="small-heading pt-2">Scale &amp; roles</h3>
-      <dl class="space-y-4">
-        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-          <dd class="text-3xl font-extrabold tracking-[-0.022em] text-foreground sm:text-4xl">
-            Display heading
-          </dd>
-          <dt class="font-mono-custom text-xs text-muted-foreground">
-            h1 · text-3xl/4xl · 800
-          </dt>
-        </div>
-        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-          <dd class="text-2xl font-extrabold tracking-[-0.022em] text-foreground">
-            Section heading
-          </dd>
-          <dt class="font-mono-custom text-xs text-muted-foreground">
-            h2 · text-2xl · 800
-          </dt>
-        </div>
-        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-          <dd class="lead max-w-none">Standfirst / lede — the opening voice.</dd>
-          <dt class="font-mono-custom text-xs text-muted-foreground">.lead</dt>
-        </div>
-        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-          <dd class="text-muted-foreground">
-            Body copy — muted ink, the default reading colour.
-          </dd>
-          <dt class="font-mono-custom text-xs text-muted-foreground">
-            p · text-muted-foreground
-          </dt>
-        </div>
-        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-          <dd class="small-heading">Eyebrow label</dd>
-          <dt class="font-mono-custom text-xs text-muted-foreground">
-            .small-heading · mono
-          </dt>
-        </div>
-        <div class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-          <dd class="font-mono-custom text-foreground">12.34 · tabular figures</dd>
-          <dt class="font-mono-custom text-xs text-muted-foreground">
-            .font-mono-custom
-          </dt>
-        </div>
-      </dl>
-    </section>
-
-    <!-- ── 004 Voice ──────────────────────────────────────────────────── -->
-    <section class="space-y-4" data-reveal aria-labelledby="voice">
-      <h2 id="voice" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">004</span>
-        Voice
-      </h2>
-      <p class="max-w-[60ch] text-pretty">
-        The same restraint as the pixels, applied to words. When I write — here,
-        in a post, in a UI label — it should sound like this.
-      </p>
-      <dl class="grid gap-x-8 gap-y-4 sm:grid-cols-2">
-        {
-          voice.map((v) => (
-            <div class="border-t border-border pt-3">
-              <dt class="font-medium text-foreground">{v.trait}</dt>
-              <dd class="mt-0.5 text-sm text-pretty">{v.note}</dd>
+          <dl class="grid gap-4 sm:grid-cols-2">
+            <div
+              class="rounded-lg bg-surface p-4 [box-shadow:inset_0_0_0_1px_var(--border)]"
+            >
+              <dt
+                class="text-xs font-semibold tracking-wide text-brand-strong uppercase"
+              >
+                Do
+              </dt>
+              <dd class="mt-1 text-sm text-pretty">
+                Keep it one colour, give it room, and let the stroke weight
+                breathe.
+              </dd>
             </div>
-          ))
-        }
-      </dl>
-    </section>
+            <div
+              class="rounded-lg bg-surface p-4 [box-shadow:inset_0_0_0_1px_var(--border)]"
+            >
+              <dt
+                class="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
+              >
+                Don't
+              </dt>
+              <dd class="mt-1 text-sm text-pretty">
+                Recolour it per background, stretch it, or add shadows and
+                gradients.
+              </dd>
+            </div>
+          </dl>
+        </section>
 
+        <!-- ── 002 Color ──────────────────────────────────────────────────── -->
+        <section class="space-y-4" data-reveal aria-labelledby="color">
+          <h2
+            id="color"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
+            <span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">002</span
+            >
+            Color
+          </h2>
+          <div
+            class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"
+          >
+            <p class="max-w-[48ch] text-pretty">
+              Read live from the cascade with <code
+                class="font-mono-custom rounded-sm bg-surface px-1.5 py-0.5 text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+                >getComputedStyle</code
+              >, so they always match the active theme. Click any swatch to copy
+              its value.
+            </p>
+            <div
+              class="inline-flex shrink-0 rounded-md bg-surface p-0.5 [box-shadow:inset_0_0_0_1px_var(--border)]"
+              role="group"
+              aria-label="Colour value format"
+            >
+              {
+                (["hex", "oklch", "rgb"] as const).map((f, i) => (
+                  <button
+                    type="button"
+                    data-format={f}
+                    aria-pressed={i === 0 ? "true" : "false"}
+                    class="font-mono-custom rounded-[5px] px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground aria-pressed:bg-primary aria-pressed:text-primary-foreground"
+                  >
+                    {f.toUpperCase()}
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+
+          <h3 class="small-heading pt-2">Core — load-bearing neutrals</h3>
+          <ul
+            class="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2"
+            role="list"
+          >
+            {
+              coreTokens.map((t) => (
+                <li>
+                  <ColorSwatch {...t} />
+                </li>
+              ))
+            }
+          </ul>
+
+          <h3 class="small-heading pt-4">Accent &amp; semantic</h3>
+          <ul
+            class="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2"
+            role="list"
+          >
+            {
+              accentTokens.map((t) => (
+                <li>
+                  <ColorSwatch {...t} />
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <!-- ── 003 Typography ─────────────────────────────────────────────── -->
+        <section class="space-y-6" data-reveal aria-labelledby="typography">
+          <h2
+            id="typography"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
+            <span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">003</span
+            >
+            Typography
+          </h2>
+
+          <div class="space-y-6">
+            <div>
+              <p
+                class="font-sans text-5xl font-extrabold tracking-[-0.03em] text-foreground"
+              >
+                Geist
+              </p>
+              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <p class="font-mono-custom text-xs text-muted-foreground">
+                  font-sans · display &amp; body · variable 100–900
+                </p>
+                <a
+                  href="/assets/fonts/Geist%5Bwght%5D.woff2"
+                  download="Geist-Variable.woff2"
+                  class="inline-flex items-center gap-1.5 rounded-md bg-surface px-2.5 py-1 text-xs font-medium text-foreground [box-shadow:inset_0_0_0_1px_var(--border)] transition-colors hover:bg-surface-hover"
+                >
+                  <svg
+                    class="size-3.5"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11"></path>
+                  </svg>
+                  Download
+                </a>
+                <span class="font-mono-custom text-xs text-muted-foreground">
+                  SIL OFL · <a
+                    class="underline underline-offset-2 hover:text-foreground"
+                    href="https://github.com/vercel/geist-font"
+                    target="_blank"
+                    rel="noopener noreferrer">source</a
+                  >
+                </span>
+              </div>
+            </div>
+            <div>
+              <p class="font-mono text-4xl text-foreground">Berkeley Mono</p>
+              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <p class="font-mono-custom text-xs text-muted-foreground">
+                  font-mono · UI labels, metadata, dates
+                </p>
+                <a
+                  href="https://usgraphics.com/products/berkeley-mono"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 rounded-md bg-surface px-2.5 py-1 text-xs font-medium text-foreground [box-shadow:inset_0_0_0_1px_var(--border)] transition-colors hover:bg-surface-hover"
+                >
+                  Get Berkeley Mono
+                  <svg
+                    class="size-3"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5.5 10.5 10.5 5.5M6 5.5h4.5V10"></path>
+                  </svg>
+                </a>
+                <span class="font-mono-custom text-xs text-muted-foreground">
+                  commercial · licensed
+                </span>
+              </div>
+            </div>
+            <div>
+              <p class="font-cursive text-4xl text-foreground">-Ryan</p>
+              <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <p class="font-mono-custom text-xs text-muted-foreground">
+                  font-cursive · Permanent Marker · signature only
+                </p>
+                <a
+                  href="/assets/fonts/PermanentMarker-Regular.ttf"
+                  download
+                  class="inline-flex items-center gap-1.5 rounded-md bg-surface px-2.5 py-1 text-xs font-medium text-foreground [box-shadow:inset_0_0_0_1px_var(--border)] transition-colors hover:bg-surface-hover"
+                >
+                  <svg
+                    class="size-3.5"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11"></path>
+                  </svg>
+                  Download
+                </a>
+                <span class="font-mono-custom text-xs text-muted-foreground">
+                  Apache 2.0 · <a
+                    class="underline underline-offset-2 hover:text-foreground"
+                    href="https://fonts.google.com/specimen/Permanent+Marker"
+                    target="_blank"
+                    rel="noopener noreferrer">source</a
+                  >
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="small-heading pt-2">Scale &amp; roles</h3>
+          <dl class="space-y-4">
+            <div
+              class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <dd
+                class="text-3xl font-extrabold tracking-[-0.022em] text-foreground sm:text-4xl"
+              >
+                Display heading
+              </dd>
+              <dt class="font-mono-custom text-xs text-muted-foreground">
+                h1 · text-3xl/4xl · 800
+              </dt>
+            </div>
+            <div
+              class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <dd
+                class="text-2xl font-extrabold tracking-[-0.022em] text-foreground"
+              >
+                Section heading
+              </dd>
+              <dt class="font-mono-custom text-xs text-muted-foreground">
+                h2 · text-2xl · 800
+              </dt>
+            </div>
+            <div
+              class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <dd class="lead max-w-none">
+                Standfirst / lede — the opening voice.
+              </dd>
+              <dt class="font-mono-custom text-xs text-muted-foreground">
+                .lead
+              </dt>
+            </div>
+            <div
+              class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <dd class="text-muted-foreground">
+                Body copy — muted ink, the default reading colour.
+              </dd>
+              <dt class="font-mono-custom text-xs text-muted-foreground">
+                p · text-muted-foreground
+              </dt>
+            </div>
+            <div
+              class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <dd class="small-heading">Eyebrow label</dd>
+              <dt class="font-mono-custom text-xs text-muted-foreground">
+                .small-heading · mono
+              </dt>
+            </div>
+            <div
+              class="flex flex-col gap-1 border-t border-border pt-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+            >
+              <dd class="font-mono-custom text-foreground">
+                12.34 · tabular figures
+              </dd>
+              <dt class="font-mono-custom text-xs text-muted-foreground">
+                .font-mono-custom
+              </dt>
+            </div>
+          </dl>
+        </section>
+
+        <!-- ── 004 Voice ──────────────────────────────────────────────────── -->
+        <section class="space-y-4" data-reveal aria-labelledby="voice">
+          <h2
+            id="voice"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
+            <span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">004</span
+            >
+            Voice
+          </h2>
+          <p class="max-w-[60ch] text-pretty">
+            The same restraint as the pixels, applied to words. When I write —
+            here, in a post, in a UI label — it should sound like this.
+          </p>
+          <dl class="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+            {
+              voice.map((v) => (
+                <div class="border-t border-border pt-3">
+                  <dt class="font-medium text-foreground">{v.trait}</dt>
+                  <dd class="mt-0.5 text-sm text-pretty">{v.note}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </section>
       </div>
 
       <div slot="system" class="space-y-16">
-    <!-- ── 005 Elevation ──────────────────────────────────────────────── -->
-    <section class="space-y-4" data-reveal aria-labelledby="elevation">
-      <h2 id="elevation" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">005</span>
-        Elevation &amp; surfaces
-      </h2>
-      <p class="text-pretty">
-        Hover the raised card — it physically lifts on hover-capable pointers.
-      </p>
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div class="card-raised squircle rounded-lg p-5">
-          <p class="font-medium text-foreground">Raised card</p>
-          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">.card-raised</p>
-          <p class="mt-2 text-sm text-pretty">White surface, hairline ring, hover-lift.</p>
-        </div>
-        <div class="rounded-lg bg-card p-5 shadow-elevated">
-          <p class="font-medium text-foreground">Soft elevation</p>
-          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">shadow-elevated</p>
-          <p class="mt-2 text-sm text-pretty">Apple-style whisper shadow, flat in dark.</p>
-        </div>
-        <div class="rounded-lg bg-surface p-5 [box-shadow:inset_0_0_0_1px_var(--border)]">
-          <p class="font-medium text-foreground">Recessed well</p>
-          <p class="mt-1 font-mono-custom text-xs text-muted-foreground">bg-surface</p>
-          <p class="mt-2 text-sm text-pretty">One step below the canvas — sunken.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── 006 Radius ─────────────────────────────────────────────────── -->
-    <section class="space-y-4" data-reveal aria-labelledby="radius">
-      <h2 id="radius" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">006</span>
-        Radius
-      </h2>
-      <p class="text-pretty">
-        Every step derives from <code
-          class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
-          >--radius</code
-        > (0.375rem) via calc. <code
-          class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
-          >.squircle</code
-        > opts an element into continuous corners where supported.
-      </p>
-      <ul class="flex flex-wrap gap-4" role="list">
-        {
-          radii.map((r) => (
-            <li class="flex flex-col items-center gap-2">
-              <span
-                class:list={[
-                  "size-16 bg-primary/10 [box-shadow:inset_0_0_0_1px_var(--border)]",
-                  `rounded-${r}`,
-                ]}
-                aria-hidden="true"
-              />
-              <span class="font-mono-custom text-xs text-muted-foreground">
-                rounded-{r}
-              </span>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <!-- ── 007 Motion ─────────────────────────────────────────────────── -->
-    <section class="space-y-4" data-reveal aria-labelledby="motion">
-      <h2 id="motion" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">007</span>
-        Motion
-      </h2>
-      <p class="text-pretty">
-        Two curves only. Hover the demo to compare the settle; durations stay as
-        Tailwind utilities (150ms micro, 200ms highlight, 250–300ms overlays).
-      </p>
-      <div class="motion-demo space-y-4">
-        {
-          easings.map((e, i) => (
-            <div>
-              <div class="mb-1.5 flex items-baseline justify-between gap-4">
-                <span class="font-medium text-foreground">{e.name}</span>
-                <span class="font-mono-custom text-xs text-muted-foreground">{e.curve}</span>
-              </div>
-              <div class="flex items-center rounded-full bg-surface p-1.5 [box-shadow:inset_0_0_0_1px_var(--border)]">
-                <span class:list={["motion-dot size-6 rounded-full bg-brand", `motion-dot--${i}`]} aria-hidden="true" />
-              </div>
-              <p class="mt-1 text-sm text-pretty">{e.use}</p>
-            </div>
-          ))
-        }
-      </div>
-    </section>
-
-    <!-- ── 008 Components ─────────────────────────────────────────────── -->
-    <section class="space-y-4" data-reveal aria-labelledby="components">
-      <h2 id="components" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">008</span>
-        Components
-      </h2>
-
-      <h3 id="links" class="text-lg font-semibold text-foreground">Links &amp; CTAs</h3>
-      <p class="text-pretty">
-        Inline links read as foreground ink with a faint underline and reveal on
-        hover — like <a href="/writing">this one</a>. Standalone
-        <span class="quiet-link">quiet links</span> drop the underline for nav-style
-        lists. Directional CTAs travel toward their intent:
-      </p>
-      <div class="flex flex-wrap items-center gap-x-8 gap-y-3">
-        <CtaLink href="/about">Forward</CtaLink>
-        <CtaLink href="/" direction="back">Back</CtaLink>
-        <CtaLink href="https://ryanfurrer.com" direction="external">External</CtaLink>
-      </div>
-
-      <h3 id="lists" class="pt-4 text-lg font-semibold text-foreground">List rows</h3>
-      <p class="text-pretty">
-        The <code
-          class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
-          >Item</code
-        > row with the shared traveling-highlight — one pill follows the cursor.
-      </p>
-      <ul class="flex flex-col gap-px" role="list" data-dir-hover-list="items">
-        <li>
-          <Item title="Crafting the traveling highlight" href="/writing" publishedAt="2026-07-15" />
-        </li>
-        <li>
-          <Item title="A row with a trailing tag" href="/uses">
+        <!-- ── 005 Elevation ──────────────────────────────────────────────── -->
+        <section class="space-y-4" data-reveal aria-labelledby="elevation">
+          <h2
+            id="elevation"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
             <span
-              slot="trailing"
-              class="font-mono-custom text-xs uppercase tracking-wide text-muted-foreground transition-colors can-hover:group-hover/item:text-foreground"
-              >Editor</span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">005</span
             >
-          </Item>
-        </li>
-        <li>
-          <Item title="An external row" href="https://ryanfurrer.com" external />
-        </li>
-      </ul>
+            Elevation &amp; surfaces
+          </h2>
+          <p class="text-pretty">
+            Hover the raised card — it physically lifts on hover-capable
+            pointers.
+          </p>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div class="card-raised rounded-lg p-5">
+              <p class="font-medium text-foreground">Raised card</p>
+              <p class="font-mono-custom mt-1 text-xs text-muted-foreground">
+                .card-raised
+              </p>
+              <p class="mt-2 text-sm text-pretty">
+                White surface, hairline ring, hover-lift.
+              </p>
+            </div>
+            <div class="rounded-lg bg-card p-5 shadow-elevated">
+              <p class="font-medium text-foreground">Soft elevation</p>
+              <p class="font-mono-custom mt-1 text-xs text-muted-foreground">
+                shadow-elevated
+              </p>
+              <p class="mt-2 text-sm text-pretty">
+                Apple-style whisper shadow, flat in dark.
+              </p>
+            </div>
+            <div
+              class="rounded-lg bg-surface p-5 [box-shadow:inset_0_0_0_1px_var(--border)]"
+            >
+              <p class="font-medium text-foreground">Recessed well</p>
+              <p class="font-mono-custom mt-1 text-xs text-muted-foreground">
+                bg-surface
+              </p>
+              <p class="mt-2 text-sm text-pretty">
+                One step below the canvas — sunken.
+              </p>
+            </div>
+          </div>
+        </section>
 
-      <h3 id="feedback" class="pt-4 text-lg font-semibold text-foreground">Badges &amp; callouts</h3>
-      <div class="flex flex-wrap items-center gap-2">
-        <span class="badge">Updated</span>
-        <span class="badge">2026</span>
-        <span class="badge">Draft</span>
-      </div>
-      <Callout variant="info">
-        <p>The info callout reuses the reserved viridian at low opacity.</p>
-      </Callout>
-      <Callout variant="warning">
-        <p>Warning leans amber — a semantic colour outside the neutral system.</p>
-      </Callout>
-      <Callout variant="caution">
-        <p>Caution uses rose, kept distinct from the destructive red.</p>
-      </Callout>
+        <!-- ── 006 Radius ─────────────────────────────────────────────────── -->
+        <section class="space-y-4" data-reveal aria-labelledby="radius">
+          <h2
+            id="radius"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
+            <span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">006</span
+            >
+            Radius
+          </h2>
+          <p class="text-pretty">
+            Every step derives from <code
+              class="font-mono-custom rounded-sm bg-surface px-1.5 py-0.5 text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+              >--radius</code
+            > (0.375rem) via calc.
+          </p>
+          <ul class="flex flex-wrap gap-4" role="list">
+            {
+              radii.map((r) => (
+                <li class="flex flex-col items-center gap-2">
+                  <span
+                    class:list={[
+                      "size-16 bg-primary/10 [box-shadow:inset_0_0_0_1px_var(--border)]",
+                      `rounded-${r}`,
+                    ]}
+                    aria-hidden="true"
+                  />
+                  <span class="font-mono-custom text-xs text-muted-foreground">
+                    rounded-{r}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
 
-      <h3 id="code" class="pt-4 text-lg font-semibold text-foreground">Prose &amp; code</h3>
-      <p class="text-pretty">
-        Long-form content renders in <code
-          class="rounded-sm bg-surface px-1.5 py-0.5 font-mono-custom text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
-          >.prose</code
-        >. Code blocks are dual-theme (Catppuccin Latte / Mocha) with a copy button:
-      </p>
-      <div class="prose prose-neutral max-w-none dark:prose-invert">
-        <CodeBlock node={{ code: sampleCode, language: "ts" }} />
-        <blockquote>
-          Impact comes from proportion and restraint — one accent, generous
-          whitespace, and motion you feel more than notice.
-        </blockquote>
-      </div>
-    </section>
+        <!-- ── 007 Motion ─────────────────────────────────────────────────── -->
+        <section class="space-y-4" data-reveal aria-labelledby="motion">
+          <h2
+            id="motion"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
+            <span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">007</span
+            >
+            Motion
+          </h2>
+          <p class="text-pretty">
+            Two curves only. Hover the demo to compare the settle; durations
+            stay as Tailwind utilities (150ms micro, 200ms highlight, 250–300ms
+            overlays).
+          </p>
+          <div class="motion-demo space-y-4">
+            {
+              easings.map((e, i) => (
+                <div>
+                  <div class="mb-1.5 flex items-baseline justify-between gap-4">
+                    <span class="font-medium text-foreground">{e.name}</span>
+                    <span class="font-mono-custom text-xs text-muted-foreground">
+                      {e.curve}
+                    </span>
+                  </div>
+                  <div class="flex items-center rounded-full bg-surface p-1.5 [box-shadow:inset_0_0_0_1px_var(--border)]">
+                    <span
+                      class:list={[
+                        "motion-dot size-6 rounded-full bg-brand",
+                        `motion-dot--${i}`,
+                      ]}
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <p class="mt-1 text-sm text-pretty">{e.use}</p>
+                </div>
+              ))
+            }
+          </div>
+        </section>
 
-    <!-- ── 009 Accessibility ──────────────────────────────────────────── -->
-    <section class="space-y-4" data-reveal aria-labelledby="accessibility">
-      <h2 id="accessibility" class="flex items-baseline gap-3 text-2xl text-foreground">
-        <span class="font-mono-custom text-sm font-normal text-muted-foreground" aria-hidden="true">009</span>
-        Accessibility
-      </h2>
-      <p class="text-pretty">
-        Every surface targets WCAG 2.1 AA. The system adapts to OS preferences:
-      </p>
-      <ul class="space-y-2 text-pretty" role="list">
-        <li>
-          <strong class="font-semibold text-foreground">Reduced motion</strong> —
-          animations collapse to near-instant; the sticky header stays pinned.
-        </li>
-        <li>
-          <strong class="font-semibold text-foreground">Reduced transparency</strong> —
-          the glass header and floating menus swap to solid surfaces, blur off.
-        </li>
-        <li>
-          <strong class="font-semibold text-foreground">Increased contrast</strong> —
-          hairlines firm up into defined borders on structural edges.
-        </li>
-        <li>
-          <strong class="font-semibold text-foreground">Colour scheme</strong> —
-          a manual Light/Dark choice overrides the OS, set before paint to avoid a
-          flash.
-        </li>
-        <li>
-          <strong class="font-semibold text-foreground">Focus</strong> — one
-          consistent gray focus ring follows every radius. Tab through this page to
-          see it.
-        </li>
-      </ul>
-    </section>
+        <!-- ── 008 Components ─────────────────────────────────────────────── -->
+        <section class="space-y-4" data-reveal aria-labelledby="components">
+          <h2
+            id="components"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
+            <span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">008</span
+            >
+            Components
+          </h2>
 
+          <h3 id="links" class="text-lg font-semibold text-foreground">
+            Links &amp; CTAs
+          </h3>
+          <p class="text-pretty">
+            Inline links read as foreground ink with a faint underline and
+            reveal on hover — like <a href="/writing">this one</a>. Standalone
+            <span class="quiet-link">quiet links</span> drop the underline for nav-style
+            lists. Directional CTAs travel toward their intent:
+          </p>
+          <div class="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <CtaLink href="/about">Forward</CtaLink>
+            <CtaLink href="/" direction="back">Back</CtaLink>
+            <CtaLink href="https://ryanfurrer.com" direction="external"
+              >External</CtaLink
+            >
+          </div>
+
+          <h3 id="lists" class="pt-4 text-lg font-semibold text-foreground">
+            List rows
+          </h3>
+          <p class="text-pretty">
+            The <code
+              class="font-mono-custom rounded-sm bg-surface px-1.5 py-0.5 text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+              >Item</code
+            > row with the shared traveling-highlight — one pill follows the cursor.
+          </p>
+          <ul
+            class="flex flex-col gap-px"
+            role="list"
+            data-dir-hover-list="items"
+          >
+            <li>
+              <Item
+                title="Crafting the traveling highlight"
+                href="/writing"
+                publishedAt="2026-07-15"
+              />
+            </li>
+            <li>
+              <Item title="A row with a trailing tag" href="/uses">
+                <span
+                  slot="trailing"
+                  class="font-mono-custom text-xs tracking-wide text-muted-foreground uppercase transition-colors can-hover:group-hover/item:text-foreground"
+                  >Editor</span
+                >
+              </Item>
+            </li>
+            <li>
+              <Item
+                title="An external row"
+                href="https://ryanfurrer.com"
+                external
+              />
+            </li>
+          </ul>
+
+          <h3 id="feedback" class="pt-4 text-lg font-semibold text-foreground">
+            Badges &amp; callouts
+          </h3>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="badge">Updated</span>
+            <span class="badge">2026</span>
+            <span class="badge">Draft</span>
+          </div>
+          <Callout variant="info">
+            <p>The info callout reuses the reserved viridian at low opacity.</p>
+          </Callout>
+          <Callout variant="warning">
+            <p>
+              Warning leans amber — a semantic colour outside the neutral
+              system.
+            </p>
+          </Callout>
+          <Callout variant="caution">
+            <p>Caution uses rose, kept distinct from the destructive red.</p>
+          </Callout>
+
+          <h3 id="code" class="pt-4 text-lg font-semibold text-foreground">
+            Prose &amp; code
+          </h3>
+          <p class="text-pretty">
+            Long-form content renders in <code
+              class="font-mono-custom rounded-sm bg-surface px-1.5 py-0.5 text-foreground [box-shadow:inset_0_0_0_1px_var(--border)]"
+              >.prose</code
+            >. Code blocks are dual-theme (Catppuccin Latte / Mocha) with a copy
+            button:
+          </p>
+          <div class="prose max-w-none prose-neutral dark:prose-invert">
+            <CodeBlock node={{ code: sampleCode, language: "ts" }} />
+            <blockquote>
+              Impact comes from proportion and restraint — one accent, generous
+              whitespace, and motion you feel more than notice.
+            </blockquote>
+          </div>
+        </section>
+
+        <!-- ── 009 Accessibility ──────────────────────────────────────────── -->
+        <section class="space-y-4" data-reveal aria-labelledby="accessibility">
+          <h2
+            id="accessibility"
+            class="flex items-baseline gap-3 text-2xl text-foreground"
+          >
+            <span
+              class="font-mono-custom text-sm font-normal text-muted-foreground"
+              aria-hidden="true">009</span
+            >
+            Accessibility
+          </h2>
+          <p class="text-pretty">
+            Every surface targets WCAG 2.1 AA. The system adapts to OS
+            preferences:
+          </p>
+          <ul class="space-y-2 text-pretty" role="list">
+            <li>
+              <strong class="font-semibold text-foreground"
+                >Reduced motion</strong
+              > — animations collapse to near-instant; the sticky header stays pinned.
+            </li>
+            <li>
+              <strong class="font-semibold text-foreground"
+                >Reduced transparency</strong
+              > — the glass header and floating menus swap to solid surfaces, blur
+              off.
+            </li>
+            <li>
+              <strong class="font-semibold text-foreground"
+                >Increased contrast</strong
+              > — hairlines firm up into defined borders on structural edges.
+            </li>
+            <li>
+              <strong class="font-semibold text-foreground"
+                >Colour scheme</strong
+              > — a manual Light/Dark choice overrides the OS, set before paint to
+              avoid a flash.
+            </li>
+            <li>
+              <strong class="font-semibold text-foreground">Focus</strong> — one consistent
+              gray focus ring follows every radius. Tab through this page to see it.
+            </li>
+          </ul>
+        </section>
       </div>
     </Tabs>
 
@@ -732,7 +1049,9 @@ Two easing curves, one radius scale, a small type system. Impact is
       return `#${hex2(r)}${hex2(g)}${hex2(b)}${alpha ? hex2(a) : ""}`;
     }
     if (fmt === "rgb") {
-      return alpha ? `rgb(${r} ${g} ${b} / ${alphaPct(a)})` : `rgb(${r} ${g} ${b})`;
+      return alpha
+        ? `rgb(${r} ${g} ${b} / ${alphaPct(a)})`
+        : `rgb(${r} ${g} ${b})`;
     }
     if (raw.startsWith("oklch(")) return raw.replace(/\s+/g, " ").trim();
     const [L, C, H] = toOklch(r, g, b);
@@ -775,19 +1094,21 @@ Two easing curves, one radius scale, a small type system. Impact is
   }
 
   // Format switch.
-  document.querySelectorAll<HTMLButtonElement>("[data-format]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const next = btn.dataset.format as Format;
-      if (!FORMATS.includes(next)) return;
-      format = next;
-      document
-        .querySelectorAll<HTMLButtonElement>("[data-format]")
-        .forEach((b) =>
-          b.setAttribute("aria-pressed", String(b.dataset.format === next)),
-        );
-      refresh();
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-format]")
+    .forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const next = btn.dataset.format as Format;
+        if (!FORMATS.includes(next)) return;
+        format = next;
+        document
+          .querySelectorAll<HTMLButtonElement>("[data-format]")
+          .forEach((b) =>
+            b.setAttribute("aria-pressed", String(b.dataset.format === next)),
+          );
+        refresh();
+      });
     });
-  });
 
   // Copy a swatch, with a brief inline confirmation.
   swatches().forEach((btn) => {

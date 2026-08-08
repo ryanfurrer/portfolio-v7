@@ -1,10 +1,12 @@
 import { Menu, X } from "lucide-react";
 import { type CSSProperties, useState } from "react";
 
+import ThemeSegmented from "@/components/ThemeSegmented";
 import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -80,6 +82,9 @@ export default function MobileNav({ navItems, pathname }: Props) {
             );
           })}
         </nav>
+        <SheetFooter className="items-end pe-2 pb-6">
+          <ThemeSegmented size="md" />
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );

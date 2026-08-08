@@ -5,7 +5,7 @@ import vercel from "@astrojs/vercel";
 import sanity from "@sanity/astro";
 import tailwindcss from "@tailwindcss/vite";
 import { readFileSync } from "node:fs";
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import {
   apiVersion,
   dataset,
@@ -87,6 +87,21 @@ export default defineConfig({
     }),
   ],
   site: "https://ryanfurrer.com/",
+  // Font trials via Astro's Google provider. Each family here is exposed as a
+  // CSS variable; whichever one --font-sans points at (in global.css) is the
+  // live typeface. To try another Google family, add an entry, render its
+  // <Font> in Head.astro, and repoint --font-sans.
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Google Sans",
+      cssVariable: "--font-google-sans",
+      weights: ["400 700"],
+      styles: ["normal", "italic"],
+      subsets: ["latin"],
+      fallbacks: ["Inter", "sans-serif"],
+    },
+  ],
   vite: {
     resolve: {
       alias: {

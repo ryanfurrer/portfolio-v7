@@ -1,7 +1,6 @@
 ---
 import { sanityClient } from "sanity:client";
 import LatestItemsSection from "@/components/LatestItemsSection.astro";
-import CtaLink from "@/components/CtaLink.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
 import Layout from "@/layouts/Layout.astro";
 import { socialLinks } from "@/lib/social-links";
@@ -28,29 +27,30 @@ const personJsonLd = {
 
 <Layout jsonLd={personJsonLd}>
   <main class="space-y-16">
-    <section class="space-y-6">
-      <div class="space-y-3" data-reveal>
-        <h1 class="text-3xl text-foreground sm:text-4xl">Ryan Furrer</h1>
-        <p class="lead max-w-[46ch]">
-          I feel at home where design and engineering meet.<br />
-          Crafting interfaces down to the last detail.
-        </p>
-      </div>
-      <div class="max-w-[46ch] space-y-3 text-pretty" data-reveal>
-        <p>
-          Currently I am a Frontend Engineer and Designer at <a
-            href="https://pragma.gg"
-            >Pragma</a
-          >, part of the team creating the platform that helps studios build
-          successful games, <a href="https://firstlook.gg">FirstLook</a>.
-        </p>
-        <CtaLink href="/about">Learn more about me</CtaLink>
-      </div>
+    <section class="space-y-8">
+      <h1
+        class="text-[clamp(1.875rem,1.1rem+2.8vw,3rem)]/[1.1] font-semibold tracking-tight text-pretty text-foreground"
+        data-reveal
+      >
+        I am a Frontend Engineer who feels at home where design and engineering
+        meet.
+        <span class="text-muted-foreground">
+          {" "}Crafting interfaces down to the last detail.
+        </span>
+      </h1>
 
-      <div class="space-y-2" data-reveal>
-        <span class="small-heading inline-block">Find me elsewhere:</span>
-        <div class="text-sm">
-          <SocialLinks orientation="horizontal" />
+      <div class="grid gap-x-8 gap-y-8 sm:grid-cols-[1.6fr_1fr]" data-reveal>
+        <div class="space-y-2">
+          <span class="small-heading inline-block">Now</span>
+          <p>
+            Design Engineer at <a href="https://pragma.gg">Pragma</a>, part of
+            the team creating the platform that helps studios build successful
+            games, <a href="https://firstlook.gg">FirstLook</a>.
+          </p>
+        </div>
+        <div class="space-y-2">
+          <span class="small-heading inline-block">Elsewhere</span>
+          <SocialLinks orientation="vertical" />
         </div>
       </div>
     </section>

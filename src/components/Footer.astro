@@ -1,5 +1,7 @@
 ---
+import Presence from "./Presence";
 import SocialLinks from "./SocialLinks.astro";
+import ThemeSegmented from "./ThemeSegmented";
 
 const currentYear = new Date().getFullYear();
 
@@ -40,11 +42,16 @@ const sitemapLinks = [
       </ul>
     </nav>
     <div
-      class="flex items-center justify-between text-sm text-muted-foreground"
+      class="flex flex-col gap-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
     >
-      <p>&copy; {currentYear} Ryan Furrer</p>
-      <div>
+      <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <p>&copy; {currentYear} Ryan Furrer</p>
+        <span aria-hidden="true" class="opacity-40">·</span>
+        <Presence client:idle />
+      </div>
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
         <SocialLinks />
+        <ThemeSegmented client:idle />
       </div>
     </div>
   </div>
