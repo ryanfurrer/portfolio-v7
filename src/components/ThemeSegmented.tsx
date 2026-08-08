@@ -4,12 +4,17 @@ import { cn } from "@/lib/utils";
 interface Props {
   /** "md" gives touch-sized hits for the mobile menu; "sm" is the compact footer size. */
   size?: "sm" | "md";
+  /** "plain" drops the filled active chip for a quieter, text-only selection. */
+  variant?: "boxed" | "plain";
 }
 
 // Inline light/dark/system control — no popover, unlike the dropdown ModeToggle.
 // Shares the single theme store (@/lib/theme), so it stays in sync with every
 // other control on the page.
-export default function ThemeSegmented({ size = "sm" }: Props) {
+export default function ThemeSegmented({
+  size = "sm",
+  variant = "boxed",
+}: Props) {
   const theme = useTheme();
 
   return (
@@ -23,9 +28,13 @@ export default function ThemeSegmented({ size = "sm" }: Props) {
           className={cn(
             "rounded-md text-sm transition-colors",
             size === "md" ? "px-3 py-2" : "px-2.5 py-1",
-            theme === option.value
-              ? "bg-foreground/10 text-foreground"
-              : "text-body hover:text-foreground",
+            variant === "plain"
+              ? theme === option.value
+                ? "font-medium text-foreground"
+                : "text-body hover:text-foreground"
+              : theme === option.value
+                ? "bg-foreground/10 text-foreground"
+                : "text-body hover:text-foreground",
           )}
         >
           {option.label}

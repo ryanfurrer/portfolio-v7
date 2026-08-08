@@ -39,7 +39,12 @@ function isAwake(hour: number, wake: number, sleep: number) {
     : hour >= wake || hour < sleep;
 }
 
-export default function Presence() {
+interface Props {
+  /** Drops the mono face + ping animation for a calmer, body-typeface reading. */
+  plain?: boolean;
+}
+
+export default function Presence({ plain = false }: Props) {
   // Stay null until mounted so server HTML and first client paint match
   // (the live time would otherwise differ and trip a hydration warning).
   const [now, setNow] = useState<Date | null>(null);
@@ -59,9 +64,13 @@ export default function Presence() {
     : false;
 
   return (
-    <div className="font-mono-custom inline-flex items-center gap-2 text-body">
+    <div
+      className={`inline-flex items-center gap-2 text-body ${
+        plain ? "text-sm" : "font-mono-custom"
+      }`}
+    >
       <span className="relative flex size-2" aria-hidden="true">
-        {now && online && (
+        {!plain && now && online && (
           <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-500/70 motion-reduce:hidden" />
         )}
         <span

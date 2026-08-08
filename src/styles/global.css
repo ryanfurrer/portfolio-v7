@@ -1187,3 +1187,19 @@ nav.toc[data-toc-snap]::before {
     text-decoration-color: var(--color-foreground);
   }
 }
+
+@utility text-box-trim-none {
+  text-box-trim: none;
+}
+@utility text-box-trim-both {
+  text-box-edge: cap alphabetic;
+  text-box-trim: trim-both;
+}
+@utility text-box-trim-start {
+  text-box-edge: cap alphabetic;
+  text-box-trim: trim-start;
+}
+@utility text-box-trim-end {
+  text-box-edge: cap alphabetic;
+  text-box-trim: trim-end;
+}

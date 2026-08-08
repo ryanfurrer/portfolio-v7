@@ -4,54 +4,42 @@ import SocialLinks from "./SocialLinks.astro";
 import ThemeSegmented from "./ThemeSegmented";
 
 const currentYear = new Date().getFullYear();
-
-const sitemapLinks = [
-  { label: "Home", href: "/" },
-  { label: "Writing", href: "/writing" },
-  { label: "Work", href: "/work" },
-  { label: "Appearances", href: "/appearances" },
-  { label: "Now", href: "/now" },
-  { label: "About", href: "/about" },
-  { label: "Uses", href: "/uses" },
-  { label: "Links", href: "/links" },
-];
 ---
 
 <!-- z-30 keeps the footer above the ScrollFade blur (z-20); pb-20 clears the
      floating ToC button on mobile. -->
 <footer class="relative z-30 border-t border-border pt-8 pb-20 lg:pb-0">
-  <div class="space-y-8">
-    <nav>
-      <h2 class="small-heading">Sitemap</h2>
-      <ul
-        class="grid grid-cols-2 gap-px text-sm md:flex md:flex-wrap md:gap-x-8 md:gap-y-4"
-        role="list"
-      >
-        {
-          sitemapLinks.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                class="quiet-link no-underline inline-block w-full py-2"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-    <div
-      class="flex flex-col gap-6 text-sm text-body sm:flex-row sm:items-center sm:justify-between"
-    >
-      <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <p>&copy; {currentYear} Ryan Furrer</p>
-        <span aria-hidden="true" class="opacity-40">·</span>
-        <Presence client:idle />
+  <div class="space-y-10">
+    <div class="max-w-sm space-y-3">
+      <div class="space-y-2">
+        <a
+          href="/"
+          class="flex w-fit items-center text-xl font-semibold tracking-tight text-box-trim-both text-foreground"
+          name="go to home page"
+        >
+          ryan furrer<span
+            class="-translate-x-0.5 -translate-y-2 text-5xl text-box-trim-both text-brand"
+            >.</span
+          >
+        </a>
+        <div class="space-y-1.5 text-sm text-pretty">
+          <p>Built with Astro, hosted on Vercel, and set in Google Sans.</p>
+          <a
+            href="/brand"
+            class="inline-block text-foreground underline decoration-border underline-offset-2 transition-colors hover:decoration-foreground"
+            >View colophon</a
+          >
+        </div>
       </div>
+      <Presence plain client:idle />
+    </div>
+    <div
+      class="flex flex-col gap-4 text-sm text-body sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>&copy; {currentYear} Ryan Furrer</p>
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
         <SocialLinks />
-        <ThemeSegmented client:idle />
+        <ThemeSegmented variant="plain" client:idle />
       </div>
     </div>
   </div>
