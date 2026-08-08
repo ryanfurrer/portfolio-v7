@@ -87,16 +87,24 @@ const articleJsonLd = {
     <CtaLink href={backHref} direction="back" class="mb-6 lg:hidden">{backLabel}</CtaLink>
     {
       headerImage && (
-        <img
-          src={headerImage.src}
-          srcset={headerImage.srcset}
-          sizes="(min-width: 1184px) 704px, (min-width: 1024px) calc(100vw - 30rem), (min-width: 768px) min(100vw - 3rem, 672px), calc(100vw - 2rem)"
-          alt={title ?? ""}
-          width="550"
-          height="310"
-          fetchpriority="high"
+        <button
+          type="button"
+          class="zoomable-image"
+          data-zoom-src={headerImage.zoomSrc}
+          data-zoom-alt={title ?? ""}
+          aria-label={title ? `Enlarge image: ${title}` : "Enlarge image"}
           data-reveal
-        />
+        >
+          <img
+            src={headerImage.src}
+            srcset={headerImage.srcset}
+            sizes="(min-width: 1184px) 704px, (min-width: 1024px) calc(100vw - 30rem), (min-width: 768px) min(100vw - 3rem, 672px), calc(100vw - 2rem)"
+            alt={title ?? ""}
+            width="550"
+            height="310"
+            fetchpriority="high"
+          />
+        </button>
       )
     }
     <header data-reveal>
@@ -135,3 +143,11 @@ const articleJsonLd = {
 
   <slot name="scripts" />
 </Layout>
+
+<script>
+  // Wire click-to-zoom for every article image (header + body). Lives here so
+  // header-only pages get it too; idempotent, so the body-image renderer needn't
+  // re-init.
+  import { initImageZoom } from "@/lib/image-zoom";
+  initImageZoom();
+</script>

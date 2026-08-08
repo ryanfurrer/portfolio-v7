@@ -4,12 +4,12 @@
    style, body links, and a couple of small utilities.
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Selection — the ink at low opacity, a touch stronger in the dark. */
+/* Selection — a viridian brand tint (the one reserved hue), stronger in dark. */
 ::selection {
-  background-color: color-mix(in oklch, var(--link) 22%, transparent);
+  background-color: color-mix(in oklch, var(--brand) 22%, transparent);
 }
 .dark ::selection {
-  background-color: color-mix(in oklch, var(--link) 32%, transparent);
+  background-color: color-mix(in oklch, var(--brand) 32%, transparent);
 }
 
 /* Apple-style headings: extrabold + tight, size-specific tracking. Components
@@ -47,7 +47,8 @@ a:not(.no-underline) {
   text-decoration: underline;
   text-decoration-color: color-mix(in oklch, var(--foreground) 25%, transparent);
   text-decoration-skip-ink: none;
-  text-underline-offset: 2px;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
   transition:
     color 150ms var(--ease-out-curve),
     text-decoration-color 150ms var(--ease-out-curve);

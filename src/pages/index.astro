@@ -6,22 +6,11 @@ import SocialLinks from "@/components/SocialLinks.astro";
 import Layout from "@/layouts/Layout.astro";
 import { socialLinks } from "@/lib/social-links";
 import { SITE_DESCRIPTION } from "@/consts";
-import {
-  LATEST_APPEARANCES_QUERY,
-  LATEST_POSTS_QUERY,
-  LATEST_PROJECTS_QUERY,
-} from "@/sanity/lib/queries";
-import type {
-  LATEST_APPEARANCES_QUERY_RESULT,
-  LATEST_POSTS_QUERY_RESULT,
-  LATEST_PROJECTS_QUERY_RESULT,
-} from "@/sanity/sanity.types";
+import { LATEST_ITEMS_QUERY } from "@/sanity/lib/queries";
+import type { LATEST_ITEMS_QUERY_RESULT } from "@/sanity/sanity.types";
 
-const [latestPosts, latestProjects, latestAppearances] = await Promise.all([
-  sanityClient.fetch<LATEST_POSTS_QUERY_RESULT>(LATEST_POSTS_QUERY),
-  sanityClient.fetch<LATEST_PROJECTS_QUERY_RESULT>(LATEST_PROJECTS_QUERY),
-  sanityClient.fetch<LATEST_APPEARANCES_QUERY_RESULT>(LATEST_APPEARANCES_QUERY),
-]);
+const latestItems =
+  await sanityClient.fetch<LATEST_ITEMS_QUERY_RESULT>(LATEST_ITEMS_QUERY);
 
 // Person entity for the site — links the profile to every social account so
 // search engines can associate them (knowledge-panel eligibility).
@@ -65,16 +54,6 @@ const personJsonLd = {
         </div>
       </div>
     </section>
-    <LatestItemsSection
-      title="Writing"
-      items={latestPosts}
-      basePath="/writing"
-    />
-    <LatestItemsSection title="Work" items={latestProjects} basePath="/work" />
-    <LatestItemsSection
-      title="Appearances"
-      items={latestAppearances}
-      basePath="/appearances"
-    />
+    <LatestItemsSection title="Latest" items={latestItems} />
   </main>
 </Layout>

@@ -1,7 +1,12 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   Color — a NEUTRAL-INK system. There is no brand hue: the accent IS the
-   foreground (near-black in light, near-white in dark). Interactivity is
-   expressed with ink weight and faint neutral washes, never color.
+   Color — a NEUTRAL Apple-style palette with ONE reserved brand hue.
+
+   The text/surface system is neutral ink (near-black in light, near-white in
+   dark) on an off-white canvas. Interactivity is expressed with ink weight,
+   faint neutral washes, and elevation — never color. The single exception is
+   `--brand` (viridian): a reserved personality hue that carries the logo mark,
+   the signature, and the text-selection tint. It is never used for text
+   contrast, so it has no APCA constraint — keep it OUT of body/UI text.
 
    Light is the default (:root). Dark mode is a class toggle: add `class="dark"`
    to a root ancestor (the site sets it on <html>) to switch every token below.
@@ -11,44 +16,64 @@
 :root {
   color-scheme: light;
 
-  --background: oklch(1 0 0); /* pure white page */
+  /* Off-white canvas (≈ #f5f5f7, Apple section gray). White cards and hovers
+     lift ABOVE it — the ground is deliberately not pure white. */
+  --background: oklch(0.971 0 0);
 
   /* Text hierarchy — Apple-style near-black, three steps (never pure #000) */
   --foreground: #1d1d1f;         /* primary — headings & key copy */
-  --foreground-muted: #6e6e73;   /* secondary — body & descriptions */
+  --foreground-muted: #6b6b70;   /* secondary — body & descriptions (holds ≥4.5:1 on the canvas) */
   --foreground-subtle: #86868b;  /* tertiary — captions, meta, timestamps */
 
-  /* Recessed off-white surfaces — wells, hover highlights, inline code */
-  --surface: oklch(0.971 0 0);       /* ≈ #f5f5f7, Apple section gray */
-  --surface-hover: oklch(0.952 0 0);
+  /* Recessed surfaces — wells, inline code, menu-item hovers. One step BELOW
+     the canvas so they still read as sunken now that the canvas is off-white. */
+  --surface: oklch(0.955 0 0);
+  --surface-hover: oklch(0.94 0 0);
 
-  /* The reserved accent = the ink itself. Links read as foreground + faint
-     underline, deepening to pure black on hover. */
+  /* Raised surface — rows and nav items lift to pure white above the gray
+     canvas. White-on-gray is low-contrast, so a raised element needs a depth
+     cue: a hairline ring + whisper shadow read it as an elevated card. */
+  --surface-raised: oklch(1 0 0);
+  --surface-raised-shadow:
+    0 1px 2px oklch(0 0 0 / 0.05),
+    inset 0 0 0 1px oklch(0 0 0 / 0.045);
+  --nav-hover-shadow: var(--surface-raised-shadow);
+
+  /* The reserved accent for interactivity = the ink itself. Links read as
+     foreground + faint underline, deepening to pure black on hover. */
   --link: var(--foreground);
   --link-hover: #000;
-  --link-underline: #bbb;
 
-  /* Nav washes — the ink at low opacity. Active is stronger than hover. */
+  /* Brand accent — viridian. The single reserved hue in an otherwise neutral
+     system: logo mark, signature, and the text-selection tint. Pure
+     personality — never used for text contrast. Dark variant below. */
+  --brand: oklch(0.64 0.135 164.8); /* #00a577 */
+
+  /* Nav washes / lifts. Active is a faint neutral ink wash ("you are here");
+     hover lifts to the raised white surface (paired with --nav-hover-shadow). */
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
-  --nav-hover: color-mix(in oklch, var(--link) 5%, transparent);
+  --nav-hover: var(--surface-raised);
 
-  /* Neutral metadata pill (e.g. "Updated", year chips) */
-  --badge: oklch(0.971 0 0);
+  /* Neutral metadata pill (e.g. "Updated", year chips) — a touch deeper than
+     the canvas so it still reads on the off-white ground. */
+  --badge: oklch(0.94 0 0);
   --badge-foreground: var(--foreground-muted);
 
-  /* Structural neutrals (shadcn surface set) */
+  /* Structural neutrals (shadcn surface set). On-surface text tokens alias our
+     own ink hierarchy so text reads identically whether a native element or a
+     shadcn primitive renders it. Tweak the source tokens, not these aliases. */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --popover-foreground: var(--foreground);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: var(--foreground);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted-foreground: var(--foreground-muted);
   --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent-foreground: var(--foreground);
   --destructive: oklch(0.577 0.245 27.325);
 
   /* Hairlines — opacity-based so they sit correctly on any surface */
@@ -60,37 +85,47 @@
 .dark {
   color-scheme: dark;
 
-  --background: oklch(0.165 0 0); /* deep near-black, ≈ #1a1a1a */
+  --background: oklch(0.165 0 0); /* deep near-black, ≈ #0e0e0e */
 
   /* Brighter hierarchy so body copy holds up on the dark field */
   --foreground: #f5f5f7;
   --foreground-muted: #a1a1a6;
   --foreground-subtle: #86868b;
 
+  --surface: oklch(0.215 0 0);
+  --surface-hover: oklch(0.245 0 0);
+  /* Dark keeps hover on the recessed surface — no white-lift, no elevation
+     shadow (elevation is a light-mode device). */
+  --surface-raised: var(--surface);
+  --surface-raised-shadow: none;
+  --nav-hover-shadow: none;
+
   /* Ink flips to white; interactivity brightens toward pure white */
   --link: var(--foreground);
   --link-hover: #fff;
 
+  /* Brand accent, dark variant — L raised / C trimmed so viridian holds up on
+     the dark field. */
+  --brand: oklch(0.71 0.124 164.8); /* #44b98e */
+
   --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
   --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
 
-  --surface: oklch(0.215 0 0);
-  --surface-hover: oklch(0.245 0 0);
   --badge: oklch(0.245 0 0);
   --badge-foreground: var(--foreground-muted);
 
   --card: oklch(0.215 0 0);
-  --card-foreground: oklch(0.985 0 0);
+  --card-foreground: var(--foreground);
   --popover: oklch(0.215 0 0);
-  --popover-foreground: oklch(0.985 0 0);
+  --popover-foreground: var(--foreground);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  --secondary-foreground: var(--foreground);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted-foreground: var(--foreground-muted);
   --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --accent-foreground: var(--foreground);
   --destructive: oklch(0.704 0.191 22.216);
 
   --border: oklch(1 0 0 / 0.1);
