@@ -65,7 +65,7 @@ export default function Presence({ plain = false }: Props) {
 
   return (
     <div
-      className={`inline-flex items-center gap-2 text-body ${
+      className={`inline-flex items-center gap-2 text-subtle-foreground ${
         plain ? "text-sm" : "font-mono-custom"
       }`}
     >
@@ -83,14 +83,14 @@ export default function Presence({ plain = false }: Props) {
           }`}
         />
       </span>
-      <span className="tabular-nums whitespace-nowrap">
+      <span className="whitespace-nowrap tabular-nums">
         {PRESENCE.location}{" "}
         {now ? (
           timeFormatter.format(now)
         ) : (
           // Same-width placeholder (tabular-nums: "--:--" === "21:05") so the
           // time appearing on mount doesn't shift the navbar layout (no CLS).
-          <span className="text-body/50">--:--</span>
+          <span className="text-subtle-foreground/50">--:--</span>
         )}
       </span>
       <span className="sr-only">

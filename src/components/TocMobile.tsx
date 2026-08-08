@@ -126,7 +126,7 @@ export default function TocMobile({ headings, title }: Props) {
       // enough that muted ToC items stay legible when the panel opens over busy
       // article images. Solid fallback where backdrop-filter is unsupported (and
       // under prefers-reduced-transparency; see global.css).
-      className="fixed inset-s-1/2 top-[calc(env(safe-area-inset-top)+5.5rem)] z-30 w-[65vw] overflow-hidden rounded-lg border border-border bg-background supports-[backdrop-filter]:bg-background/90 shadow-lg backdrop-blur-xl rail:hidden dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
+      className="fixed inset-s-1/2 top-[calc(env(safe-area-inset-top)+5.5rem)] z-30 w-[65vw] overflow-hidden rounded-lg border border-border bg-background shadow-lg backdrop-blur-xl supports-[backdrop-filter]:bg-background/90 rail:hidden dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
     >
       <button
         ref={triggerRef}
@@ -139,7 +139,7 @@ export default function TocMobile({ headings, title }: Props) {
         <span className="min-w-0 flex-1 truncate">{title}</span>
         <motion.svg
           viewBox="0 0 24 24"
-          className="size-4 shrink-0 text-body"
+          className="size-4 shrink-0 text-subtle-foreground"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
@@ -194,9 +194,7 @@ export default function TocMobile({ headings, title }: Props) {
                     onClick={(e) => handleHeadingClick(e, h.id)}
                     aria-current={isActive ? "location" : undefined}
                     className={`flex items-center gap-2 rounded-md px-2 py-3 no-underline transition-colors ${
-                      isActive
-                        ? "text-foreground"
-                        : "quiet-link"
+                      isActive ? "text-foreground" : "quiet-link"
                     } ${h.level === 3 ? "ps-4" : h.level === 4 ? "ps-6" : ""}`}
                   >
                     <span

@@ -103,7 +103,7 @@ const description = SECTION_META.links.description;
                           link.iconBackground,
                         ]}
                       />
-                      <span class="pointer-events-none inline-flex items-center gap-1 text-xs font-medium text-body transition-colors duration-200 ease-out can-hover:group-hover:text-body">
+                      <span class="pointer-events-none inline-flex items-center gap-1 text-xs font-medium text-subtle-foreground transition-colors duration-200 ease-out can-hover:group-hover:text-subtle-foreground">
                         {link.actionLabel}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -130,12 +130,12 @@ const description = SECTION_META.links.description;
                               {formatFollowerCount(link.followerCount)}
                             </span>
                           </p>
-                          <p class="mt-2 text-sm leading-none text-body">
+                          <p class="mt-2 text-sm leading-none text-subtle-foreground">
                             {followLabel}
                           </p>
                         </>
                       ) : (
-                        <p class="mt-2.5 text-base leading-none font-medium text-body">
+                        <p class="mt-2.5 text-base leading-none font-medium text-subtle-foreground">
                           {link.description}
                         </p>
                       )}

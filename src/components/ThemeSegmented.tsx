@@ -31,10 +31,10 @@ export default function ThemeSegmented({
             variant === "plain"
               ? theme === option.value
                 ? "font-medium text-foreground"
-                : "text-body hover:text-foreground"
+                : "text-subtle-foreground hover:text-foreground"
               : theme === option.value
                 ? "bg-foreground/10 text-foreground"
-                : "text-body hover:text-foreground",
+                : "text-subtle-foreground hover:text-foreground",
           )}
         >
           {option.label}

@@ -72,7 +72,10 @@ const thumbnailFallback = videoId
     "error",
     (event) => {
       const img = event.target as HTMLElement;
-      if (!(img instanceof HTMLImageElement) || !img.classList.contains("yt-thumb"))
+      if (
+        !(img instanceof HTMLImageElement) ||
+        !img.classList.contains("yt-thumb")
+      )
         return;
       const fallback = img.dataset.fallback;
       if (fallback && img.src !== fallback) {
@@ -93,7 +96,9 @@ const thumbnailFallback = videoId
 
     const iframe = document.createElement("iframe");
     iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
-    iframe.title = btn.getAttribute("aria-label")?.replace(/^Play video: /, "") ?? "YouTube video";
+    iframe.title =
+      btn.getAttribute("aria-label")?.replace(/^Play video: /, "") ??
+      "YouTube video";
     iframe.allow =
       "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     iframe.allowFullscreen = true;
@@ -178,7 +183,7 @@ const thumbnailFallback = videoId
     text-align: center;
     /* AA-tested secondary token (≥4.5:1 in both modes) — a transparent mix of
        currentColor drops below AA. */
-    color: var(--body);
+    color: var(--subtle-foreground);
   }
 
   @media (prefers-reduced-motion: reduce) {

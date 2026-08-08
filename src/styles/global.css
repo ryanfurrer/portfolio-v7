@@ -84,7 +84,7 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* custom */
-  --color-body: var(--body);
+  --color-subtle-foreground: var(--subtle-foreground);
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
   --color-brand: var(--brand);
@@ -148,7 +148,7 @@
   /* Reading tier — the workhorse body ink. Sits between --foreground (strong:
      headings, emphasis) and --muted-foreground (light: large display + labels).
      Clears AA (~4.5:1) at small sizes, where muted deliberately does not. */
-  --body: oklch(0.56 0.008 286);
+  --subtle-foreground: oklch(0.56 0.008 286);
   --link: var(--foreground);
   --link-hover: #000;
   --brand: oklch(
@@ -164,7 +164,7 @@
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
   --nav-hover: var(--surface-raised);
   --badge: oklch(0.94 0.002 286);
-  --badge-foreground: var(--body);
+  --badge-foreground: var(--subtle-foreground);
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
   --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -206,7 +206,7 @@
   --sidebar-ring: oklch(0.556 0.008 286);
 
   /* custom */
-  --body: oklch(0.708 0.008 286);
+  --subtle-foreground: oklch(0.708 0.008 286);
   --link: var(--foreground);
   --link-hover: #fff;
   --brand: oklch(0.76 0.16 56); /* orange brand — marks / tints / focus rings */
@@ -218,7 +218,7 @@
   --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
   --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
   --badge: oklch(0.245 0.003 286);
-  --badge-foreground: var(--body);
+  --badge-foreground: var(--subtle-foreground);
   --shadow-elevated: none;
 }
 
@@ -519,7 +519,7 @@ html.dark {
      underlined) and from navbar items (which add an active pill). Display is
      left to the call site so it works in block, flex, and inline contexts. */
   .quiet-link {
-    color: var(--color-body);
+    color: var(--color-subtle-foreground);
     text-decoration: none;
     transition-property: color;
     transition-timing-function: var(--ease-out-curve);
@@ -559,8 +559,8 @@ html.dark {
     letter-spacing: 0.025em;
     text-transform: uppercase;
     /* Body tier (not muted): these small uppercase labels must clear AA, so they
-       ride --body — which stays AA-dark when --muted-foreground lightens. */
-    color: var(--body);
+       ride --subtle-foreground — which stays AA-dark when --muted-foreground lightens. */
+    color: var(--subtle-foreground);
   }
 
   /* Neutral metadata pill — e.g. "Updated", year chips */
@@ -641,7 +641,7 @@ html.dark {
     margin-inline: auto;
     width: 100% !important;
     max-width: var(--container-content) !important;
-    color: var(--color-body) !important;
+    color: var(--color-subtle-foreground) !important;
   }
 
   .prose h1,
@@ -668,7 +668,7 @@ html.dark {
     font-size: 1.2rem;
     line-height: 1.6;
     letter-spacing: -0.011em;
-    color: var(--color-body);
+    color: var(--color-subtle-foreground);
     text-wrap: pretty;
   }
 
@@ -730,7 +730,7 @@ html.dark {
   .prose blockquote {
     font-style: normal;
     border-inline-start: 2px solid var(--border);
-    color: var(--color-body);
+    color: var(--color-subtle-foreground);
   }
 
   .prose img {
@@ -1125,7 +1125,7 @@ html.dark {
    figcaption). */
 .prose .zoomable-figure figcaption {
   margin-block: 0.75rem 0;
-  color: var(--color-body);
+  color: var(--color-subtle-foreground);
   font-size: 0.875rem;
   line-height: 1.5;
   text-align: center;
