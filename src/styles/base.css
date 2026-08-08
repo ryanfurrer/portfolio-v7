@@ -1,0 +1,122 @@
+/* Base element rules */
+
+html {
+  background-color: var(--background);
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  /* Keep anchor jumps (TOC links, skip link) clear of the sticky header. */
+  scroll-padding-top: 5rem;
+}
+
+/* Brand-tinted text selection — a translucent --brand wash so the underlying
+   ink stays legible in both themes (a solid fill would wash out the text). */
+::selection {
+  background-color: color-mix(in oklch, var(--brand) 30%, transparent);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: oklch(0 0 0 / 0.22);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(0 0 0 / 0.35);
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0 0 0 / 0.22) transparent;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: oklch(1 0 0 / 0.2);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: oklch(1 0 0 / 0.33);
+}
+html.dark {
+  scrollbar-color: oklch(1 0 0 / 0.2) transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════  */
+
+/* Accessibility preference queries (after base tokens so prefers-contrast :root/.dark overrides win when active) */
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property:
+      opacity, color, background-color, border-color, fill, stroke,
+      text-decoration-color !important;
+  }
+  /* Auto-hiding chrome is motion-adjacent: keep the header pinned visible for
+     reduced-motion users instead of letting it jump in and out on scroll.
+     Un-layered, so it beats the Tailwind utility (which lives in a layer). */
+  [data-site-header][data-hidden] {
+    translate: none;
+  }
+}
+
+/* Reduced transparency — the scrolled header and the floating menus are
+   translucent "glass" (backdrop-blur). When the OS asks for reduced
+   transparency, swap them to a solid surface and drop the blur so text over
+   changing backgrounds stays fully legible. Kept outside @layer so these beat
+   the Tailwind utility classes that set the glass on those elements. */
+@media (prefers-reduced-transparency: reduce) {
+  [data-site-header][data-scrolled] {
+    background-color: var(--background);
+    backdrop-filter: none;
+  }
+  [data-slot="navigation-menu-content"],
+  [data-slot="dropdown-menu-content"] {
+    background-color: var(--popover);
+    backdrop-filter: none;
+  }
+  [data-toc-mobile] {
+    background-color: var(--background);
+    backdrop-filter: none;
+  }
+  /* Drop the lightbox blur; a more opaque scrim obscures the page instead. */
+  .image-zoom-dialog[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: none;
+  }
+}
+
+/* Increased contrast — firm up the hairline system into defined borders so
+   structural edges (cards, menus, inputs, the scrolled header) read clearly. */
+@media (prefers-contrast: more) {
+  :root {
+    --border: oklch(0 0 0 / 0.55);
+    --input: oklch(0 0 0 / 0.6);
+  }
+  .dark {
+    --border: oklch(1 0 0 / 0.5);
+    --input: oklch(1 0 0 / 0.55);
+  }
+  [data-site-header][data-scrolled],
+  [data-slot="navigation-menu-content"],
+  [data-slot="dropdown-menu-content"] {
+    background-color: var(--popover);
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+  }
+  [data-toc-mobile] {
+    background-color: var(--background);
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+  }
+}

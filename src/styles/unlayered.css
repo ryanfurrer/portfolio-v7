@@ -1,0 +1,136 @@
+/* Un-layered overrides — OUT of @layer on purpose: an un-layered rule beats any @layer rule regardless of specificity/order, which is how these win over Tailwind utilities + Typography. (.quiet-link, the layered sibling of the body-link rule, lives in @layer base above.) */
+
+/* ── Entrance reveal ──────────────────────────────────────────────────
+   Content marked [data-reveal] fades + rises in once on load, cascading top to
+   bottom. The `reveal-init` class is added to <html> before paint by the inline
+   script in Head.astro — only when JS is on AND motion is allowed — so no-JS
+   and reduced-motion users get the content immediately, unhidden. The cascade
+   itself is driven by scripts/reveal.ts (which adds .is-revealed). The failsafe
+   animation reveals everything after 2s if that script never runs, so content —
+   especially article bodies — can't get stuck hidden. Kept outside @layer so
+   the hidden state beats Tailwind's opacity utilities. */
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+.reveal-init [data-reveal]:not(.is-revealed) {
+  opacity: 0;
+  animation: reveal-failsafe 0.3s var(--ease-out-curve) 2s forwards;
+}
+
+.reveal-init [data-reveal].is-revealed {
+  animation: reveal-rise 0.5s var(--ease-out-curve) both;
+}
+
+/* Table of Contents active link — outside @layer so it beats Tailwind utility classes */
+[data-toc-link].is-active {
+  color: var(--color-foreground);
+}
+
+/* Tailwind Typography gives <picture> a 2em block margin (its @layer utilities
+   rule). Inside the zoom trigger <button> — its own formatting context — that
+   margin can't collapse out, so it sits *inside* the button and floats the focus
+   ring 32px off the image. The button already owns the block spacing. Un-layered
+   to beat Typography's utilities-layer rule. (The nested <img> is already zeroed
+   by Typography's own `picture > img` reset.) */
+.prose .zoomable-image picture {
+  margin: 0;
+}
+
+/* The header image is a direct <img> (no <picture>), so Typography's 2em img
+   margin (utilities layer) applies and — because the trigger <button> is its own
+   formatting context — sits inside the button, floating the image down. Zero it
+   here, un-layered to beat that rule; the button owns the block spacing. */
+.prose > .zoomable-image > img {
+  margin: 0;
+}
+
+/* Body images are wrapped in <figure>. Typography already gives the figure a 2em
+   block margin and zeroes its children (`figure > *`), so the wrapper owns the
+   image's spacing and the trigger's own margin stands down — no override needed
+   there. Only the caption is restyled (un-layered to beat Typography's default
+   figcaption). */
+.prose .zoomable-figure figcaption {
+  margin-block: 0.75rem 0;
+  color: var(--color-subtle-foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* TOC traveling indicator — an ink bar in the left gutter that slides between
+   active links as the scroll-spy moves, echoing the dir-hover highlight.
+   Position rides the composited `translate`; vars are set by the script in
+   TableOfContents.astro. While [data-toc-snap] is present the transition is
+   suppressed so the bar can appear in place (first activation). */
+nav.toc::before {
+  content: "";
+  position: absolute;
+  left: -0.75rem;
+  top: 0;
+  width: 2px;
+  height: var(--toc-active-h, 0);
+  translate: 0 var(--toc-active-y, 0);
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  opacity: var(--toc-active-opacity, 0);
+  transition:
+    translate 0.2s var(--ease-out-curve),
+    height 0.2s var(--ease-out-curve),
+    opacity 0.15s var(--ease-out-curve);
+}
+nav.toc[data-toc-snap]::before {
+  transition: none;
+}
+
+/* Body links — single source of truth for both plain (main) and rich-text
+   (.prose) contexts. Kept outside @layer so it beats Tailwind Typography's
+   prose link styles, which live in a later cascade layer and would otherwise
+   win on layer order (regardless of specificity) — this is what the old
+   .prose a !important duplicate was really working around. Reads as foreground
+   "ink" + a faint underline at rest, and reveals the reserved accent on hover
+   and keyboard focus (focus also gets the global outline ring on top). */
+:is(main, .prose) a:not(.no-underline) {
+  font-weight: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in oklch,
+    var(--color-foreground) 25%,
+    transparent
+  );
+  text-decoration-skip-ink: none;
+  /* Match the standalone CTA's wipe-in underline (Link.astro): 1.5px line held
+     ~1px off the baseline, so inline prose links and CTAs speak one underline. */
+  text-decoration-thickness: 1.5px;
+  /* text-underline-offset: 3px; */
+  transition-property: color, text-decoration-color;
+  transition-timing-function: var(--ease-out-curve);
+  transition-duration: 150ms;
+  /* :hover gated so a tap on touch doesn't latch the accent; :focus-visible
+     (keyboard) stays. Tapping a body link navigates away anyway. */
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-foreground);
+      text-decoration-color: var(--color-foreground);
+    }
+  }
+  &:focus-visible {
+    color: var(--color-foreground);
+    text-decoration-color: var(--color-foreground);
+  }
+}

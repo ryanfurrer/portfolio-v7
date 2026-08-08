@@ -1,0 +1,110 @@
+@layer base {
+  .prose {
+    margin-inline: auto;
+    width: 100% !important;
+    max-width: var(--container-content) !important;
+    color: var(--color-subtle-foreground) !important;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    color: var(--color-foreground) !important;
+    scroll-margin-block-start: 1.5em;
+  }
+
+  /* Size-specific tracking: the article title is a display size, so it wants a
+     touch tighter tracking than the global -0.022em (letters read too loose as
+     they grow). */
+  .prose h1 {
+    letter-spacing: -0.03em;
+  }
+
+  /* Standfirst / dek — a larger, muted intro line that reads as editorial lede
+     rather than body copy. Used for the article standfirst on content pages and
+     the homepage tagline so the site opens with one consistent voice. */
+  .lead {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    letter-spacing: -0.011em;
+    color: var(--color-subtle-foreground);
+    text-wrap: pretty;
+  }
+
+  /* In an article, the dek is the opening description — give it the spacing that
+     sets it apart from the title above and the first body sentence below. */
+  .prose > .lead {
+    margin-top: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .prose b,
+  .prose strong {
+    font-weight: 600 !important;
+    color: var(--color-foreground) !important;
+  }
+
+  /* Inline code — a distinct token pill. A deeper fill than the general surface
+     plus a hairline ring so it stays legible on the off-white canvas (where a
+     surface-close fill would otherwise vanish). Dark keeps its recessed surface. */
+  .prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    font-weight: 500;
+    background-color: oklch(0.925 0 0);
+    box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.08);
+    color: var(--color-foreground);
+    padding: 0.125em 0.375em;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+  .dark .prose :not(pre) > code {
+    background-color: var(--surface);
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.08);
+  }
+
+  .prose :not(pre) > code::before,
+  .prose :not(pre) > code::after {
+    content: none !important;
+  }
+
+  /* Code blocks — soften the corners and fence them in a hairline */
+  .prose pre {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+
+  /* Shiki dual-theme: the <Code> component ships catppuccin-latte (light) as
+     inline styles plus a parallel set of --shiki-dark vars. Swap to the dark
+     palette under prefers-color-scheme; inline styles force the !important. */
+  .dark .astro-code,
+  .dark .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+
+  .prose blockquote {
+    font-style: normal;
+    border-inline-start: 2px solid var(--border);
+    color: var(--color-subtle-foreground);
+  }
+
+  .prose img {
+    display: block;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    /* Pure black/white hairline outline — never a tinted neutral, which reads
+       as dirt on the image edge. Flips to white in dark mode. */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .prose img {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}

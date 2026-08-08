@@ -1,0 +1,171 @@
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  /* Single, consistent keyboard focus ring for every interactive element. Uses
+     a box-shadow ring (not outline) so it follows border-radius everywhere,
+     including older Safari, and a neutral gray so it never clashes with the
+     accent. 2px background gap + 2px ring mirrors Tailwind's ring-offset-2.
+     Deliberately NOT :where() — specificity must sit above a lone utility class
+     so a resting shadow-* (e.g. a button's shadow-lg) can't hide the ring. */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-ring);
+  }
+
+  /* Apple-style headings: extrabold + tight tracking, matching the weight of
+     content-page (.prose) h1s. Components that set their own weight
+     (.small-heading, font-medium/semibold utilities) still win. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--foreground);
+    font-weight: 800;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  .font-mono-custom {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Role E — standalone nav-text links: footer sitemap, social links, and the
+     table of contents (desktop + mobile). Muted ink at rest, foreground on
+     hover/focus, never underlined. Distinct from inline body links (which are
+     underlined) and from navbar items (which add an active pill). Display is
+     left to the call site so it works in block, flex, and inline contexts. */
+  .quiet-link {
+    color: var(--color-subtle-foreground);
+    text-decoration: none;
+    transition-property: color;
+    transition-timing-function: var(--ease-out-curve);
+    transition-duration: 150ms;
+  }
+
+  /* :hover gated to hover-capable pointers (no sticky ink on touch tap); the
+     keyboard :focus-visible affordance stays. The :active rule below covers the
+     touch press feedback. */
+  @media (hover: hover) {
+    .quiet-link:hover {
+      color: var(--color-foreground);
+    }
+  }
+  .quiet-link:focus-visible {
+    color: var(--color-foreground);
+  }
+
+  /* Instant press acknowledgment — the link inks up the moment it's pressed
+     (pointer-down), not only on release. Matches the press feedback on Items
+     and buttons so every interactive element responds to the touch. */
+  .quiet-link:active {
+    color: var(--color-foreground);
+  }
+
+  .small-heading {
+    /* Berkeley Mono so eyebrows read as the same technical family as the mono
+       metadata beside them (role tags, dates). Regular 400 (not bold) for a
+       quieter label that unifies with those inline tokens. */
+    font-family: var(--font-mono);
+    /* 13px — a half-step above the 12px inline role tags so section eyebrows
+       carry a little more presence/hierarchy without competing with content. */
+    font-size: 0.8125rem;
+    font-weight: 400;
+    /* Tracking matches the mono role tags (Tailwind `tracking-wide`, 0.025em)
+       so eyebrows and the item labels beside them read as one system. */
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    /* Body tier (not muted): these small uppercase labels must clear AA, so they
+       ride --subtle-foreground — which stays AA-dark when --muted-foreground lightens. */
+    color: var(--subtle-foreground);
+  }
+
+  /* Neutral metadata pill — e.g. "Updated", year chips */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 9999px;
+    background-color: var(--badge);
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: var(--badge-foreground);
+    white-space: nowrap;
+  }
+
+  .squircle {
+    corner-shape: squircle;
+  }
+
+  /* Raised card — a white surface lifted above the off-white canvas with a
+     hairline ring + soft shadow (Apple "white cards on gray"). Dark mode keeps
+     the flat recessed surface it already used (shadow-elevated is none there),
+     with a bright inset hairline instead. */
+  .card-raised {
+    background-color: var(--card);
+    box-shadow:
+      inset 0 0 0 1px oklch(0 0 0 / 0.05),
+      var(--shadow-elevated);
+    transition:
+      box-shadow 0.25s var(--ease-out-curve),
+      translate 0.25s var(--ease-out-curve);
+  }
+  /* Hover: the card physically lifts (rise + deeper, softer shadow) — the depth
+     cue reads as "pick me up" rather than a flat color swap. Gated to
+     hover-capable pointers so a tap on touch doesn't latch the lift. */
+  @media (hover: hover) {
+    .card-raised:hover {
+      translate: 0 -2px;
+      box-shadow:
+        inset 0 0 0 1px oklch(0 0 0 / 0.05),
+        0 4px 10px -3px oklch(0 0 0 / 0.09),
+        0 16px 34px -10px oklch(0 0 0 / 0.13);
+    }
+  }
+  /* Focus-visible: a proper offset ring that follows the border radius, on
+     top of the resting elevation — keyboard users get an unmistakable target. */
+  .card-raised:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 1px oklch(0 0 0 / 0.05),
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ring),
+      var(--shadow-elevated);
+  }
+  .dark .card-raised {
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.06);
+  }
+  @media (hover: hover) {
+    .dark .card-raised:hover {
+      translate: 0 -2px;
+      background-color: var(--surface-hover);
+      box-shadow:
+        inset 0 0 0 1px oklch(1 0 0 / 0.09),
+        0 8px 24px -10px oklch(0 0 0 / 0.6);
+    }
+  }
+  .dark .card-raised:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 1px oklch(1 0 0 / 0.09),
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ring);
+  }
+}
