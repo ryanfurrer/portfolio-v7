@@ -1119,7 +1119,7 @@ html.dark {
 
 /* Table of Contents active link — outside @layer so it beats Tailwind utility classes */
 [data-toc-link].is-active {
-  color: var(--color-primary);
+  color: var(--color-foreground);
 }
 
 /* Tailwind Typography gives <picture> a 2em block margin (its @layer utilities
