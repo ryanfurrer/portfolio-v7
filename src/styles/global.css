@@ -84,10 +84,10 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* custom */
+  --color-body: var(--body);
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
   --color-brand: var(--brand);
-  --color-brand-strong: var(--brand-strong);
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);
   --color-nav-active: var(--nav-active);
@@ -122,7 +122,7 @@
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.56 0 0);
+  --muted-foreground: oklch(0.72 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
@@ -145,14 +145,13 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* custom */
+  /* Reading tier — the workhorse body ink. Sits between --foreground (strong:
+     headings, emphasis) and --muted-foreground (light: large display + labels).
+     Clears AA (~4.5:1) at small sizes, where muted deliberately does not. */
+  --body: oklch(0.56 0 0);
   --link: var(--foreground);
   --link-hover: #000;
-  --brand: oklch(
-    0.64 0.135 164.8
-  ); /* viridian #00a577 — logo/signature/selection, never text */
-  --brand-strong: oklch(
-    0.48 0.13 164.8
-  ); /* AA-safe viridian for text (--brand fails as text) */
+  --brand: oklch(0.76 0.16 56); /* orange brand — marks / tints / focus rings; too light for text */
   --surface: oklch(0.955 0 0);
   --surface-hover: oklch(0.94 0 0);
   --surface-raised: oklch(1 0 0);
@@ -162,7 +161,7 @@
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
   --nav-hover: var(--surface-raised);
   --badge: oklch(0.94 0 0);
-  --badge-foreground: var(--muted-foreground);
+  --badge-foreground: var(--body);
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
   --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -182,7 +181,7 @@
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: var(--foreground);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted-foreground: oklch(0.72 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.704 0.191 22.216);
@@ -204,12 +203,10 @@
   --sidebar-ring: oklch(0.556 0 0);
 
   /* custom */
+  --body: oklch(0.708 0 0);
   --link: var(--foreground);
   --link-hover: #fff;
-  --brand: oklch(
-    0.71 0.124 164.8
-  ); /* #44b98e — already AA as text on dark, so brand-strong reuses it */
-  --brand-strong: var(--brand);
+  --brand: oklch(0.76 0.16 56); /* orange brand — marks / tints / focus rings */
   --surface: oklch(0.215 0 0);
   --surface-hover: oklch(0.245 0 0);
   --surface-raised: var(--surface);
@@ -217,7 +214,7 @@
   --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
   --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
   --badge: oklch(0.245 0 0);
-  --badge-foreground: var(--muted-foreground);
+  --badge-foreground: var(--body);
   --shadow-elevated: none;
 }
 
@@ -524,7 +521,7 @@ html.dark {
      underlined) and from navbar items (which add an active pill). Display is
      left to the call site so it works in block, flex, and inline contexts. */
   .quiet-link {
-    color: var(--color-muted-foreground);
+    color: var(--color-body);
     text-decoration: none;
     transition-property: color;
     transition-timing-function: var(--ease-out-curve);
@@ -563,8 +560,9 @@ html.dark {
        so eyebrows and the item labels beside them read as one system. */
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    /* Quiet ink clears WCAG AA (4.5:1) for these small uppercase labels. */
-    color: var(--muted-foreground);
+    /* Body tier (not muted): these small uppercase labels must clear AA, so they
+       ride --body — which stays AA-dark when --muted-foreground lightens. */
+    color: var(--body);
   }
 
   /* Neutral metadata pill — e.g. "Updated", year chips */
@@ -647,7 +645,7 @@ html.dark {
     margin-inline: auto;
     width: 100% !important;
     max-width: var(--container-content) !important;
-    color: var(--color-muted-foreground) !important;
+    color: var(--color-body) !important;
   }
 
   .prose h1,
@@ -674,7 +672,7 @@ html.dark {
     font-size: 1.2rem;
     line-height: 1.6;
     letter-spacing: -0.011em;
-    color: var(--color-muted-foreground);
+    color: var(--color-body);
     text-wrap: pretty;
   }
 
@@ -736,7 +734,7 @@ html.dark {
   .prose blockquote {
     font-style: normal;
     border-inline-start: 2px solid var(--border);
-    color: var(--color-muted-foreground);
+    color: var(--color-body);
   }
 
   .prose img {
@@ -1126,7 +1124,7 @@ html.dark {
    figcaption). */
 .prose .zoomable-figure figcaption {
   margin-block: 0.75rem 0;
-  color: var(--color-muted-foreground);
+  color: var(--color-body);
   font-size: 0.875rem;
   line-height: 1.5;
   text-align: center;
@@ -1167,7 +1165,7 @@ nav.toc[data-toc-snap]::before {
    and keyboard focus (focus also gets the global outline ring on top). */
 :is(main, .prose) a:not(.no-underline) {
   font-weight: inherit;
-  color: var(--color-muted-foreground);
+  color: var(--color-body);
   text-decoration: underline;
   text-decoration-color: color-mix(
     in oklch,

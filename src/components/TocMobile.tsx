@@ -139,7 +139,7 @@ export default function TocMobile({ headings, title }: Props) {
         <span className="min-w-0 flex-1 truncate">{title}</span>
         <motion.svg
           viewBox="0 0 24 24"
-          className="size-4 shrink-0 text-muted-foreground"
+          className="size-4 shrink-0 text-body"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"

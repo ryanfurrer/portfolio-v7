@@ -8,7 +8,7 @@
  *
  * Icons are inline lucide paths (crisp + themeable, aria-hidden). Caution uses
  * rose rather than pure red so it stays distinct from the destructive/error red;
- * info leans on the reserved viridian at low opacity.
+ * info uses blue — the conventional informational hue.
  */
 type Variant = "info" | "warning" | "caution";
 
@@ -26,8 +26,9 @@ const VARIANTS: Record<
 > = {
   info: {
     label: "Note",
-    surface: "bg-brand/10 border-brand/35 dark:bg-brand/15 dark:border-brand/35",
-    accent: "text-brand-strong",
+    surface:
+      "bg-blue-50 border-blue-300/80 dark:bg-blue-950/40 dark:border-blue-900/60",
+    accent: "text-blue-700 dark:text-blue-300",
     // lucide: info
     icon: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
   },

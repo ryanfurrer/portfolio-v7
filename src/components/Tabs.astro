@@ -32,7 +32,7 @@ const active = initial ?? tabs[0]?.id;
           aria-controls={`panel-${t.id}`}
           aria-selected={t.id === active ? "true" : "false"}
           tabindex={t.id === active ? 0 : -1}
-          class="rounded-md px-4 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-selected:bg-foreground aria-selected:text-primary-foreground aria-selected:hover:text-primary-foreground"
+          class="rounded-md px-4 py-1.5 text-sm font-medium text-body transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-selected:bg-foreground aria-selected:text-primary-foreground aria-selected:hover:text-primary-foreground"
         >
           {t.label}
         </button>

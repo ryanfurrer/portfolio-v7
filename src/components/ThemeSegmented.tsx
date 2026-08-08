@@ -25,7 +25,7 @@ export default function ThemeSegmented({ size = "sm" }: Props) {
             size === "md" ? "px-3 py-2" : "px-2.5 py-1",
             theme === option.value
               ? "bg-foreground/10 text-foreground"
-              : "text-muted-foreground hover:text-foreground",
+              : "text-body hover:text-foreground",
           )}
         >
           {option.label}
