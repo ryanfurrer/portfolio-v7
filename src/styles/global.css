@@ -112,50 +112,50 @@
   /* shadcn/ui */
   --radius: 0.5rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.145 0.003 286);
   --card: oklch(1 0 0);
   --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.72 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --primary: oklch(0.205 0.003 286);
+  --primary-foreground: oklch(0.985 0.001 286);
+  --secondary: oklch(0.97 0.001 286);
+  --secondary-foreground: oklch(0.205 0.003 286);
+  --muted: oklch(0.97 0.001 286);
+  --muted-foreground: oklch(0.72 0.008 286);
+  --accent: oklch(0.97 0.001 286);
+  --accent-foreground: oklch(0.205 0.003 286);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.922 0.002 286);
+  --input: oklch(0.922 0.002 286);
+  --ring: oklch(0.708 0.008 286);
   /* dormant — shadcn defaults, unused until a chart/sidebar ships */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.985 0.001 286);
+  --sidebar-foreground: oklch(0.145 0.003 286);
+  --sidebar-primary: oklch(0.205 0.003 286);
+  --sidebar-primary-foreground: oklch(0.985 0.001 286);
+  --sidebar-accent: oklch(0.97 0.001 286);
+  --sidebar-accent-foreground: oklch(0.205 0.003 286);
+  --sidebar-border: oklch(0.922 0.002 286);
+  --sidebar-ring: oklch(0.708 0.008 286);
 
   /* custom */
   /* Reading tier — the workhorse body ink. Sits between --foreground (strong:
      headings, emphasis) and --muted-foreground (light: large display + labels).
      Clears AA (~4.5:1) at small sizes, where muted deliberately does not. */
-  --body: oklch(0.56 0 0);
+  --body: oklch(0.56 0.008 286);
   --link: var(--foreground);
   --link-hover: #000;
   --brand: oklch(
     0.76 0.16 56
   ); /* orange brand — marks / tints / focus rings; too light for text */
-  --surface: oklch(0.955 0 0);
-  --surface-hover: oklch(0.94 0 0);
+  --surface: oklch(0.955 0.002 286);
+  --surface-hover: oklch(0.94 0.002 286);
   --surface-raised: oklch(1 0 0);
   --surface-raised-shadow:
     0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
@@ -163,7 +163,7 @@
   --nav-hover-shadow: var(--surface-raised-shadow);
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
   --nav-hover: var(--surface-raised);
-  --badge: oklch(0.94 0 0);
+  --badge: oklch(0.94 0.002 286);
   --badge-foreground: var(--body);
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
   --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
@@ -173,51 +173,51 @@
   color-scheme: dark;
 
   /* shadcn/ui */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --background: oklch(0.145 0.003 286);
+  --foreground: oklch(0.985 0.001 286);
+  --card: oklch(0.205 0.003 286);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.205 0 0);
+  --popover: oklch(0.205 0.003 286);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
+  --primary: oklch(0.922 0.002 286);
+  --primary-foreground: oklch(0.205 0.003 286);
+  --secondary: oklch(0.269 0.003 286);
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.2 0 0);
-  --muted-foreground: oklch(0.72 0 0);
-  --accent: oklch(0.269 0 0);
+  --muted: oklch(0.2 0.003 286);
+  --muted-foreground: oklch(0.72 0.008 286);
+  --accent: oklch(0.269 0.003 286);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: oklch(0.556 0.008 286);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar: oklch(0.205 0.003 286);
+  --sidebar-foreground: oklch(0.985 0.001 286);
   --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0.001 286);
+  --sidebar-accent: oklch(0.269 0.003 286);
+  --sidebar-accent-foreground: oklch(0.985 0.001 286);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.556 0.008 286);
 
   /* custom */
-  --body: oklch(0.708 0 0);
+  --body: oklch(0.708 0.008 286);
   --link: var(--foreground);
   --link-hover: #fff;
   --brand: oklch(0.76 0.16 56); /* orange brand — marks / tints / focus rings */
-  --surface: oklch(0.215 0 0);
-  --surface-hover: oklch(0.245 0 0);
+  --surface: oklch(0.215 0.003 286);
+  --surface-hover: oklch(0.245 0.003 286);
   --surface-raised: var(--surface);
   --surface-raised-shadow: none;
   --item-hover: var(--secondary);
   --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
   --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
-  --badge: oklch(0.245 0 0);
+  --badge: oklch(0.245 0.003 286);
   --badge-foreground: var(--body);
   --shadow-elevated: none;
 }
@@ -1166,7 +1166,7 @@ nav.toc[data-toc-snap]::before {
    and keyboard focus (focus also gets the global outline ring on top). */
 :is(main, .prose) a:not(.no-underline) {
   font-weight: inherit;
-  color: var(--color-body);
+  color: inherit;
   text-decoration: underline;
   text-decoration-color: color-mix(
     in oklch,
@@ -1177,7 +1177,7 @@ nav.toc[data-toc-snap]::before {
   /* Match the standalone CTA's wipe-in underline (Link.astro): 1.5px line held
      ~1px off the baseline, so inline prose links and CTAs speak one underline. */
   text-decoration-thickness: 1.5px;
-  text-underline-offset: 3px;
+  /* text-underline-offset: 3px; */
   transition-property: color, text-decoration-color;
   transition-timing-function: var(--ease-out-curve);
   transition-duration: 150ms;
