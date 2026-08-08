@@ -64,9 +64,8 @@ const ogImageUrl = ogImage
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  {/* Active trial sans (see astro.config `fonts`). Emits @font-face + preload
-      for whatever --font-sans points at. Reverting to Geist means dropping this
-      and restoring the Geist woff2 preloads. */}
+  {/* Body sans — Google Sans via the Astro font provider (see astro.config
+      `fonts`). Emits @font-face + preload for whatever --font-sans points at. */}
   <Font cssVariable="--font-google-sans" preload />
   <link
     rel="preload"

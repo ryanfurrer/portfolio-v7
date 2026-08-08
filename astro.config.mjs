@@ -87,10 +87,10 @@ export default defineConfig({
     }),
   ],
   site: "https://ryanfurrer.com/",
-  // Font trials via Astro's Google provider. Each family here is exposed as a
-  // CSS variable; whichever one --font-sans points at (in global.css) is the
-  // live typeface. To try another Google family, add an entry, render its
-  // <Font> in Head.astro, and repoint --font-sans.
+  // Body typeface via Astro's Google provider. The family is exposed as a CSS
+  // variable that --font-sans points at (in global.css); the provider downloads
+  // it at build and emits a metric-matched fallback. Add an entry, render its
+  // <Font> in Head.astro, and repoint --font-sans to swap families.
   fonts: [
     {
       provider: fontProviders.google(),

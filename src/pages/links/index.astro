@@ -6,6 +6,7 @@ import TwitchIcon from "@/assets/icons/twitch.svg";
 import XIcon from "@/assets/icons/x.svg";
 import YoutubeIcon from "@/assets/icons/youtube.svg";
 import LinksCard from "@/components/ui/LinksCard.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
 import { socialLinks } from "@/lib/social-links";
 import { LINKS_LATEST_QUERY } from "@/sanity/lib/queries";
@@ -76,14 +77,7 @@ const description = SECTION_META.links.description;
   ogImage="/og/links.png"
 >
   <div class="space-y-16">
-    <header class="space-y-3">
-      <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
-        Links
-      </h1>
-      <p class="lead max-w-[52ch]" data-reveal>
-        {description}
-      </p>
-    </header>
+    <PageHeader title="Links" lead={description} />
 
     <main class="space-y-16">
       <section class="space-y-4">
@@ -96,12 +90,12 @@ const description = SECTION_META.links.description;
               const followLabel =
                 link.actionLabel === "Subscribe" ? "subscribers" : "followers";
               return (
-                <LinksCard href={link.href} class="group rounded-3xl p-4">
+                <LinksCard href={link.href} class="group squircle rounded-3xl p-4">
                   <div class="flex h-full flex-col justify-between gap-6">
                     <div class="flex items-start justify-between gap-2">
                       <IconComponent
                         class:list={[
-                          "size-10 shrink-0 rounded-xl p-2.5",
+                          "squircle size-10 shrink-0 rounded-xl p-2.5",
                           link.iconFill,
                           link.iconBackground,
                         ]}
@@ -162,7 +156,7 @@ const description = SECTION_META.links.description;
                 <a
                   href={`/${content.path}/${content.item.slug?.current}`}
                   data-reveal
-                  class="group block overflow-hidden rounded-2xl no-underline ring-1 ring-black/10 transition duration-200 ease-out hover:shadow-sm active:scale-[0.99] motion-reduce:active:scale-100 dark:ring-white/10 dark:hover:shadow-none"
+                  class="group squircle block overflow-hidden rounded-2xl no-underline ring-1 ring-black/10 transition duration-200 ease-out hover:shadow-sm active:scale-[0.99] motion-reduce:active:scale-100 dark:ring-white/10 dark:hover:shadow-none"
                 >
                   {content.ogImageUrl ? (
                     <img

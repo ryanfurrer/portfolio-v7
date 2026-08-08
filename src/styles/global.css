@@ -582,6 +582,12 @@ html.dark {
     white-space: nowrap;
   }
 
+  /* Continuous (superellipse) corners on top of any rounded-* radius. Progressive
+     enhancement — browsers without `corner-shape` fall back to the plain radius. */
+  .squircle {
+    corner-shape: squircle;
+  }
+
   /* Raised card — a white surface lifted above the off-white canvas with a
      hairline ring + soft shadow (Apple "white cards on gray"). Dark mode keeps
      the flat recessed surface it already used (shadow-elevated is none there),
