@@ -1,6 +1,7 @@
 ---
 import CtaLink from "@/components/CtaLink.astro";
 import CompanyHeader from "@/components/CompanyHeader.astro";
+import Container from "@/components/Container.astro";
 import Item from "@/components/Item.astro";
 import Layout from "@/layouts/Layout.astro";
 import { groupByYear } from "@/sanity/lib/content";
@@ -67,11 +68,11 @@ const metaDescription = description ?? `Work for ${label}`;
       logo={logo}
     />
     <main>
-      <div class="space-y-8">
+      <Container class="space-y-8">
         {
           years.map((year) => (
             <section class="space-y-4">
-              <h2 class="small-heading" data-reveal>
+              <h2 class="small-heading text-box-trim-start" data-reveal>
                 {year}
               </h2>
               <ul class="flex flex-col gap-px" role="list">
@@ -88,7 +89,7 @@ const metaDescription = description ?? `Work for ${label}`;
             </section>
           ))
         }
-      </div>
+      </Container>
     </main>
   </div>
 </Layout>

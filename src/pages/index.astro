@@ -1,5 +1,6 @@
 ---
 import { sanityClient } from "sanity:client";
+import Container from "@/components/Container.astro";
 import LatestItemsSection from "@/components/LatestItemsSection.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -54,6 +55,8 @@ const personJsonLd = {
         </div>
       </div>
     </section>
-    <LatestItemsSection title="Latest" items={latestItems} />
+    <Container>
+      <LatestItemsSection title="Latest" items={latestItems} />
+    </Container>
   </main>
 </Layout>

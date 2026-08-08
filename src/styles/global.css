@@ -159,6 +159,7 @@
   --surface-raised: oklch(1 0 0);
   --surface-raised-shadow:
     0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
+  --item-hover: var(--surface-raised);
   --nav-hover-shadow: var(--surface-raised-shadow);
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
   --nav-hover: var(--surface-raised);
@@ -182,7 +183,7 @@
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.269 0 0);
+  --muted: oklch(0.2 0 0);
   --muted-foreground: oklch(0.72 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: var(--foreground);
@@ -213,6 +214,7 @@
   --surface-hover: oklch(0.245 0 0);
   --surface-raised: var(--surface);
   --surface-raised-shadow: none;
+  --item-hover: var(--secondary);
   --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
   --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
   --badge: oklch(0.245 0 0);
@@ -986,7 +988,7 @@ html.dark {
     top: 0;
     translate: 0 var(--dir-hover-y, 0);
     height: var(--dir-hover-h, 0);
-    background-color: var(--surface-raised);
+    background-color: var(--item-hover);
     box-shadow: var(--surface-raised-shadow, none);
     border-radius: var(--radius-md);
     pointer-events: none;
@@ -1042,7 +1044,12 @@ html.dark {
      after navigating with the cursor resting on the just-clicked item. */
   @media (hover: hover) {
     body:not([data-dir-hover-active])
-      a[data-dir-hover]:not([aria-current="page"]):hover {
+      a[data-dir-hover="item"]:not([aria-current="page"]):hover {
+      background-color: var(--item-hover);
+      box-shadow: var(--surface-raised-shadow, none);
+    }
+    body:not([data-dir-hover-active])
+      a[data-dir-hover="nav"]:not([aria-current="page"]):hover {
       background-color: var(--surface-raised);
       box-shadow: var(--surface-raised-shadow, none);
     }

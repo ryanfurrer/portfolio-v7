@@ -90,7 +90,10 @@ const description = SECTION_META.links.description;
               const followLabel =
                 link.actionLabel === "Subscribe" ? "subscribers" : "followers";
               return (
-                <LinksCard href={link.href} class="group squircle rounded-3xl p-4">
+                <LinksCard
+                  href={link.href}
+                  class="group squircle rounded-3xl p-4"
+                >
                   <div class="flex h-full flex-col justify-between gap-6">
                     <div class="flex items-start justify-between gap-2">
                       <IconComponent

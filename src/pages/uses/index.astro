@@ -1,4 +1,5 @@
 ---
+import Container from "@/components/Container.astro";
 import EmptyState from "@/components/EmptyState.astro";
 import Item from "@/components/Item.astro";
 import PageHeader from "@/components/PageHeader.astro";
@@ -28,52 +29,54 @@ const categories = (uses?.categories ?? []).filter(
   <div class="space-y-8">
     <PageHeader title={title} lead={description} />
 
-    <main class="space-y-10">
-      {
-        categories.map((category) => (
-          <section class="space-y-2">
-            <h2 class="small-heading" data-reveal>
-              {category.title}
-            </h2>
-            <ul class="flex flex-col gap-px" role="list">
-              {category.items?.map((item) => (
-                <li>
-                  <Item
-                    title={item.name}
-                    href={item.url ?? undefined}
-                    external={Boolean(item.url)}
-                  >
-                    <svg
-                      slot="leading"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="size-4"
-                      aria-hidden="true"
-                      set:html={resolveUsesIcon(item.icon, item.description)}
-                    />
-                    {item.description && (
-                      <span
-                        slot="trailing"
-                        class="font-mono-custom text-xs uppercase tracking-wide text-body transition-colors can-hover:group-hover/item:text-foreground"
-                      >
-                        {item.description}
-                      </span>
-                    )}
-                  </Item>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))
-      }
-      {categories.length === 0 && <EmptyState />}
+    <main>
+      <Container class="space-y-10">
+        {
+          categories.map((category) => (
+            <section class="space-y-2">
+              <h2 class="small-heading text-box-trim-start" data-reveal>
+                {category.title}
+              </h2>
+              <ul class="flex flex-col gap-px" role="list">
+                {category.items?.map((item) => (
+                  <li>
+                    <Item
+                      title={item.name}
+                      href={item.url ?? undefined}
+                      external={Boolean(item.url)}
+                    >
+                      <svg
+                        slot="leading"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="size-4"
+                        aria-hidden="true"
+                        set:html={resolveUsesIcon(item.icon, item.description)}
+                      />
+                      {item.description && (
+                        <span
+                          slot="trailing"
+                          class="font-mono-custom text-xs tracking-wide text-body uppercase transition-colors can-hover:group-hover/item:text-foreground"
+                        >
+                          {item.description}
+                        </span>
+                      )}
+                    </Item>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+        {categories.length === 0 && <EmptyState />}
+      </Container>
     </main>
   </div>
 </Layout>
