@@ -110,7 +110,7 @@
   color-scheme: light;
 
   /* shadcn/ui */
-  --radius: 0.375rem;
+  --radius: 0.5rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -151,7 +151,9 @@
   --body: oklch(0.56 0 0);
   --link: var(--foreground);
   --link-hover: #000;
-  --brand: oklch(0.76 0.16 56); /* orange brand — marks / tints / focus rings; too light for text */
+  --brand: oklch(
+    0.76 0.16 56
+  ); /* orange brand — marks / tints / focus rings; too light for text */
   --surface: oklch(0.955 0 0);
   --surface-hover: oklch(0.94 0 0);
   --surface-raised: oklch(1 0 0);
@@ -290,16 +292,10 @@ html {
   scroll-padding-top: 5rem;
 }
 
+/* Brand-tinted text selection — a translucent --brand wash so the underlying
+   ink stays legible in both themes (a solid fill would wash out the text). */
 ::selection {
-  background-color: color-mix(
-    in oklch,
-    var(--color-orange-500) 100%,
-    transparent
-  );
-  color: var(--color-background);
-}
-::selection .dark {
-  background-color: color-mix(in oklch, var(--var-blue-100) 50%, transparent);
+  background-color: color-mix(in oklch, var(--brand) 30%, transparent);
 }
 
 ::-webkit-scrollbar {
@@ -580,8 +576,6 @@ html.dark {
     white-space: nowrap;
   }
 
-  /* Continuous (superellipse) corners on top of any rounded-* radius. Progressive
-     enhancement — browsers without `corner-shape` fall back to the plain radius. */
   .squircle {
     corner-shape: squircle;
   }

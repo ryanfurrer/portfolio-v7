@@ -26,9 +26,7 @@ const linkAttrs = isLink
   ? {
       href,
       "data-dir-hover": "item",
-      ...(external
-        ? { target: "_blank", rel: externalRel("_blank") }
-        : {}),
+      ...(external ? { target: "_blank", rel: externalRel("_blank") } : {}),
       class:
         "group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98]",
     }
@@ -45,7 +43,7 @@ const linkAttrs = isLink
           </span>
         )
       }
-      <h3 class="font-semibold">{title}</h3>
+      <h3 class="font-medium">{title}</h3>
       {
         external && (
           <svg

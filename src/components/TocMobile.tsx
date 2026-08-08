@@ -134,7 +134,7 @@ export default function TocMobile({ headings, title }: Props) {
         aria-expanded={open}
         aria-controls="toc-mobile-panel"
         onClick={() => setOpen((v) => !v)}
-        className="touch-hitbox flex w-full items-center gap-3 px-4 py-3 text-start text-sm font-semibold text-foreground transition-[scale] duration-150 ease-out active:scale-[0.98]"
+        className="touch-hitbox flex w-full items-center gap-3 px-4 py-3 text-start text-sm font-medium text-foreground transition-[scale] duration-150 ease-out active:scale-[0.98]"
       >
         <span className="min-w-0 flex-1 truncate">{title}</span>
         <motion.svg
