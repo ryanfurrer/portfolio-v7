@@ -2,6 +2,7 @@
 import Presence from "./Presence";
 import SocialLinks from "./SocialLinks.astro";
 import ThemeSegmented from "./ThemeSegmented";
+import Wordmark from "./Wordmark.astro";
 
 const currentYear = new Date().getFullYear();
 ---
@@ -14,13 +15,10 @@ const currentYear = new Date().getFullYear();
       <div class="space-y-2">
         <a
           href="/"
-          class="flex w-fit items-center text-xl font-semibold tracking-tight text-box-trim-both text-foreground"
+          class="flex w-fit items-center text-foreground"
           name="go to home page"
         >
-          ryan furrer<span
-            class="-translate-x-0.5 -translate-y-2 text-5xl text-box-trim-both text-brand"
-            >.</span
-          >
+          <Wordmark />
         </a>
         <div class="space-y-1.5 text-sm text-pretty">
           <p>Built with Astro, hosted on Vercel, and set in Google Sans.</p>

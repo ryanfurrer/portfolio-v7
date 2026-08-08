@@ -1,6 +1,7 @@
 ---
 import MobileNav from "@/components/MobileNav";
 import NavMenu from "@/components/NavMenu";
+import Wordmark from "@/components/Wordmark.astro";
 import { cn } from "@/lib/utils";
 
 // Top-level desktop items keep the directional traveling-highlight (dir-hover).
@@ -38,11 +39,9 @@ const isActive = (href: string) =>
     <a
       href="/"
       name="go to home page"
-      class="flex w-fit items-center text-xl font-semibold tracking-tight text-foreground"
+      class="flex w-fit items-center text-foreground"
     >
-      ryan furrer<span
-        class="-translate-x-0.5 -translate-y-2 text-5xl text-brand">.</span
-      >
+      <Wordmark />
     </a>
   </div>
   <div class="hidden items-center gap-1 sm:flex">
