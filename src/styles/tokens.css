@@ -1,5 +1,3 @@
-/* Design tokens — @theme map, then light (:root) + dark (.dark). Defined up top so the a11y overrides below win when active. */
-
 @theme inline {
   /* shadcn/ui */
   --color-background: var(--background);
@@ -55,9 +53,9 @@
   --font-mono: "Berkeley Mono", ui-monospace, monospace;
   --font-cursive: "Permanent Marker", ui-cursive, cursive;
   --ease-ios: var(--ease-ios-curve);
-  --container-page: 80rem; /* overall shell/frame width — the gutters absorb the slack (max-w-page) */
-  --container-content: 44rem; /* shared reading measure — navbar, page content & prose all align to it (max-w-content) */
-  --breakpoint-rail: 74rem; /* where the gutter rail (back-link + ToC) appears; below it, content centers and ToC is a drawer */
+  --container-page: 80rem; /* shell width (max-w-page) */
+  --container-content: 44rem; /* reading measure — navbar, content & prose align to it */
+  --breakpoint-rail: 74rem; /* below this the gutter rail (back-link + ToC) collapses to a drawer */
 }
 
 :root {
@@ -99,9 +97,8 @@
   --sidebar-ring: oklch(0.708 0.008 286);
 
   /* custom */
-  /* Reading tier — the workhorse body ink. Sits between --foreground (strong:
-     headings, emphasis) and --muted-foreground (light: large display + labels).
-     Clears AA (~4.5:1) at small sizes, where muted deliberately does not. */
+  /* Reading tier between --foreground and --muted-foreground; clears AA at small
+     sizes, where --muted-foreground deliberately does not. */
   --subtle-foreground: oklch(0.56 0.008 286);
   --link: var(--foreground);
   --brand: oklch(

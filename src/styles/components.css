@@ -7,11 +7,9 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Role E — standalone nav-text links: footer sitemap, social links, and the
-     table of contents (desktop + mobile). Muted ink at rest, foreground on
-     hover/focus, never underlined. Distinct from inline body links (which are
-     underlined) and from navbar items (which add an active pill). Display is
-     left to the call site so it works in block, flex, and inline contexts. */
+  /* Standalone nav-text links (footer, socials, ToC): muted, never underlined —
+     distinct from inline body links (underlined) and navbar items (active pill).
+     Display is left to the call site. */
   .quiet-link {
     color: var(--color-subtle-foreground);
     text-decoration: none;
@@ -20,9 +18,7 @@
     transition-duration: 150ms;
   }
 
-  /* :hover gated to hover-capable pointers (no sticky ink on touch tap); the
-     keyboard :focus-visible affordance stays. The :active rule below covers the
-     touch press feedback. */
+  /* :hover gated so a touch tap doesn't latch the ink; keyboard focus stays. */
   @media (hover: hover) {
     .quiet-link:hover {
       color: var(--color-foreground);
@@ -32,35 +28,26 @@
     color: var(--color-foreground);
   }
 
-  /* Instant press acknowledgment — the link inks up the moment it's pressed
-     (pointer-down), not only on release. Matches the press feedback on Items
-     and buttons so every interactive element responds to the touch. */
+  /* Ink up on press (pointer-down), matching Items/buttons. */
   .quiet-link:active {
     color: var(--color-foreground);
   }
 
   .small-heading {
-    /* Berkeley Mono so eyebrows read as the same technical family as the mono
-       metadata beside them (role tags, dates). Regular 400 (not bold) for a
-       quieter label that unifies with those inline tokens. */
+    /* Berkeley Mono so eyebrows match the mono metadata beside them (tags, dates). */
     font-family: var(--font-mono);
-    /* 13px — a half-step above the 12px inline role tags so section eyebrows
-       carry a little more presence/hierarchy without competing with content. */
+    /* 13px — a half-step above the 12px inline role tags. */
     font-size: 0.8125rem;
     font-weight: 400;
-    /* Tracking matches the mono role tags (Tailwind `tracking-wide`, 0.025em)
-       so eyebrows and the item labels beside them read as one system. */
+    /* Matches the role tags' tracking (0.025em) so they read as one system. */
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    /* Body tier (not muted): these small uppercase labels must clear AA, so they
-       ride --subtle-foreground — which stays AA-dark when --muted-foreground lightens. */
+    /* --subtle-foreground (not muted): these small labels must clear AA. */
     color: var(--subtle-foreground);
   }
 
-  /* Standfirst / dek — a larger, muted intro line that reads as editorial lede
-     rather than body copy. Used for the article standfirst on content pages and
-     the homepage tagline so the site opens with one consistent voice. The
-     article-only spacing lives with the .prose > .lead rule in prose.css. */
+  /* Standfirst / dek — larger muted intro line (article standfirst + homepage
+     tagline). Article-only spacing is the .prose > .lead rule in prose.css. */
   .lead {
     font-size: 1.2rem;
     line-height: 1.6;
@@ -73,10 +60,8 @@
     corner-shape: squircle;
   }
 
-  /* Raised card — a white surface lifted above the off-white canvas with a
-     hairline ring + soft shadow (Apple "white cards on gray"). Dark mode keeps
-     the flat recessed surface it already used (shadow-elevated is none there),
-     with a bright inset hairline instead. */
+  /* White surface lifted off the canvas — hairline ring + soft shadow. Dark keeps
+     a flat recessed surface (shadow-elevated is none) with a bright inset hairline. */
   .card-raised {
     background-color: var(--card);
     box-shadow:
@@ -86,9 +71,7 @@
       box-shadow 0.25s var(--ease-out-curve),
       translate 0.25s var(--ease-out-curve);
   }
-  /* Hover: the card physically lifts (rise + deeper, softer shadow) — the depth
-     cue reads as "pick me up" rather than a flat color swap. Gated to
-     hover-capable pointers so a tap on touch doesn't latch the lift. */
+  /* Hover lifts the card (rise + deeper shadow); gated so touch doesn't latch it. */
   @media (hover: hover) {
     .card-raised:hover {
       translate: 0 -2px;
@@ -98,8 +81,7 @@
         0 16px 34px -10px oklch(0 0 0 / 0.13);
     }
   }
-  /* Focus-visible: a proper offset ring that follows the border radius, on
-     top of the resting elevation — keyboard users get an unmistakable target. */
+  /* Offset ring over the resting elevation, following the border radius. */
   .card-raised:focus-visible {
     outline: none;
     box-shadow:

@@ -1,9 +1,6 @@
-/* Mobile-menu animation (keyframes kept beside the rules that fire them) */
-
-/* Mobile menu reveal — clip from the top edge so the panel appears to grow down
-   out of the navbar instead of sliding in from off-screen. Overrides the Sheet's
-   default slide-in-from-top (higher specificity wins; duration comes from the
-   `data-[state]:!duration-*` utilities on the element). */
+/* Clip from the top edge so the panel grows down out of the navbar rather than
+   sliding in. Overrides the Sheet's slide-in; duration comes from the element's
+   `data-[state]:!duration-*` utilities. */
 @keyframes menu-grow-in {
   from {
     clip-path: inset(0 0 100% 0);
@@ -31,9 +28,8 @@
   animation-fill-mode: both;
 }
 
-/* Nav links settle in with a staggered fade-up as the panel grows. The stagger
-   runs top→bottom (--index) to track the clip sweep. Enter only — on close the
-   links simply clip away with the panel (exits stay subtler than enters). */
+/* Staggered fade-up, top→bottom (--index) to track the clip sweep. Enter only —
+   on close the links clip away with the panel. */
 @keyframes menu-item-in {
   from {
     opacity: 0;

@@ -16,15 +16,12 @@
     scroll-margin-block-start: 1.5em;
   }
 
-  /* Size-specific tracking: the article title is a display size, so it wants a
-     touch tighter tracking than the global -0.022em (letters read too loose as
-     they grow). */
+  /* Display-size title wants tighter tracking than the global -0.022em. */
   .prose h1 {
     letter-spacing: -0.03em;
   }
 
-  /* In an article, the dek is the opening description — give it the spacing that
-     sets it apart from the title above and the first body sentence below. */
+  /* Set the dek apart from the title above and the first sentence below. */
   .prose > .lead {
     margin-top: 0.75rem;
     margin-bottom: 2rem;
@@ -36,9 +33,8 @@
     color: var(--color-foreground) !important;
   }
 
-  /* Inline code — a distinct token pill. A deeper fill than the general surface
-     plus a hairline ring so it stays legible on the off-white canvas (where a
-     surface-close fill would otherwise vanish). Dark keeps its recessed surface. */
+  /* Inline code pill — deeper fill + hairline ring so it doesn't vanish on the
+     off-white canvas. */
   .prose :not(pre) > code {
     font-family: var(--font-mono);
     font-size: 0.85em;
@@ -60,15 +56,13 @@
     content: none !important;
   }
 
-  /* Code blocks — soften the corners and fence them in a hairline */
   .prose pre {
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
   }
 
-  /* Shiki dual-theme: the <Code> component ships catppuccin-latte (light) as
-     inline styles plus a parallel set of --shiki-dark vars. Swap to the dark
-     palette under prefers-color-scheme; inline styles force the !important. */
+  /* Shiki dual-theme: <Code> ships catppuccin-latte inline + parallel --shiki-dark
+     vars; swap to them in dark (inline styles force the !important). */
   .dark .astro-code,
   .dark .astro-code span {
     color: var(--shiki-dark) !important;
@@ -88,8 +82,7 @@
     display: block;
     width: 100%;
     border-radius: var(--radius-lg);
-    /* Pure black/white hairline outline — never a tinted neutral, which reads
-       as dirt on the image edge. Flips to white in dark mode. */
+    /* Pure black/white hairline — a tinted neutral reads as dirt on the edge. */
     border: 1px solid rgba(0, 0, 0, 0.1);
   }
 

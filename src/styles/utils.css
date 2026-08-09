@@ -1,16 +1,10 @@
-/* Custom variants + utilities */
-
-/* Manual theme: `dark:` utilities key off a `.dark` class on <html>, set before
-   paint by the inline script in Head.astro (which resolves the stored choice or
-   the OS preference). System preference is honored through that script, not a
-   media query, so a manual Light/Dark choice can override the OS. */
+/* `dark:` keys off a `.dark` class on <html> (set before paint by Head.astro),
+   not a media query — so a manual Light/Dark choice can override the OS. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Gate a variant to hover-capable pointers. Tailwind v4 wraps plain `hover:` in
-   `@media (hover: hover)` but NOT compound `group-hover:` — so a tap on a touch
-   screen fires a sticky `:hover` and latches group-hover treatments on. Stack
-   this before `group-hover/…` (e.g. `can-hover:group-hover/item:text-foreground`)
-   to keep those effects on mouse/trackpad only. */
+/* Tailwind wraps plain `hover:` in @media (hover: hover) but NOT compound
+   `group-hover:`, so a touch tap latches those on. Stack `can-hover:` before
+   `group-hover/…` to keep the effect mouse/trackpad-only. */
 @custom-variant can-hover (@media (hover: hover));
 
 @utility touch-hitbox {
