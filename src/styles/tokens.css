@@ -102,7 +102,7 @@
   --subtle-foreground: oklch(0.56 0.008 286);
   --link: var(--foreground);
   --brand: oklch(
-    0.76 0.16 56
+    0.659 0.194 37.5
   ); /* orange brand — marks / tints / focus rings; too light for text */
   --surface: oklch(0.955 0.002 286);
   --surface-hover: oklch(0.94 0.002 286);
@@ -156,7 +156,7 @@
   /* custom */
   --subtle-foreground: oklch(0.708 0.008 286);
   --link: var(--foreground);
-  --brand: oklch(0.76 0.16 56); /* orange brand — marks / tints / focus rings */
+  --brand: oklch(0.659 0.194 37.5); /* orange brand — marks / tints / focus rings */
   --surface: oklch(0.215 0.003 286);
   --surface-hover: oklch(0.245 0.003 286);
   --surface-raised: var(--surface);
