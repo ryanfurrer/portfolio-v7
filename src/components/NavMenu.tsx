@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
  * NavigationMenu so hover-open, close-intent, and keyboard support come for
  * free (no focus-steal on hover, unlike a DropdownMenu). The trigger mirrors the
  * server-rendered nav anchors — same neutral hover (--nav-hover) and active
- * (--nav-active) states — so it reads as a peer of the dir-hover items.
+ * (ghost ring) states — so it reads as a peer of the dir-hover items.
  */
 interface NavMenuItem {
   label: string;
@@ -43,11 +43,11 @@ export default function NavMenu({ label, items, pathname }: Props) {
           <NavigationMenuTrigger
             className={cn(
               "transition-[color,background-color,scale] active:scale-[0.97] [&>svg]:transition-transform [&>svg]:duration-200 [&>svg]:ease-out data-[state=open]:[&>svg]:rotate-180",
-              // Active (a sub-item is the current route) → filled ink, matching
-              // the primary nav; stays filled on hover/open (only the chevron
-              // rotates). Inactive → muted with the white nav-hover lift.
+              // Active (a sub-item is the current route) → ghost ring, matching
+              // the primary nav; the ring persists on hover/open (only the
+              // chevron rotates). Inactive → muted with the nav-hover lift.
               groupActive
-                ? "bg-foreground text-primary-foreground"
+                ? "text-foreground ring-1 ring-inset ring-border"
                 : "text-subtle-foreground hover:bg-nav-hover hover:text-foreground hover:[box-shadow:var(--nav-hover-shadow)] data-[state=open]:bg-nav-hover data-[state=open]:text-foreground data-[state=open]:[box-shadow:var(--nav-hover-shadow)]",
             )}
           >
