@@ -14,12 +14,14 @@
     "@astrojs/react": "^6.0.1",
     "@astrojs/sitemap": "^3.6.1",
     "@astrojs/vercel": "^11.0.3",
+    "@portabletext/block-tools": "^5.1.12",
     "@sanity/asset-utils": "^2.3.0",
     "@sanity/astro": "^3.4.2",
     "@sanity/client": "^7.24.0",
     "@sanity/code-input": "^7.3.0",
     "@sanity/icons": "^5.2.0",
     "@sanity/image-url": "^2.0.2",
+    "@sanity/ui": "3.4.0",
     "@sanity/vision": "^6.5.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.8",
@@ -32,6 +34,7 @@
     "clsx": "^2.1.1",
     "groq": "^6.5.0",
     "lucide-react": "^1.25.0",
+    "marked": "^18.0.9",
     "motion": "^12.42.2",
     "radix-ui": "^1.6.4",
     "react": "^19.2.8",
@@ -40,7 +43,8 @@
     "sanity": "^6.5.0",
     "styled-components": "^6.4.4",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
