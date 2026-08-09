@@ -47,6 +47,19 @@
     @apply border-border outline-ring/50;
   }
 
+  /* Superellipse corners site-wide — progressive, silently ignored where
+     corner-shape is unsupported. Only the radius-scale boxes get the squircle;
+     circles and pills (rounded-full) stay truly round so the mark, avatars, and
+     dots don't distort. .rounded-full (0,1,0) outranks the * rule (0,0,0). */
+  *,
+  *::before,
+  *::after {
+    corner-shape: squircle;
+  }
+  .rounded-full {
+    corner-shape: round;
+  }
+
   /* Box-shadow ring (follows border-radius everywhere). NOT :where() —
      specificity must beat a resting shadow-* utility so it can't hide the ring. */
   a:focus-visible,

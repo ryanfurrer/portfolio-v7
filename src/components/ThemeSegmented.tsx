@@ -1,5 +1,5 @@
+import { segmentedItem } from "@/lib/segmented";
 import { THEME_OPTIONS, setTheme, useTheme } from "@/lib/theme";
-import { cn } from "@/lib/utils";
 
 interface Props {
   /** "md" gives touch-sized hits for the mobile menu; "sm" is the compact footer size. */
@@ -25,17 +25,11 @@ export default function ThemeSegmented({
           type="button"
           onClick={() => setTheme(option.value)}
           aria-pressed={theme === option.value}
-          className={cn(
-            "rounded-md text-sm transition-colors",
-            size === "md" ? "px-3 py-2" : "px-2.5 py-1",
-            variant === "plain"
-              ? theme === option.value
-                ? "font-medium text-foreground"
-                : "text-subtle-foreground hover:text-foreground"
-              : theme === option.value
-                ? "bg-foreground/10 text-foreground"
-                : "text-subtle-foreground hover:text-foreground",
-          )}
+          className={segmentedItem({
+            active: theme === option.value,
+            size,
+            variant,
+          })}
         >
           {option.label}
         </button>
