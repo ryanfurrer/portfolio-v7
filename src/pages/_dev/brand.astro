@@ -88,6 +88,41 @@ const colorGroups = [
     ],
   },
   {
+    heading: "Fills — base & hover",
+    tokens: [
+      {
+        token: "--primary",
+        label: "Primary",
+        util: "bg-primary",
+        note: "Inverse-ink fill — active nav, solid buttons.",
+      },
+      {
+        token: "--primary-hover",
+        label: "Primary hover",
+        util: "bg-primary-hover",
+        note: "The default button, hovered — the fill shifts toward mid-tone.",
+      },
+      {
+        token: "--secondary",
+        label: "Secondary",
+        util: "bg-secondary",
+        note: "Secondary button fill — a neutral step off the page.",
+      },
+      {
+        token: "--secondary-hover",
+        label: "Secondary hover",
+        util: "bg-secondary-hover",
+        note: "The secondary button, hovered — same nudge toward mid-tone.",
+      },
+      {
+        token: "--muted-hover",
+        label: "Muted hover",
+        util: "bg-muted-hover",
+        note: "Hover for a muted fill — crafted for the ramp, not yet wired.",
+      },
+    ],
+  },
+  {
     heading: "Line & focus",
     tokens: [
       {
@@ -118,12 +153,6 @@ const colorGroups = [
         label: "Brand",
         util: "text-brand",
         note: "The mark, tints, and text selection. Personality only — too light for body text.",
-      },
-      {
-        token: "--primary",
-        label: "Primary",
-        util: "bg-primary",
-        note: "Inverse-ink fill — active nav, solid buttons.",
       },
       {
         token: "--destructive",
@@ -370,12 +399,9 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       <div class="space-y-6">
         {
           colorGroups.map((group) => (
-            <div class="space-y-1">
+            <div class="space-y-1.5">
               <h3 class="small-heading">{group.heading}</h3>
-              <ul
-                class="grid grid-cols-1 gap-x-6 gap-y-1 sm:grid-cols-2"
-                role="list"
-              >
+              <ul class="divide-y divide-border" role="list">
                 {group.tokens.map((t) => (
                   <li>
                     <ColorSwatch {...t} />
@@ -950,8 +976,10 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       announce(ok ? `Copied ${value}` : "Copy failed");
       const prev = out.textContent;
       out.textContent = ok ? "Copied ✓" : "Press ⌘C";
+      btn.classList.toggle("is-copied", ok);
       window.setTimeout(() => {
         out.textContent = prev;
+        btn.classList.remove("is-copied");
       }, 1100);
     });
   });
