@@ -32,6 +32,23 @@
   animation: reveal-rise 0.5s var(--ease-out-curve) both;
 }
 
+/* Container surface (Container.astro) is a decorative frame layered behind its
+   content. It fades in as one beat — no rise — while the headings/rows keep
+   their own stagger on top, so the panel and the stagger coexist without
+   nesting opacity (a fade inside a fade goes murky). Ordered after the rule
+   above so it overrides only the animation-name, keeping its cascade delay. */
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.reveal-init .reveal-panel-surface.is-revealed {
+  animation-name: reveal-fade;
+}
+
 /* Table of Contents active link — outside @layer so it beats Tailwind utility classes */
 [data-toc-link].is-active {
   color: var(--color-foreground);

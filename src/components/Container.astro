@@ -6,6 +6,14 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div class:list={["rounded-lg bg-muted p-6", className]}>
-  <slot />
+<div class="relative rounded-lg p-6">
+  <div
+    class="reveal-panel-surface absolute inset-0 rounded-[inherit] bg-muted"
+    data-reveal
+    aria-hidden="true"
+  >
+  </div>
+  <div class:list={["relative", className]}>
+    <slot />
+  </div>
 </div>
