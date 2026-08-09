@@ -1,42 +1,4 @@
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  /* Single, consistent keyboard focus ring for every interactive element. Uses
-     a box-shadow ring (not outline) so it follows border-radius everywhere,
-     including older Safari, and a neutral gray so it never clashes with the
-     accent. 2px background gap + 2px ring mirrors Tailwind's ring-offset-2.
-     Deliberately NOT :where() — specificity must sit above a lone utility class
-     so a resting shadow-* (e.g. a button's shadow-lg) can't hide the ring. */
-  a:focus-visible,
-  button:focus-visible,
-  summary:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible,
-  [tabindex]:not([tabindex="-1"]):focus-visible {
-    outline: none;
-    box-shadow:
-      0 0 0 2px var(--color-background),
-      0 0 0 4px var(--color-ring);
-  }
-
-  /* Apple-style headings: extrabold + tight tracking, matching the weight of
-     content-page (.prose) h1s. Components that set their own weight
-     (.small-heading, font-medium/semibold utilities) still win. */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: var(--foreground);
-    font-weight: 800;
-    letter-spacing: -0.022em;
-    text-wrap: balance;
-  }
-
+@layer components {
   .font-mono-custom {
     font-family: var(--font-mono);
     font-size: 0.875rem;
@@ -95,19 +57,16 @@
     color: var(--subtle-foreground);
   }
 
-  /* Neutral metadata pill — e.g. "Updated", year chips */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    border-radius: 9999px;
-    background-color: var(--badge);
-    padding: 0.125rem 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    line-height: 1.25rem;
-    color: var(--badge-foreground);
-    white-space: nowrap;
+  /* Standfirst / dek — a larger, muted intro line that reads as editorial lede
+     rather than body copy. Used for the article standfirst on content pages and
+     the homepage tagline so the site opens with one consistent voice. The
+     article-only spacing lives with the .prose > .lead rule in prose.css. */
+  .lead {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    letter-spacing: -0.011em;
+    color: var(--color-subtle-foreground);
+    text-wrap: pretty;
   }
 
   .squircle {

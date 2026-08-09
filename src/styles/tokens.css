@@ -48,8 +48,6 @@
   --color-surface-hover: var(--surface-hover);
   --color-nav-active: var(--nav-active);
   --color-nav-hover: var(--nav-hover);
-  --color-badge: var(--badge);
-  --color-badge-foreground: var(--badge-foreground);
   --shadow-elevated:
     0 1px 2px -1px oklch(0 0 0 / 0.06), 0 6px 20px -4px oklch(0 0 0 / 0.08);
   --font-sans:
@@ -118,8 +116,6 @@
   --nav-hover-shadow: var(--surface-raised-shadow);
   --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
   --nav-hover: var(--surface-raised);
-  --badge: oklch(0.94 0.002 286);
-  --badge-foreground: var(--subtle-foreground);
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
   --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -171,7 +167,5 @@
   --item-hover: var(--secondary);
   --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
   --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
-  --badge: oklch(0.245 0.003 286);
-  --badge-foreground: var(--subtle-foreground);
   --shadow-elevated: none;
 }

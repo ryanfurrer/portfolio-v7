@@ -23,17 +23,6 @@
     letter-spacing: -0.03em;
   }
 
-  /* Standfirst / dek — a larger, muted intro line that reads as editorial lede
-     rather than body copy. Used for the article standfirst on content pages and
-     the homepage tagline so the site opens with one consistent voice. */
-  .lead {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    letter-spacing: -0.011em;
-    color: var(--color-subtle-foreground);
-    text-wrap: pretty;
-  }
-
   /* In an article, the dek is the opening description — give it the spacing that
      sets it apart from the title above and the first body sentence below. */
   .prose > .lead {

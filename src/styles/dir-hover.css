@@ -1,5 +1,5 @@
-@layer base {
-  /* Traveling highlight hover effect for Item components */
+@layer components {
+  /* Traveling highlight — vertical variant (Item lists). */
   ul[data-dir-hover-list="items"] {
     position: relative;
     isolation: isolate;
@@ -8,9 +8,8 @@
   ul[data-dir-hover-list="items"]::before {
     content: "";
     position: absolute;
-    /* Match the Item's -mx-2 bleed: the highlight extends 0.5rem past the list
-       on each side so the pill wraps the item's padding (text/date sit inset),
-       not just the list box. Keep in sync with Item.astro's -mx-2. */
+    /* Extends 0.5rem past the list to wrap the Item's -mx-2 padding — keep in
+       sync with Item.astro's -mx-2. */
     inset-inline: -0.5rem;
     top: 0;
     translate: 0 var(--dir-hover-y, 0);
@@ -27,7 +26,7 @@
       opacity 0.15s var(--ease-out-curve);
   }
 
-  /* Horizontal variant — primary navbar */
+  /* Horizontal variant — primary navbar. */
   ul[data-dir-hover-list="nav"] {
     position: relative;
     isolation: isolate;
@@ -53,22 +52,19 @@
       opacity 0.15s var(--ease-out-curve);
   }
 
-  /* While snapping the highlight to the pointer's entry edge, suppress the
-     slide transition so it can emanate from that point (directional entry). */
+  /* No slide while snapping to the pointer's entry edge, so it emanates from there. */
   ul[data-dir-hover-list="items"][data-dir-snap]::before,
   ul[data-dir-hover-list="nav"][data-dir-snap]::before {
     transition: none;
   }
 
-  /* Ensure items are positioned correctly relative to the highlight */
+  /* Positioning context for the z-index:-1 highlight. */
   a[data-dir-hover] {
     position: relative;
   }
 
-  /* CSS fallback hover effect when JS hasn't initialized (desktop only).
-     Skip the active item: it already carries bg-nav-active, and stacking a
-     solid fill on top during the pre-JS window flashes a doubled box right
-     after navigating with the cursor resting on the just-clicked item. */
+  /* Pre-JS hover fallback (desktop). Skip the active item — it already carries
+     bg-nav-active; stacking a fill flashes a doubled box. */
   @media (hover: hover) {
     body:not([data-dir-hover-active])
       a[data-dir-hover="item"]:not([aria-current="page"]):hover {

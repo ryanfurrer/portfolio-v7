@@ -1,7 +1,6 @@
-@layer base {
-  /* Click-to-zoom trigger: a bare button wrapping the image. Resets the button
-     chrome and carries the block spacing typography would give the <img>, so the
-     wrapper is invisible and the image sits exactly where it did before. */
+@layer components {
+  /* Bare button wrapping the image — reset chrome, carry the block spacing
+     Typography would give the <img>. */
   .prose .zoomable-image {
     position: relative;
     display: block;
@@ -9,8 +8,7 @@
     margin-block: 2em;
     padding: 0;
     border: 0;
-    /* Match the image's own corners so the focus ring hugs the rounded edge
-       instead of boxing it in a sharp rectangle. */
+    /* Match the image corners so the focus ring hugs the rounded edge. */
     border-radius: var(--radius-lg);
     background: none;
     font: inherit;
@@ -18,17 +16,13 @@
     cursor: zoom-in;
   }
 
-  /* A header image leads the article, so the button hugs the top (the mobile
-     back-link is :first-child, hidden at the rail, so Typography's first-child
-     reset lands on it, not this). Only the header image is a direct child; body
-     images nest in <figure> and keep their spacing. The inner <img>'s own 2em
-     margin is zeroed below — un-layered, to beat Typography's utilities rule. */
+  /* The header image is a direct child, so hug the top; body images nest in
+     <figure> and keep their spacing. (Inner <img> margin zeroed in unlayered.css.) */
   .prose > .zoomable-image {
     margin-top: 0;
   }
 
-  /* Magnifier hint in the corner. Opacity-only (movement-free) so it still fades
-     under prefers-reduced-motion, and revealed on keyboard focus as well. */
+  /* Magnifier hint — opacity-only so it still fades under reduced-motion. */
   .prose .zoomable-image::after {
     content: "";
     position: absolute;
@@ -55,16 +49,11 @@
     opacity: 1;
   }
 
-  /* Lightbox. The dialog fills the viewport and centres the image, so a click on
-     any dark area (the dialog itself) closes it while a click on the image does
-     not. Enter/exit is pure CSS via @starting-style + allow-discrete; the global
-     reduced-motion rule above strips the movement (scale) and keeps only the
-     opacity fade for those readers. */
+  /* Lightbox dialog. Pure-CSS enter/exit via @starting-style + allow-discrete;
+     the reduced-motion rule strips the scale, keeping only the fade. */
   .image-zoom-dialog {
-    /* Shared timing so the scrim, dialog and image settle as one entity. The
-       exit is shorter than the enter — the reader already chose to close, so
-       get out of the way. A transition applies in the direction of the state
-       it targets: base = exit, [open] = enter. */
+    /* Exit shorter than enter — the reader already chose to close. A transition
+       targets the state's direction: base = exit, [open] = enter. */
     --zoom-enter: 0.24s;
     --zoom-exit: 0.16s;
     width: 100vw;
@@ -108,9 +97,8 @@
 
   .image-zoom-dialog[open]::backdrop {
     background-color: rgba(0, 0, 0, 0.72);
-    /* Blur the page behind the lightbox for depth. Not transitioned (only the
-       scrim colour fades) so a full-viewport blur can't jank the open. Dropped
-       entirely under prefers-reduced-transparency below. */
+    /* Page blur for depth — not transitioned (a full-viewport blur would jank
+       the open). Dropped under prefers-reduced-transparency. */
     backdrop-filter: blur(8px);
     transition:
       background-color var(--zoom-enter) var(--ease-ios),
@@ -124,9 +112,8 @@
     }
   }
 
-  /* Shared-element collapse (image-zoom.ts drives the image back onto its
-     thumbnail via WAAPI): fade the scrim and hide the close button in step, while
-     the still-[open] dialog keeps the image opaque for the trip home. */
+  /* Collapse: image-zoom.ts animates the image home (WAAPI); fade the scrim and
+     close button in step while the still-[open] dialog keeps the image opaque. */
   .image-zoom-dialog.is-closing::backdrop {
     background-color: rgba(0, 0, 0, 0);
     transition: background-color var(--zoom-exit) var(--ease-ios);
@@ -168,9 +155,8 @@
     }
   }
 
-  /* With a caption, stack image + caption as one centred group (the image shrinks
-     via min-height:0 so the caption always fits) rather than centring the image
-     alone and leaving the caption stranded at the foot of the viewport. */
+  /* Caption present: stack as one centred group (min-height:0 lets the image
+     shrink so the caption always fits). */
   .image-zoom-dialog.has-caption {
     display: flex;
     flex-direction: column;
