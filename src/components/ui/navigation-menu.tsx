@@ -51,7 +51,7 @@ function NavigationMenuItem({
 // Layout only — colour/state styling is supplied by the call site so it can
 // mirror the surrounding nav items.
 const navigationMenuTriggerStyle = cva(
-  "group inline-flex w-max items-center gap-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors outline-none select-none disabled:pointer-events-none disabled:opacity-50",
+  "group inline-flex w-max items-center gap-1 rounded-md px-3 py-1.5 text-sm  transition-colors outline-none select-none disabled:pointer-events-none disabled:opacity-50",
 );
 
 function NavigationMenuTrigger({
@@ -96,7 +96,11 @@ function NavigationMenuLink({
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       className={cn(
-        "flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm no-underline outline-hidden transition-colors select-none hover:bg-surface hover:text-foreground focus:bg-surface focus:text-foreground",
+        // Hover mirrors the primary nav (bg-nav-hover + ring). But dropdown
+        // items sit on the elevated popover, where muted ≈ the popover surface
+        // and vanishes — so in dark they lift to --accent instead (one tier up,
+        // matching the nav's lift-off-its-background behavior).
+        "flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm no-underline outline-hidden transition-colors select-none hover:bg-nav-hover hover:text-foreground hover:[box-shadow:var(--nav-hover-shadow)] focus:bg-nav-hover focus:text-foreground focus:[box-shadow:var(--nav-hover-shadow)] dark:hover:bg-accent dark:focus:bg-accent",
         className,
       )}
       {...props}

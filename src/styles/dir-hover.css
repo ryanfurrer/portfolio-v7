@@ -64,7 +64,7 @@
   }
 
   /* Pre-JS hover fallback (desktop). Skip the active item — it already carries
-     bg-nav-active; stacking a fill flashes a doubled box. */
+     its own active indicator; stacking a hover fill reads as a doubled box. */
   @media (hover: hover) {
     body:not([data-dir-hover-active])
       a[data-dir-hover="item"]:not([aria-current="page"]):hover {
@@ -73,8 +73,8 @@
     }
     body:not([data-dir-hover-active])
       a[data-dir-hover="nav"]:not([aria-current="page"]):hover {
-      background-color: var(--surface-raised);
-      box-shadow: var(--surface-raised-shadow, none);
+      background-color: var(--nav-hover);
+      box-shadow: var(--nav-hover-shadow, none);
     }
   }
 }

@@ -44,7 +44,6 @@
   --color-brand: var(--brand);
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);
-  --color-nav-active: var(--nav-active);
   --color-nav-hover: var(--nav-hover);
   --shadow-elevated:
     0 1px 2px -1px oklch(0 0 0 / 0.06), 0 6px 20px -4px oklch(0 0 0 / 0.08);
@@ -109,10 +108,12 @@
   --surface-raised: oklch(1 0 0);
   --surface-raised-shadow:
     0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
+  /* Item rows sit inside a --muted container: they lift to a raised white card.
+     Nav items sit on the page: they recess to a --muted chip. Opposite moves,
+     one shared elevation ring (--surface-raised-shadow). */
   --item-hover: var(--surface-raised);
   --nav-hover-shadow: var(--surface-raised-shadow);
-  --nav-active: color-mix(in oklch, var(--link) 12%, transparent);
-  --nav-hover: var(--surface-raised);
+  --nav-hover: var(--muted);
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
   --ease-ios-curve: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -162,7 +163,6 @@
   --surface-raised: var(--surface);
   --surface-raised-shadow: none;
   --item-hover: var(--secondary);
-  --nav-active: color-mix(in oklch, var(--link) 20%, transparent);
-  --nav-hover: color-mix(in oklch, var(--link) 10%, transparent);
+  --nav-hover: var(--muted);
   --shadow-elevated: none;
 }
