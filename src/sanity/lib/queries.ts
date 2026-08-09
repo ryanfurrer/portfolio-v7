@@ -11,21 +11,29 @@ import {defineQuery} from "groq";
 // --- Index / listing pages (all share the same row shape) ---
 
 export const POSTS_QUERY = defineQuery(
-  `*[_type == "post" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}`,
+  `*[_type == "post" && defined(slug.current)]|order(publishedAt desc){_id, "originalId": coalesce(_originalId, _id), title, slug, publishedAt}`,
 );
 
 export const PROJECTS_QUERY = defineQuery(
-  `*[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt, "company": company->{name, "slug": slug.current}}`,
+  `*[_type == "project" && defined(slug.current)]|order(publishedAt desc){_id, "originalId": coalesce(_originalId, _id), title, slug, publishedAt, "company": company->{name, "slug": slug.current}}`,
 );
 
 export const APPEARANCES_QUERY = defineQuery(
-  `*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}`,
+  `*[_type == "appearance" && defined(slug.current)]|order(publishedAt desc){_id, "originalId": coalesce(_originalId, _id), title, slug, publishedAt}`,
 );
 
 // --- Home page (latest ten across every content type) ---
 
 export const LATEST_ITEMS_QUERY = defineQuery(
-  `*[_type in ["post", "project", "appearance"] && defined(slug.current) && defined(publishedAt)]|order(publishedAt desc)[0...10]{_id, _type, title, slug}`,
+  `*[_type in ["post", "project", "appearance"] && defined(slug.current) && defined(publishedAt)]|order(publishedAt desc)[0...10]{_id, "originalId": coalesce(_originalId, _id), _type, title, slug}`,
+);
+
+// A draft-perspective result identifies which version supplied each row via
+// `_originalId`, but it cannot tell whether a published counterpart exists.
+// This small published-perspective lookup lets local previews mark only
+// draft-only documents rather than every document with pending edits.
+export const PUBLISHED_DOCUMENT_IDS_QUERY = defineQuery(
+  `*[_id in $ids]._id`,
 );
 
 // --- Links page (single latest of each) ---
@@ -109,7 +117,7 @@ export const WORK_HUBS_QUERY = defineQuery(`{
     url,
     logo,
     description,
-    "projects": *[_type == "project" && references(^._id) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}
+    "projects": *[_type == "project" && references(^._id) && defined(slug.current)]|order(publishedAt desc){_id, "originalId": coalesce(_originalId, _id), title, slug, publishedAt}
   },
-  "personal": *[_type == "project" && !defined(company) && defined(slug.current)]|order(publishedAt desc){_id, title, slug, publishedAt}
+  "personal": *[_type == "project" && !defined(company) && defined(slug.current)]|order(publishedAt desc){_id, "originalId": coalesce(_originalId, _id), title, slug, publishedAt}
 }`);

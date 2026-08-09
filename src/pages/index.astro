@@ -8,9 +8,14 @@ import { socialLinks } from "@/lib/social-links";
 import { SITE_DESCRIPTION } from "@/consts";
 import { LATEST_ITEMS_QUERY } from "@/sanity/lib/queries";
 import type { LATEST_ITEMS_QUERY_RESULT } from "@/sanity/sanity.types";
+import { getUnpublishedDocumentIds } from "@/sanity/lib/content";
 
 const latestItems =
   await sanityClient.fetch<LATEST_ITEMS_QUERY_RESULT>(LATEST_ITEMS_QUERY);
+const unpublishedIds = await getUnpublishedDocumentIds(
+  sanityClient,
+  latestItems,
+);
 
 // Person entity for the site — links the profile to every social account so
 // search engines can associate them (knowledge-panel eligibility).
@@ -56,7 +61,11 @@ const personJsonLd = {
       </div>
     </section>
     <Container>
-      <LatestItemsSection title="Latest" items={latestItems} />
+      <LatestItemsSection
+        title="Latest"
+        items={latestItems}
+        unpublishedIds={unpublishedIds}
+      />
     </Container>
   </main>
 </Layout>

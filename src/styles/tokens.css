@@ -8,10 +8,13 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-hover: var(--secondary-hover);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-muted-hover: var(--muted-hover);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
@@ -42,8 +45,6 @@
   /* custom */
   --color-subtle-foreground: var(--subtle-foreground);
   --color-brand: var(--brand);
-  --color-surface: var(--surface);
-  --color-surface-hover: var(--surface-hover);
   --color-nav-hover: var(--nav-hover);
   --shadow-elevated:
     0 1px 2px -1px oklch(0 0 0 / 0.06), 0 6px 20px -4px oklch(0 0 0 / 0.08);
@@ -70,11 +71,24 @@
   --popover-foreground: var(--foreground);
   --primary: oklch(0.205 0.003 286);
   --primary-foreground: oklch(0.985 0.001 286);
+  /* Hover ramp (primary · secondary · muted): each -hover nudges its base toward
+     mid-tone — the visible direction — so near-white fills darken while the dark
+     primary fill lightens (matching what bg-primary/90 already does). Opacity
+     hovers only move toward the page, which is invisible on near-white fills, so
+     those get explicit tokens. --accent is itself the hover surface and
+     --destructive hovers via its own tint, so neither needs a -hover. */
+  --primary-hover: oklch(0.28 0.003 286);
   --secondary: oklch(0.98 0.001 286);
   --secondary-foreground: oklch(0.205 0.003 286);
+  --secondary-hover: oklch(0.94 0.002 286);
   --muted: oklch(0.98 0.001 286);
   --muted-foreground: oklch(0.72 0.008 286);
-  --accent: oklch(0.97 0.001 286);
+  --muted-hover: oklch(0.94 0.002 286);
+  /* Interactive hover/focus/active surface — ghost buttons, hovered rows,
+     dropdown/menu highlights. NOT the brand accent (that's --brand). Tuned a
+     touch darker than shadcn's 0.97 so a hover reads on pure-white surfaces
+     and separates from --muted. */
+  --accent: oklch(0.955 0.002 286);
   --accent-foreground: oklch(0.205 0.003 286);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0.002 286);
@@ -99,19 +113,15 @@
   /* Reading tier between --foreground and --muted-foreground; clears AA at small
      sizes, where --muted-foreground deliberately does not. */
   --subtle-foreground: oklch(0.56 0.008 286);
-  --link: var(--foreground);
   --brand: oklch(
     0.659 0.194 37.5
   ); /* orange brand — marks / tints / focus rings; too light for text */
-  --surface: oklch(0.955 0.002 286);
-  --surface-hover: oklch(0.94 0.002 286);
-  --surface-raised: oklch(1 0 0);
   --surface-raised-shadow:
     0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
-  /* Item rows sit inside a --muted container: they lift to a raised white card.
-     Nav items sit on the page: they recess to a --muted chip. Opposite moves,
-     one shared elevation ring (--surface-raised-shadow). */
-  --item-hover: var(--surface-raised);
+  /* Item rows sit inside a --muted container: they lift to the raised white card
+     (--card). Nav items sit on the page: they recess to a --muted chip. Opposite
+     moves, one shared elevation ring (--surface-raised-shadow). */
+  --item-hover: var(--card);
   --nav-hover-shadow: var(--surface-raised-shadow);
   --nav-hover: var(--muted);
   --ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
@@ -130,10 +140,13 @@
   --popover-foreground: var(--foreground);
   --primary: oklch(0.922 0.002 286);
   --primary-foreground: oklch(0.205 0.003 286);
+  --primary-hover: oklch(0.86 0.002 286);
   --secondary: oklch(0.269 0.003 286);
   --secondary-foreground: var(--foreground);
+  --secondary-hover: oklch(0.32 0.003 286);
   --muted: oklch(0.2 0.003 286);
   --muted-foreground: oklch(0.72 0.008 286);
+  --muted-hover: oklch(0.245 0.003 286);
   --accent: oklch(0.269 0.003 286);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.704 0.191 22.216);
@@ -156,11 +169,7 @@
 
   /* custom */
   --subtle-foreground: oklch(0.708 0.008 286);
-  --link: var(--foreground);
   --brand: oklch(0.659 0.194 37.5); /* orange brand — marks / tints / focus rings */
-  --surface: oklch(0.215 0.003 286);
-  --surface-hover: oklch(0.245 0.003 286);
-  --surface-raised: var(--surface);
   --surface-raised-shadow: none;
   --item-hover: var(--secondary);
   --nav-hover: var(--muted);

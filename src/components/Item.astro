@@ -10,9 +10,17 @@ interface Props {
   publishedAt?: string | null;
   /** External link: opens in a new tab + shows a ↗ affordance after the title. */
   external?: boolean;
+  /** Draft-only Sanity document: visible locally, absent from production. */
+  unpublished?: boolean;
 }
 
-const { title, href, publishedAt, external = false } = Astro.props;
+const {
+  title,
+  href,
+  publishedAt,
+  external = false,
+  unpublished = false,
+} = Astro.props;
 
 const formattedDate = publishedAt ? formatDateDotNotation(publishedAt) : null;
 const isLink = Boolean(href);
@@ -43,7 +51,19 @@ const linkAttrs = isLink
           </span>
         )
       }
-      <h3 class="font-medium">{title}</h3>
+      <h3 class="flex items-center gap-2 font-medium">
+        {
+          unpublished && (
+            <span
+              role="img"
+              aria-label="Unpublished — local preview only"
+              title="Unpublished — local preview only"
+              class="size-2 shrink-0 rounded-full bg-brand"
+            />
+          )
+        }
+        <span>{title}</span>
+      </h3>
       {
         external && (
           <svg

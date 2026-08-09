@@ -96,7 +96,7 @@
   @media (hover: hover) {
     .dark .card-raised:hover {
       translate: 0 -2px;
-      background-color: var(--surface-hover);
+      background-color: var(--accent);
       box-shadow:
         inset 0 0 0 1px oklch(1 0 0 / 0.09),
         0 8px 24px -10px oklch(0 0 0 / 0.6);
