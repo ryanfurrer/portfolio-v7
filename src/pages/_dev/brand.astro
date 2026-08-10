@@ -168,8 +168,16 @@ const easings = [
 // uses it.
 const durations = [
   { ms: "150", role: "Press & tap", note: "buttons dip, tap targets answer" },
-  { ms: "200", role: "Hover & highlight", note: "links, list rows, menus opening" },
-  { ms: "300", role: "Chrome & theme", note: "the sticky header, light ↔ dark" },
+  {
+    ms: "200",
+    role: "Hover & highlight",
+    note: "links, list rows, menus opening",
+  },
+  {
+    ms: "300",
+    role: "Chrome & theme",
+    note: "the sticky header, light ↔ dark",
+  },
   { ms: "420", role: "Drawer settle", note: "the mobile sheet easing open" },
   { ms: "500", role: "Entrance", note: "the reveal cascade and large images" },
 ];
@@ -202,7 +210,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       <h2 id="principles" class="text-2xl text-foreground">Principles</h2>
       <ul class="space-y-2.5 text-pretty" role="list">
         <li>
-          <strong class="font-medium text-foreground">One reserved accent.</strong
+          <strong class="font-medium text-foreground"
+            >One reserved accent.</strong
           >{" "}
           Neutral ink on a near-white page; a single orange carries personality and
           never load-bearing work.
@@ -215,7 +224,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
           from weight and contrast.
         </li>
         <li>
-          <strong class="font-medium text-foreground">Depth over borders.</strong
+          <strong class="font-medium text-foreground"
+            >Depth over borders.</strong
           >{" "}
           Surfaces separate with a hairline ring and a soft shadow, rarely a solid
           line.
@@ -240,7 +250,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
 
       <figure class="space-y-3">
         <div
-          class="flex items-center justify-center rounded-lg bg-muted px-6 py-12 ring-1 ring-inset ring-border"
+          class="flex items-center justify-center rounded-lg bg-muted px-6 py-12 ring-1 ring-border ring-inset"
         >
           <Wordmark class="h-9 w-auto text-foreground" />
         </div>
@@ -253,12 +263,13 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       <div class="grid gap-4 sm:grid-cols-2">
         <figure class="space-y-2">
           <div
-            class="relative grid aspect-[16/9] place-items-center rounded-lg bg-muted ring-1 ring-inset ring-border"
+            class="relative grid aspect-[16/9] place-items-center rounded-lg bg-muted ring-1 ring-border ring-inset"
           >
             <span
               class="absolute inset-[26%] rounded-sm border border-dashed border-border"
               aria-hidden="true"></span>
-            <span class="size-14 rounded-full bg-brand" aria-hidden="true"></span>
+            <span class="size-14 rounded-full bg-brand" aria-hidden="true"
+            ></span>
           </div>
           <figcaption class="text-sm text-pretty text-subtle-foreground">
             <span class="font-medium text-foreground">Clear space</span> — keep a
@@ -268,7 +279,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
 
         <figure class="space-y-2">
           <div
-            class="grid aspect-[16/9] place-items-center rounded-lg bg-muted ring-1 ring-inset ring-border"
+            class="grid aspect-[16/9] place-items-center rounded-lg bg-muted ring-1 ring-border ring-inset"
           >
             <span class="size-14 rounded-full bg-foreground" aria-hidden="true"
             ></span>
@@ -284,7 +295,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         <a
           href="/brand/ryan-furrer-mark.svg"
           download
-          class={buttonVariants({ variant: "outline", size: "sm" })}
+          class={buttonVariants({ variant: "outline" })}
         >
           <svg
             viewBox="0 0 16 16"
@@ -302,10 +313,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         <button
           type="button"
           data-copy-svg
-          class:list={[
-            buttonVariants({ variant: "outline", size: "sm" }),
-            "group/copy",
-          ]}
+          class:list={[buttonVariants({ variant: "outline" }), "group/copy"]}
         >
           <span class="relative size-4 shrink-0" aria-hidden="true">
             <svg
@@ -353,8 +361,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         </h3>
         <p class="mt-1.5 max-w-[52ch] text-pretty text-subtle-foreground">
           Surfaces separate by elevation and a hairline ring, never a hard line.
-          The three ink tiers do the rest — strong for the title, subtle for this
-          reading line, muted for the meta below.
+          The three ink tiers do the rest — strong for the title, subtle for
+          this reading line, muted for the meta below.
         </p>
         <div class="mt-4 flex items-center justify-between gap-4">
           <span class="font-mono-custom text-xs text-subtle-foreground"
@@ -433,7 +441,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             class="font-medium text-foreground">weight</strong
           > and contrast, never a second hue.
         </p>
-        <p class="mt-5 font-mono-custom text-xs text-subtle-foreground">
+        <p class="font-mono-custom mt-5 text-xs text-subtle-foreground">
           RYAN FURRER · 08.08.2026 · 1,240 WORDS
         </p>
       </div>
@@ -460,7 +468,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             Berkeley Mono
           </p>
           <p class="font-mono-custom mt-2 text-xs text-subtle-foreground">
-            font-mono · labels, metadata, dates, code · 400 &amp; 700 · commercial —
+            font-mono · labels, metadata, dates, code · 400 &amp; 700 ·
+            commercial —
             <a
               class="underline underline-offset-2 hover:text-foreground"
               href="https://usgraphics.com/products/berkeley-mono"
@@ -488,8 +497,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       <h2 id="surfaces" class="text-2xl text-foreground">Surfaces</h2>
       <p class="text-pretty">
         The page recesses to a muted panel and lifts to a raised card; the
-        interactive surface is a separate layer, painted only on hover and focus.
-        Hover the raised card — it lifts on hover-capable pointers.
+        interactive surface is a separate layer, painted only on hover and
+        focus. Hover the raised card — it lifts on hover-capable pointers.
       </p>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="rounded-lg bg-muted p-5">
@@ -538,7 +547,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         <span class="text-foreground">md</span>, <span class="text-foreground"
           >lg</span
         > — each derived from <code
-          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-inset ring-border"
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
           >--radius</code
         > (0.5rem) by calc. (xl–3xl exist too, but only on the larger Links cards.)
         The corners are a <span class="text-foreground">squircle</span> (superellipse)
@@ -551,7 +560,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             <li class="flex flex-col items-center gap-2">
               <span
                 class:list={[
-                  "size-16 bg-primary/10 ring-1 ring-inset ring-border",
+                  "size-16 bg-primary/10 ring-1 ring-border ring-inset",
                   r.cls,
                 ]}
                 aria-hidden="true"
@@ -568,7 +577,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
     <section class="space-y-4" data-reveal aria-labelledby="motion">
       <h2 id="motion" class="text-2xl text-foreground">Motion</h2>
       <p class="text-pretty">
-        Two curves carry everything — <span class="text-foreground">ease-out</span
+        Two curves carry everything — <span class="text-foreground"
+          >ease-out</span
         > for micro-interactions, <span class="text-foreground">ease-ios</span> for
         overlays. Hover a track to compare the settle.
       </p>
@@ -582,7 +592,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
                   {e.curve}
                 </span>
               </div>
-              <div class="flex items-center rounded-full bg-muted p-1.5 ring-1 ring-inset ring-border">
+              <div class="flex items-center rounded-full bg-muted p-1.5 ring-1 ring-border ring-inset">
                 <span
                   class:list={[
                     "motion-dot size-6 rounded-full bg-brand",
@@ -616,7 +626,10 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       </div>
 
       <div class="flex flex-wrap items-center gap-4 pt-1">
-        <button type="button" class={buttonVariants({ variant: "outline", size: "sm" })}>
+        <button
+          type="button"
+          class={buttonVariants({ variant: "outline", size: "sm" })}
+        >
           Press me
         </button>
         <span class="font-mono-custom text-xs text-subtle-foreground">
@@ -628,13 +641,15 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
     <section class="space-y-4" data-reveal aria-labelledby="components">
       <h2 id="components" class="text-2xl text-foreground">Components</h2>
 
-      <h3 id="buttons" class="text-lg font-semibold text-foreground">Buttons</h3>
+      <h3 id="buttons" class="text-lg font-semibold text-foreground">
+        Buttons
+      </h3>
       <p class="text-pretty">
         shadcn <code
-          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-inset ring-border"
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
           >Button</code
         >, variants adapted to the site's tokens. Styled through <code
-          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-inset ring-border"
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
           >buttonVariants()</code
         > so an anchor and a button can share one style.
       </p>
@@ -649,7 +664,10 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         <button type="button" class={buttonVariants({ variant: "ghost" })}>
           Ghost
         </button>
-        <button type="button" class={buttonVariants({ variant: "destructive" })}>
+        <button
+          type="button"
+          class={buttonVariants({ variant: "destructive" })}
+        >
           Destructive
         </button>
         <button type="button" class={buttonVariants({ variant: "link" })}>
@@ -657,9 +675,13 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         </button>
       </div>
       <div class="flex flex-wrap items-center gap-3">
-        <button type="button" class={buttonVariants({ size: "sm" })}>Small</button>
+        <button type="button" class={buttonVariants({ size: "sm" })}
+          >Small</button
+        >
         <button type="button" class={buttonVariants()}>Default</button>
-        <button type="button" class={buttonVariants({ size: "lg" })}>Large</button>
+        <button type="button" class={buttonVariants({ size: "lg" })}
+          >Large</button
+        >
         <button
           type="button"
           class={buttonVariants({ size: "icon" })}
@@ -701,13 +723,13 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       </h3>
       <p class="text-pretty">
         The <code
-          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-inset ring-border"
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
           >Item</code
         > row: a title, an optional <span class="text-foreground"
           >leading icon</span
-        > and <span class="text-foreground">trailing tag</span>, and a date (or the
-        external ↗). Grouped in a Container, one highlight follows the cursor down
-        the list.
+        > and <span class="text-foreground">trailing tag</span>, and a date (or
+        the external ↗). Grouped in a Container, one highlight follows the
+        cursor down the list.
       </p>
       <Container>
         <ul
@@ -750,7 +772,11 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             />
           </li>
           <li>
-            <Item title="An external row" href="https://ryanfurrer.com" external />
+            <Item
+              title="An external row"
+              href="https://ryanfurrer.com"
+              external
+            />
           </li>
         </ul>
       </Container>
@@ -760,12 +786,14 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       </h3>
       <Callout variant="info">
         <p>
-          Info leans blue — the conventional informational hue, a semantic colour
-          outside the neutral system.
+          Info leans blue — the conventional informational hue, a semantic
+          colour outside the neutral system.
         </p>
       </Callout>
       <Callout variant="warning">
-        <p>Warning leans amber — a semantic colour outside the neutral system.</p>
+        <p>
+          Warning leans amber — a semantic colour outside the neutral system.
+        </p>
       </Callout>
       <Callout variant="caution">
         <p>Caution uses rose, kept distinct from the destructive red.</p>
@@ -776,7 +804,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       </h3>
       <p class="text-pretty">
         Long-form content renders in <code
-          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-inset ring-border"
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
           >.prose</code
         > — headings, lists, links, quotes, and dual-theme code blocks (Catppuccin
         Latte / Mocha) with a copy button.
@@ -784,7 +812,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       <div class="prose max-w-none prose-neutral dark:prose-invert">
         <h4>A prose heading</h4>
         <p>
-          Body copy sets the measure and rhythm. Inline <a href="/writing">links</a
+          Body copy sets the measure and rhythm. Inline <a href="/writing"
+            >links</a
           > underline on hover, <code>inline code</code> sits in a tinted pill, and
           <em>emphasis</em> stays quiet.
         </p>
