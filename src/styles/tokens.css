@@ -14,7 +14,6 @@
   --color-secondary-hover: var(--secondary-hover);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-muted-hover: var(--muted-hover);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
@@ -71,19 +70,18 @@
   --popover-foreground: var(--foreground);
   --primary: oklch(0.205 0.003 286);
   --primary-foreground: oklch(0.985 0.001 286);
-  /* Hover ramp (primary · secondary · muted): each -hover nudges its base toward
+  /* Hover ramp (primary · secondary): each -hover nudges its base toward
      mid-tone — the visible direction — so near-white fills darken while the dark
      primary fill lightens (matching what bg-primary/90 already does). Opacity
      hovers only move toward the page, which is invisible on near-white fills, so
-     those get explicit tokens. --accent is itself the hover surface and
-     --destructive hovers via its own tint, so neither needs a -hover. */
+     those get explicit tokens. --accent is itself the hover surface, --destructive
+     hovers via its own tint, and --muted is surface-only, so none need a -hover. */
   --primary-hover: oklch(0.28 0.003 286);
   --secondary: oklch(0.98 0.001 286);
   --secondary-foreground: oklch(0.205 0.003 286);
   --secondary-hover: oklch(0.94 0.002 286);
   --muted: oklch(0.98 0.001 286);
   --muted-foreground: oklch(0.72 0.008 286);
-  --muted-hover: oklch(0.94 0.002 286);
   /* Interactive hover/focus/active surface — ghost buttons, hovered rows,
      dropdown/menu highlights. NOT the brand accent (that's --brand). Tuned a
      touch darker than shadcn's 0.97 so a hover reads on pure-white surfaces
@@ -91,8 +89,11 @@
   --accent: oklch(0.955 0.002 286);
   --accent-foreground: oklch(0.205 0.003 286);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0.002 286);
-  --input: oklch(0.922 0.002 286);
+  /* Translucent (pure black, never tinted) so the hairline adapts to whatever
+     surface it sits on — mirrors the white-alpha borders in dark. A tinted
+     border would pick up the surface beneath it and read as dirt. */
+  --border: oklch(0 0 0 / 0.1);
+  --input: oklch(0 0 0 / 0.15);
   --ring: oklch(0.708 0.008 286);
   /* dormant — shadcn defaults, unused until a chart/sidebar ships */
   --chart-1: oklch(0.646 0.222 41.116);
@@ -106,7 +107,7 @@
   --sidebar-primary-foreground: oklch(0.985 0.001 286);
   --sidebar-accent: oklch(0.97 0.001 286);
   --sidebar-accent-foreground: oklch(0.205 0.003 286);
-  --sidebar-border: oklch(0.922 0.002 286);
+  --sidebar-border: oklch(0 0 0 / 0.1);
   --sidebar-ring: oklch(0.708 0.008 286);
 
   /* custom */
@@ -146,7 +147,6 @@
   --secondary-hover: oklch(0.32 0.003 286);
   --muted: oklch(0.2 0.003 286);
   --muted-foreground: oklch(0.72 0.008 286);
-  --muted-hover: oklch(0.245 0.003 286);
   --accent: oklch(0.269 0.003 286);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.704 0.191 22.216);

@@ -41,20 +41,17 @@ const colorGroups = [
       {
         token: "--foreground",
         label: "Foreground",
-        util: "text-foreground",
         note: "Headings and strong copy.",
       },
       {
         token: "--subtle-foreground",
         label: "Subtle foreground",
-        util: "text-subtle-foreground",
         note: "The default reading tier — body text sets to this.",
       },
       {
         token: "--muted-foreground",
         label: "Muted foreground",
-        util: "text-muted-foreground",
-        note: "Captions, metadata, quiet labels — steps back at small sizes.",
+        note: "Large secondary text only — a hero's supporting line. Deliberately below AA at small sizes, so never captions or metadata.",
       },
     ],
   },
@@ -64,25 +61,21 @@ const colorGroups = [
       {
         token: "--background",
         label: "Background",
-        util: "bg-background",
         note: "The page itself; everything lifts or recesses from here.",
       },
       {
         token: "--muted",
         label: "Muted",
-        util: "bg-muted",
         note: "Container fill — groups flat content into a soft panel.",
       },
       {
         token: "--card",
         label: "Card",
-        util: "bg-card",
         note: "Raised surface for elevated, self-contained content.",
       },
       {
         token: "--accent",
         label: "Accent",
-        util: "bg-accent",
         note: "Interactive hover, focus & active surface — ghost buttons, hovered rows, menu highlights. Not the brand accent (that's --brand).",
       },
     ],
@@ -93,32 +86,22 @@ const colorGroups = [
       {
         token: "--primary",
         label: "Primary",
-        util: "bg-primary",
         note: "Inverse-ink fill — active nav, solid buttons.",
       },
       {
         token: "--primary-hover",
         label: "Primary hover",
-        util: "bg-primary-hover",
         note: "The default button, hovered — the fill shifts toward mid-tone.",
       },
       {
         token: "--secondary",
         label: "Secondary",
-        util: "bg-secondary",
         note: "Secondary button fill — a neutral step off the page.",
       },
       {
         token: "--secondary-hover",
         label: "Secondary hover",
-        util: "bg-secondary-hover",
         note: "The secondary button, hovered — same nudge toward mid-tone.",
-      },
-      {
-        token: "--muted-hover",
-        label: "Muted hover",
-        util: "bg-muted-hover",
-        note: "Hover for a muted fill — crafted for the ramp, not yet wired.",
       },
     ],
   },
@@ -128,19 +111,16 @@ const colorGroups = [
       {
         token: "--border",
         label: "Border",
-        util: "border-border",
         note: "Hairline separators and inset rings.",
       },
       {
         token: "--input",
         label: "Input",
-        util: "border-input",
         note: "Form-control edges — a step firmer than border.",
       },
       {
         token: "--ring",
         label: "Ring",
-        util: "ring-ring",
         note: "Keyboard focus, on every interactive element.",
       },
     ],
@@ -151,13 +131,11 @@ const colorGroups = [
       {
         token: "--brand",
         label: "Brand",
-        util: "text-brand",
         note: "The mark, tints, and text selection. Personality only — too light for body text.",
       },
       {
         token: "--destructive",
         label: "Destructive",
-        util: "text-destructive",
         note: "Errors, danger, destructive actions.",
       },
     ],
@@ -266,7 +244,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         >
           <Wordmark class="h-9 w-auto text-foreground" />
         </div>
-        <figcaption class="text-sm text-pretty text-muted-foreground">
+        <figcaption class="text-sm text-pretty text-subtle-foreground">
           The wordmark: letters in ink, the terminal dot in brand orange. The
           circle is that dot.
         </figcaption>
@@ -282,7 +260,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
               aria-hidden="true"></span>
             <span class="size-14 rounded-full bg-brand" aria-hidden="true"></span>
           </div>
-          <figcaption class="text-sm text-pretty text-muted-foreground">
+          <figcaption class="text-sm text-pretty text-subtle-foreground">
             <span class="font-medium text-foreground">Clear space</span> — keep a
             half-diameter of room on every side.
           </figcaption>
@@ -295,7 +273,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             <span class="size-14 rounded-full bg-foreground" aria-hidden="true"
             ></span>
           </div>
-          <figcaption class="text-sm text-pretty text-muted-foreground">
+          <figcaption class="text-sm text-pretty text-subtle-foreground">
             <span class="font-medium text-foreground">Ink alternate</span> — when
             orange would clash, drop to foreground ink.
           </figcaption>
@@ -363,7 +341,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
           reading line, muted for the meta below.
         </p>
         <div class="mt-4 flex items-center justify-between gap-4">
-          <span class="font-mono-custom text-xs text-muted-foreground"
+          <span class="font-mono-custom text-xs text-subtle-foreground"
             >08.08.2026 · 4 min read</span
           >
           <CtaLink href="/writing">Read on</CtaLink>
@@ -439,7 +417,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             class="font-medium text-foreground">weight</strong
           > and contrast, never a second hue.
         </p>
-        <p class="mt-5 font-mono-custom text-xs text-muted-foreground">
+        <p class="mt-5 font-mono-custom text-xs text-subtle-foreground">
           RYAN FURRER · 08.08.2026 · 1,240 WORDS
         </p>
       </div>
@@ -451,7 +429,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
           >
             Google Sans
           </p>
-          <p class="font-mono-custom mt-2 text-xs text-muted-foreground">
+          <p class="font-mono-custom mt-2 text-xs text-subtle-foreground">
             font-sans · display, headings, body · 400–700 · <a
               class="underline underline-offset-2 hover:text-foreground"
               href="https://fonts.google.com/specimen/Google+Sans"
@@ -465,7 +443,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
           <p class="font-mono text-3xl text-foreground sm:text-4xl">
             Berkeley Mono
           </p>
-          <p class="font-mono-custom mt-2 text-xs text-muted-foreground">
+          <p class="font-mono-custom mt-2 text-xs text-subtle-foreground">
             font-mono · labels, metadata, dates, code · 400 &amp; 700 · commercial —
             <a
               class="underline underline-offset-2 hover:text-foreground"
@@ -478,7 +456,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
 
         <div class="border-t border-border pt-5">
           <p class="font-cursive text-3xl text-foreground sm:text-4xl">-Ryan</p>
-          <p class="font-mono-custom mt-2 text-xs text-muted-foreground">
+          <p class="font-mono-custom mt-2 text-xs text-subtle-foreground">
             font-cursive · the signature, nowhere else · 400 · <a
               class="underline underline-offset-2 hover:text-foreground"
               href="https://fonts.google.com/specimen/Permanent+Marker"
@@ -500,7 +478,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="rounded-lg bg-muted p-5">
           <p class="font-medium text-foreground">Muted panel</p>
-          <p class="font-mono-custom mt-1 text-xs text-muted-foreground">
+          <p class="font-mono-custom mt-1 text-xs text-subtle-foreground">
             bg-muted · Container
           </p>
           <p class="mt-2 text-sm text-pretty">
@@ -509,7 +487,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         </div>
         <div class="rounded-lg bg-accent p-5">
           <p class="font-medium text-foreground">Interactive surface</p>
-          <p class="font-mono-custom mt-1 text-xs text-muted-foreground">
+          <p class="font-mono-custom mt-1 text-xs text-subtle-foreground">
             bg-accent
           </p>
           <p class="mt-2 text-sm text-pretty">
@@ -518,7 +496,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         </div>
         <div class="card-raised rounded-lg p-5">
           <p class="font-medium text-foreground">Raised card</p>
-          <p class="font-mono-custom mt-1 text-xs text-muted-foreground">
+          <p class="font-mono-custom mt-1 text-xs text-subtle-foreground">
             .card-raised
           </p>
           <p class="mt-2 text-sm text-pretty">
@@ -527,7 +505,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         </div>
         <div class="rounded-lg bg-card p-5 shadow-elevated">
           <p class="font-medium text-foreground">Soft elevation</p>
-          <p class="font-mono-custom mt-1 text-xs text-muted-foreground">
+          <p class="font-mono-custom mt-1 text-xs text-subtle-foreground">
             shadow-elevated
           </p>
           <p class="mt-2 text-sm text-pretty">
@@ -562,7 +540,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
                 ]}
                 aria-hidden="true"
               />
-              <span class="font-mono-custom text-xs text-muted-foreground">
+              <span class="font-mono-custom text-xs text-subtle-foreground">
                 {r.cls} · {r.calc}
               </span>
             </li>
@@ -584,7 +562,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             <div>
               <div class="mb-1.5 flex items-baseline justify-between gap-4">
                 <span class="font-medium text-foreground">{e.name}</span>
-                <span class="font-mono-custom text-xs text-muted-foreground">
+                <span class="font-mono-custom text-xs text-subtle-foreground">
                   {e.curve}
                 </span>
               </div>
@@ -631,7 +609,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         >
           Press me
         </button>
-        <span class="font-mono-custom text-xs text-muted-foreground">
+        <span class="font-mono-custom text-xs text-subtle-foreground">
           press dips to scale 0.97 — felt, not seen
         </span>
       </div>
@@ -731,7 +709,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             <Item title="A row with a leading icon" href="/uses">
               <svg
                 slot="leading"
-                class="size-5 text-muted-foreground"
+                class="size-5 text-subtle-foreground"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -749,7 +727,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
             <Item title="A row with a trailing tag" href="/uses">
               <span
                 slot="trailing"
-                class="font-mono-custom text-xs tracking-wide text-muted-foreground uppercase transition-colors can-hover:group-hover/item:text-foreground"
+                class="font-mono-custom text-xs tracking-wide text-subtle-foreground uppercase transition-colors can-hover:group-hover/item:text-foreground"
                 >Editor</span
               >
             </Item>
@@ -969,16 +947,13 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
   swatches().forEach((btn) => {
     btn.addEventListener("click", async () => {
       const token = btn.dataset.swatch;
-      const out = btn.querySelector<HTMLElement>("[data-swatch-value]");
-      if (!token || !out) return;
+      if (!token) return;
       const value = currentValue(token, format);
       const ok = await copy(value);
       announce(ok ? `Copied ${value}` : "Copy failed");
-      const prev = out.textContent;
-      out.textContent = ok ? "Copied ✓" : "Press ⌘C";
-      btn.classList.toggle("is-copied", ok);
+      if (!ok) return;
+      btn.classList.add("is-copied");
       window.setTimeout(() => {
-        out.textContent = prev;
         btn.classList.remove("is-copied");
       }, 1100);
     });
