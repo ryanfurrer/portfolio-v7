@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react";
 
+import { THEME_COLORS } from "@/lib/theme-colors";
+
 /**
  * Single source of truth for the light/dark choice, shared across every island
  * that reads or sets it (the footer + mobile-menu controls). There's no explicit
@@ -26,7 +28,12 @@ function systemTheme(): Theme {
 function applyTheme(theme: Theme) {
   document.documentElement.classList.toggle("dark", theme === "dark");
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", theme === "dark" ? "#0e0e0e" : "#f5f5f5");
+  if (meta) meta.setAttribute("content", THEME_COLORS[theme]);
+}
+
+function syncTheme(theme: Theme) {
+  applyTheme(theme);
+  window.dispatchEvent(new Event(THEME_EVENT));
 }
 
 // The explicit user choice, or null when none is stored (legacy "system" and
@@ -47,8 +54,7 @@ export function setTheme(next: Theme) {
   try {
     localStorage.setItem("theme", next);
   } catch {}
-  applyTheme(next);
-  window.dispatchEvent(new Event(THEME_EVENT));
+  syncTheme(next);
 }
 
 // Page-lifetime listeners that must exist exactly once no matter how many
@@ -62,8 +68,12 @@ function initThemeGlobals() {
   window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", () => {
-      if (!storedChoice()) applyTheme(systemTheme());
+      if (!storedChoice()) syncTheme(systemTheme());
     });
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === "theme" || event.key === null) syncTheme(readTheme());
+  });
 
   window.addEventListener("keydown", (e) => {
     if (e.key !== "d" && e.key !== "D") return;
@@ -85,11 +95,7 @@ function initThemeGlobals() {
 function subscribe(callback: () => void) {
   initThemeGlobals();
   window.addEventListener(THEME_EVENT, callback);
-  window.addEventListener("storage", callback);
-  return () => {
-    window.removeEventListener(THEME_EVENT, callback);
-    window.removeEventListener("storage", callback);
-  };
+  return () => window.removeEventListener(THEME_EVENT, callback);
 }
 
 /** Reactive current theme, synced across islands. SSR/first paint reads "light". */

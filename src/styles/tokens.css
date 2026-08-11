@@ -93,7 +93,7 @@
      border would pick up the surface beneath it and read as dirt. */
   --border: oklch(0 0 0 / 0.1);
   --input: oklch(0 0 0 / 0.15);
-  --ring: oklch(0.708 0.008 286);
+  --ring: oklch(0.556 0.008 286);
   /* dormant — shadcn defaults, unused until a chart/sidebar ships */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -107,7 +107,7 @@
   --sidebar-accent: oklch(0.97 0.001 286);
   --sidebar-accent-foreground: oklch(0.205 0.003 286);
   --sidebar-border: oklch(0 0 0 / 0.1);
-  --sidebar-ring: oklch(0.708 0.008 286);
+  --sidebar-ring: var(--ring);
 
   /* custom */
   /* Reading tier between --foreground and --muted-foreground; clears AA at small
@@ -115,7 +115,7 @@
   --subtle-foreground: oklch(0.56 0.008 286);
   --brand: oklch(
     0.659 0.194 37.5
-  ); /* orange brand — marks / tints / focus rings; too light for text */
+  ); /* orange brand — marks / tints / selection; too light for text */
   --surface-raised-shadow:
     0 1px 2px oklch(0 0 0 / 0.05), inset 0 0 0 1px oklch(0 0 0 / 0.045);
   /* Item rows sit inside a --muted container: they lift to the raised white card
@@ -164,11 +164,13 @@
   --sidebar-accent: oklch(0.269 0.003 286);
   --sidebar-accent-foreground: oklch(0.985 0.001 286);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0.008 286);
+  --sidebar-ring: var(--ring);
 
   /* custom */
   --subtle-foreground: oklch(0.708 0.008 286);
-  --brand: oklch(0.659 0.194 37.5); /* orange brand — marks / tints / focus rings */
+  --brand: oklch(
+    0.659 0.194 37.5
+  ); /* orange brand — marks / tints / selection */
   --surface-raised-shadow: none;
   --item-hover: var(--card);
   --nav-hover: var(--muted);

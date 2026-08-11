@@ -4,13 +4,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap no-underline outline-none transition-[color,background-color,box-shadow,scale] select-none focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0",
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap no-underline outline-none transition-[color,background-color,box-shadow,scale] select-none focus-visible:ring-[3px] focus-visible:ring-ring active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary-hover",
         destructive:
-          "bg-destructive/10 text-[color-mix(in_oklch,var(--destructive)_82%,black)] hover:bg-destructive/15 focus-visible:ring-destructive/40 dark:bg-destructive/15 dark:text-destructive dark:hover:bg-destructive/20",
+          "bg-destructive/10 text-[color-mix(in_oklch,var(--destructive)_82%,black)] hover:bg-destructive/15 focus-visible:ring-destructive dark:bg-destructive/15 dark:text-destructive dark:hover:bg-destructive/20",
         outline:
           "border border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
