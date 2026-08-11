@@ -1,6 +1,7 @@
 import {blockContentType} from './blockContentType'
 import {calloutType} from './calloutType'
 import {youtubeType} from './youtubeType'
+import {xPostType} from './xPostType'
 import {videoType} from './videoType'
 import {postType} from './postType'
 import {projectType} from './projectType'
@@ -15,6 +16,7 @@ export const schemaTypes = [
   blockContentType,
   calloutType,
   youtubeType,
+  xPostType,
   videoType,
   // Documents
   postType,

@@ -54,6 +54,7 @@ export const blockContentType = defineType({
       ],
     }),
     defineArrayMember({type: 'youtube'}),
+    defineArrayMember({type: 'xPost'}),
     defineArrayMember({type: 'video'}),
   ],
 })

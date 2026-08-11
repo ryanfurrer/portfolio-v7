@@ -1,0 +1,112 @@
+---
+/**
+ * Renders a Sanity `xPost` block from only its post URL. The blockquote/link
+ * remains useful when JavaScript or X is unavailable; widgets.js upgrades it
+ * to the official post embed in the browser.
+ */
+const { node } = Astro.props;
+
+function parsePostUrl(value?: string): { id: string; url: string } | null {
+  if (!value) return null;
+
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase().replace(/^(?:www\.|mobile\.)/, "");
+    if (host !== "x.com" && host !== "twitter.com") return null;
+
+    const match = url.pathname.match(
+      /^\/(?:[a-z0-9_]+|i\/web)\/status\/(\d+)(?:\/.*)?$/i,
+    );
+    if (!match) return null;
+
+    url.protocol = "https:";
+    url.hostname = "x.com";
+    url.port = "";
+    url.search = "";
+    url.hash = "";
+
+    return {
+      id: match[1],
+      url: url.toString(),
+    };
+  } catch {
+    return null;
+  }
+}
+
+const post = parsePostUrl(node?.url);
+---
+
+{
+  post && (
+    <div class="x-post-embed" data-x-post-id={post.id}>
+      <blockquote class="twitter-tweet">
+        <a href={post.url}>View this post on X</a>
+      </blockquote>
+    </div>
+  )
+}
+
+<script>
+  type XWidgetsWindow = Window & {
+    twttr?: {
+      widgets?: {
+        load: (element?: HTMLElement) => void;
+      };
+    };
+  };
+
+  const SCRIPT_ID = "x-widgets-script";
+
+  function loadXPosts() {
+    const embeds = document.querySelectorAll<HTMLElement>(".x-post-embed");
+    if (embeds.length === 0) return;
+
+    // Match the embed to the theme resolved by Head.astro before first paint.
+    const theme = document.documentElement.classList.contains("dark")
+      ? "dark"
+      : "light";
+    for (const embed of embeds) {
+      const quote = embed.querySelector<HTMLElement>(".twitter-tweet");
+      if (quote) quote.dataset.theme = theme;
+    }
+
+    const xWindow = window as XWidgetsWindow;
+    if (xWindow.twttr?.widgets) {
+      for (const embed of embeds) xWindow.twttr.widgets.load(embed);
+      return;
+    }
+
+    if (document.getElementById(SCRIPT_ID)) return;
+
+    const script = document.createElement("script");
+    script.id = SCRIPT_ID;
+    script.src = "https://platform.x.com/widgets.js";
+    script.async = true;
+    document.head.append(script);
+  }
+
+  loadXPosts();
+  document.addEventListener("astro:page-load", loadXPosts);
+</script>
+
+<style>
+  .x-post-embed {
+    display: flex;
+    width: 100%;
+    min-height: 8rem;
+    justify-content: center;
+  }
+
+  .x-post-embed :global(.twitter-tweet) {
+    width: 100%;
+    max-width: 550px;
+    margin: 0;
+  }
+
+  /* Undo the site's prose blockquote treatment on X's pre-enhancement link. */
+  .x-post-embed :global(blockquote.twitter-tweet) {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+</style>

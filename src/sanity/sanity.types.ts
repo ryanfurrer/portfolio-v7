@@ -238,6 +238,9 @@ export type BlockContent = Array<
     } & Youtube)
   | ({
       _key: string;
+    } & XPost)
+  | ({
+      _key: string;
     } & Video)
 >;
 
@@ -257,6 +260,11 @@ export type Video = {
   };
   aspectRatio?: "16 / 9" | "16 / 10";
   caption?: string;
+};
+
+export type XPost = {
+  _type: "xPost";
+  url?: string;
 };
 
 export type Youtube = {
@@ -412,6 +420,7 @@ export type AllSanitySchemaTypes =
   | BlockContent
   | SanityFileAssetReference
   | Video
+  | XPost
   | Youtube
   | Callout
   | Code

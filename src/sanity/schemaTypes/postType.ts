@@ -1,5 +1,6 @@
-import {defineType} from 'sanity'
-import {DocumentTextIcon} from '@sanity/icons/DocumentText'
+import { defineType } from 'sanity'
+import { DocumentTextIcon } from '@sanity/icons/DocumentText'
+import { MarkdownPostInput } from '../components/MarkdownPostInput'
 import {
   bodyField,
   descriptionField,
@@ -27,10 +28,11 @@ export const postType = defineType({
     headerImageField,
     bodyField,
   ],
+  components: { input: MarkdownPostInput },
   preview: {
-    select: {title: 'title', date: 'publishedAt', media: 'headerImage'},
-    prepare({title, date, media}) {
-      return {title, subtitle: formatPreviewDate(date), media}
+    select: { title: 'title', date: 'publishedAt', media: 'headerImage' },
+    prepare({ title, date, media }) {
+      return { title, subtitle: formatPreviewDate(date), media }
     },
   },
 })
