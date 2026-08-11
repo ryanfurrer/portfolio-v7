@@ -1,40 +1,46 @@
 import { useSyncExternalStore } from "react";
 
 /**
- * Single source of truth for the light/dark/system choice, shared across every
- * island that reads or sets it (the footer ModeToggle, the mobile menu control,
- * …). The pre-paint script in Head.astro applies the stored choice before first
+ * Single source of truth for the light/dark choice, shared across every island
+ * that reads or sets it (the footer + mobile-menu controls). There's no explicit
+ * "system" option: with nothing stored we follow the OS preference and keep
+ * tracking its changes; the first explicit pick stops that and wins for good.
+ * The pre-paint script in Head.astro applies the resolved theme before first
  * paint; these helpers keep it — and the address-bar color — in step at runtime.
  */
-export type Theme = "light" | "dark" | "system";
+export type Theme = "light" | "dark";
 
 export const THEME_OPTIONS: { value: Theme; label: string }[] = [
   { value: "light", label: "Light" },
   { value: "dark", label: "Dark" },
-  { value: "system", label: "System" },
 ];
 
 const THEME_EVENT = "themechange";
 
-function prefersDark() {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+function systemTheme(): Theme {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 }
 
 function applyTheme(theme: Theme) {
-  const dark = theme === "dark" || (theme === "system" && prefersDark());
-  document.documentElement.classList.toggle("dark", dark);
+  document.documentElement.classList.toggle("dark", theme === "dark");
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", dark ? "#0e0e0e" : "#f5f5f5");
+  if (meta) meta.setAttribute("content", theme === "dark" ? "#0e0e0e" : "#f5f5f5");
+}
+
+// The explicit user choice, or null when none is stored (legacy "system" and
+// any stray value read as null, so those fall back to the OS preference).
+function storedChoice(): Theme | null {
+  try {
+    const stored = localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark") return stored;
+  } catch {}
+  return null;
 }
 
 function readTheme(): Theme {
-  try {
-    const stored = localStorage.getItem("theme");
-    if (stored === "light" || stored === "dark" || stored === "system") {
-      return stored;
-    }
-  } catch {}
-  return "system";
+  return storedChoice() ?? systemTheme();
 }
 
 export function setTheme(next: Theme) {
@@ -56,7 +62,7 @@ function initThemeGlobals() {
   window
     .matchMedia("(prefers-color-scheme: dark)")
     .addEventListener("change", () => {
-      if (readTheme() === "system") applyTheme("system");
+      if (!storedChoice()) applyTheme(systemTheme());
     });
 
   window.addEventListener("keydown", (e) => {
@@ -86,7 +92,7 @@ function subscribe(callback: () => void) {
   };
 }
 
-/** Reactive current theme, synced across islands. SSR/first paint reads "system". */
+/** Reactive current theme, synced across islands. SSR/first paint reads "light". */
 export function useTheme(): Theme {
-  return useSyncExternalStore(subscribe, readTheme, () => "system");
+  return useSyncExternalStore(subscribe, readTheme, () => "light");
 }

@@ -1,7 +1,7 @@
 ---
+import ModeToggle from "./ModeToggle";
 import Presence from "./Presence";
 import SocialLinks from "./SocialLinks.astro";
-import ThemeSegmented from "./ThemeSegmented";
 import Wordmark from "./Wordmark.astro";
 
 const currentYear = new Date().getFullYear();
@@ -37,7 +37,7 @@ const currentYear = new Date().getFullYear();
       <p>&copy; {currentYear} Ryan Furrer</p>
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
         <SocialLinks />
-        <ThemeSegmented variant="plain" client:idle />
+        <ModeToggle client:idle />
       </div>
     </div>
   </div>

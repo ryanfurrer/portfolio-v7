@@ -3,11 +3,10 @@ import { cn } from "@/lib/utils";
 type Size = "sm" | "md";
 type Variant = "boxed" | "plain";
 
-// One source of truth for segmented-control item styling, so every segmented
-// picker (the React ThemeSegmented, the /brand colour-format switch) stays
-// visually and behaviourally identical instead of drifting into look-alikes.
-// "md" gives touch-sized hits; "plain" drops the filled active chip for a
-// quieter, text-only selection.
+// One source of truth for segmented-control item styling (the /brand
+// colour-format switch), so any future segmented picker matches it instead of
+// drifting into a look-alike. "md" gives touch-sized hits; "plain" drops the
+// filled active chip for a quieter, text-only selection.
 export function segmentedItem({
   active,
   size = "sm",
