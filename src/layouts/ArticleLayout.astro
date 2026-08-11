@@ -114,14 +114,13 @@ const articleJsonLd = {
       {
         publishedLong && (
           <p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm text-subtle-foreground">
-            <span>{publishedLong}</span>
+            <time datetime={publishedAt ?? undefined}>{publishedLong}</time>
             {hasUpdate && (
               <>
-                <span aria-hidden="true" class="opacity-50">
-                  ·
-                </span>
-                <span class="font-medium text-subtle-foreground">
-                  Updated {updatedLong}
+                <span aria-hidden="true">—</span>
+                <span>
+                  Updated{" "}
+                  <time datetime={updatedAt ?? undefined}>{updatedLong}</time>
                 </span>
               </>
             )}
