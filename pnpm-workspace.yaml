@@ -2,3 +2,11 @@ allowBuilds:
   esbuild: true
   msw: false
   sharp: true
+
+# @sanity/astro's dev-only module-dedupe plugin force-adds these transitive deps
+# to Vite's optimizeDeps.include; pnpm keeps them in the virtual store, so hoist
+# them to the root node_modules so Vite can resolve them (silences the two
+# "Failed to resolve dependency" warnings at dev-server start).
+publicHoistPattern:
+  - react-compiler-runtime
+  - lodash
