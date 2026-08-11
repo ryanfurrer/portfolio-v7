@@ -135,9 +135,9 @@
   /* shadcn/ui */
   --background: oklch(0.145 0.003 286);
   --foreground: oklch(0.985 0.001 286);
-  --card: oklch(0.205 0.003 286);
+  --card: oklch(0.23 0.003 286);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.205 0.003 286);
+  --popover: oklch(0.23 0.003 286);
   --popover-foreground: var(--foreground);
   --primary: oklch(0.922 0.002 286);
   --primary-foreground: oklch(0.205 0.003 286);
@@ -171,7 +171,7 @@
   --subtle-foreground: oklch(0.708 0.008 286);
   --brand: oklch(0.659 0.194 37.5); /* orange brand — marks / tints / focus rings */
   --surface-raised-shadow: none;
-  --item-hover: var(--secondary);
+  --item-hover: var(--card);
   --nav-hover: var(--muted);
   --shadow-elevated: none;
 }
