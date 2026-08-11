@@ -13,9 +13,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { segmentedItem } from "@/lib/segmented";
 import Layout from "@/layouts/Layout.astro";
 
-// Dev-only page (injected in astro.config only when `command === "dev"`), so it
-// carries its own copy rather than a public SECTION_META entry, and skips the
-// OG card that the section generator would otherwise emit.
+// Not a Sanity-driven section, so it carries its own copy rather than a
+// SECTION_META entry and falls back to the site's default OG card.
 const title = "Brand";
 const description =
   "The identity this site is built from — one reserved accent, a restrained type system, and the components behind every page.";
@@ -814,7 +813,7 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         <p>
           Body copy sets the measure and rhythm. Inline <a href="/writing"
             >links</a
-          > underline on hover, <code>inline code</code> sits in a tinted pill, and
+          > underline on hover, <code>inline code</code> sits in a tinted pill, and{" "}
           <em>emphasis</em> stays quiet.
         </p>
         <ul>
@@ -873,14 +872,29 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
 
+  // Reading a translucent pixel back from an 8-bit canvas can't recover the
+  // straight-alpha RGB precisely (a 10%-white token comes back tinted). Tokens
+  // are authored in OKLCH with an explicit alpha, so split that alpha off the
+  // string — it's ground truth — and resolve only the *opaque* colour on canvas,
+  // where a single opaque read is exact.
   function toRGBA(color: string): [number, number, number, number] {
     if (!ctx) return [0, 0, 0, 255];
+    let opaque = color;
+    let aByte = 255;
+    const withAlpha = color.match(/^(.*?)\s*\/\s*([0-9.]+%?)\s*\)\s*$/);
+    if (withAlpha) {
+      opaque = `${withAlpha[1]})`;
+      const raw = withAlpha[2];
+      const frac = raw.endsWith("%") ? parseFloat(raw) / 100 : parseFloat(raw);
+      aByte = Math.max(0, Math.min(255, Math.round(frac * 255)));
+    }
     ctx.clearRect(0, 0, 1, 1);
     ctx.fillStyle = "#000";
-    ctx.fillStyle = color;
     ctx.fillRect(0, 0, 1, 1);
-    const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
-    return [r, g, b, a];
+    ctx.fillStyle = opaque;
+    ctx.fillRect(0, 0, 1, 1);
+    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+    return [r, g, b, aByte];
   }
 
   const hex2 = (n: number) => n.toString(16).padStart(2, "0");
