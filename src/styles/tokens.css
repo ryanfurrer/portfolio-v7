@@ -47,8 +47,7 @@
   --color-nav-hover: var(--nav-hover);
   --shadow-elevated:
     0 1px 2px -1px oklch(0 0 0 / 0.06), 0 6px 20px -4px oklch(0 0 0 / 0.08);
-  --font-sans:
-    var(--font-google-sans, "Geist"), "Inter", ui-sans-serif, sans-serif;
+  --font-sans: var(--font-google-sans), "Inter", ui-sans-serif, sans-serif;
   --font-mono: "Berkeley Mono", ui-monospace, monospace;
   --font-cursive: "Permanent Marker", ui-cursive, cursive;
   --ease-ios: var(--ease-ios-curve);

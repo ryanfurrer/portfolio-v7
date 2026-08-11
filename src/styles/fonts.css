@@ -1,20 +1,4 @@
 @font-face {
-  font-family: "Geist";
-  src: url("/assets/fonts/Geist[wght].woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: optional;
-}
-
-@font-face {
-  font-family: "Geist";
-  src: url("/assets/fonts/Geist-Italic[wght].woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: optional;
-}
-
-@font-face {
   font-family: "Berkeley Mono";
   src: url("/assets/fonts/BerkeleyMono-Regular.woff2") format("woff2");
   font-weight: 400;
