@@ -1,0 +1,133 @@
+/* Un-layered on purpose: an un-layered rule beats any @layer rule (regardless of
+   specificity/order), which is how these win over Tailwind utilities + Typography. */
+
+/* Entrance reveal. [data-reveal] stays hidden until .is-revealed (added by
+   scripts/reveal.ts). Head.astro sets .reveal-init before paint only when JS +
+   motion are on, so no-JS / reduced-motion users see content immediately. The
+   failsafe reveals after 2s if the script never runs. Un-layered so the hidden
+   state beats Tailwind's opacity utilities. */
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+.reveal-init [data-reveal]:not(.is-revealed) {
+  opacity: 0;
+  animation: reveal-failsafe 0.3s var(--ease-out-curve) 2s forwards;
+}
+
+.reveal-init [data-reveal].is-revealed {
+  animation: reveal-rise 0.5s var(--ease-out-curve) both;
+}
+
+/* Container surface (Container.astro) is a decorative frame layered behind its
+   content. It fades in as one beat — no rise — while the headings/rows keep
+   their own stagger on top, so the panel and the stagger coexist without
+   nesting opacity (a fade inside a fade goes murky). Ordered after the rule
+   above so it overrides only the animation-name, keeping its cascade delay. */
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.reveal-init .reveal-panel-surface.is-revealed {
+  animation-name: reveal-fade;
+}
+
+/* Table of Contents active link — outside @layer so it beats Tailwind utility classes */
+[data-toc-link].is-active {
+  color: var(--color-foreground);
+}
+
+/* Typography's 2em <picture> margin can't collapse out of the zoom <button>
+   (its own formatting context), floating the focus ring off the image. Zero it —
+   the button owns the spacing; un-layered to beat Typography's utilities rule. */
+.prose .zoomable-image picture {
+  margin: 0;
+}
+
+/* Header image is a bare <img>, so Typography's 2em margin sits inside the button
+   and floats it down. Zero it (un-layered); the button owns the spacing. */
+.prose > .zoomable-image > img {
+  margin: 0;
+}
+
+/* Body images nest in <figure>, which Typography already spaces — only the
+   caption is restyled here (un-layered to beat Typography's figcaption). */
+.prose .zoomable-figure figcaption {
+  margin-block: 0.75rem 0;
+  color: var(--color-subtle-foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* TOC indicator — an ink bar that slides between active links (scroll-spy),
+   echoing the dir-hover highlight. Vars set by TableOfContents.astro;
+   [data-toc-snap] suppresses the slide on first activation. */
+nav.toc::before {
+  content: "";
+  position: absolute;
+  left: -0.75rem;
+  top: 0;
+  width: 2px;
+  height: var(--toc-active-h, 0);
+  translate: 0 var(--toc-active-y, 0);
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  opacity: var(--toc-active-opacity, 0);
+  transition:
+    translate 0.2s var(--ease-out-curve),
+    height 0.2s var(--ease-out-curve),
+    opacity 0.15s var(--ease-out-curve);
+}
+nav.toc[data-toc-snap]::before {
+  transition: none;
+}
+
+/* Body links for both main and .prose contexts. Un-layered so it beats
+   Typography's prose link styles (a later layer wins on layer order regardless
+   of specificity). Foreground ink + faint underline; full underline on hover/focus. */
+:is(main, .prose) a:not(.no-underline) {
+  font-weight: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in oklch,
+    var(--color-foreground) 25%,
+    transparent
+  );
+  text-decoration-skip-ink: none;
+  /* Match the CTA underline (Link.astro) so prose links + CTAs speak one language. */
+  text-decoration-thickness: 1.5px;
+  transition-property: color, text-decoration-color;
+  transition-timing-function: var(--ease-out-curve);
+  transition-duration: 150ms;
+  /* :hover gated so touch doesn't latch the accent; keyboard focus stays. */
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-foreground);
+      text-decoration-color: var(--color-foreground);
+    }
+  }
+  &:focus-visible {
+    color: var(--color-foreground);
+    text-decoration-color: var(--color-foreground);
+  }
+}

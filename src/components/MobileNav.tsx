@@ -1,10 +1,12 @@
 import { Menu, X } from "lucide-react";
 import { type CSSProperties, useState } from "react";
 
+import ModeToggle from "@/components/ModeToggle";
 import {
   Sheet,
   SheetClose,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -31,7 +33,7 @@ function isActive(href: string, pathname: string) {
 // -me-2 nudge, so the X lands where the hamburger was.
 const controlPosition = "absolute top-4 end-2";
 const controlBase =
-  "inline-flex size-10 items-center justify-center rounded-lg text-foreground-muted transition-colors";
+  "inline-flex size-10 items-center justify-center rounded-lg text-subtle-foreground transition-colors";
 
 export default function MobileNav({ navItems, pathname }: Props) {
   const [open, setOpen] = useState(false);
@@ -70,9 +72,7 @@ export default function MobileNav({ navItems, pathname }: Props) {
                 style={{ "--index": i } as CSSProperties}
                 className={cn(
                   "menu-item rounded-lg px-2 py-2 text-2xl font-semibold tracking-tight no-underline transition-colors [-webkit-tap-highlight-color:transparent] active:text-foreground",
-                  active
-                    ? "text-foreground"
-                    : "text-foreground-muted",
+                  active ? "text-foreground" : "text-subtle-foreground",
                 )}
               >
                 {item.label}
@@ -80,6 +80,9 @@ export default function MobileNav({ navItems, pathname }: Props) {
             );
           })}
         </nav>
+        <SheetFooter className="items-end pe-2 pb-6">
+          <ModeToggle size="md" />
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );

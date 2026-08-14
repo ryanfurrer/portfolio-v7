@@ -1,0 +1,157 @@
+@layer base {
+  html {
+    background-color: var(--background);
+    scrollbar-gutter: stable;
+    scroll-behavior: smooth;
+    /* Clear the sticky header on anchor jumps (TOC + skip link). */
+    scroll-padding-top: 5rem;
+  }
+
+  /* Solid brand fill with dark ink so the selection stays legible in both themes. */
+  ::selection {
+    background-color: var(--brand);
+    color: oklch(0.145 0.003 286);
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: oklch(0 0 0 / 0.22);
+    border-radius: 9999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: oklch(0 0 0 / 0.35);
+  }
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0 0 0 / 0.22) transparent;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: oklch(1 0 0 / 0.2);
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: oklch(1 0 0 / 0.33);
+  }
+  html.dark {
+    scrollbar-color: oklch(1 0 0 / 0.2) transparent;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  /* Superellipse corners site-wide — progressive, silently ignored where
+     corner-shape is unsupported. Only the radius-scale boxes get the squircle;
+     circles and pills (rounded-full) stay truly round so the mark, avatars, and
+     dots don't distort. .rounded-full (0,1,0) outranks the * rule (0,0,0). */
+  *,
+  *::before,
+  *::after {
+    corner-shape: squircle;
+  }
+  .rounded-full {
+    corner-shape: round;
+  }
+
+  /* Box-shadow ring (follows border-radius everywhere). NOT :where() —
+     specificity must beat a resting shadow-* utility so it can't hide the ring. */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px var(--color-ring);
+  }
+
+  /* Base heading weight/tracking; component classes (@layer components) override. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--foreground);
+    font-weight: 600;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+}
+
+/* Preference queries — unlayered so they beat utilities; after tokens.css so the
+   prefers-contrast token overrides win. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property:
+      opacity, color, background-color, border-color, fill, stroke,
+      text-decoration-color !important;
+  }
+  /* Pin the auto-hiding header — it otherwise jumps in/out on scroll. */
+  [data-site-header][data-hidden] {
+    translate: none;
+  }
+}
+
+/* Swap the glass chrome to a solid surface so text stays legible without blur. */
+@media (prefers-reduced-transparency: reduce) {
+  [data-site-header][data-scrolled] {
+    background-color: var(--background);
+    backdrop-filter: none;
+  }
+  [data-slot="navigation-menu-content"],
+  [data-slot="dropdown-menu-content"] {
+    background-color: var(--popover);
+    backdrop-filter: none;
+  }
+  [data-toc-mobile] {
+    background-color: var(--background);
+    backdrop-filter: none;
+  }
+  /* Drop the lightbox blur; a more opaque scrim obscures the page instead. */
+  .image-zoom-dialog[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: none;
+  }
+}
+
+/* Firm up hairlines into defined borders so structural edges read clearly. */
+@media (prefers-contrast: more) {
+  :root {
+    --border: oklch(0 0 0 / 0.55);
+    --input: oklch(0 0 0 / 0.6);
+  }
+  .dark {
+    --border: oklch(1 0 0 / 0.5);
+    --input: oklch(1 0 0 / 0.55);
+  }
+  [data-site-header][data-scrolled],
+  [data-slot="navigation-menu-content"],
+  [data-slot="dropdown-menu-content"] {
+    background-color: var(--popover);
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+  }
+  [data-toc-mobile] {
+    background-color: var(--background);
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+  }
+}

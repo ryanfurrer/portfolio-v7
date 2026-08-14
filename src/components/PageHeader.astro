@@ -1,0 +1,41 @@
+---
+interface Props {
+  title: string;
+  lead?: string;
+  /** Override the statement's measure (copy length varies by page). */
+  deckClass?: string;
+  class?: string;
+}
+
+const {
+  title,
+  lead,
+  deckClass = "max-w-[32ch]",
+  class: className,
+} = Astro.props;
+---
+
+<header class:list={["space-y-4", className]}>
+  <div class="space-y-2">
+    <h1
+      class="text-[clamp(1.15rem,1.25rem+1.4vw,1.75rem)]/[1] font-semibold tracking-tight text-muted-foreground"
+      data-reveal
+    >
+      {title}
+    </h1>
+    {
+      lead && (
+        <p
+          class:list={[
+            "text-[clamp(1.5rem,1.2rem+1.4vw,2rem)]/[1.3] font-semibold tracking-tight text-balance text-foreground",
+            deckClass,
+          ]}
+          data-reveal
+        >
+          {lead}
+        </p>
+      )
+    }
+  </div>
+  <slot />
+</header>

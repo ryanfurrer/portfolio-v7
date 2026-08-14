@@ -1,0 +1,112 @@
+@layer components {
+  .font-mono-custom {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Standalone nav-text links (footer, socials, ToC): muted, never underlined —
+     distinct from inline body links (underlined) and navbar items (active pill).
+     Display is left to the call site. */
+  .quiet-link {
+    color: var(--color-subtle-foreground);
+    text-decoration: none;
+    transition-property: color;
+    transition-timing-function: var(--ease-out-curve);
+    transition-duration: 150ms;
+  }
+
+  /* :hover gated so a touch tap doesn't latch the ink; keyboard focus stays. */
+  @media (hover: hover) {
+    .quiet-link:hover {
+      color: var(--color-foreground);
+    }
+  }
+  .quiet-link:focus-visible {
+    color: var(--color-foreground);
+  }
+
+  /* Ink up on press (pointer-down), matching Items/buttons. */
+  .quiet-link:active {
+    color: var(--color-foreground);
+  }
+
+  .small-heading {
+    /* Berkeley Mono so eyebrows match the mono metadata beside them (tags, dates). */
+    font-family: var(--font-mono);
+    /* 13px — a half-step above the 12px inline role tags. */
+    font-size: 0.8125rem;
+    font-weight: 400;
+    /* Matches the role tags' tracking (0.025em) so they read as one system. */
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    /* --subtle-foreground (not muted): these small labels must clear AA. */
+    color: var(--subtle-foreground);
+  }
+
+  /* Standfirst / dek — larger muted intro line (article standfirst + homepage
+     tagline). Article-only spacing is the .prose > .lead rule in prose.css. */
+  .lead {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    letter-spacing: -0.011em;
+    color: var(--color-subtle-foreground);
+    text-wrap: pretty;
+  }
+
+  .squircle {
+    corner-shape: squircle;
+  }
+
+  /* White surface lifted off the canvas — hairline ring + soft shadow. Dark keeps
+     a flat recessed surface (shadow-elevated is none) with a bright inset hairline. */
+  .card-raised {
+    background-color: var(--card);
+    box-shadow:
+      inset 0 0 0 1px oklch(0 0 0 / 0.05),
+      var(--shadow-elevated);
+    transition:
+      box-shadow 0.25s var(--ease-out-curve),
+      translate 0.25s var(--ease-out-curve);
+  }
+  /* Hover lifts the card (rise + deeper shadow); gated so touch doesn't latch it. */
+  @media (hover: hover) {
+    .card-raised:hover {
+      translate: 0 -2px;
+      box-shadow:
+        inset 0 0 0 1px oklch(0 0 0 / 0.05),
+        0 4px 10px -3px oklch(0 0 0 / 0.09),
+        0 16px 34px -10px oklch(0 0 0 / 0.13);
+    }
+  }
+  /* Offset ring over the resting elevation, following the border radius. */
+  .card-raised:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 1px oklch(0 0 0 / 0.05),
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ring),
+      var(--shadow-elevated);
+  }
+  .dark .card-raised {
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.06);
+  }
+  @media (hover: hover) {
+    .dark .card-raised:hover {
+      translate: 0 -2px;
+      background-color: var(--accent);
+      box-shadow:
+        inset 0 0 0 1px oklch(1 0 0 / 0.09),
+        0 8px 24px -10px oklch(0 0 0 / 0.6);
+    }
+  }
+  .dark .card-raised:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 0 0 0 1px oklch(1 0 0 / 0.09),
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ring);
+  }
+}

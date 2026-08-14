@@ -1,0 +1,19 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class="relative rounded-lg p-6">
+  <div
+    class="reveal-panel-surface absolute inset-0 rounded-[inherit] bg-muted"
+    data-reveal
+    aria-hidden="true"
+  >
+  </div>
+  <div class:list={["relative", className]}>
+    <slot />
+  </div>
+</div>

@@ -39,16 +39,21 @@ const isContentPage = contentPrefixes.some(
 ---
 
 <html lang="en">
-  <Head title={title} description={description} ogImage={ogImage} jsonLd={jsonLd} />
-  <body class="bg-background text-foreground-muted antialiased">
+  <Head
+    title={title}
+    description={description}
+    ogImage={ogImage}
+    jsonLd={jsonLd}
+  />
+  <body class="bg-background text-subtle-foreground antialiased">
     <!-- Pinned to the page container's start edge (not the raw viewport edge),
          so it lines up with content instead of the far corner on wide screens. -->
     <div
-      class="pointer-events-none fixed inset-x-0 top-4 z-50 mx-auto max-w-280 px-4"
+      class="pointer-events-none fixed inset-x-0 top-4 z-50 mx-auto max-w-page px-4"
     >
       <a
         href="#main-content"
-        class="pointer-events-auto inline-block -translate-y-[calc(100%+1.5rem)] rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background shadow-elevated transition-transform duration-200 ease-out focus:translate-y-0 motion-reduce:transition-none"
+        class="pointer-events-auto inline-block -translate-y-[calc(100%+1.5rem)] rounded-md bg-foreground px-4 py-2 text-sm font-medium text-primary-foreground shadow-elevated transition-transform duration-200 ease-out focus:translate-y-0 motion-reduce:transition-none"
       >
         Skip to content
       </a>
@@ -72,16 +77,15 @@ const isContentPage = contentPrefixes.some(
               header still repaints smoothly during iOS momentum scroll. */}
           <div
             aria-hidden="true"
-            class="pointer-events-none absolute inset-0 -z-10 transform-[translateZ(0)] bg-background/70 opacity-0 backdrop-blur-xl transition-opacity duration-300 ease-out will-change-transform group-data-[scrolled]:opacity-100"
-          >
-          </div>
-          <div class="mx-auto max-w-280 px-4 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8">
+            class="pointer-events-none absolute inset-0 -z-10 transform-[translateZ(0)] bg-background/70 opacity-0 backdrop-blur-xl transition-opacity duration-300 ease-out will-change-transform group-data-scrolled:opacity-100"
+          />
+          <div class="mx-auto max-w-page px-4 rail:grid rail:grid-cols-[minmax(0,1fr)_var(--container-content)_minmax(0,1fr)] rail:gap-x-8">
             <div
               class={cn(
-                "py-4 lg:col-start-2",
+                "py-4 rail:col-start-2",
                 maxWidth === "sm"
-                  ? "mx-auto max-w-sm lg:mx-0 lg:max-w-none"
-                  : "mx-auto max-w-2xl lg:mx-0 lg:max-w-none",
+                  ? "mx-auto max-w-sm rail:mx-0"
+                  : "mx-auto max-w-content rail:mx-0",
               )}
             >
               <Navbar />
@@ -92,10 +96,10 @@ const isContentPage = contentPrefixes.some(
     }
 
     <div
-      class="mx-auto max-w-280 px-4 py-8 lg:grid lg:grid-cols-[12rem_1fr_12rem] lg:gap-x-8"
+      class="mx-auto max-w-page px-4 py-8 rail:grid rail:grid-cols-[minmax(0,1fr)_var(--container-content)_minmax(0,1fr)] rail:gap-x-8"
     >
       <!-- Left gutter -->
-      <aside class="hidden lg:col-start-1 lg:block">
+      <aside class="hidden rail:col-start-1 rail:block rail:text-end">
         <slot name="left" />
       </aside>
 
@@ -107,19 +111,23 @@ const isContentPage = contentPrefixes.some(
           // md:px-2 gives every page's content the same 8px inset at md+ (so
           // headings line up with Item rows, whose hover pill bleeds -mx-2 into
           // it). Centralized here instead of repeated per-section.
-          "space-y-16 min-w-0 focus:outline-none md:px-2 lg:col-start-2",
+          "space-y-16 min-w-0 focus:outline-none md:px-2 rail:col-start-2",
           maxWidth === "sm"
-            ? "max-w-sm mx-auto lg:max-w-none lg:mx-0"
-            : "max-w-2xl mx-auto lg:max-w-none lg:mx-0",
+            ? "mx-auto max-w-sm rail:mx-0"
+            : "mx-auto max-w-content rail:mx-0",
         )}
       >
         <slot />
-        {isContentPage && <div id="content-end" aria-hidden="true" class="mt-0!"></div>}
+        {
+          isContentPage && (
+            <div id="content-end" aria-hidden="true" class="mt-0!" />
+          )
+        }
         {!noFooter && <Footer />}
       </div>
 
       <!-- Right gutter -->
-      <aside class="hidden lg:col-start-3 lg:block">
+      <aside class="hidden rail:col-start-3 rail:block">
         <slot name="right" />
       </aside>
     </div>
@@ -131,7 +139,6 @@ const isContentPage = contentPrefixes.some(
       import "@/scripts/dir-hover";
       import "@/scripts/sticky-header";
       import "@/scripts/reveal";
-      import "@/scripts/console-art";
     </script>
   </body>
 </html>

@@ -3,6 +3,7 @@ import Item from "./Item.astro";
 
 interface LatestItem {
   _id: string;
+  originalId: string;
   _type: "post" | "project" | "appearance";
   title: string | null;
   slug: { current?: string } | null;
@@ -11,9 +12,10 @@ interface LatestItem {
 interface Props {
   title: string;
   items: LatestItem[];
+  unpublishedIds?: Set<string>;
 }
 
-const { title, items } = Astro.props;
+const { title, items, unpublishedIds = new Set<string>() } = Astro.props;
 
 const categoryByType: Record<LatestItem["_type"], string> = {
   post: "Writing",
@@ -29,7 +31,7 @@ const basePathByType: Record<LatestItem["_type"], string> = {
 ---
 
 <section class="space-y-2">
-  <h2 class="small-heading" data-reveal>
+  <h2 class="small-heading text-box-trim-start" data-reveal>
     {title}
   </h2>
   <ul class="flex flex-col gap-px" role="list">
@@ -39,6 +41,7 @@ const basePathByType: Record<LatestItem["_type"], string> = {
           <Item
             title={item.title}
             href={`${basePathByType[item._type]}/${item.slug?.current}`}
+            unpublished={unpublishedIds.has(item._id)}
           >
             <p
               slot="trailing"

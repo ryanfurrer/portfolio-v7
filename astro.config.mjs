@@ -5,7 +5,7 @@ import vercel from "@astrojs/vercel";
 import sanity from "@sanity/astro";
 import tailwindcss from "@tailwindcss/vite";
 import { readFileSync } from "node:fs";
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import {
   apiVersion,
   dataset,
@@ -51,10 +51,29 @@ if (wantsDrafts && !readToken) {
   );
 }
 
+// The brand / design-system page ships to the dev server only — its route is
+// injected here when the Astro command is `dev`, so production builds never
+// emit it (no page, no sitemap entry, no OG card). The source lives outside the
+// routed tree in src/pages/_dev/ (underscore dir → ignored by file routing).
+/** @type {import('astro').AstroIntegration} */
+const devOnlyPages = {
+  name: "dev-only-pages",
+  hooks: {
+    "astro:config:setup": ({ command, injectRoute }) => {
+      if (command !== "dev") return;
+      injectRoute({
+        pattern: "/brand",
+        entrypoint: "./src/pages/_dev/brand.astro",
+      });
+    },
+  },
+};
+
 // https://astro.build/config
 export default defineConfig({
   adapter: vercel(),
   integrations: [
+    devOnlyPages,
     react(),
     sitemap(),
     sanity({
@@ -68,6 +87,21 @@ export default defineConfig({
     }),
   ],
   site: "https://ryanfurrer.com/",
+  // Body typeface via Astro's Google provider. The family is exposed as a CSS
+  // variable that --font-sans points at (in global.css); the provider downloads
+  // it at build and emits a metric-matched fallback. Add an entry, render its
+  // <Font> in Head.astro, and repoint --font-sans to swap families.
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Google Sans",
+      cssVariable: "--font-google-sans",
+      weights: ["400 700"],
+      styles: ["normal", "italic"],
+      subsets: ["latin"],
+      fallbacks: ["Inter", "sans-serif"],
+    },
+  ],
   vite: {
     resolve: {
       alias: {

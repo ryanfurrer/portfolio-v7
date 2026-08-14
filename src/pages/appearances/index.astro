@@ -1,14 +1,20 @@
 ---
 import { sanityClient } from "sanity:client";
+import Container from "@/components/Container.astro";
 import Item from "@/components/Item.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
-import { groupByYear } from "@/sanity/lib/content";
+import { getUnpublishedDocumentIds, groupByYear } from "@/sanity/lib/content";
 import { APPEARANCES_QUERY } from "@/sanity/lib/queries";
 import type { APPEARANCES_QUERY_RESULT } from "@/sanity/sanity.types";
 import { SECTION_META } from "@/lib/og/sections";
 
 const appearances =
   await sanityClient.fetch<APPEARANCES_QUERY_RESULT>(APPEARANCES_QUERY);
+const unpublishedIds = await getUnpublishedDocumentIds(
+  sanityClient,
+  appearances,
+);
 const { byYear: appearancesByYear, years } = groupByYear(appearances);
 
 const description = SECTION_META.appearances.description;
@@ -20,20 +26,13 @@ const description = SECTION_META.appearances.description;
   ogImage="/og/appearances.png"
 >
   <div class="space-y-8">
-    <header class="space-y-3">
-      <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
-        Appearances
-      </h1>
-      <p class="lead max-w-[60ch]" data-reveal>
-        {description}
-      </p>
-    </header>
+    <PageHeader title="Appearances" lead={description} />
     <main>
-      <div class="space-y-8">
+      <Container class="space-y-8">
         {
           years.map((year) => (
             <section class="space-y-4">
-              <h2 class="small-heading" data-reveal>
+              <h2 class="small-heading text-box-trim-start" data-reveal>
                 {year}
               </h2>
               <ul class="flex flex-col gap-px" role="list">
@@ -43,6 +42,7 @@ const description = SECTION_META.appearances.description;
                       title={appearance.title}
                       href={`/appearances/${appearance.slug?.current}`}
                       publishedAt={appearance.publishedAt}
+                      unpublished={unpublishedIds.has(appearance._id)}
                     />
                   </li>
                 ))}
@@ -50,7 +50,7 @@ const description = SECTION_META.appearances.description;
             </section>
           ))
         }
-      </div>
+      </Container>
     </main>
   </div>
 </Layout>

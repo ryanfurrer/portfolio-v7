@@ -34,8 +34,7 @@ export const SECTION_META = {
   },
   now: {
     title: "Now",
-    description:
-      "What I’m focused on at the moment — projects, reading, and life.",
+    description: "What I’m up to in and out of code.",
   },
   links: {
     title: "Links",

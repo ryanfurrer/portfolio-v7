@@ -6,6 +6,7 @@ import TwitchIcon from "@/assets/icons/twitch.svg";
 import XIcon from "@/assets/icons/x.svg";
 import YoutubeIcon from "@/assets/icons/youtube.svg";
 import LinksCard from "@/components/ui/LinksCard.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
 import { socialLinks } from "@/lib/social-links";
 import { LINKS_LATEST_QUERY } from "@/sanity/lib/queries";
@@ -76,14 +77,7 @@ const description = SECTION_META.links.description;
   ogImage="/og/links.png"
 >
   <div class="space-y-16">
-    <header class="space-y-3">
-      <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
-        Links
-      </h1>
-      <p class="lead max-w-[52ch]" data-reveal>
-        {description}
-      </p>
-    </header>
+    <PageHeader title="Links" lead={description} />
 
     <main class="space-y-16">
       <section class="space-y-4">
@@ -109,7 +103,7 @@ const description = SECTION_META.links.description;
                           link.iconBackground,
                         ]}
                       />
-                      <span class="pointer-events-none inline-flex items-center gap-1 text-xs font-medium text-foreground-subtle transition-colors duration-200 ease-out can-hover:group-hover:text-foreground-muted">
+                      <span class="pointer-events-none inline-flex items-center gap-1 text-xs font-medium text-subtle-foreground transition-colors duration-200 ease-out can-hover:group-hover:text-subtle-foreground">
                         {link.actionLabel}
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -136,12 +130,12 @@ const description = SECTION_META.links.description;
                               {formatFollowerCount(link.followerCount)}
                             </span>
                           </p>
-                          <p class="mt-2 text-sm leading-none text-foreground-subtle">
+                          <p class="mt-2 text-sm leading-none text-subtle-foreground">
                             {followLabel}
                           </p>
                         </>
                       ) : (
-                        <p class="mt-2.5 text-base leading-none font-medium text-foreground-subtle">
+                        <p class="mt-2.5 text-base leading-none font-medium text-subtle-foreground">
                           {link.description}
                         </p>
                       )}
@@ -175,7 +169,7 @@ const description = SECTION_META.links.description;
                       class="aspect-1200/630 w-full object-cover transition-transform duration-500 ease-out motion-reduce:transition-none motion-reduce:group-hover:scale-100 can-hover:group-hover:scale-[1.015]"
                     />
                   ) : (
-                    <div class="flex aspect-1200/630 w-full flex-col justify-center gap-2 bg-surface p-6 sm:p-8">
+                    <div class="flex aspect-1200/630 w-full flex-col justify-center gap-2 bg-muted p-6 sm:p-8">
                       <p class="small-heading">{content.type}</p>
                       <h3 class="text-xl font-bold text-balance text-foreground sm:text-2xl">
                         {content.item.title}

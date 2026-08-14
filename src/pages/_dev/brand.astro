@@ -1,0 +1,1038 @@
+---
+import Callout from "@/components/Callout.astro";
+import ColorSwatch from "@/components/ColorSwatch.astro";
+import Container from "@/components/Container.astro";
+import CtaLink from "@/components/CtaLink.astro";
+import Item from "@/components/Item.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import CodeBlock from "@/components/sanity/CodeBlock.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import TocMobile from "@/components/TocMobile.tsx";
+import Wordmark from "@/components/Wordmark.astro";
+import { buttonVariants } from "@/components/ui/button";
+import { segmentedItem } from "@/lib/segmented";
+import Layout from "@/layouts/Layout.astro";
+
+// Not a Sanity-driven section, so it carries its own copy rather than a
+// SECTION_META entry and falls back to the site's default OG card.
+const title = "Brand";
+const description =
+  "The identity this site is built from — one reserved accent, a restrained type system, and the components behind every page.";
+
+const headings = [
+  { id: "principles", text: "Principles", level: 2 },
+  { id: "mark", text: "Mark", level: 2 },
+  { id: "color", text: "Color", level: 2 },
+  { id: "type", text: "Type", level: 2 },
+  { id: "surfaces", text: "Surfaces", level: 2 },
+  { id: "shape", text: "Shape", level: 2 },
+  { id: "motion", text: "Motion", level: 2 },
+  { id: "components", text: "Components", level: 2 },
+];
+
+// Colour grouped by role — ink → surfaces → line & focus → brand & semantic.
+// Descriptions are usage, not colour (which flips with the theme); values read
+// live in the browser.
+const colorGroups = [
+  {
+    heading: "Ink — three tiers",
+    tokens: [
+      {
+        token: "--foreground",
+        label: "Foreground",
+        note: "Headings and strong copy.",
+      },
+      {
+        token: "--subtle-foreground",
+        label: "Subtle foreground",
+        note: "The default reading tier — body text sets to this.",
+      },
+      {
+        token: "--muted-foreground",
+        label: "Muted foreground",
+        note: "Large secondary text only — a hero's supporting line. Deliberately below AA at small sizes, so never captions or metadata.",
+      },
+    ],
+  },
+  {
+    heading: "Surfaces — page to raised",
+    tokens: [
+      {
+        token: "--background",
+        label: "Background",
+        note: "The page itself; everything lifts or recesses from here.",
+      },
+      {
+        token: "--muted",
+        label: "Muted",
+        note: "Container fill — groups flat content into a soft panel.",
+      },
+      {
+        token: "--card",
+        label: "Card",
+        note: "Raised surface for elevated, self-contained content.",
+      },
+      {
+        token: "--accent",
+        label: "Accent",
+        note: "Interactive hover, focus & active surface — ghost buttons, hovered rows, menu highlights. Not the brand accent (that's --brand).",
+      },
+    ],
+  },
+  {
+    heading: "Fills — base & hover",
+    tokens: [
+      {
+        token: "--primary",
+        label: "Primary",
+        note: "Inverse-ink fill — active nav, solid buttons.",
+      },
+      {
+        token: "--primary-hover",
+        label: "Primary hover",
+        note: "The default button, hovered — the fill shifts toward mid-tone.",
+      },
+      {
+        token: "--secondary",
+        label: "Secondary",
+        note: "Secondary button fill — a neutral step off the page.",
+      },
+      {
+        token: "--secondary-hover",
+        label: "Secondary hover",
+        note: "The secondary button, hovered — same nudge toward mid-tone.",
+      },
+    ],
+  },
+  {
+    heading: "Line & focus",
+    tokens: [
+      {
+        token: "--border",
+        label: "Border",
+        note: "Hairline separators and inset rings.",
+      },
+      {
+        token: "--input",
+        label: "Input",
+        note: "Form-control edges — a step firmer than border.",
+      },
+      {
+        token: "--ring",
+        label: "Ring",
+        note: "Solid, AA-visible keyboard focus on every interactive element.",
+      },
+    ],
+  },
+  {
+    heading: "Brand & semantic",
+    tokens: [
+      {
+        token: "--brand",
+        label: "Brand",
+        note: "The mark, tints, and text selection. Personality only — too light for body text.",
+      },
+      {
+        token: "--destructive",
+        label: "Destructive",
+        note: "Errors, danger, destructive actions.",
+      },
+    ],
+  },
+];
+
+// Full literal class names (not `rounded-${r}`) so Tailwind's scanner emits each
+// utility — a template string would silently ship unstyled corners. Only the
+// steps the project actually uses.
+const radii = [
+  { cls: "rounded-sm", calc: "−4px" },
+  { cls: "rounded-md", calc: "−2px" },
+  { cls: "rounded-lg", calc: "base" },
+];
+
+const easings = [
+  {
+    name: "ease-out",
+    curve: "cubic-bezier(0, 0, 0.2, 1)",
+    use: "Hover / press micro-interactions.",
+  },
+  {
+    name: "ease-ios",
+    curve: "cubic-bezier(0.23, 1, 0.32, 1)",
+    use: "Overlays and drawers — a slower settle.",
+  },
+];
+
+// Derived from the codebase, not rounded off: each duration and what actually
+// uses it.
+const durations = [
+  { ms: "150", role: "Press & tap", note: "buttons dip, tap targets answer" },
+  {
+    ms: "200",
+    role: "Hover & highlight",
+    note: "links, list rows, menus opening",
+  },
+  {
+    ms: "300",
+    role: "Chrome & theme",
+    note: "the sticky header, light ↔ dark",
+  },
+  { ms: "420", role: "Drawer settle", note: "the mobile sheet easing open" },
+  { ms: "500", role: "Entrance", note: "the reveal cascade and large images" },
+];
+
+const sampleCode = `// One pseudo-element per list follows the hovered row.
+const { top, height } = row.getBoundingClientRect();
+list.style.setProperty("--dir-hover-y", \`\${top}px\`);
+list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
+---
+
+<Layout title={`${title} — Ryan Furrer`} description={description}>
+  <div slot="left" class="sticky top-20">
+    <CtaLink href="/" direction="back">Home</CtaLink>
+  </div>
+  <div slot="right">
+    <TableOfContents headings={headings} />
+  </div>
+
+  <main class="space-y-16 sm:space-y-20">
+    <div class="space-y-4">
+      <PageHeader title={title} lead={description} />
+      <p class="max-w-[58ch] text-pretty" data-reveal>
+        Not a spec sheet — the working system. Every colour is copyable, every
+        value reads live from the cascade, and the components below are the real
+        ones. Flip the theme in the header and watch it resolve.
+      </p>
+    </div>
+
+    <section class="space-y-4" data-reveal aria-labelledby="principles">
+      <h2 id="principles" class="text-2xl text-foreground">Principles</h2>
+      <ul class="space-y-2.5 text-pretty" role="list">
+        <li>
+          <strong class="font-medium text-foreground"
+            >One reserved accent.</strong
+          >{" "}
+          Neutral ink on a near-white page; a single orange carries personality and
+          never load-bearing work.
+        </li>
+        <li>
+          <strong class="font-medium text-foreground"
+            >Ink is the interaction colour.</strong
+          >{" "}
+          Links, active states, and fills use the foreground, not a hue — emphasis
+          from weight and contrast.
+        </li>
+        <li>
+          <strong class="font-medium text-foreground"
+            >Depth over borders.</strong
+          >{" "}
+          Surfaces separate with a hairline ring and a soft shadow, rarely a solid
+          line.
+        </li>
+        <li>
+          <strong class="font-medium text-foreground"
+            >Restraint, then whitespace.</strong
+          >{" "}
+          Two curves, one radius scale, a small type system. Impact from proportion,
+          not more parts.
+        </li>
+      </ul>
+    </section>
+
+    <section class="space-y-5" data-reveal aria-labelledby="mark">
+      <h2 id="mark" class="text-2xl text-foreground">Mark</h2>
+      <p class="max-w-[58ch] text-pretty">
+        A single filled circle — the dot that closes the wordmark, on its own.
+        One flat colour: brand orange, or foreground ink where the accent would
+        compete.
+      </p>
+
+      <figure class="space-y-3">
+        <div
+          class="flex items-center justify-center rounded-lg bg-muted px-6 py-12 ring-1 ring-border ring-inset"
+        >
+          <Wordmark class="h-9 w-auto text-foreground" />
+        </div>
+        <figcaption class="text-sm text-pretty text-subtle-foreground">
+          The wordmark: letters in ink, the terminal dot in brand orange. The
+          circle is that dot.
+        </figcaption>
+      </figure>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <figure class="space-y-2">
+          <div
+            class="relative grid aspect-[16/9] place-items-center rounded-lg bg-muted ring-1 ring-border ring-inset"
+          >
+            <span
+              class="absolute inset-[26%] rounded-sm border border-dashed border-border"
+              aria-hidden="true"></span>
+            <span class="size-14 rounded-full bg-brand" aria-hidden="true"
+            ></span>
+          </div>
+          <figcaption class="text-sm text-pretty text-subtle-foreground">
+            <span class="font-medium text-foreground">Clear space</span> — keep a
+            half-diameter of room on every side.
+          </figcaption>
+        </figure>
+
+        <figure class="space-y-2">
+          <div
+            class="grid aspect-[16/9] place-items-center rounded-lg bg-muted ring-1 ring-border ring-inset"
+          >
+            <span class="size-14 rounded-full bg-foreground" aria-hidden="true"
+            ></span>
+          </div>
+          <figcaption class="text-sm text-pretty text-subtle-foreground">
+            <span class="font-medium text-foreground">Ink alternate</span> — when
+            orange would clash, drop to foreground ink.
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <a
+          href="/brand/ryan-furrer-mark.svg"
+          download
+          class={buttonVariants({ variant: "outline" })}
+        >
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M8 2v8m0 0 3-3m-3 3L5 7M2.5 12.5h11"></path>
+          </svg>
+          Download SVG
+        </a>
+        <button
+          type="button"
+          data-copy-svg
+          class:list={[buttonVariants({ variant: "outline" }), "group/copy"]}
+        >
+          <span class="relative size-4 shrink-0" aria-hidden="true">
+            <svg
+              class="absolute inset-0 size-4 opacity-100 transition-opacity duration-150 ease-out group-[.is-copied]/copy:opacity-0"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="5.5" y="5.5" width="8" height="8" rx="1.5"></rect>
+              <path
+                d="M10.5 5.5V4A1.5 1.5 0 0 0 9 2.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5"
+              ></path>
+            </svg>
+            <svg
+              class="absolute inset-0 size-4 scale-90 text-brand opacity-0 transition-[opacity,scale] duration-200 ease-out group-[.is-copied]/copy:scale-100 group-[.is-copied]/copy:opacity-100"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3.5 8.5 6.5 11.5 12.5 5"></path>
+            </svg>
+          </span>
+          Copy SVG
+        </button>
+      </div>
+    </section>
+
+    <section class="space-y-5" data-reveal aria-labelledby="color">
+      <h2 id="color" class="text-2xl text-foreground">Color</h2>
+      <p class="max-w-[54ch] text-pretty">
+        Neutral ink and surfaces carry the work; one orange carries personality.
+        The whole palette, composing a card:
+      </p>
+
+      <div class="card-raised rounded-lg p-6">
+        <p class="small-heading">Field note</p>
+        <h3 class="mt-1.5 text-lg font-semibold text-foreground">
+          Depth without borders
+        </h3>
+        <p class="mt-1.5 max-w-[52ch] text-pretty text-subtle-foreground">
+          Surfaces separate by elevation and a hairline ring, never a hard line.
+          The three ink tiers do the rest — strong for the title, subtle for
+          this reading line, muted for the meta below.
+        </p>
+        <div class="mt-4 flex items-center justify-between gap-4">
+          <span class="font-mono-custom text-xs text-subtle-foreground"
+            >08.08.2026 · 4 min read</span
+          >
+          <CtaLink href="/writing">Read on</CtaLink>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p class="max-w-[46ch] text-pretty">
+          Click a swatch to copy it — in any format.
+        </p>
+        <div
+          class="flex shrink-0 items-center gap-0.5"
+          role="group"
+          aria-label="Colour value format"
+        >
+          {
+            (["hex", "oklch", "rgb"] as const).map((f, i) => (
+              <button
+                type="button"
+                data-format={f}
+                aria-pressed={i === 0 ? "true" : "false"}
+                class={segmentedItem({ active: i === 0 })}
+              >
+                {f.toUpperCase()}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        {
+          colorGroups.map((group) => (
+            <div class="space-y-1.5">
+              <h3 class="small-heading">{group.heading}</h3>
+              <ul class="divide-y divide-border" role="list">
+                {group.tokens.map((t) => (
+                  <li>
+                    <ColorSwatch {...t} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="space-y-6" data-reveal aria-labelledby="type">
+      <h2 id="type" class="text-2xl text-foreground">Type</h2>
+      <p class="max-w-[56ch] text-pretty">
+        Two families do the work: Google Sans for everything you read, Berkeley
+        Mono for labels and data. Permanent Marker signs off — nowhere else. The
+        scale, in a real masthead:
+      </p>
+
+      <div class="rounded-lg bg-muted p-6 sm:p-8">
+        <p class="small-heading">Essay</p>
+        <p
+          class="mt-2 text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl"
+        >
+          The details are the story
+        </p>
+        <p class="lead mt-3 max-w-[48ch]">
+          A restrained system buys impact with proportion and space — not with
+          more colour, or more parts.
+        </p>
+        <p class="mt-4 max-w-[58ch] text-pretty text-subtle-foreground">
+          Body copy runs in the subtle tier, a step down from the headings and
+          comfortable across long passages. Emphasis comes from <strong
+            class="font-medium text-foreground">weight</strong
+          > and contrast, never a second hue.
+        </p>
+        <p class="font-mono-custom mt-5 text-xs text-subtle-foreground">
+          RYAN FURRER · 08.08.2026 · 1,240 WORDS
+        </p>
+      </div>
+
+      <div class="space-y-5">
+        <div class="border-t border-border pt-5">
+          <p
+            class="font-sans text-4xl font-semibold tracking-tight text-foreground sm:text-5xl"
+          >
+            Google Sans
+          </p>
+          <p class="font-mono-custom mt-2 text-xs text-subtle-foreground">
+            font-sans · display, headings, body · 400–700 · <a
+              class="underline underline-offset-2 hover:text-foreground"
+              href="https://fonts.google.com/specimen/Google+Sans"
+              target="_blank"
+              rel="noopener noreferrer">Google Fonts ↗</a
+            >
+          </p>
+        </div>
+
+        <div class="border-t border-border pt-5">
+          <p class="font-mono text-3xl text-foreground sm:text-4xl">
+            Berkeley Mono
+          </p>
+          <p class="font-mono-custom mt-2 text-xs text-subtle-foreground">
+            font-mono · labels, metadata, dates, code · 400 &amp; 700 ·
+            commercial —
+            <a
+              class="underline underline-offset-2 hover:text-foreground"
+              href="https://usgraphics.com/products/berkeley-mono"
+              target="_blank"
+              rel="noopener noreferrer">usgraphics.com ↗</a
+            >
+          </p>
+        </div>
+
+        <div class="border-t border-border pt-5">
+          <p class="font-cursive text-3xl text-foreground sm:text-4xl">-Ryan</p>
+          <p class="font-mono-custom mt-2 text-xs text-subtle-foreground">
+            font-cursive · the signature, nowhere else · 400 · <a
+              class="underline underline-offset-2 hover:text-foreground"
+              href="https://fonts.google.com/specimen/Permanent+Marker"
+              target="_blank"
+              rel="noopener noreferrer">Google Fonts ↗</a
+            >
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4" data-reveal aria-labelledby="surfaces">
+      <h2 id="surfaces" class="text-2xl text-foreground">Surfaces</h2>
+      <p class="text-pretty">
+        The page recesses to a muted panel and lifts to a raised card; the
+        interactive surface is a separate layer, painted only on hover and
+        focus. Hover the raised card — it lifts on hover-capable pointers.
+      </p>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="rounded-lg bg-muted p-5">
+          <p class="font-medium text-foreground">Muted panel</p>
+          <p class="font-mono-custom mt-1 text-xs text-subtle-foreground">
+            bg-muted · Container
+          </p>
+          <p class="mt-2 text-sm text-pretty">
+            Groups flat content into one soft block.
+          </p>
+        </div>
+        <div class="rounded-lg bg-accent p-5">
+          <p class="font-medium text-foreground">Interactive surface</p>
+          <p class="font-mono-custom mt-1 text-xs text-subtle-foreground">
+            bg-accent
+          </p>
+          <p class="mt-2 text-sm text-pretty">
+            Hover, focus & active states — ghost buttons, hovered rows.
+          </p>
+        </div>
+        <div class="card-raised rounded-lg p-5">
+          <p class="font-medium text-foreground">Raised card</p>
+          <p class="font-mono-custom mt-1 text-xs text-subtle-foreground">
+            .card-raised
+          </p>
+          <p class="mt-2 text-sm text-pretty">
+            Lifts off the page — hairline ring, hover-lift.
+          </p>
+        </div>
+        <div class="rounded-lg bg-card p-5 shadow-elevated">
+          <p class="font-medium text-foreground">Soft elevation</p>
+          <p class="font-mono-custom mt-1 text-xs text-subtle-foreground">
+            shadow-elevated
+          </p>
+          <p class="mt-2 text-sm text-pretty">
+            A whisper shadow that floats it; flat in dark.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4" data-reveal aria-labelledby="shape">
+      <h2 id="shape" class="text-2xl text-foreground">Shape</h2>
+      <p class="text-pretty">
+        Three steps do the real work — <span class="text-foreground">sm</span>,
+        <span class="text-foreground">md</span>, <span class="text-foreground"
+          >lg</span
+        > — each derived from <code
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
+          >--radius</code
+        > (0.5rem) by calc. (xl–3xl exist too, but only on the larger Links cards.)
+        The corners are a <span class="text-foreground">squircle</span> (superellipse)
+        site-wide — a softer curve than a plain arc, as these tiles show; circles
+        and pills stay round.
+      </p>
+      <ul class="flex flex-wrap gap-4" role="list">
+        {
+          radii.map((r) => (
+            <li class="flex flex-col items-center gap-2">
+              <span
+                class:list={[
+                  "size-16 bg-primary/10 ring-1 ring-border ring-inset",
+                  r.cls,
+                ]}
+                aria-hidden="true"
+              />
+              <span class="font-mono-custom text-xs text-subtle-foreground">
+                {r.cls} · {r.calc}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="space-y-4" data-reveal aria-labelledby="motion">
+      <h2 id="motion" class="text-2xl text-foreground">Motion</h2>
+      <p class="text-pretty">
+        Two curves carry everything — <span class="text-foreground"
+          >ease-out</span
+        > for micro-interactions, <span class="text-foreground">ease-ios</span> for
+        overlays. Hover a track to compare the settle.
+      </p>
+      <div class="motion-demo space-y-4">
+        {
+          easings.map((e, i) => (
+            <div>
+              <div class="mb-1.5 flex items-baseline justify-between gap-4">
+                <span class="font-medium text-foreground">{e.name}</span>
+                <span class="font-mono-custom text-xs text-subtle-foreground">
+                  {e.curve}
+                </span>
+              </div>
+              <div class="flex items-center rounded-full bg-muted p-1.5 ring-1 ring-border ring-inset">
+                <span
+                  class:list={[
+                    "motion-dot size-6 rounded-full bg-brand",
+                    `motion-dot--${i}`,
+                  ]}
+                  aria-hidden="true"
+                />
+              </div>
+              <p class="mt-1 text-sm text-pretty">{e.use}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="pt-1">
+        <h3 class="small-heading">Durations, and what they move</h3>
+        <dl class="mt-1 divide-y divide-border">
+          {
+            durations.map((d) => (
+              <div class="flex items-baseline justify-between gap-4 py-2.5">
+                <dt class="font-mono-custom shrink-0 text-sm text-foreground">
+                  {d.ms}ms
+                </dt>
+                <dd class="text-end text-sm text-pretty text-subtle-foreground">
+                  <span class="text-foreground">{d.role}</span> — {d.note}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 pt-1">
+        <button
+          type="button"
+          class={buttonVariants({ variant: "outline", size: "sm" })}
+        >
+          Press me
+        </button>
+        <span class="font-mono-custom text-xs text-subtle-foreground">
+          press dips to scale 0.97 — felt, not seen
+        </span>
+      </div>
+    </section>
+
+    <section class="space-y-4" data-reveal aria-labelledby="components">
+      <h2 id="components" class="text-2xl text-foreground">Components</h2>
+
+      <h3 id="buttons" class="text-lg font-semibold text-foreground">
+        Buttons
+      </h3>
+      <p class="text-pretty">
+        shadcn <code
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
+          >Button</code
+        >, variants adapted to the site's tokens. Styled through <code
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
+          >buttonVariants()</code
+        > so an anchor and a button can share one style.
+      </p>
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="button" class={buttonVariants()}>Default</button>
+        <button type="button" class={buttonVariants({ variant: "secondary" })}>
+          Secondary
+        </button>
+        <button type="button" class={buttonVariants({ variant: "outline" })}>
+          Outline
+        </button>
+        <button type="button" class={buttonVariants({ variant: "ghost" })}>
+          Ghost
+        </button>
+        <button
+          type="button"
+          class={buttonVariants({ variant: "destructive" })}
+        >
+          Destructive
+        </button>
+        <button type="button" class={buttonVariants({ variant: "link" })}>
+          Link
+        </button>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <button type="button" class={buttonVariants({ size: "sm" })}
+          >Small</button
+        >
+        <button type="button" class={buttonVariants()}>Default</button>
+        <button type="button" class={buttonVariants({ size: "lg" })}
+          >Large</button
+        >
+        <button
+          type="button"
+          class={buttonVariants({ size: "icon" })}
+          aria-label="Icon button"
+        >
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M8 3.5v9M3.5 8h9"></path>
+          </svg>
+        </button>
+      </div>
+
+      <h3 id="links" class="pt-4 text-lg font-semibold text-foreground">
+        Links &amp; CTAs
+      </h3>
+      <p class="text-pretty">
+        Inline links read as foreground ink with a faint underline and reveal on
+        hover — like <a href="/writing">this one</a>. Standalone{" "}
+        <span class="quiet-link">quiet links</span> drop the underline for nav-style
+        lists. Directional CTAs travel toward their intent:
+      </p>
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-3">
+        <CtaLink href="/about">Forward</CtaLink>
+        <CtaLink href="/" direction="back">Back</CtaLink>
+        <CtaLink href="https://ryanfurrer.com" direction="external"
+          >External</CtaLink
+        >
+      </div>
+
+      <h3 id="lists" class="pt-4 text-lg font-semibold text-foreground">
+        List rows
+      </h3>
+      <p class="text-pretty">
+        The <code
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
+          >Item</code
+        > row: a title, an optional <span class="text-foreground"
+          >leading icon</span
+        > and <span class="text-foreground">trailing tag</span>, and a date (or
+        the external ↗). Grouped in a Container, one highlight follows the
+        cursor down the list.
+      </p>
+      <Container>
+        <ul
+          class="flex flex-col gap-px"
+          role="list"
+          data-dir-hover-list="items"
+        >
+          <li>
+            <Item title="A row with a leading icon" href="/uses">
+              <svg
+                slot="leading"
+                class="size-5 text-subtle-foreground"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+              </svg>
+            </Item>
+          </li>
+          <li>
+            <Item title="A row with a trailing tag" href="/uses">
+              <span
+                slot="trailing"
+                class="font-mono-custom text-xs tracking-wide text-subtle-foreground uppercase transition-colors can-hover:group-hover/item:text-foreground"
+                >Editor</span
+              >
+            </Item>
+          </li>
+          <li>
+            <Item
+              title="A row with a date"
+              href="/writing"
+              publishedAt="2026-07-15"
+            />
+          </li>
+          <li>
+            <Item
+              title="An external row"
+              href="https://ryanfurrer.com"
+              external
+            />
+          </li>
+        </ul>
+      </Container>
+
+      <h3 id="feedback" class="pt-4 text-lg font-semibold text-foreground">
+        Callouts
+      </h3>
+      <Callout variant="info">
+        <p>
+          Info leans blue — the conventional informational hue, a semantic
+          colour outside the neutral system.
+        </p>
+      </Callout>
+      <Callout variant="warning">
+        <p>
+          Warning leans amber — a semantic colour outside the neutral system.
+        </p>
+      </Callout>
+      <Callout variant="caution">
+        <p>Caution uses rose, kept distinct from the destructive red.</p>
+      </Callout>
+
+      <h3 id="code" class="pt-4 text-lg font-semibold text-foreground">
+        Prose &amp; code
+      </h3>
+      <p class="text-pretty">
+        Long-form content renders in <code
+          class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
+          >.prose</code
+        > — headings, lists, links, quotes, and dual-theme code blocks (Catppuccin
+        Latte / Mocha) with a copy button.
+      </p>
+      <div class="prose max-w-none prose-neutral dark:prose-invert">
+        <h4>A prose heading</h4>
+        <p>
+          Body copy sets the measure and rhythm. Inline <a href="/writing"
+            >links</a
+          > underline on hover, <code>inline code</code> sits in a tinted pill, and{
+            " "
+          }
+          <em>emphasis</em> stays quiet.
+        </p>
+        <ul>
+          <li>Lists keep a comfortable rhythm.</li>
+          <li>Markers align to the reading measure.</li>
+        </ul>
+        <CodeBlock node={{ code: sampleCode, language: "ts" }} />
+        <blockquote>
+          Impact comes from proportion and restraint — one accent, generous
+          whitespace, and motion you feel more than notice.
+        </blockquote>
+      </div>
+    </section>
+
+    <p id="copy-status" class="sr-only" role="status" aria-live="polite"></p>
+  </main>
+
+  <TocMobile headings={headings} title={title} client:load />
+</Layout>
+
+<style>
+  /* Live swatch values — filled from the cascade so light/dark always match. */
+  [data-swatch-value] {
+    text-transform: none;
+  }
+
+  /* Motion demo — the dot slides to the far edge on section hover, each row
+     using one of the system's two curves so the settle is directly comparable.
+     margin-inline-start keeps it logical + RTL-safe. Reduced-motion users get a
+     jump (the global reduce rule excludes margin from its transition allow-list). */
+  .motion-dot {
+    margin-inline-start: 0;
+    transition-property: margin-inline-start;
+    transition-duration: 700ms;
+  }
+  .motion-dot--0 {
+    transition-timing-function: var(--ease-out);
+  }
+  .motion-dot--1 {
+    transition-timing-function: var(--ease-ios);
+  }
+  .motion-demo:hover .motion-dot {
+    margin-inline-start: calc(100% - 1.5rem);
+  }
+</style>
+
+<script>
+  import { segmentedItem } from "@/lib/segmented";
+
+  type Format = "hex" | "oklch" | "rgb";
+  const FORMATS: Format[] = ["hex", "oklch", "rgb"];
+  let format: Format = "hex";
+
+  // A 1×1 canvas resolves any CSS colour string (hex / oklch / rgb) to sRGB
+  // bytes — the reliable cross-browser way to normalise the cascade's value.
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+  // Reading a translucent pixel back from an 8-bit canvas can't recover the
+  // straight-alpha RGB precisely (a 10%-white token comes back tinted). Tokens
+  // are authored in OKLCH with an explicit alpha, so split that alpha off the
+  // string — it's ground truth — and resolve only the *opaque* colour on canvas,
+  // where a single opaque read is exact.
+  function toRGBA(color: string): [number, number, number, number] {
+    if (!ctx) return [0, 0, 0, 255];
+    let opaque = color;
+    let aByte = 255;
+    const withAlpha = color.match(/^(.*?)\s*\/\s*([0-9.]+%?)\s*\)\s*$/);
+    if (withAlpha) {
+      opaque = `${withAlpha[1]})`;
+      const raw = withAlpha[2];
+      const frac = raw.endsWith("%") ? parseFloat(raw) / 100 : parseFloat(raw);
+      aByte = Math.max(0, Math.min(255, Math.round(frac * 255)));
+    }
+    ctx.clearRect(0, 0, 1, 1);
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, 1, 1);
+    ctx.fillStyle = opaque;
+    ctx.fillRect(0, 0, 1, 1);
+    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+    return [r, g, b, aByte];
+  }
+
+  const hex2 = (n: number) => n.toString(16).padStart(2, "0");
+  const alphaPct = (a: number) => `${Math.round((a / 255) * 100)}%`;
+
+  // sRGB (0–255) → OKLCH, via linear sRGB and the OKLab matrices.
+  function toOklch(r: number, g: number, b: number): [number, number, number] {
+    const lin = (c: number) => {
+      c /= 255;
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    };
+    const R = lin(r),
+      G = lin(g),
+      B = lin(b);
+    const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B);
+    const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B);
+    const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+    const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+    const A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
+    const Bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+    const C = Math.sqrt(A * A + Bb * Bb);
+    let H = (Math.atan2(Bb, A) * 180) / Math.PI;
+    if (H < 0) H += 360;
+    return [L, C, H];
+  }
+
+  const rnd = (n: number, p: number) => +n.toFixed(p);
+
+  // The three formats for one resolved colour. Prefer the authored string when
+  // it's already in the requested format so hand-tuned values show verbatim.
+  function formatColor(raw: string, fmt: Format): string {
+    const [r, g, b, a] = toRGBA(raw);
+    const alpha = a < 255;
+    if (fmt === "hex") {
+      if (raw.startsWith("#")) return raw.toLowerCase();
+      return `#${hex2(r)}${hex2(g)}${hex2(b)}${alpha ? hex2(a) : ""}`;
+    }
+    if (fmt === "rgb") {
+      return alpha
+        ? `rgb(${r} ${g} ${b} / ${alphaPct(a)})`
+        : `rgb(${r} ${g} ${b})`;
+    }
+    if (raw.startsWith("oklch(")) return raw.replace(/\s+/g, " ").trim();
+    const [L, C, H] = toOklch(r, g, b);
+    const chroma = rnd(C, 3);
+    const base = `${rnd(L, 3)} ${chroma} ${chroma === 0 ? 0 : rnd(H, 1)}`;
+    return alpha ? `oklch(${base} / ${alphaPct(a)})` : `oklch(${base})`;
+  }
+
+  function currentValue(token: string, fmt: Format): string {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue(token)
+      .trim();
+    return raw ? formatColor(raw, fmt) : "—";
+  }
+
+  const swatches = () =>
+    document.querySelectorAll<HTMLButtonElement>("[data-swatch]");
+
+  // Paint every swatch's live value in the active format.
+  function refresh() {
+    swatches().forEach((btn) => {
+      const token = btn.dataset.swatch;
+      const out = btn.querySelector<HTMLElement>("[data-swatch-value]");
+      if (token && out) out.textContent = currentValue(token, format);
+    });
+  }
+
+  const status = document.getElementById("copy-status");
+  function announce(msg: string) {
+    if (status) status.textContent = msg;
+  }
+
+  async function copy(text: string): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // Format switch.
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-format]")
+    .forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const next = btn.dataset.format as Format;
+        if (!FORMATS.includes(next)) return;
+        format = next;
+        document
+          .querySelectorAll<HTMLButtonElement>("[data-format]")
+          .forEach((b) => {
+            const on = b.dataset.format === next;
+            b.setAttribute("aria-pressed", String(on));
+            b.className = segmentedItem({ active: on });
+          });
+        refresh();
+      });
+    });
+
+  // Copy a swatch, with a brief inline confirmation.
+  swatches().forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const token = btn.dataset.swatch;
+      if (!token) return;
+      const value = currentValue(token, format);
+      const ok = await copy(value);
+      announce(ok ? `Copied ${value}` : "Copy failed");
+      if (!ok) return;
+      btn.classList.add("is-copied");
+      window.setTimeout(() => {
+        btn.classList.remove("is-copied");
+      }, 1100);
+    });
+  });
+
+  // Copy the mark's SVG source — same copy-confirm language as the swatches.
+  const svgBtn = document.querySelector<HTMLButtonElement>("[data-copy-svg]");
+  if (svgBtn) {
+    svgBtn.addEventListener("click", async () => {
+      const res = await fetch("/brand/ryan-furrer-mark.svg");
+      const ok = res.ok && (await copy(await res.text()));
+      announce(ok ? "Copied SVG markup" : "Copy failed");
+      if (!ok) return;
+      svgBtn.classList.add("is-copied");
+      window.setTimeout(() => {
+        svgBtn.classList.remove("is-copied");
+      }, 1100);
+    });
+  }
+
+  refresh();
+  // Re-resolve when the theme class flips on <html> so values track light/dark.
+  new MutationObserver(refresh).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+</script>

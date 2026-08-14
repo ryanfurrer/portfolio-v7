@@ -60,9 +60,8 @@ const ratio = aspectRatio || "16 / 9";
   // Static SSR can't know the reader's motion preference, so gate the
   // decorative autoplay here. Play only when motion is allowed; leave the
   // video paused (but controllable) under reduced motion.
-  const allowsMotion = !window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const allowsMotion = !window.matchMedia("(prefers-reduced-motion: reduce)")
+    .matches;
   if (allowsMotion) {
     for (const el of document.querySelectorAll<HTMLVideoElement>(
       "video[data-autoplay]",
@@ -110,6 +109,6 @@ const ratio = aspectRatio || "16 / 9";
     text-align: center;
     /* AA-tested secondary token (≥4.5:1 in both modes) — a transparent mix of
        currentColor drops below AA. */
-    color: var(--foreground-muted);
+    color: var(--subtle-foreground);
   }
 </style>

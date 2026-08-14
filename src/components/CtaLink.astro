@@ -50,7 +50,7 @@ const arrowClass =
   target={finalTarget}
   rel={finalRel}
   class:list={[
-    "group/cta not-prose inline-flex w-fit items-center gap-1 text-sm font-medium text-foreground-muted no-underline transition-[color,scale] duration-150 ease-out hover:text-foreground focus-visible:text-foreground active:scale-[0.98] motion-reduce:transition-colors",
+    "group/cta not-prose inline-flex w-fit items-center gap-1 text-sm font-medium text-subtle-foreground no-underline transition-[color,scale] duration-150 ease-out hover:text-foreground focus-visible:text-foreground active:scale-[0.98] motion-reduce:transition-colors",
     className,
   ]}
   {...rest}
@@ -67,7 +67,7 @@ const arrowClass =
         stroke-linejoin="round"
         class:list={[
           arrowClass,
-          "can-hover:group-hover/cta:-translate-x-1 group-focus-visible/cta:-translate-x-1",
+          "group-focus-visible/cta:-translate-x-1 can-hover:group-hover/cta:-translate-x-1",
         ]}
         aria-hidden="true"
       >
@@ -77,7 +77,7 @@ const arrowClass =
     )
   }<span
     data-back-label={isBack ? "" : undefined}
-    class="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1.5px] bg-[position:0_100%] bg-no-repeat pb-px transition-[background-size] duration-200 ease-out can-hover:group-hover/cta:bg-[length:100%_1.5px] group-focus-visible/cta:bg-[length:100%_1.5px] motion-reduce:transition-none"
+    class="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1.5px] bg-[position:0_100%] bg-no-repeat pb-px transition-[background-size] duration-200 ease-out group-focus-visible/cta:bg-[length:100%_1.5px] motion-reduce:transition-none can-hover:group-hover/cta:bg-[length:100%_1.5px]"
     ><slot /></span
   >{
     direction === "forward" && (
@@ -91,7 +91,7 @@ const arrowClass =
         stroke-linejoin="round"
         class:list={[
           arrowClass,
-          "can-hover:group-hover/cta:translate-x-1 group-focus-visible/cta:translate-x-1",
+          "group-focus-visible/cta:translate-x-1 can-hover:group-hover/cta:translate-x-1",
         ]}
         aria-hidden="true"
       >
@@ -111,7 +111,7 @@ const arrowClass =
         stroke-linejoin="round"
         class:list={[
           arrowClass,
-          "can-hover:group-hover/cta:translate-x-0.5 can-hover:group-hover/cta:-translate-y-0.5 group-focus-visible/cta:translate-x-0.5 group-focus-visible/cta:-translate-y-0.5",
+          "group-focus-visible/cta:translate-x-0.5 group-focus-visible/cta:-translate-y-0.5 can-hover:group-hover/cta:translate-x-0.5 can-hover:group-hover/cta:-translate-y-0.5",
         ]}
         aria-hidden="true"
       >

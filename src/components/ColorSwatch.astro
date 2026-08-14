@@ -1,0 +1,54 @@
+---
+interface Props {
+  token: string;
+  label: string;
+  note: string;
+}
+
+const { token, label, note } = Astro.props;
+---
+
+<button
+  type="button"
+  data-swatch={token}
+  aria-label={`Copy the ${label} colour value`}
+  class="group/sw -mx-2 grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-4 rounded-md px-2 py-2.5 text-start transition-[translate] duration-150 ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:translate-y-px"
+>
+  <span
+    class="mt-0.5 size-7 shrink-0 rounded-md ring-1 ring-inset ring-border"
+    style={`background-color: var(${token})`}
+    aria-hidden="true"></span>
+
+  <span class="min-w-0">
+    <span class="block truncate font-medium text-foreground">{label}</span>
+    <span class="mt-0.5 block text-sm text-pretty text-subtle-foreground"
+      >{note}</span
+    >
+  </span>
+
+  {/* Value doubles as the copy confirmation: on copy it rolls out and a brand
+      "Copied" rolls in (its own space — no reserved icon column). */}
+  <span class="relative mt-0.5 font-mono-custom text-xs tabular-nums">
+    <span
+      data-swatch-value
+      class="block text-end text-foreground decoration-brand decoration-dotted underline-offset-4 transition-[opacity,translate] duration-200 ease-out group-[.is-copied]/sw:-translate-y-1 group-[.is-copied]/sw:opacity-0 can-hover:group-hover/sw:underline"
+      >…</span
+    >
+    <span
+      aria-hidden="true"
+      class="absolute inset-0 flex items-center justify-end text-brand opacity-0 transition-[opacity,translate] duration-200 ease-out group-[.is-copied]/sw:-translate-y-1 group-[.is-copied]/sw:opacity-100"
+    >
+      <svg
+        class="size-4 shrink-0"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M3 8.5 6.5 12 13 4.5"></path>
+      </svg>
+    </span>
+  </span>
+</button>

@@ -1,16 +1,21 @@
 ---
 import { sanityClient } from "sanity:client";
+import Container from "@/components/Container.astro";
 import LatestItemsSection from "@/components/LatestItemsSection.astro";
-import CtaLink from "@/components/CtaLink.astro";
 import SocialLinks from "@/components/SocialLinks.astro";
 import Layout from "@/layouts/Layout.astro";
 import { socialLinks } from "@/lib/social-links";
 import { SITE_DESCRIPTION } from "@/consts";
 import { LATEST_ITEMS_QUERY } from "@/sanity/lib/queries";
 import type { LATEST_ITEMS_QUERY_RESULT } from "@/sanity/sanity.types";
+import { getUnpublishedDocumentIds } from "@/sanity/lib/content";
 
 const latestItems =
   await sanityClient.fetch<LATEST_ITEMS_QUERY_RESULT>(LATEST_ITEMS_QUERY);
+const unpublishedIds = await getUnpublishedDocumentIds(
+  sanityClient,
+  latestItems,
+);
 
 // Person entity for the site — links the profile to every social account so
 // search engines can associate them (knowledge-panel eligibility).
@@ -19,7 +24,7 @@ const personJsonLd = {
   "@type": "Person",
   name: "Ryan Furrer",
   url: Astro.site?.toString(),
-  jobTitle: "Design Engineer",
+  jobTitle: "Frontend Engineer and Designer",
   description: SITE_DESCRIPTION,
   image: new URL("/og-image.png", Astro.site).toString(),
   sameAs: socialLinks.map((link) => link.href),
@@ -28,31 +33,39 @@ const personJsonLd = {
 
 <Layout jsonLd={personJsonLd}>
   <main class="space-y-16">
-    <section class="space-y-6">
-      <div class="space-y-3" data-reveal>
-        <h1 class="text-3xl text-foreground sm:text-4xl">Ryan Furrer</h1>
-        <p class="lead max-w-[46ch]">
-          I feel at home where design and engineering meet.<br />
-          Crafting interfaces down to the last detail.
-        </p>
-      </div>
-      <div class="max-w-[46ch] space-y-3 text-pretty" data-reveal>
-        <p>
-          Currently I am a Design Engineer at <a href="https://pragma.gg"
-            >Pragma</a
-          >, part of the team creating the platform that helps studios build
-          successful games, <a href="https://firstlook.gg">FirstLook</a>.
-        </p>
-        <CtaLink href="/about">Learn more about me</CtaLink>
-      </div>
+    <section class="space-y-8">
+      <h1
+        class="text-[clamp(1.875rem,1.1rem+2.8vw,3rem)]/[1.1] font-semibold tracking-tight text-pretty text-foreground"
+        data-reveal
+      >
+        I am a Frontend Engineer who feels at home where design and engineering
+        meet.
+        <span class="text-muted-foreground">
+          {" "}Crafting interfaces down to the last detail.
+        </span>
+      </h1>
 
-      <div class="space-y-2" data-reveal>
-        <span class="small-heading inline-block">Find me elsewhere:</span>
-        <div class="text-sm">
-          <SocialLinks orientation="horizontal" />
+      <div class="grid gap-x-8 gap-y-8 sm:grid-cols-[2fr_1fr]" data-reveal>
+        <div class="space-y-2">
+          <span class="small-heading inline-block">Now</span>
+          <p class="text-lg text-foreground">
+            Design Engineer at <a href="https://pragma.gg">Pragma</a>, part of
+            the team creating the platform that helps studios build successful
+            games, <a href="https://firstlook.gg">FirstLook</a>.
+          </p>
+        </div>
+        <div class="space-y-2">
+          <span class="small-heading inline-block">Connect</span>
+          <SocialLinks orientation="vertical" size="lg" />
         </div>
       </div>
     </section>
-    <LatestItemsSection title="Latest" items={latestItems} />
+    <Container>
+      <LatestItemsSection
+        title="Latest"
+        items={latestItems}
+        unpublishedIds={unpublishedIds}
+      />
+    </Container>
   </main>
 </Layout>

@@ -1,0 +1,48 @@
+/* Clip from the top edge so the panel grows down out of the navbar rather than
+   sliding in. Overrides the Sheet's slide-in; duration comes from the element's
+   `data-[state]:!duration-*` utilities. */
+@keyframes menu-grow-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes menu-grow-out {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+[data-slot="sheet-content"].menu-grow[data-state="open"] {
+  animation-name: menu-grow-in;
+  animation-timing-function: var(--ease-ios-curve);
+  animation-fill-mode: both;
+}
+[data-slot="sheet-content"].menu-grow[data-state="closed"] {
+  animation-name: menu-grow-out;
+  animation-timing-function: var(--ease-ios-curve);
+  animation-fill-mode: both;
+}
+
+/* Staggered fade-up, top→bottom (--index) to track the clip sweep. Enter only —
+   on close the links clip away with the panel. */
+@keyframes menu-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .menu-grow[data-state="open"] .menu-item {
+    animation: menu-item-in 340ms var(--ease-ios-curve) backwards;
+    animation-delay: calc(90ms + var(--index) * 45ms);
+  }
+}

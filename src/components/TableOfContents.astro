@@ -33,60 +33,62 @@ const { headings } = Astro.props;
 }
 
 <script>
-  const nav = document.querySelector<HTMLElement>("nav.toc");
-  const links = document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]");
-  const headingEls = [...links].map((l) =>
-    document.getElementById(l.dataset.tocLink!),
-  );
+  // Scoped per nav.toc so multiple ToCs (e.g. one per tab) can coexist without
+  // cross-wiring their indicators or active states.
+  function initToc(nav: HTMLElement) {
+    const links = [
+      ...nav.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"),
+    ];
+    const headingEls = links.map((l) => document.getElementById(l.dataset.tocLink!));
 
-  // Slide the gutter indicator (nav.toc::before) to a link. On first appearance
-  // it snaps into place without transition (mirrors dir-hover's data-dir-snap),
-  // then subsequent moves glide.
-  let indicatorVisible = false;
-  function moveIndicator(link: HTMLAnchorElement) {
-    if (!nav) return;
-    const navRect = nav.getBoundingClientRect();
-    const rect = link.getBoundingClientRect();
-    if (!indicatorVisible) {
-      nav.setAttribute("data-toc-snap", "");
+    // Slide the gutter indicator (nav.toc::before) to a link. On first
+    // appearance it snaps into place without transition (mirrors dir-hover's
+    // data-dir-snap), then subsequent moves glide.
+    let indicatorVisible = false;
+    function moveIndicator(link: HTMLAnchorElement) {
+      const navRect = nav.getBoundingClientRect();
+      const rect = link.getBoundingClientRect();
+      if (!indicatorVisible) {
+        nav.setAttribute("data-toc-snap", "");
+      }
+      nav.style.setProperty("--toc-active-y", `${rect.top - navRect.top}px`);
+      nav.style.setProperty("--toc-active-h", `${rect.height}px`);
+      if (!indicatorVisible) {
+        void nav.offsetHeight;
+        nav.removeAttribute("data-toc-snap");
+        nav.style.setProperty("--toc-active-opacity", "1");
+        indicatorVisible = true;
+      }
     }
-    nav.style.setProperty("--toc-active-y", `${rect.top - navRect.top}px`);
-    nav.style.setProperty("--toc-active-h", `${rect.height}px`);
-    if (!indicatorVisible) {
-      void nav.offsetHeight;
-      nav.removeAttribute("data-toc-snap");
-      nav.style.setProperty("--toc-active-opacity", "1");
-      indicatorVisible = true;
-    }
-  }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const link = document.querySelector<HTMLAnchorElement>(
-          `[data-toc-link="${entry.target.id}"]`,
-        );
-        if (entry.isIntersecting && link) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const link = links.find((l) => l.dataset.tocLink === entry.target.id);
+          if (!link) return;
           links.forEach((l) => l.classList.remove("is-active"));
           link.classList.add("is-active");
           moveIndicator(link);
-        }
-      });
-    },
-    { rootMargin: "0px 0px -80% 0px" },
-  );
+        });
+      },
+      { rootMargin: "0px 0px -80% 0px" },
+    );
 
-  headingEls.forEach((h) => h && observer.observe(h));
+    headingEls.forEach((h) => h && observer.observe(h));
 
-  // Keep the bar aligned if the column reflows (font load, resize).
-  window.addEventListener(
-    "resize",
-    () => {
-      const active = document.querySelector<HTMLAnchorElement>(
-        "[data-toc-link].is-active",
-      );
-      if (active) moveIndicator(active);
-    },
-    { passive: true },
-  );
+    // Keep the bar aligned if the column reflows (font load, resize).
+    window.addEventListener(
+      "resize",
+      () => {
+        const active = nav.querySelector<HTMLAnchorElement>(
+          "[data-toc-link].is-active",
+        );
+        if (active) moveIndicator(active);
+      },
+      { passive: true },
+    );
+  }
+
+  document.querySelectorAll<HTMLElement>("nav.toc").forEach(initToc);
 </script>

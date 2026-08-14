@@ -34,7 +34,7 @@ export default function BackToTop() {
     // Wrapper pins to the page container's end edge (not the raw viewport edge),
     // so on wide screens the button hugs the content column instead of floating
     // out in the far margin. pointer-events pass through everywhere but the button.
-    <div className="pointer-events-none fixed inset-x-0 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-30 mx-auto flex max-w-280 justify-end px-4">
+    <div className="pointer-events-none fixed inset-x-0 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-30 mx-auto flex max-w-page justify-end px-4">
       <motion.button
         type="button"
         onClick={handleClick}

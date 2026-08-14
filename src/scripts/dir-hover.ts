@@ -20,8 +20,8 @@ function findItemElement(element: unknown): HTMLAnchorElement | null {
   return element.closest("a[data-dir-hover]");
 }
 
-// The current-page item already carries a persistent highlight (bg-nav-active);
-// the traveling hover highlight must never stack on top of it. Otherwise, right
+// The current-page item already carries its own active indicator (the ghost
+// ring); the traveling hover highlight must never stack on top of it. Otherwise, right
 // after a navigation — when the cursor is still resting on the just-clicked
 // (now active) item — the two highlights double up and read as wonky.
 function isCurrentPage(item: HTMLAnchorElement): boolean {

@@ -1,4 +1,6 @@
+import type {SanityClient} from "@sanity/client";
 import {slugify} from "@/lib/utils";
+import {PUBLISHED_DOCUMENT_IDS_QUERY} from "@/sanity/lib/queries";
 
 /**
  * Shared helpers for the three content detail pages (post / project /
@@ -16,6 +18,36 @@ interface HeadingBlock {
   _type: string;
   style?: string;
   children?: Array<{text?: string}>;
+}
+
+interface DocumentIdentity {
+  _id: string;
+  originalId: string;
+}
+
+/**
+ * Return the IDs of draft-backed documents that have never been published.
+ * The second, explicitly published query is what distinguishes them from
+ * published documents that merely have pending edits.
+ */
+export async function getUnpublishedDocumentIds(
+  client: SanityClient,
+  documents: DocumentIdentity[],
+) {
+  const draftBackedIds = documents
+    .filter((document) => document.originalId.startsWith("drafts."))
+    .map((document) => document._id);
+
+  if (draftBackedIds.length === 0) return new Set<string>();
+
+  const publishedIds = await client.fetch<string[]>(
+    PUBLISHED_DOCUMENT_IDS_QUERY,
+    {ids: draftBackedIds},
+    {perspective: "published"},
+  );
+  const publishedIdSet = new Set(publishedIds);
+
+  return new Set(draftBackedIds.filter((id) => !publishedIdSet.has(id)));
 }
 
 /** Pull h2/h3/h4 headings out of a Portable Text body for the ToC. */

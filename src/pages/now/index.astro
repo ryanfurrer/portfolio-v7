@@ -1,6 +1,7 @@
 ---
 import EmptyState from "@/components/EmptyState.astro";
 import PortableText from "@/components/sanity/PortableText.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
 import { NOW_QUERY } from "@/sanity/lib/queries";
 import type { NOW_QUERY_RESULT } from "@/sanity/sanity.types";
@@ -21,14 +22,7 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
   ogImage="/og/now.png"
 >
   <div class="space-y-8">
-    <header class="space-y-3">
-      <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
-        {title}
-      </h1>
-      <p class="lead max-w-[60ch]" data-reveal>
-        {description}
-      </p>
-    </header>
+    <PageHeader title={title} lead={description} />
     <main class="space-y-6">
       {
         entries.map((entry, i) => {
@@ -45,7 +39,7 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
                 {dateLong && (
                   <time
                     datetime={dateIso}
-                    class="text-sm font-medium text-foreground-muted"
+                    class="text-sm font-medium text-subtle-foreground"
                   >
                     {dateLong}
                   </time>
@@ -95,7 +89,9 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
     padding-block: var(--r);
     /* inline-start gets the wide gutter for the margin rule (see note below). */
     padding-inline: 3rem 1.5rem;
-    background-color: var(--card); /* bright paper = the raised card surface (both modes) */
+    background-color: var(
+      --card
+    ); /* bright paper = the raised card surface (both modes) */
     /* A single tiled rule line (via background-size/-repeat) rather than
        repeating-linear-gradient — WebKit drops thin repeating bands partway
        down a tall element, so the lines would stop rendering in Safari. */
@@ -123,7 +119,7 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
       0 0,
       0 var(--baseline);
     border: 1px solid oklch(0 0 0 / 0.07);
-    border-radius: 0.6rem;
+    border-radius: var(--radius-lg);
     box-shadow:
       0 1px 2px oklch(0 0 0 / 0.05),
       0 12px 32px -18px oklch(0 0 0 / 0.18);
@@ -169,7 +165,7 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
       linear-gradient(
         to right,
         transparent 0 2.25rem,
-        color-mix(in oklch, var(--link) 42%, transparent) 2.25rem 2.28rem,
+        color-mix(in oklch, var(--foreground) 42%, transparent) 2.25rem 2.28rem,
         transparent 2.28rem
       ),
       linear-gradient(to bottom, oklch(0.92 0 0 / 0.07) 0 1px, transparent 1px);

@@ -1,0 +1,80 @@
+@layer components {
+  /* Traveling highlight — vertical variant (Item lists). */
+  ul[data-dir-hover-list="items"] {
+    position: relative;
+    isolation: isolate;
+  }
+
+  ul[data-dir-hover-list="items"]::before {
+    content: "";
+    position: absolute;
+    /* Extends 0.5rem past the list to wrap the Item's -mx-2 padding — keep in
+       sync with Item.astro's -mx-2. */
+    inset-inline: -0.5rem;
+    top: 0;
+    translate: 0 var(--dir-hover-y, 0);
+    height: var(--dir-hover-h, 0);
+    background-color: var(--item-hover);
+    box-shadow: var(--surface-raised-shadow, none);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+    z-index: -1;
+    opacity: var(--dir-hover-opacity, 0);
+    transition:
+      translate 0.2s var(--ease-out-curve),
+      height 0.2s var(--ease-out-curve),
+      opacity 0.15s var(--ease-out-curve);
+  }
+
+  /* Horizontal variant — primary navbar. */
+  ul[data-dir-hover-list="nav"] {
+    position: relative;
+    isolation: isolate;
+  }
+
+  ul[data-dir-hover-list="nav"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    translate: var(--dir-hover-x, 0) 0;
+    width: var(--dir-hover-w, 0);
+    background-color: var(--nav-hover);
+    box-shadow: var(--nav-hover-shadow, none);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+    z-index: -1;
+    opacity: var(--dir-hover-opacity, 0);
+    transition:
+      translate 0.2s var(--ease-out-curve),
+      width 0.2s var(--ease-out-curve),
+      opacity 0.15s var(--ease-out-curve);
+  }
+
+  /* No slide while snapping to the pointer's entry edge, so it emanates from there. */
+  ul[data-dir-hover-list="items"][data-dir-snap]::before,
+  ul[data-dir-hover-list="nav"][data-dir-snap]::before {
+    transition: none;
+  }
+
+  /* Positioning context for the z-index:-1 highlight. */
+  a[data-dir-hover] {
+    position: relative;
+  }
+
+  /* Pre-JS hover fallback (desktop). Skip the active item — it already carries
+     its own active indicator; stacking a hover fill reads as a doubled box. */
+  @media (hover: hover) {
+    body:not([data-dir-hover-active])
+      a[data-dir-hover="item"]:not([aria-current="page"]):hover {
+      background-color: var(--item-hover);
+      box-shadow: var(--surface-raised-shadow, none);
+    }
+    body:not([data-dir-hover-active])
+      a[data-dir-hover="nav"]:not([aria-current="page"]):hover {
+      background-color: var(--nav-hover);
+      box-shadow: var(--nav-hover-shadow, none);
+    }
+  }
+}

@@ -10,9 +10,17 @@ interface Props {
   publishedAt?: string | null;
   /** External link: opens in a new tab + shows a ↗ affordance after the title. */
   external?: boolean;
+  /** Draft-only Sanity document: visible locally, absent from production. */
+  unpublished?: boolean;
 }
 
-const { title, href, publishedAt, external = false } = Astro.props;
+const {
+  title,
+  href,
+  publishedAt,
+  external = false,
+  unpublished = false,
+} = Astro.props;
 
 const formattedDate = publishedAt ? formatDateDotNotation(publishedAt) : null;
 const isLink = Boolean(href);
@@ -26,9 +34,7 @@ const linkAttrs = isLink
   ? {
       href,
       "data-dir-hover": "item",
-      ...(external
-        ? { target: "_blank", rel: externalRel("_blank") }
-        : {}),
+      ...(external ? { target: "_blank", rel: externalRel("_blank") } : {}),
       class:
         "group/item -mx-2 block rounded-md p-2 font-normal no-underline transition duration-200 ease-out [-webkit-tap-highlight-color:transparent] active:scale-[0.98]",
     }
@@ -40,12 +46,24 @@ const linkAttrs = isLink
     <div class="flex w-fit items-center gap-3 text-foreground">
       {
         hasLeading && (
-          <span class="shrink-0 text-foreground-muted transition-colors can-hover:group-hover/item:text-foreground">
+          <span class="shrink-0 text-subtle-foreground transition-colors can-hover:group-hover/item:text-foreground">
             <slot name="leading" />
           </span>
         )
       }
-      <h3 class="font-semibold">{title}</h3>
+      <h3 class="flex items-center gap-2 font-medium">
+        {
+          unpublished && (
+            <span
+              role="img"
+              aria-label="Unpublished — local preview only"
+              title="Unpublished — local preview only"
+              class="size-2 shrink-0 rounded-full bg-brand"
+            />
+          )
+        }
+        <span>{title}</span>
+      </h3>
       {
         external && (
           <svg
@@ -56,7 +74,7 @@ const linkAttrs = isLink
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="size-3.5 shrink-0 text-foreground-subtle transition-[color,translate] duration-200 ease-out group-focus-visible/item:translate-x-0.5 group-focus-visible/item:-translate-y-0.5 group-focus-visible/item:text-foreground can-hover:group-hover/item:translate-x-0.5 can-hover:group-hover/item:-translate-y-0.5 can-hover:group-hover/item:text-foreground"
+            class="size-3.5 shrink-0 text-subtle-foreground transition-[color,translate] duration-200 ease-out group-focus-visible/item:translate-x-0.5 group-focus-visible/item:-translate-y-0.5 group-focus-visible/item:text-foreground can-hover:group-hover/item:translate-x-0.5 can-hover:group-hover/item:-translate-y-0.5 can-hover:group-hover/item:text-foreground"
             aria-hidden="true"
           >
             <path d="M7 7h10v10" />

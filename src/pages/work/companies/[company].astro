@@ -1,9 +1,10 @@
 ---
 import CtaLink from "@/components/CtaLink.astro";
 import CompanyHeader from "@/components/CompanyHeader.astro";
+import Container from "@/components/Container.astro";
 import Item from "@/components/Item.astro";
 import Layout from "@/layouts/Layout.astro";
-import { groupByYear } from "@/sanity/lib/content";
+import { getUnpublishedDocumentIds, groupByYear } from "@/sanity/lib/content";
 import { WORK_HUBS_QUERY } from "@/sanity/lib/queries";
 import type { WORK_HUBS_QUERY_RESULT } from "@/sanity/sanity.types";
 import { sanityClient } from "sanity:client";
@@ -15,6 +16,10 @@ import { sanityClient } from "sanity:client";
 export async function getStaticPaths() {
   const { companies, personal } =
     await sanityClient.fetch<WORK_HUBS_QUERY_RESULT>(WORK_HUBS_QUERY);
+  const unpublishedIds = await getUnpublishedDocumentIds(sanityClient, [
+    ...companies.flatMap((company) => company.projects),
+    ...personal,
+  ]);
 
   const paths = companies
     .filter((c) => c.slug && c.projects.length > 0)
@@ -26,6 +31,7 @@ export async function getStaticPaths() {
         description: c.description,
         logo: c.logo,
         projects: c.projects,
+        unpublishedIds: [...unpublishedIds],
       },
     }));
 
@@ -39,6 +45,7 @@ export async function getStaticPaths() {
           "Things I've built for myself — side projects and experiments.",
         logo: null,
         projects: personal,
+        unpublishedIds: [...unpublishedIds],
       },
     });
   }
@@ -46,7 +53,8 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { label, url, description, logo, projects } = Astro.props;
+const { label, url, description, logo, projects, unpublishedIds } = Astro.props;
+const unpublishedIdSet = new Set<string>(unpublishedIds);
 const { byYear, years } = groupByYear(projects);
 
 const metaDescription = description ?? `Work for ${label}`;
@@ -59,7 +67,7 @@ const metaDescription = description ?? `Work for ${label}`;
   </div>
 
   <div class="space-y-8">
-    <CtaLink href="/work" direction="back" class="lg:hidden">Work</CtaLink>
+    <CtaLink href="/work" direction="back" class="rail:hidden">Work</CtaLink>
     <CompanyHeader
       label={label}
       url={url}
@@ -67,11 +75,11 @@ const metaDescription = description ?? `Work for ${label}`;
       logo={logo}
     />
     <main>
-      <div class="space-y-8">
+      <Container class="space-y-8">
         {
           years.map((year) => (
             <section class="space-y-4">
-              <h2 class="small-heading" data-reveal>
+              <h2 class="small-heading text-box-trim-start" data-reveal>
                 {year}
               </h2>
               <ul class="flex flex-col gap-px" role="list">
@@ -81,6 +89,7 @@ const metaDescription = description ?? `Work for ${label}`;
                       title={project.title}
                       href={`/work/${project.slug?.current}`}
                       publishedAt={project.publishedAt}
+                      unpublished={unpublishedIdSet.has(project._id)}
                     />
                   </li>
                 ))}
@@ -88,7 +97,7 @@ const metaDescription = description ?? `Work for ${label}`;
             </section>
           ))
         }
-      </div>
+      </Container>
     </main>
   </div>
 </Layout>

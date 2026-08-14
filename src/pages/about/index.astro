@@ -1,6 +1,7 @@
 ---
 import PortableText from "@/components/sanity/PortableText.astro";
 import Signature from "@/components/Signature.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
 import { ABOUT_QUERY } from "@/sanity/lib/queries";
 import type { ABOUT_QUERY_RESULT } from "@/sanity/sanity.types";
@@ -20,14 +21,7 @@ const body = about?.body ?? [];
   ogImage="/og/about.png"
 >
   <div class="space-y-8">
-    <header class="space-y-3">
-      <h1 class="text-2xl text-balance text-foreground sm:text-3xl" data-reveal>
-        {title}
-      </h1>
-      <p class="lead max-w-[60ch]" data-reveal>
-        {description}
-      </p>
-    </header>
+    <PageHeader title={title} lead={description} />
     <main class="space-y-4" data-reveal>
       {body.length > 0 && <PortableText portableText={body} />}
       <Signature />

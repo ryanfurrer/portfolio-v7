@@ -1,0 +1,92 @@
+@layer base {
+  .prose {
+    margin-inline: auto;
+    width: 100% !important;
+    max-width: var(--container-content) !important;
+    color: var(--color-subtle-foreground) !important;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    color: var(--color-foreground) !important;
+    scroll-margin-block-start: 1.5em;
+  }
+
+  /* Display-size title wants tighter tracking than the global -0.022em. */
+  .prose h1 {
+    letter-spacing: -0.03em;
+  }
+
+  /* Set the dek apart from the title above and the first sentence below. */
+  .prose > .lead {
+    margin-top: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .prose b,
+  .prose strong {
+    font-weight: 600 !important;
+    color: var(--color-foreground) !important;
+  }
+
+  /* Inline code pill — deeper fill + hairline ring so it doesn't vanish on the
+     off-white canvas. */
+  .prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    font-weight: 500;
+    background-color: oklch(0.925 0 0);
+    box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.08);
+    color: var(--color-foreground);
+    padding: 0.125em 0.375em;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+  .dark .prose :not(pre) > code {
+    background-color: var(--muted);
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.08);
+  }
+
+  .prose :not(pre) > code::before,
+  .prose :not(pre) > code::after {
+    content: none !important;
+  }
+
+  .prose pre {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+
+  /* Shiki dual-theme: <Code> ships catppuccin-latte inline + parallel --shiki-dark
+     vars; swap to them in dark (inline styles force the !important). */
+  .dark .astro-code,
+  .dark .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+
+  .prose blockquote {
+    font-style: normal;
+    border-inline-start: 2px solid var(--border);
+    color: var(--color-subtle-foreground);
+  }
+
+  .prose img {
+    display: block;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    /* Pure black/white hairline — a tinted neutral reads as dirt on the edge. */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .prose img {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
