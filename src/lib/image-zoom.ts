@@ -25,12 +25,14 @@ let dialog: HTMLDialogElement | null = null;
 let dialogImg: HTMLImageElement | null = null;
 let dialogCaption: HTMLElement | null = null;
 let initialized = false;
+let openRequest = 0;
 
 // The thumbnail the current zoom grew from (hidden while open so there's only
 // one copy on screen) and the in-flight FLIP animation, kept so the exit can
 // collapse the image back onto the thumbnail and so opens/closes interrupt cleanly.
 let activeThumb: HTMLElement | null = null;
 let currentAnim: Animation | null = null;
+let pendingFrame: number | null = null;
 let flipActive = false;
 
 const CLOSE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
@@ -44,6 +46,22 @@ interface Box {
 
 function reducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function cancelPendingFrame(): void {
+  if (pendingFrame === null) return;
+  cancelAnimationFrame(pendingFrame);
+  pendingFrame = null;
+}
+
+function finishReveal(trigger: HTMLElement): void {
+  const reveal = trigger.closest<HTMLElement>("[data-reveal]");
+  if (!reveal || getComputedStyle(reveal).animationName !== "reveal-rise")
+    return;
+
+  // The zoom becomes this image's entrance once the reader clicks it. Finish the
+  // load reveal first so two independent transforms cannot compete for its origin.
+  reveal.getAnimations().forEach((animation) => animation.finish());
 }
 
 function ensureDialog(): HTMLDialogElement {
@@ -113,29 +131,45 @@ function invert(from: DOMRect | Box, to: Box): string {
   return `translate(${dx}px, ${dy}px) scale(${scale})`;
 }
 
-function openZoom(trigger: HTMLElement): void {
+async function openZoom(trigger: HTMLElement): Promise<void> {
   const src = trigger.getAttribute(ZOOM_ATTR);
   if (!src) return;
 
+  const request = ++openRequest;
   const active = ensureDialog();
   const thumb = trigger.querySelector("img");
 
-  // Paint instantly by reusing the already-decoded inline image, then swap in the
-  // hi-res variant once it loads so the view sharpens without a blank flash.
-  active.dataset.pendingSrc = src;
-  dialogImg!.src = thumb?.currentSrc || thumb?.src || src;
+  // FLIP images are already served at their intrinsic size, so reuse the exact
+  // decoded resource on screen. Fetching their equivalent zoom URL on click can
+  // leave the new <img> empty for one paint when the cache is cold.
+  const displaySrc =
+    trigger.hasAttribute(FLIP_ATTR) && thumb
+      ? thumb.currentSrc || thumb.src
+      : src;
+  dialogImg!.src = displaySrc;
+  const resolvedSrc = dialogImg!.src;
   dialogImg!.alt = trigger.getAttribute("data-zoom-alt") ?? "";
 
   const caption = trigger.getAttribute("data-zoom-caption") ?? "";
   dialogCaption!.textContent = caption;
   active.classList.toggle("has-caption", caption.length > 0);
 
-  document.documentElement.style.overflow = "hidden";
-
   flipActive = false;
   activeThumb = null;
+  cancelPendingFrame();
   currentAnim?.cancel();
   currentAnim = null;
+
+  try {
+    await dialogImg!.decode();
+  } catch {
+    // A failed decode still falls through so the browser can render its normal
+    // broken-image state instead of leaving the click inert.
+  }
+  if (request !== openRequest || dialogImg!.src !== resolvedSrc) return;
+
+  finishReveal(trigger);
+  document.documentElement.style.overflow = "hidden";
 
   const firstRect = thumb?.getBoundingClientRect();
   const canFlip =
@@ -153,30 +187,40 @@ function openZoom(trigger: HTMLElement): void {
     dialogImg!.style.opacity = "1";
     dialogImg!.style.scale = "1";
     dialogImg!.style.transformOrigin = "top left";
-    thumb!.style.visibility = "hidden";
-
-    active.showModal();
 
     const last = finalBox(firstRect!.width / firstRect!.height);
-    currentAnim = dialogImg!.animate(
-      [{ transform: invert(firstRect!, last) }, { transform: "none" }],
-      { duration: ENTER_MS, easing: EASE },
-    );
+    const startTransform = invert(firstRect!, last);
+    // Keep the thumbnail painted until its dialog copy has joined the top layer.
+    // Their first frame overlaps exactly, avoiding a blank handoff frame.
+    dialogImg!.style.transform = startTransform;
+    active.showModal();
+    pendingFrame = requestAnimationFrame(() => {
+      pendingFrame = null;
+      if (
+        !active.open ||
+        active.classList.contains("is-closing") ||
+        activeThumb !== thumb
+      )
+        return;
+
+      thumb!.style.visibility = "hidden";
+      currentAnim = dialogImg!.animate(
+        [{ transform: startTransform }, { transform: "none" }],
+        { duration: ENTER_MS, easing: EASE },
+      );
+      dialogImg!.style.transform = "";
+    });
   } else {
     active.showModal();
   }
-
-  const hires = new Image();
-  hires.onload = () => {
-    // Ignore a late load if the reader has since closed or opened another image.
-    if (active.open && active.dataset.pendingSrc === src) dialogImg!.src = src;
-  };
-  hires.src = src;
 }
 
 function requestClose(): void {
   const active = dialog;
-  if (!active || !active.open || active.classList.contains("is-closing")) return;
+  if (!active || !active.open || active.classList.contains("is-closing"))
+    return;
+
+  cancelPendingFrame();
 
   if (flipActive && activeThumb) {
     const firstRect = activeThumb.getBoundingClientRect();
@@ -200,10 +244,15 @@ function requestClose(): void {
         { duration: EXIT_MS, easing: EASE, fill: "forwards" },
       );
       currentAnim.onfinish = () => {
-        // Image has landed on the thumbnail and the scrim has faded — tear the
-        // modal down instantly so its own CSS exit can't re-show the image.
-        active.style.transition = "none";
-        active.close();
+        // Repaint the thumbnail beneath its overlapping dialog copy before the
+        // top layer is removed, so closing cannot expose a blank frame.
+        activeThumb!.style.visibility = "";
+        pendingFrame = requestAnimationFrame(() => {
+          pendingFrame = null;
+          if (!active.open || !active.classList.contains("is-closing")) return;
+          active.style.transition = "none";
+          active.close();
+        });
       };
       return;
     }
@@ -214,9 +263,11 @@ function requestClose(): void {
 
 function cleanupAfterClose(): void {
   const active = dialog!;
+  openRequest += 1;
   document.documentElement.style.overflow = "";
   active.classList.remove("is-closing", "has-caption");
   active.style.transition = "";
+  cancelPendingFrame();
   currentAnim?.cancel();
   currentAnim = null;
   if (activeThumb) activeThumb.style.visibility = "";
@@ -237,6 +288,6 @@ export function initImageZoom(): void {
     const trigger = (event.target as HTMLElement).closest<HTMLElement>(
       ".zoomable-image",
     );
-    if (trigger) openZoom(trigger);
+    if (trigger) void openZoom(trigger);
   });
 }
