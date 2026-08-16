@@ -1,16 +1,27 @@
 {
-    "$schema": "https://openapi.vercel.sh/vercel.json",
-    "redirects": [
-      {
-        "source": "/:path(.*)",
-        "has": [
-          {
-            "type": "host",
-            "value": "links.ryanfurrer.com"
-          }
-        ],
-        "destination": "https://ryanfurrer.com/links",
-        "permanent": true
-      }
-    ]
-  }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/admin/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "links.ryanfurrer.com"
+        }
+      ],
+      "destination": "https://www.ryanfurrer.com/links",
+      "permanent": true
+    }
+  ]
+}

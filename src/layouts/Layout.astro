@@ -14,6 +14,9 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  ogType?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
   jsonLd?: Record<string, unknown>;
   noNavbar?: boolean;
   noFooter?: boolean;
@@ -24,6 +27,9 @@ const {
   title = SITE_TITLE,
   description = SITE_DESCRIPTION,
   ogImage,
+  ogType = "website",
+  publishedTime,
+  modifiedTime,
   jsonLd,
   noNavbar = false,
   noFooter = false,
@@ -43,6 +49,9 @@ const isContentPage = contentPrefixes.some(
     title={title}
     description={description}
     ogImage={ogImage}
+    ogType={ogType}
+    publishedTime={publishedTime}
+    modifiedTime={modifiedTime}
     jsonLd={jsonLd}
   />
   <body class="bg-background text-subtle-foreground antialiased">

@@ -75,7 +75,16 @@ export default defineConfig({
   integrations: [
     devOnlyPages,
     react(),
-    sitemap(),
+    sitemap({
+      // The embedded CMS is an application surface, not public site content.
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        return (
+          pathname !== studioBasePath &&
+          !pathname.startsWith(`${studioBasePath}/`)
+        );
+      },
+    }),
     sanity({
       projectId,
       dataset,
@@ -86,7 +95,7 @@ export default defineConfig({
       token: previewDrafts ? readToken : undefined,
     }),
   ],
-  site: "https://ryanfurrer.com/",
+  site: "https://www.ryanfurrer.com/",
   // Body typeface via Astro's Google provider. The family is exposed as a CSS
   // variable that --font-sans points at (in global.css); the provider downloads
   // it at build and emits a metric-matched fallback. Add an entry, render its
