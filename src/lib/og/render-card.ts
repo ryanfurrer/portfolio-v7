@@ -202,7 +202,7 @@ export async function renderOgCard({
                 lineHeight: 1.35,
                 color: COLORS.muted,
                 maxWidth: "860px",
-                lineClamp: 2,
+                lineClamp: 3,
                 textOverflow: "ellipsis",
               },
             },
