@@ -80,7 +80,7 @@
   --secondary-foreground: oklch(0.205 0.003 286);
   --secondary-hover: oklch(0.94 0.002 286);
   --muted: oklch(0.98 0.001 286);
-  --muted-foreground: oklch(0.72 0.008 286);
+  --muted-foreground: oklch(0.66 0.008 286);
   /* Interactive hover/focus/active surface — ghost buttons, hovered rows,
      dropdown/menu highlights. NOT the brand accent (that's --brand). Tuned a
      touch darker than shadcn's 0.97 so a hover reads on pure-white surfaces

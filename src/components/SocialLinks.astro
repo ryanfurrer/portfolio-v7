@@ -1,12 +1,14 @@
 ---
 import { socialLinks } from "@/lib/social-links";
+import { cn } from "@/lib/utils";
 
 interface Props {
+  className?: string;
   orientation?: "horizontal" | "vertical";
   size?: "lg" | "md";
 }
 
-const { orientation = "horizontal", size = "md" } = Astro.props;
+const { orientation = "horizontal", size = "md", className } = Astro.props;
 
 const footerLinks = socialLinks.filter((link) => link.footer);
 ---
@@ -14,8 +16,8 @@ const footerLinks = socialLinks.filter((link) => link.footer);
 <ul
   role="list"
   class:list={orientation === "vertical"
-    ? "flex flex-col"
-    : "flex gap-x-4 md:gap-x-2"}
+    ? cn("flex flex-col", className)
+    : cn("flex gap-x-4 md:gap-x-2", className)}
 >
   {
     footerLinks.map((link) => (

@@ -49,6 +49,59 @@
   animation-name: reveal-fade;
 }
 
+/* Homepage headline — typographic line reveal (scripts/hero-lines.ts). The
+   headline is split into visual lines, each rising out from behind its own
+   baseline; the sub-row (Now/Connect) fades up as the lines settle. Hidden
+   until .is-split so unsplit text never flashes; the 2s failsafe reveals it if
+   the script never runs. Un-layered so the hidden state beats Tailwind's
+   opacity utilities. */
+@keyframes hero-line-rise {
+  from {
+    opacity: 0;
+    translate: 0 110%;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes hero-title-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+.reveal-init [data-hero-title]:not(.is-revealed) {
+  opacity: 0;
+  animation: hero-title-failsafe 0.3s var(--ease-out-curve) 2s forwards;
+}
+.reveal-init [data-hero-title].is-revealed {
+  opacity: 1;
+}
+/* Flex column so the per-line masks don't margin-collapse — the mask's
+   descender padding is cancelled exactly by its negative margin, keeping the
+   split headline the same height as the plain inline text (no CLS on restore). */
+[data-hero-title].is-split {
+  display: flex;
+  flex-direction: column;
+}
+[data-hero-title].is-split .hero-line {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.15em;
+  margin-block: -0.15em;
+}
+[data-hero-title].is-split .hero-line-inner {
+  display: block;
+}
+.reveal-init [data-hero-title].is-split .hero-line-inner {
+  animation: hero-line-rise 0.65s var(--ease-ios-curve) calc(var(--line) * 70ms)
+    both;
+}
+.reveal-init [data-hero-sub] {
+  opacity: 0;
+  animation: reveal-rise 0.5s var(--ease-out-curve) 0.45s both;
+}
+
 /* Table of Contents active link — outside @layer so it beats Tailwind utility classes */
 [data-toc-link].is-active {
   color: var(--color-foreground);

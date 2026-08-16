@@ -36,7 +36,7 @@ const personJsonLd = {
     <section class="space-y-8">
       <h1
         class="text-[clamp(1.875rem,1.1rem+2.8vw,3rem)]/[1.1] font-semibold tracking-tight text-pretty text-foreground"
-        data-reveal
+        data-hero-title
       >
         I am a Frontend Engineer who feels at home where design and engineering
         meet.
@@ -45,7 +45,7 @@ const personJsonLd = {
         </span>
       </h1>
 
-      <div class="grid gap-x-8 gap-y-8 sm:grid-cols-[2fr_1fr]" data-reveal>
+      <div class="grid gap-x-8 gap-y-8 sm:grid-cols-[2fr_1fr]" data-hero-sub>
         <div class="space-y-2">
           <span class="small-heading inline-block">Now</span>
           <p class="text-lg text-foreground">
@@ -56,7 +56,11 @@ const personJsonLd = {
         </div>
         <div class="space-y-2">
           <span class="small-heading inline-block">Connect</span>
-          <SocialLinks orientation="vertical" size="lg" />
+          <SocialLinks
+            className="**:text-foreground"
+            orientation="vertical"
+            size="lg"
+          />
         </div>
       </div>
     </section>
@@ -69,3 +73,7 @@ const personJsonLd = {
     </Container>
   </main>
 </Layout>
+
+<script>
+  import "@/scripts/hero-lines";
+</script>
