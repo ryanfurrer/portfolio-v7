@@ -79,10 +79,10 @@ const heading = title ?? label;
       aria-hidden="true"
       set:html={icon}
     />
-    <span class="text-balance text-sm font-medium tracking-tight">{heading}</span>
+    <span class="font-medium tracking-tight text-balance">{heading}</span>
   </div>
   <div
-    class="[&_a]:decoration-skip-ink mt-1.5 text-sm/6 text-pretty text-foreground [&_a]:font-medium [&_a]:underline [&_p]:m-0 [&_p+p]:mt-2"
+    class="[&_a]:decoration-skip-ink mt-1.5 text-base/6 text-pretty text-foreground [&_a]:font-medium [&_a]:underline [&_p]:m-0 [&_p+p]:mt-2"
   >
     <slot />
   </div>
