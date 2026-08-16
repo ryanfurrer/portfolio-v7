@@ -63,9 +63,24 @@ const fontPath = (file: string) =>
 
 // Read once at module load — endpoints render many cards per build.
 const fonts = [
-  { name: "Google Sans", data: readFileSync(fontPath("GoogleSans-Regular.ttf")), weight: 400 as const, style: "normal" as const },
-  { name: "Google Sans", data: readFileSync(fontPath("GoogleSans-SemiBold.ttf")), weight: 600 as const, style: "normal" as const },
-  { name: "Berkeley Mono", data: readFileSync(fontPath("BerkeleyMono-Regular.otf")), weight: 400 as const, style: "normal" as const },
+  {
+    name: "Google Sans",
+    data: readFileSync(fontPath("GoogleSans-Regular.ttf")),
+    weight: 400 as const,
+    style: "normal" as const,
+  },
+  {
+    name: "Google Sans",
+    data: readFileSync(fontPath("GoogleSans-SemiBold.ttf")),
+    weight: 600 as const,
+    style: "normal" as const,
+  },
+  {
+    name: "Berkeley Mono",
+    data: readFileSync(fontPath("BerkeleyMono-Regular.otf")),
+    weight: 400 as const,
+    style: "normal" as const,
+  },
 ];
 
 /** Minimal hyperscript so we can build Satori's VDOM without JSX in a .ts file. */
@@ -109,6 +124,8 @@ export async function renderOgCard({
   // Just the section path (e.g. "/writing") — the domain is implied, and this
   // stays short whether it's a section card or a post within that section.
   const url = `/${path}`.replace(/\/$/, "") || "/";
+  const titleSize = titleFontSize(title);
+  const descriptionGap = titleSize >= 104 ? 16 : 24;
 
   const tree = h(
     "div",
@@ -164,7 +181,7 @@ export async function renderOgCard({
         {
           style: {
             display: "flex",
-            fontSize: titleFontSize(title),
+            fontSize: titleSize,
             fontWeight: 600,
             lineHeight: 1.1,
             letterSpacing: "-0.025em",
@@ -179,12 +196,14 @@ export async function renderOgCard({
             "div",
             {
               style: {
-                display: "flex",
-                marginTop: "28px",
+                display: "block",
+                marginTop: `${descriptionGap}px`,
                 fontSize: 34,
                 lineHeight: 1.35,
                 color: COLORS.muted,
                 maxWidth: "860px",
+                lineClamp: 2,
+                textOverflow: "ellipsis",
               },
             },
             description,
