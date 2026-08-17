@@ -1,68 +1,59 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   Named text patterns used across the site's page chrome (outside long-form
-   article bodies, which live in prose.css).
+   Named text/surface patterns used across the site's page chrome (outside
+   long-form article bodies, which live in prose.css).
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Standfirst / dek — the one editorial step above body copy. A larger, muted
-   intro line used for page & article ledes and the homepage tagline. */
+/* Standfirst / dek — the one larger, muted editorial step above body copy. Used
+   for page & article ledes and the homepage tagline. Sits at the --subtle-
+   foreground tier (mid ink), not the lighter --muted-foreground. */
 .lead {
-  font-size: var(--text-lead);
-  line-height: var(--leading-lead);
-  letter-spacing: var(--tracking-lead);
-  color: var(--foreground-muted);
+  font-size: 1.2rem;
+  line-height: 1.6;
+  letter-spacing: -0.011em;
+  color: var(--subtle-foreground);
   text-wrap: pretty;
 }
 
 /* Small uppercase eyebrow label — section kickers ("Find me elsewhere:").
-   Berkeley Mono so eyebrows read as the same technical family as the inline
-   mono metadata beside them (role tags, dates). Regular 400, 13px (a half-step
-   above the 12px inline tags), muted so it clears WCAG AA at this size. */
+   Berkeley Mono so eyebrows read as the same technical family as the mono
+   metadata beside them (role tags, dates). 13px is a half-step above the 12px
+   inline tags; 0.025em tracking matches them. --subtle-foreground so it clears
+   AA at this size (never --muted-foreground on small labels). */
 .small-heading {
   font-family: var(--font-mono);
   font-size: 0.8125rem; /* 13px */
   font-weight: 400;
-  letter-spacing: var(--tracking-label);
+  letter-spacing: 0.025em;
   text-transform: uppercase;
-  color: var(--foreground-muted);
+  color: var(--subtle-foreground);
 }
 
-/* Neutral metadata pill — "Updated", year chips, small status tags. */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  border-radius: 9999px;
-  background-color: var(--badge);
-  padding: 0.125rem 0.5rem;
-  font-size: var(--text-xs);
-  font-weight: 500;
-  line-height: 1.25rem;
-  color: var(--badge-foreground);
-  white-space: nowrap;
-}
-
-/* Quiet nav-text link — footer sitemap, social links, table of contents. Muted
-   ink at rest, foreground on hover/focus/press, never underlined. Distinct from
-   body links (underlined) and navbar items (which add an active pill). Display
-   is left to the call site so it works block, flex, or inline. */
+/* Quiet nav-text link — footer, socials, table of contents. Muted at rest,
+   foreground on hover/focus/press, never underlined. Distinct from body links
+   (underlined) and navbar items (active ring). Display is left to the call site
+   so it works block, flex, or inline. */
 .quiet-link {
-  color: var(--foreground-muted);
+  color: var(--subtle-foreground);
   text-decoration: none;
   transition: color 150ms var(--ease-out-curve);
 }
-.quiet-link:hover,
+/* :hover gated so a touch tap doesn't latch the ink; keyboard focus stays. */
+@media (hover: hover) {
+  .quiet-link:hover {
+    color: var(--foreground);
+  }
+}
 .quiet-link:focus-visible,
 .quiet-link:active {
   color: var(--foreground);
 }
 
-/* Raised card — the signature "white card on the gray canvas" pattern. A white
-   surface lifted above the off-white ground with a hairline ring + soft Apple
-   shadow. On hover the card physically lifts (rise + deeper, softer shadow) so
-   the depth cue reads as "pick me up" rather than a flat color swap; gated to
-   hover-capable pointers so a tap on touch doesn't latch the lift. Dark mode
-   keeps the flat recessed surface with a bright inset hairline instead (soft
-   elevation is a light-mode device). */
+/* Raised card — a white surface lifted above the canvas with a hairline ring +
+   soft shadow. On hover it physically lifts (rise + deeper shadow) so the depth
+   cue reads as "pick me up" rather than a flat color swap; gated to hover-capable
+   pointers so a tap on touch doesn't latch it. Dark keeps a flat recessed surface
+   with a bright inset hairline and shifts to --accent on hover (soft elevation is
+   a light-mode device). */
 .card-raised {
   background-color: var(--card);
   box-shadow:
@@ -95,7 +86,7 @@
 @media (hover: hover) {
   .dark .card-raised:hover {
     translate: 0 -2px;
-    background-color: var(--surface-hover);
+    background-color: var(--accent);
     box-shadow:
       inset 0 0 0 1px oklch(1 0 0 / 0.09),
       0 8px 24px -10px oklch(0 0 0 / 0.6);

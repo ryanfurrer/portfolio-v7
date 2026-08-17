@@ -16,18 +16,19 @@ design system changes (see below).
 
 ## When the design system changes
 
-If you edit tokens/patterns in `src/styles/global.css` (colors, type scale,
-`.lead`/`.badge`/`.prose`, radius, motion) or swap fonts, update the matching
-file under `ds-bundle/` by hand, then re-run `/design-sync` — it reads
-`.design-sync/config.json`, finds the pinned project, and re-uploads.
+The site's CSS is now split into partials under `src/styles/`. If you edit
+tokens/patterns there (colors, type, `.lead`/`.prose`, radius, motion) or swap
+fonts, update the matching file under `ds-bundle/` by hand, then re-run
+`/design-sync` — it reads `.design-sync/config.json`, finds the pinned project,
+and re-uploads.
 
-Mapping (site → bundle):
-- `:root` / `.dark` color vars          → `ds-bundle/tokens/colors.css`
-- fonts + `--font-*` + type scale       → `ds-bundle/tokens/typography.css`
-- `--radius*`, `--shadow-elevated`, `--ease-*` → `ds-bundle/tokens/radius-elevation.css`
-- headings / focus ring / body links / `::selection` → `ds-bundle/patterns/base.css`
-- `.lead` / `.small-heading` / `.badge` / `.quiet-link` / `.card-raised` → `ds-bundle/patterns/components.css`
-- `.prose` article system               → `ds-bundle/patterns/prose.css`
+Mapping (site `src/styles/*` → bundle):
+- `tokens.css` (`:root` / `.dark` / `@theme inline` color vars) → `ds-bundle/tokens/colors.css`
+- `fonts.css` + `tokens.css` `--font-*`  → `ds-bundle/tokens/typography.css`
+- `tokens.css` `--radius`/`--shadow-elevated`/`--ease-*` → `ds-bundle/tokens/radius-elevation.css`
+- `base.css` `::selection` / focus ring / headings / squircle + `unlayered.css` body links → `ds-bundle/patterns/base.css`
+- `components.css` `.lead` / `.small-heading` / `.quiet-link` / `.card-raised` / `.font-mono-custom` → `ds-bundle/patterns/components.css`
+- `prose.css` (+ typography-plugin base, reproduced) → `ds-bundle/patterns/prose.css`
 
 ## Re-sync 2026-07-27 — PR #35 redesign (viridian)
 
@@ -53,6 +54,40 @@ Local render reference: `ds-bundle/_preview/index.html` (open in a browser,
 add `class="dark"` to `<html>` for dark). NOT uploaded (outside the write globs).
 `radius-elevation.css` and the 7 font files were unchanged — not re-uploaded.
 
+## Re-sync 2026-08-17 — orange-brand / Google-Sans redesign
+
+Re-derived the whole bundle from the split `src/styles/` partials; it had drifted
+badly since the 2026-07-27 viridian re-sync. Key shifts captured:
+- **Brand: viridian → orange** `oklch(0.659 0.194 37.5)` / #F05A29, the SAME hue
+  in both themes. `::selection` is now a **solid brand fill + dark ink** (was a
+  color-mix tint).
+- **Neutrals are slightly COOL** now (neutral×zinc mix at hue 286, both themes) —
+  the ramp carries a faint blue undertone; chroma 0.003–0.008.
+- **Canvas: off-white → pure white** in light (`--background`/`--card`/`--popover`
+  all `oklch(1 0 0)`); separation now comes from a recessed `--muted` container
+  step + hairlines + shadow. The old `--surface`/`--surface-raised`/`--badge`/
+  `--link*`/`--nav-active`/`--foreground-subtle` tokens were DELETED upstream and
+  removed from the bundle.
+- **Text tiers renamed**: `--foreground-muted` → `--subtle-foreground` (mid tier,
+  AA-safe small), plus `--muted-foreground` (light tier, sub-AA small). `.lead`/
+  `.small-heading`/`.quiet-link`/prose body sit at `--subtle-foreground`.
+- **`.badge` deleted** (dead upstream) — removed the pattern + all README/preview refs.
+- **Headings 800 → 600**, radius `0.375rem → 0.5rem`.
+- **Fonts: Geist → Google Sans.** The site loads Google Sans via the Astro Google
+  provider (no local woff2), so the bundle ships the two static weights it renders
+  (400 Regular + 600 SemiBold, copied from `src/assets/og/fonts`). 500/700 snap to
+  the nearest. Deleted the two Geist variable woff2. Berkeley Mono (4 faces, PAID)
+  + Permanent Marker unchanged.
+- **`.no-underline` is now DEFINED** in the bundle (`color: inherit; text-decoration:
+  none`). It's a Tailwind utility on the site, but in the standalone bundle a bare
+  `<a class="no-underline">` was falling back to UA blue+underline (caught in the
+  headless render). This makes card/nav/CTA anchors inherit the surrounding ink.
+
+Verified via headless-Chrome render of `_preview/index.html` (light + dark) —
+fonts load, cards read neutral, brand + selection are orange, dark ramp correct.
+NOT uploaded (outside the write globs; open it locally, add `class="dark"` to
+`<html>` for dark).
+
 ## Deliberately not synced
 
 - **Tailwind utilities** — the site's layout/spacing is Tailwind; the design
@@ -60,8 +95,10 @@ add `class="dark"` to `<html>` for dark). NOT uploaded (outside the write globs)
 - **JS-driven effects** — entrance reveal (`[data-reveal]`) and traveling-
   highlight hover (`[data-dir-hover-list]`) need scripts; omitted on purpose.
 - **shadcn React components** — not CSS; rebuild in Claude Design from tokens.
-- **Fonts trimmed** to the ones actually used — 2 variable Geist (upright +
-  italic), 4 static Berkeley Mono (Regular/Bold × upright/oblique), and
-  Permanent Marker — renamed bracket-free so URLs resolve in the design
-  environment. (Mono swapped Geist Mono → Berkeley Mono, 2026-07-09, matching
-  the site's font change in commit 85407a6.)
+- **Fonts trimmed** to the ones actually used — Google Sans 400/600 (static ttf),
+  4 static Berkeley Mono (Regular/Bold × upright/oblique), and Permanent Marker.
+  Google Sans is bundled locally instead of `@import`ed so the bundle is
+  self-contained and can't silently fall back to Inter in the design environment.
+- **shadcn `--chart-*` / `--sidebar-*`** — dormant token sets that ship on the
+  site but render on no surface; omitted from the bundle to keep the vocabulary
+  to what the agent should actually reach for.
