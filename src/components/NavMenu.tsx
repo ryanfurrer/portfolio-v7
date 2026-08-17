@@ -37,10 +37,23 @@ export default function NavMenu({ label, items, pathname }: Props) {
   const groupActive = items.some((item) => isActive(item.href, pathname));
 
   return (
-    <NavigationMenu aria-label="Personal">
+    <NavigationMenu aria-label="Personal" delayDuration={0}>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger
+            // Radix toggles the menu on click, so a mouse click while it's
+            // already hover-open closes it — a race visitors hit when they
+            // click "Me" expecting a page nav during the hover-open delay.
+            // Suppress only the pointer-driven close (detail > 0); keyboard
+            // activation (detail === 0) and open-on-click stay intact.
+            onClick={(event) => {
+              if (
+                event.detail > 0 &&
+                event.currentTarget.dataset.state === "open"
+              ) {
+                event.preventDefault();
+              }
+            }}
             className={cn(
               "transition-[color,background-color,scale] active:scale-[0.97] [&>svg]:transition-transform [&>svg]:duration-200 [&>svg]:ease-out data-[state=open]:[&>svg]:rotate-180",
               // Active (a sub-item is the current route) → ghost ring, matching
