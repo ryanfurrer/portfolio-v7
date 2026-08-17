@@ -1,30 +1,48 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   Base element treatments — the site-wide defaults that aren't tied to a
-   named component: text selection, the single keyboard focus ring, heading
-   style, body links, and a couple of small utilities.
+   Base element treatments — the site-wide defaults that aren't tied to a named
+   component: text selection, superellipse corners, the single keyboard focus
+   ring, heading style, and body links.
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Selection — a viridian brand tint (the one reserved hue), stronger in dark. */
+/* Selection — a SOLID brand (orange) fill with dark ink, so it stays legible in
+   both themes (dark ink reads on orange whether the page is light or dark). */
 ::selection {
-  background-color: color-mix(in oklch, var(--brand) 22%, transparent);
-}
-.dark ::selection {
-  background-color: color-mix(in oklch, var(--brand) 32%, transparent);
+  background-color: var(--brand);
+  color: oklch(0.145 0.003 286);
 }
 
-/* Apple-style headings: extrabold + tight, size-specific tracking. Components
-   that set their own weight (.small-heading, utilities) still win. */
-h1, h2, h3, h4, h5, h6 {
+/* Superellipse corners site-wide — progressive, silently ignored where
+   corner-shape is unsupported. Circles and pills (.rounded-full) stay truly
+   round so marks, avatars, and dots don't distort. */
+*,
+*::before,
+*::after {
+  corner-shape: squircle;
+}
+.rounded-full {
+  corner-shape: round;
+}
+.squircle {
+  corner-shape: squircle;
+}
+
+/* Headings: medium-weight (600), tight size-specific tracking, balanced wrap.
+   Component classes and utilities that set their own weight still win. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--foreground);
-  font-weight: 800;
-  letter-spacing: var(--tracking-heading);
-  line-height: var(--leading-tight);
+  font-weight: 600;
+  letter-spacing: -0.022em;
   text-wrap: balance;
 }
 
 /* One consistent focus ring for every interactive element. A box-shadow ring
-   (not outline) so it follows border-radius everywhere; neutral gray so it
-   never clashes with the ink. 2px background gap + 2px ring. */
+   (not outline) so it follows border-radius everywhere; the SOLID neutral --ring
+   stays visible against the ink. 2px background gap + 2px ring. */
 a:focus-visible,
 button:focus-visible,
 summary:focus-visible,
@@ -38,37 +56,50 @@ textarea:focus-visible,
     0 0 0 4px var(--ring);
 }
 
-/* Body links — foreground "ink" + a faint underline at rest, revealing to full
-   foreground on hover/focus. Add class="no-underline" to opt a link out (e.g.
-   for nav/CTA links that use .quiet-link or their own styling instead). */
+/* Body links — inherit the surrounding ink with a faint underline at rest,
+   deepening to full foreground on hover/focus. The 1.5px underline matches the
+   CTA underline so prose links and CTAs speak one language. Opt a link out with
+   class="no-underline" (nav/CTA links that use .quiet-link or button styles). */
 a:not(.no-underline) {
   font-weight: inherit;
-  color: var(--foreground-muted);
+  color: inherit;
   text-decoration: underline;
-  text-decoration-color: color-mix(in oklch, var(--foreground) 25%, transparent);
+  text-decoration-color: color-mix(
+    in oklch,
+    var(--foreground) 25%,
+    transparent
+  );
   text-decoration-skip-ink: none;
   text-decoration-thickness: 1.5px;
-  text-underline-offset: 3px;
   transition:
     color 150ms var(--ease-out-curve),
     text-decoration-color 150ms var(--ease-out-curve);
 }
-a:not(.no-underline):hover,
+/* :hover gated so a touch tap doesn't latch the ink; keyboard focus stays. */
+@media (hover: hover) {
+  a:not(.no-underline):hover {
+    color: var(--foreground);
+    text-decoration-color: var(--foreground);
+  }
+}
 a:not(.no-underline):focus-visible {
   color: var(--foreground);
   text-decoration-color: var(--foreground);
 }
 
+/* Opt-out for links styled as something else (cards, nav, CTAs). On the site
+   this is a Tailwind utility; defined here so a bare <a class="no-underline">
+   drops the UA blue + underline and inherits the surrounding ink instead. */
+.no-underline {
+  color: inherit;
+  text-decoration: none;
+}
+
 /* Tabular monospace label — versions, timestamps, key/value readouts. */
 .font-mono-custom {
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: 0.875rem;
   font-weight: 400;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
-}
-
-/* Squircle corners (progressive enhancement; falls back to the border-radius). */
-.squircle {
-  corner-shape: squircle;
 }

@@ -7,48 +7,51 @@
 <link rel="stylesheet" href="../styles.css" />
 <style>
   .wrap { max-width: 52rem; margin: 0 auto; padding: 3rem 1.5rem; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+  .container { background: var(--muted); padding: 1.5rem; border-radius: var(--radius-2xl); margin: 1.5rem 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .card-raised { display: block; padding: 1rem 1.25rem; border-radius: var(--radius-xl); }
   .swatch { height: 3rem; border-radius: var(--radius-lg); box-shadow: inset 0 0 0 1px var(--border); }
-  .row { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
+  .row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin: 1rem 0; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <span class="small-heading">Design system preview</span>
-  <h1 style="font-size: var(--text-4xl); letter-spacing: var(--tracking-display); margin:.25rem 0 0;">Ryan Furrer</h1>
+  <h1 style="font-size: 2.25rem; letter-spacing: -0.03em; margin:.25rem 0 0;">Ryan Furrer</h1>
   <p class="lead">I feel at home where design and engineering meet. Crafting interfaces down to the last detail.</p>
 
   <div class="row">
-    <span class="badge">Updated Jul 2026</span>
-    <span style="color: var(--brand); font-weight: 700;">Viridian brand — select this text</span>
+    <span style="color: var(--brand); font-weight: 600;">Orange brand — select this text</span>
     <a href="#">an inline body link</a>
     <a class="quiet-link no-underline" href="#">quiet link</a>
+    <span class="font-mono-custom">v7.0.0</span>
   </div>
 
-  <div class="grid">
-    <a class="card-raised no-underline" href="#">
-      <span class="small-heading">Writing</span>
-      <h3 style="font-size: var(--text-xl); margin:.25rem 0 0;">A recent post</h3>
-      <p style="color: var(--foreground-muted); margin:.375rem 0 0;">One muted line of supporting copy.</p>
-    </a>
-    <a class="card-raised no-underline" href="#">
-      <span class="small-heading">Work</span>
-      <h3 style="font-size: var(--text-xl); margin:.25rem 0 0;">A project</h3>
-      <p style="color: var(--foreground-muted); margin:.375rem 0 0;">Hover me — the card lifts off the canvas.</p>
-    </a>
+  <div class="container">
+    <div class="grid">
+      <a class="card-raised no-underline" href="#">
+        <span class="small-heading">Writing</span>
+        <h3 style="font-size: 1.25rem; margin:.25rem 0 0;">A recent post</h3>
+        <p style="color: var(--subtle-foreground); margin:.375rem 0 0;">One line of supporting copy.</p>
+      </a>
+      <a class="card-raised no-underline" href="#">
+        <span class="small-heading">Work</span>
+        <h3 style="font-size: 1.25rem; margin:.25rem 0 0;">A project</h3>
+        <p style="color: var(--subtle-foreground); margin:.375rem 0 0;">Hover me — the card lifts off the container.</p>
+      </a>
+    </div>
   </div>
 
   <div class="row">
     <div class="swatch" style="flex:1; background: var(--background);"></div>
-    <div class="swatch" style="flex:1; background: var(--surface);"></div>
-    <div class="swatch" style="flex:1; background: var(--surface-raised);"></div>
+    <div class="swatch" style="flex:1; background: var(--muted);"></div>
+    <div class="swatch" style="flex:1; background: var(--accent);"></div>
     <div class="swatch" style="flex:1; background: var(--brand);"></div>
   </div>
 
   <article class="prose">
     <h2>Long-form typography</h2>
-    <p>Body copy at the muted step, with an <a href="#">inline link</a> and some <code>inline code</code> in a pill.</p>
+    <p>Body copy at the subtle step, with an <a href="#">inline link</a> and some <code>inline code</code> in a pill.</p>
     <blockquote>A quiet, upright pull-quote.</blockquote>
   </article>
 </div>

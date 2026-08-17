@@ -3,15 +3,15 @@
   "projectName": "portfolio-v7 Tokens",
   "shape": "tokens-only",
   "localDir": "./ds-bundle",
-  "note": "portfolio-v7 is an Astro application, not a component library — no Storybook, no dist/ of reusable components, private (non-published) package. The standard package/storybook converter has nothing to bundle. Per the user's choice (2026-07-09) this is a hand-authored sync of design tokens + reusable CSS patterns (NOT a component bundle), so claude.ai/design produces designs that are 1:1 with the site.",
+  "note": "portfolio-v7 is an Astro application, not a component library — no Storybook, no dist/ of reusable components, private (non-published) package. The standard package/storybook converter has nothing to bundle. This is a hand-authored sync of design tokens + reusable CSS patterns (NOT a component bundle), so claude.ai/design produces designs that are 1:1 with the site. Re-derived 2026-08-17 from the split src/styles/ partials to match the current site (orange brand, cool neutrals, Google Sans, --subtle-foreground tier, radius 0.5rem, 600-weight headings).",
   "readmeHeader": "ds-bundle/README.md",
   "uploads": {
     "writes": ["styles.css", "README.md", "tokens/**", "patterns/**", "fonts/**", "_ds_needs_recompile"],
     "deletes": ["styles.css", "README.md", "tokens/**", "patterns/**", "fonts/**"]
   },
   "source": {
-    "tokens": "src/styles/global.css (:root, .dark, @theme inline)",
-    "patterns": "src/styles/global.css (@layer base: .lead, .small-heading, .badge, .quiet-link, focus ring, body links, .prose)",
-    "fonts": "public/assets/fonts (variable Geist[wght]/Geist-Italic[wght] + static BerkeleyMono Regular/Bold/Oblique/Bold-Oblique + PermanentMarker-Regular)"
+    "tokens": "src/styles/tokens.css (:root, .dark, @theme inline) → tokens/{colors,typography,radius-elevation}.css",
+    "patterns": "src/styles/{base,components,prose,unlayered}.css (::selection, focus ring, headings, body links, .lead, .small-heading, .quiet-link, .card-raised, .prose) → patterns/{base,components,prose}.css",
+    "fonts": "Google Sans 400/600 (src/assets/og/fonts GoogleSans-Regular/SemiBold.ttf — the site loads Google Sans via the Astro Google provider, no local woff2) + Berkeley Mono Regular/Bold/Oblique/Bold-Oblique + PermanentMarker-Regular (public/assets/fonts)"
   }
 }
