@@ -1,0 +1,148 @@
+---
+import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
+import Head from "@/components/Head.astro";
+import HearthMark from "@/components/hearth/HearthMark.astro";
+import ModeToggle from "@/components/ModeToggle";
+import { buttonVariants } from "@/components/ui/button";
+import { GITHUB_URL, MARKETPLACE_URL } from "@/lib/hearth/flavors";
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = "Hearth — A warm theme for VS Code & Cursor",
+  description = "Hearth keeps your editor calm and warm, letting a single accent pick out the code worth scanning. Six light and dark variants for VS Code, Cursor, and Shiki.",
+  ogImage,
+} = Astro.props;
+
+const SITE = "https://www.ryanfurrer.com";
+const currentYear = new Date().getFullYear();
+
+const externalRel = "noopener noreferrer";
+---
+
+<html lang="en">
+  <Head title={title} description={description} ogImage={ogImage} />
+  <body class="bg-background text-subtle-foreground antialiased">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:inset-block-start-4 focus:inset-inline-start-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
+    >
+      Skip to content
+    </a>
+
+    <header
+      data-site-header
+      class="group sticky top-0 z-40 border-b border-transparent transition-[border-color,translate] duration-300 ease-out data-hidden:-translate-y-full data-scrolled:border-border"
+    >
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 -z-10 transform-[translateZ(0)] bg-background/70 opacity-0 backdrop-blur-xl transition-opacity duration-300 ease-out will-change-transform group-data-scrolled:opacity-100"
+      >
+      </div>
+      <div
+        class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4"
+      >
+        <a
+          href="/"
+          class="flex items-center gap-2 text-foreground"
+          aria-label="Hearth home"
+        >
+          <HearthMark class="size-6" />
+          <span class="font-semibold tracking-tight">Hearth</span>
+        </a>
+
+        <nav class="flex items-center gap-4 sm:gap-5">
+          <a
+            href={SITE}
+            target="_blank"
+            rel={externalRel}
+            class="quiet-link hidden text-sm sm:inline">ryanfurrer.com</a
+          >
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel={externalRel}
+            class="quiet-link hidden text-sm sm:inline">GitHub</a
+          >
+          <ModeToggle client:idle />
+          <a
+            href={MARKETPLACE_URL}
+            target="_blank"
+            rel={externalRel}
+            class={buttonVariants({ size: "sm" })}>Install</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content" tabindex="-1" class="focus:outline-none">
+      <slot />
+    </main>
+
+    <footer class="border-t border-border">
+      <div class="mx-auto max-w-5xl space-y-8 px-6 py-12">
+        <div
+          class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div class="flex items-center gap-2.5">
+            <HearthMark class="size-6" />
+            <div>
+              <p class="font-medium text-foreground">Hearth</p>
+              <p class="text-sm text-subtle-foreground">
+                A warm editor theme by{" "}
+                <a
+                  href={SITE}
+                  target="_blank"
+                  rel={externalRel}
+                  class="quiet-link"
+                >
+                  Ryan Furrer
+                </a>.
+              </p>
+            </div>
+          </div>
+          <nav class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+            <a
+              href={MARKETPLACE_URL}
+              target="_blank"
+              rel={externalRel}
+              class="quiet-link"
+            >
+              Marketplace
+            </a>
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel={externalRel}
+              class="quiet-link"
+            >
+              GitHub
+            </a>
+            <a href={SITE} target="_blank" rel={externalRel} class="quiet-link">
+              ryanfurrer.com
+            </a>
+          </nav>
+        </div>
+        <div
+          class="flex items-center justify-between text-sm text-subtle-foreground"
+        >
+          <p>&copy; {currentYear} Ryan Furrer</p>
+          <ModeToggle client:idle />
+        </div>
+      </div>
+    </footer>
+
+    <Analytics />
+    <SpeedInsights />
+    <script>
+      import "@/scripts/sticky-header";
+      import "@/scripts/reveal";
+    </script>
+  </body>
+</html>

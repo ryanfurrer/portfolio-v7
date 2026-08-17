@@ -23,5 +23,17 @@
       "destination": "https://www.ryanfurrer.com/links",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "hearth.ryanfurrer.com"
+        }
+      ],
+      "destination": "/hearth"
+    }
   ]
 }

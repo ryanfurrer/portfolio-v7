@@ -1,0 +1,74 @@
+---
+import { Code } from "astro:components";
+import { FLAVORS, GALLERY_SAMPLE } from "@/lib/hearth/flavors";
+
+// Force each card to one theme regardless of page mode: point Shiki's dual-theme
+// at the same theme on both the light and dark slots. The global `.dark
+// .astro-code` rule swaps spans to --shiki-dark, which here equals the chosen
+// theme — so a light card stays light even on a dark page, and vice versa.
+const modes = [
+  { key: "light", label: "Light" },
+  { key: "dark", label: "Dark" },
+] as const;
+
+const themeFor = (
+  themes: { light: unknown; dark: unknown },
+  mode: "light" | "dark",
+) => ({ light: themes[mode], dark: themes[mode] }) as never;
+---
+
+<div class="hearth-gallery space-y-10">
+  {
+    FLAVORS.map((flavor) => (
+      <div class="space-y-4" data-reveal>
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 class="flex items-center gap-2 text-lg font-medium text-foreground">
+            <span
+              class="size-2.5 rounded-full"
+              style={`background-color: ${flavor.accent.dark}`}
+              aria-hidden="true"
+            />
+            {flavor.fullName}
+          </h3>
+          <p class="text-sm text-muted-foreground">{flavor.tagline}</p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {modes.map((mode) => (
+            <figure class="space-y-2">
+              <div class="hearth-variant" data-mode={mode.key}>
+                <Code
+                  code={GALLERY_SAMPLE}
+                  lang="ts"
+                  themes={themeFor(flavor.themes, mode.key)}
+                  wrap={true}
+                />
+              </div>
+              <figcaption class="text-xs text-subtle-foreground">
+                {mode.label}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .hearth-variant {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .hearth-variant[data-mode="light"] {
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  }
+  .hearth-variant[data-mode="dark"] {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+  .hearth-variant :global(.astro-code) {
+    margin: 0;
+    padding: 1rem 1.125rem;
+    font-size: 0.75rem;
+    line-height: 1.65;
+  }
+</style>
