@@ -265,7 +265,12 @@ function cleanupAfterClose(): void {
   const active = dialog!;
   openRequest += 1;
   document.documentElement.style.overflow = "";
-  active.classList.remove("is-closing", "has-caption");
+  // Keep `has-caption` until the next open re-toggles it (openZoom always does).
+  // Removing it here reflows the dialog from the caption flex layout back to the
+  // base grid mid fade-out — on wide viewports the still-visible image lurches
+  // left and balloons before it finishes fading. Layout must not change while the
+  // exit animation is on screen.
+  active.classList.remove("is-closing");
   active.style.transition = "";
   cancelPendingFrame();
   currentAnim?.cancel();
