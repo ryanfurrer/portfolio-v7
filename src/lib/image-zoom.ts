@@ -37,13 +37,6 @@ let flipActive = false;
 
 const CLOSE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
 
-interface Box {
-  width: number;
-  height: number;
-  left: number;
-  top: number;
-}
-
 function reducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -98,33 +91,9 @@ function ensureDialog(): HTMLDialogElement {
   return dialog;
 }
 
-// contain-fit an aspect ratio inside the dialog's padded viewport box. Derived
-// from the thumbnail's own aspect (identical to the zoom image for FLIP triggers),
-// so it never depends on the enlarged image having laid out yet.
-function finalBox(aspect: number): Box {
-  const cs = getComputedStyle(dialog!);
-  const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-  const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
-  const availW = window.innerWidth - padX;
-  const availH = window.innerHeight - padY;
-
-  let width = availW;
-  let height = width / aspect;
-  if (height > availH) {
-    height = availH;
-    width = height * aspect;
-  }
-  return {
-    width,
-    height,
-    left: (window.innerWidth - width) / 2,
-    top: (window.innerHeight - height) / 2,
-  };
-}
-
 // The transform that maps `to` back onto `from` (FLIP "invert"), from a top-left
-// origin. Uniform scale — only used where from/to share an aspect ratio.
-function invert(from: DOMRect | Box, to: Box): string {
+// origin. Uniform scale — from and to share an aspect ratio.
+function invert(from: DOMRect, to: DOMRect): string {
   const scale = from.width / to.width;
   const dx = from.left - to.left;
   const dy = from.top - to.top;
@@ -188,12 +157,14 @@ async function openZoom(trigger: HTMLElement): Promise<void> {
     dialogImg!.style.scale = "1";
     dialogImg!.style.transformOrigin = "top left";
 
-    const last = finalBox(firstRect!.width / firstRect!.height);
-    const startTransform = invert(firstRect!, last);
-    // Keep the thumbnail painted until its dialog copy has joined the top layer.
-    // Their first frame overlaps exactly, avoiding a blank handoff frame.
-    dialogImg!.style.transform = startTransform;
+    // Read the real landing box from the top layer (caption-aware, so captioned
+    // images FLIP too), then map it back onto the thumbnail in the same task:
+    // getBoundingClientRect forces layout but not paint, so the first painted
+    // frame already overlaps the thumbnail — no full-size flash, no blank handoff.
     active.showModal();
+    const last = dialogImg!.getBoundingClientRect();
+    const startTransform = invert(firstRect!, last);
+    dialogImg!.style.transform = startTransform;
     pendingFrame = requestAnimationFrame(() => {
       pendingFrame = null;
       if (

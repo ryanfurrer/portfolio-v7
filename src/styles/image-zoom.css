@@ -125,6 +125,13 @@
     transition: opacity var(--zoom-exit) var(--ease-ios);
   }
 
+  /* The caption has no thumbnail to collapse onto — fade it with the scrim so it
+     doesn't hang in place while the image flies home. */
+  .image-zoom-dialog.is-closing .image-zoom-dialog__caption {
+    opacity: 0;
+    transition: opacity var(--zoom-exit) var(--ease-ios);
+  }
+
   .image-zoom-dialog__img {
     max-width: 100%;
     max-height: 100%;
