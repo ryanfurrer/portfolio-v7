@@ -61,12 +61,18 @@
     border: 1px solid var(--border);
   }
 
-  /* Shiki dual-theme: <Code> ships catppuccin-latte inline + parallel --shiki-dark
-     vars; swap to them in dark (inline styles force the !important). */
+  /* Warm · Teal Shiki dual-theme: <Code> ships the light token colors inline and
+     the dark ones on parallel --shiki-dark vars; swap to them in dark (inline
+     styles force the !important). The surface itself is pinned to --muted in both
+     modes rather than each theme's own editor background — the warm themes'
+     backgrounds match the page (pure white / near-black), so without this a code
+     block would dissolve into the page instead of reading as a recessed panel. */
+  .prose pre.astro-code {
+    background-color: var(--muted) !important;
+  }
   .dark .astro-code,
   .dark .astro-code span {
     color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
     font-style: var(--shiki-dark-font-style) !important;
     font-weight: var(--shiki-dark-font-weight) !important;
     text-decoration: var(--shiki-dark-text-decoration) !important;

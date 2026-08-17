@@ -1,11 +1,19 @@
 ---
 import { Code } from "astro:components";
+// Hearth · Teal by default — switch flavors in src/lib/shiki/hearth.ts.
+import { hearthThemes } from "@/lib/shiki/hearth";
 
 const { node } = Astro.props;
 const { code, language } = node;
 
 // Default to 'text' if language is not specified
 const lang = language || "text";
+
+// Shiki's ThemeRegistrationRaw type marks `settings` as required, but the runtime
+// consumes VS Code-style `tokenColors` (which it normalizes) — the vendored Hearth
+// JSON themes are valid at load. The lone cast bridges that type/runtime gap;
+// adding a phantom `settings: []` would instead wipe out the highlighting.
+const themes = hearthThemes as never;
 ---
 
 {
@@ -44,12 +52,7 @@ const lang = language || "text";
           <path d="M3.5 8.5 6.5 11.5 12.5 5" />
         </svg>
       </button>
-      <Code
-        code={code}
-        lang={lang}
-        themes={{ light: "catppuccin-latte", dark: "catppuccin-mocha" }}
-        wrap={true}
-      />
+      <Code code={code} lang={lang} themes={themes} wrap={true} />
       {/* Polite live region so the copy result is announced to screen readers. */}
       <span class="sr-only" role="status" aria-live="polite" />
     </div>
