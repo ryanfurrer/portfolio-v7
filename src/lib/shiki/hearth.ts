@@ -21,6 +21,6 @@ const FLAVORS = {
 
 export type HearthFlavor = keyof typeof FLAVORS;
 
-export const HEARTH_FLAVOR: HearthFlavor = "teal";
+export const HEARTH_FLAVOR: HearthFlavor = "azure";
 
 export const hearthThemes = FLAVORS[HEARTH_FLAVOR];
