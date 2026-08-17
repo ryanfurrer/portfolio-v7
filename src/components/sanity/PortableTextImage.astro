@@ -17,10 +17,6 @@ const zoomUrl = asset ? zoomImageUrl(asset) : null;
 // Intrinsic size (parsed from the asset ref) reserves layout space so body
 // images don't shift the article as they decode.
 const size = imageDimensions(asset);
-
-// Captioned images use the centre fade, not the thumbnail-expand FLIP — a caption
-// changes the final geometry the FLIP measures against.
-const flipAttr = caption ? undefined : "";
 ---
 
 {
@@ -32,7 +28,7 @@ const flipAttr = caption ? undefined : "";
         data-zoom-src={zoomUrl}
         data-zoom-alt={alt ?? ""}
         data-zoom-caption={caption ?? undefined}
-        data-zoom-flip={flipAttr}
+        data-zoom-flip=""
         aria-label={alt ? `Enlarge image: ${alt}` : "Enlarge image"}
       >
         <picture>
