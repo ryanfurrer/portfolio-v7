@@ -15,6 +15,7 @@
  */
 
 const ZOOM_ATTR = "data-zoom-src";
+const DARK_ZOOM_ATTR = "data-zoom-dark-src";
 const FLIP_ATTR = "data-zoom-flip";
 const ENTER_MS = 240;
 const EXIT_MS = 160;
@@ -101,16 +102,21 @@ function invert(from: DOMRect, to: DOMRect): string {
 }
 
 async function openZoom(trigger: HTMLElement): Promise<void> {
-  const src = trigger.getAttribute(ZOOM_ATTR);
+  const darkSrc = trigger.getAttribute(DARK_ZOOM_ATTR);
+  const src =
+    document.documentElement.classList.contains("dark") && darkSrc
+      ? darkSrc
+      : trigger.getAttribute(ZOOM_ATTR);
   if (!src) return;
 
   const request = ++openRequest;
   const active = ensureDialog();
-  const thumb = trigger.querySelector("img");
+  const thumb = Array.from(trigger.querySelectorAll("img")).find(
+    (image) => image.getClientRects().length > 0,
+  );
 
-  // FLIP images are already served at their intrinsic size, so reuse the exact
-  // decoded resource on screen. Fetching their equivalent zoom URL on click can
-  // leave the new <img> empty for one paint when the cache is cold.
+  // A FLIP transition needs the exact decoded candidate already on screen;
+  // theme-aware pairs also need this to select the currently visible variant.
   const displaySrc =
     trigger.hasAttribute(FLIP_ATTR) && thumb
       ? thumb.currentSrc || thumb.src

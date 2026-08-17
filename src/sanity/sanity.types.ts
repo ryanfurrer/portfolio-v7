@@ -22,6 +22,14 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
 };
 
+export type DarkImage = {
+  asset?: SanityImageAssetReference;
+  media?: unknown; // Unable to locate the referenced type "darkImage.media" in schema
+  hotspot?: SanityImageHotspot;
+  crop?: SanityImageCrop;
+  _type: "image";
+};
+
 export type HeaderImage = {
   asset?: SanityImageAssetReference;
   media?: unknown; // Unable to locate the referenced type "headerImage.media" in schema
@@ -229,6 +237,7 @@ export type BlockContent = Array<
       hotspot?: SanityImageHotspot;
       crop?: SanityImageCrop;
       alt?: string;
+      darkImage?: DarkImage;
       caption?: string;
       _type: "image";
       _key: string;
@@ -405,6 +414,7 @@ export type Geopoint = {
 
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
+  | DarkImage
   | HeaderImage
   | Uses
   | Now

@@ -114,6 +114,18 @@
   margin: 0;
 }
 
+/* The site theme can override the OS preference, so the active Sanity image
+   follows the resolved `.dark` class instead of a prefers-color-scheme source. */
+.prose .zoomable-image [data-theme-image="dark"] {
+  display: none;
+}
+.dark .prose .zoomable-image[data-theme-pair] [data-theme-image="light"] {
+  display: none;
+}
+.dark .prose .zoomable-image[data-theme-pair] [data-theme-image="dark"] {
+  display: block;
+}
+
 /* Header image is a bare <img>, so Typography's 2em margin sits inside the button
    and floats it down. Zero it (un-layered); the button owns the spacing. */
 .prose > .zoomable-image > img {
