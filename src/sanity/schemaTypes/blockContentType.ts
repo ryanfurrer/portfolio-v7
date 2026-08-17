@@ -46,6 +46,14 @@ export const blockContentType = defineType({
           title: 'Alt Text',
         }),
         defineField({
+          name: 'darkImage',
+          type: 'image',
+          title: 'Dark Mode Image',
+          description:
+            'Optional alternate shown when the site is in dark mode. Use the main image for light mode.',
+          options: {hotspot: true},
+        }),
+        defineField({
           name: 'caption',
           type: 'string',
           title: 'Caption',

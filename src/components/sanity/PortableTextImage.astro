@@ -1,47 +1,57 @@
 ---
-import {
-  imageDimensions,
-  urlForImage,
-  zoomImageUrl,
-} from "@/sanity/lib/url-for-image";
+import { articleBodyImage } from "@/sanity/lib/url-for-image";
 
-const { asset, alt, caption } = Astro.props.node;
+const { asset, darkImage, alt, caption } = Astro.props.node;
 
 // A Portable Text image block can exist before its asset is uploaded (e.g. while
 // editing a draft in the Studio with preview on), leaving `asset` undefined.
 // Guard so draft preview doesn't crash trying to resolve a URL from `undefined`.
-const url = asset ? urlForImage(asset).url() : null;
-const webpUrl = asset ? urlForImage(asset).format("webp").url() : null;
-// Enlarged variant, requested only when the reader opens the lightbox.
-const zoomUrl = asset ? zoomImageUrl(asset) : null;
-// Intrinsic size (parsed from the asset ref) reserves layout space so body
-// images don't shift the article as they decode.
-const size = imageDimensions(asset);
+const light = asset ? articleBodyImage(Astro.props.node) : null;
+const dark = darkImage?.asset ? articleBodyImage(darkImage) : null;
+const sizes =
+  "(min-width: 1184px) 704px, (min-width: 1024px) calc(100vw - 30rem), (min-width: 768px) min(100vw - 3rem, 672px), calc(100vw - 2rem)";
 ---
 
 {
-  url && (
+  light && (
     <figure class="zoomable-figure">
       <button
         type="button"
         class="zoomable-image"
-        data-zoom-src={zoomUrl}
+        data-theme-pair={dark ? "" : undefined}
+        data-zoom-src={light.zoomSrc}
+        data-zoom-dark-src={dark?.zoomSrc}
         data-zoom-alt={alt ?? ""}
         data-zoom-caption={caption ?? undefined}
         data-zoom-flip=""
         aria-label={alt ? `Enlarge image: ${alt}` : "Enlarge image"}
       >
-        <picture>
-          <source srcset={webpUrl} type="image/webp" />
+        <picture data-theme-image="light">
           <img
-            src={url}
-            alt={alt}
-            width={size?.width}
-            height={size?.height}
+            src={light.src}
+            srcset={light.srcset}
+            sizes={sizes}
+            alt={alt ?? ""}
+            width={light.width}
+            height={light.height}
             loading="lazy"
             decoding="async"
           />
         </picture>
+        {dark && (
+          <picture data-theme-image="dark">
+            <img
+              src={dark.src}
+              srcset={dark.srcset}
+              sizes={sizes}
+              alt={alt ?? ""}
+              width={dark.width}
+              height={dark.height}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        )}
       </button>
       {caption && <figcaption>{caption}</figcaption>}
     </figure>
