@@ -69,6 +69,44 @@ const devOnlyPages = {
   },
 };
 
+/**
+ * @typedef {(
+ *   req: import("node:http").IncomingMessage,
+ *   res: import("node:http").ServerResponse,
+ *   next: (err?: unknown) => void,
+ * ) => void} ConnectHandler
+ */
+
+// Local mirror of the production host rewrite: in prod, Vercel's routing
+// middleware serves the Hearth landing at hearth.ryanfurrer.com/ → /hearth
+// (middleware.ts). That middleware only runs on Vercel, so this dev-server-only
+// Vite plugin does the same for hearth.localhost:<port> while working locally.
+// `apply: "serve"` scopes it to the dev server — no build or production output.
+// Typed structurally so it needs no `vite` type import (unresolvable under pnpm).
+/**
+ * @type {{
+ *   name: string,
+ *   apply: "serve",
+ *   configureServer(server: { middlewares: { use(fn: ConnectHandler): void } }): void,
+ * }}
+ */
+const hearthLocalHost = {
+  name: "hearth-localhost-rewrite",
+  apply: "serve",
+  configureServer(server) {
+    server.middlewares.use((req, _res, next) => {
+      const host = req.headers.host ?? "";
+      if (
+        host.startsWith("hearth.localhost") &&
+        (req.url === "/" || req.url === "")
+      ) {
+        req.url = "/hearth";
+      }
+      next();
+    });
+  },
+};
+
 // https://astro.build/config
 export default defineConfig({
   adapter: vercel(),
@@ -112,6 +150,10 @@ export default defineConfig({
     },
   ],
   vite: {
+    // Let Vite's dev-server host check accept the hearth.localhost alias.
+    server: {
+      allowedHosts: ["hearth.localhost"],
+    },
     resolve: {
       alias: {
         "@": new URL("./src", import.meta.url).pathname,
@@ -131,6 +173,6 @@ export default defineConfig({
         "@sanity/code-input",
       ],
     },
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), hearthLocalHost],
   },
 });

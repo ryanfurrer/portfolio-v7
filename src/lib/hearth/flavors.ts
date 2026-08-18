@@ -34,20 +34,20 @@ export const FLAVORS: Flavor[] = [
     themes: { light: lightDuotone, dark: darkDuotone },
   },
   {
-    id: "teal",
-    name: "Teal",
-    fullName: "Hearth · Teal",
-    tagline: "Warm base, teal functions and types for a second axis to scan.",
-    accent: { light: "#008472", dark: "#4cd0b8" },
-    themes: { light: lightTeal, dark: darkTeal },
-  },
-  {
     id: "azure",
     name: "Azure",
-    fullName: "Hearth · Azure",
+    fullName: "Hearth Azure",
     tagline: "Warm base, a brighter blue on functions and types.",
     accent: { light: "#007da3", dark: "#2eb3e5" },
     themes: { light: lightAzure, dark: darkAzure },
+  },
+  {
+    id: "teal",
+    name: "Teal",
+    fullName: "Hearth Teal",
+    tagline: "Warm base, teal functions and types for a second axis to scan.",
+    accent: { light: "#008472", dark: "#4cd0b8" },
+    themes: { light: lightTeal, dark: darkTeal },
   },
 ];
 

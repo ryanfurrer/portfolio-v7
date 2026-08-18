@@ -1,0 +1,376 @@
+---
+import { Code } from "astro:components";
+import { CLI_INSTALL, GITHUB_URL, MARKETPLACE_URL } from "@/lib/hearth/flavors";
+
+const THEMES_URL = `${GITHUB_URL}/tree/main/themes`;
+
+const SHIKI_SAMPLE = `import { codeToHtml } from "shiki";
+import hearthDark from "./hearth-dark.json";
+
+const html = await codeToHtml(code, {
+  lang: "ts",
+  theme: hearthDark,
+});
+`;
+
+const tabs = [
+  { id: "vscode", label: "VS Code" },
+  { id: "cursor", label: "Cursor" },
+  { id: "shiki", label: "Shiki" },
+] as const;
+---
+
+<div class="hearth-install space-y-6" data-hearth-install>
+  <div
+    class="flex gap-1 border-b border-border"
+    role="tablist"
+    aria-label="Install Hearth in"
+  >
+    {
+      tabs.map((tab, index) => (
+        <button
+          type="button"
+          role="tab"
+          id={`hearth-tab-${tab.id}`}
+          aria-controls={`hearth-panel-${tab.id}`}
+          aria-selected={index === 0 ? "true" : "false"}
+          tabindex={index === 0 ? 0 : -1}
+          class="hearth-tab"
+        >
+          {tab.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div
+    id="hearth-panel-vscode"
+    role="tabpanel"
+    aria-labelledby="hearth-tab-vscode"
+    tabindex="0"
+    class="hearth-panel"
+  >
+    <ol class="hearth-steps">
+      <li>
+        Install from the terminal — or search <strong>Hearth</strong> in the
+        Extensions panel and click Install.
+        <button
+          type="button"
+          class="hearth-cmd group"
+          data-copy={CLI_INSTALL}
+          aria-label={`Copy install command: ${CLI_INSTALL}`}
+        >
+          <span class="hearth-cmd-prompt" aria-hidden="true">$</span>
+          <code class="hearth-cmd-text">{CLI_INSTALL}</code>
+          <span class="hearth-cmd-hint" aria-hidden="true">Copy</span>
+        </button>
+      </li>
+      <li>
+        Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
+        <kbd class="hearth-kbd">⌘T</kbd> and choose a Hearth.
+      </li>
+    </ol>
+    <a
+      href={MARKETPLACE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hearth-panel-link"
+    >
+      Open in Marketplace
+    </a>
+  </div>
+
+  <div
+    id="hearth-panel-cursor"
+    role="tabpanel"
+    aria-labelledby="hearth-tab-cursor"
+    tabindex="0"
+    class="hearth-panel"
+    hidden
+  >
+    <ol class="hearth-steps">
+      <li>
+        On the <a
+          href={MARKETPLACE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hearth-inline-link">Marketplace page</a
+        >, use <strong>Download Extension</strong> to grab the <code
+          class="hearth-inline-code">.vsix</code
+        >.
+      </li>
+      <li>
+        In Cursor, open the Extensions panel, click the <strong>⋯</strong> menu,
+        choose <strong>Install from VSIX…</strong>, and select the file.
+      </li>
+      <li>
+        Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
+        <kbd class="hearth-kbd">⌘T</kbd> and choose a Hearth.
+      </li>
+    </ol>
+    <p class="hearth-note">A one-click Open VSX listing is coming soon.</p>
+  </div>
+
+  <div
+    id="hearth-panel-shiki"
+    role="tabpanel"
+    aria-labelledby="hearth-tab-shiki"
+    tabindex="0"
+    class="hearth-panel"
+    hidden
+  >
+    <ol class="hearth-steps">
+      <li>
+        Grab any of the six theme files from the <a
+          href={THEMES_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hearth-inline-link">themes folder</a
+        > — they're plain VS Code theme JSON.
+      </li>
+      <li>Pass one to Shiki as a <code class="hearth-inline-code">theme</code>:</li>
+    </ol>
+    <div class="hearth-shiki-code not-prose">
+      <Code code={SHIKI_SAMPLE} lang="ts" />
+    </div>
+  </div>
+</div>
+
+<style>
+  .hearth-tab {
+    padding: 0.5rem 0.875rem;
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    font-size: 0.9375rem;
+    color: var(--subtle-foreground);
+    transition:
+      color 150ms ease,
+      border-color 150ms ease;
+  }
+  .hearth-tab:hover {
+    color: var(--foreground);
+  }
+  .hearth-tab[aria-selected="true"] {
+    color: var(--foreground);
+    border-bottom-color: var(--brand);
+  }
+  .hearth-tab:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .hearth-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .hearth-panel:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 4px;
+    border-radius: var(--radius-md);
+  }
+
+  .hearth-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    counter-reset: step;
+    max-width: 42rem;
+  }
+  .hearth-steps > li {
+    position: relative;
+    padding-inline-start: 2.25rem;
+    color: var(--subtle-foreground);
+    text-wrap: pretty;
+  }
+  .hearth-steps > li::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: -0.1rem;
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--brand);
+    background-color: var(--muted);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .hearth-steps strong {
+    font-weight: 500;
+    color: var(--foreground);
+  }
+
+  .hearth-inline-link {
+    color: var(--foreground);
+    text-decoration: underline;
+    text-decoration-color: var(--brand);
+    text-underline-offset: 3px;
+  }
+  .hearth-inline-code {
+    padding: 0.05rem 0.3rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--foreground);
+    background-color: var(--muted);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .hearth-note {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+  .hearth-panel-link {
+    font-size: 0.9375rem;
+    color: var(--foreground);
+    text-decoration: underline;
+    text-decoration-color: var(--brand);
+    text-underline-offset: 3px;
+  }
+
+  .hearth-shiki-code {
+    width: 100%;
+    max-width: 42rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .hearth-shiki-code :global(.astro-code) {
+    margin: 0;
+    padding: 1rem 1.125rem;
+    font-size: 0.8125rem;
+    line-height: 1.65;
+  }
+
+  .hearth-kbd {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.05rem 0.35rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--foreground);
+    background-color: var(--muted);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+
+  .hearth-cmd {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-block-start: 0.625rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--foreground);
+    background-color: var(--muted);
+    box-shadow: inset 0 0 0 1px var(--border);
+    cursor: pointer;
+    transition: translate 150ms var(--ease-out-curve);
+  }
+  .hearth-cmd:active {
+    translate: 0 1px;
+  }
+  .hearth-cmd:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .hearth-cmd-prompt {
+    color: var(--brand);
+  }
+  .hearth-cmd-hint {
+    margin-inline-start: 0.5rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--subtle-foreground);
+  }
+  .hearth-cmd.is-copied .hearth-cmd-hint {
+    color: var(--brand);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hearth-tab,
+    .hearth-cmd {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const status = document.createElement("span");
+  status.className = "sr-only";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  document.body.appendChild(status);
+
+  for (const root of document.querySelectorAll<HTMLElement>(
+    "[data-hearth-install]",
+  )) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+
+    const select = (tab: HTMLButtonElement, focus = false) => {
+      for (const other of tabs) {
+        const active = other === tab;
+        other.setAttribute("aria-selected", active ? "true" : "false");
+        other.tabIndex = active ? 0 : -1;
+        const panel = document.getElementById(
+          other.getAttribute("aria-controls") ?? "",
+        );
+        if (panel) panel.hidden = !active;
+      }
+      if (focus) tab.focus();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => select(tab));
+      tab.addEventListener("keydown", (event) => {
+        const step =
+          event.key === "ArrowRight"
+            ? 1
+            : event.key === "ArrowLeft"
+              ? -1
+              : 0;
+        if (step) {
+          event.preventDefault();
+          select(tabs[(index + step + tabs.length) % tabs.length], true);
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          select(tabs[0], true);
+        } else if (event.key === "End") {
+          event.preventDefault();
+          select(tabs[tabs.length - 1], true);
+        }
+      });
+    });
+  }
+
+  for (const cmd of document.querySelectorAll<HTMLButtonElement>(".hearth-cmd")) {
+    const hint = cmd.querySelector<HTMLElement>(".hearth-cmd-hint");
+    let timer = 0;
+    cmd.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(cmd.dataset.copy ?? "");
+        cmd.classList.add("is-copied");
+        if (hint) hint.textContent = "Copied";
+        status.textContent = "Command copied to clipboard";
+      } catch {
+        status.textContent = "Copy failed";
+        return;
+      }
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        cmd.classList.remove("is-copied");
+        if (hint) hint.textContent = "Copy";
+        status.textContent = "";
+      }, 1100);
+    });
+  }
+</script>

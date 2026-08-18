@@ -55,15 +55,19 @@ const themeFor = (
 </div>
 
 <style>
+  /* An outset ring, not inset: the code <pre> fills the card edge-to-edge, so an
+     inset shadow paints under it and vanishes. Keyed to each card's own theme —
+     a light card needs a dark edge, a dark card a light one — so the container
+     reads on any page, including a dark card on a dark page. */
   .hearth-variant {
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
   .hearth-variant[data-mode="light"] {
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 1px var(--border);
   }
   .hearth-variant[data-mode="dark"] {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 1px var(--border);
   }
   .hearth-variant :global(.astro-code) {
     margin: 0;

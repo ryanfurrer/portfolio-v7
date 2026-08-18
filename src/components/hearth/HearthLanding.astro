@@ -1,15 +1,11 @@
 ---
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import HearthEditor from "./HearthEditor.astro";
+import HearthInstall from "./HearthInstall.astro";
 import HearthMark from "./HearthMark.astro";
 import HearthPalette from "./HearthPalette.astro";
 import VariantGallery from "./VariantGallery.astro";
-import {
-  CLI_INSTALL,
-  GITHUB_URL,
-  MARKETPLACE_URL,
-} from "@/lib/hearth/flavors";
+import { GITHUB_URL, MARKETPLACE_URL } from "@/lib/hearth/flavors";
 
 const principles = [
   {
@@ -18,7 +14,7 @@ const principles = [
   },
   {
     title: "One accent, on purpose",
-    body: "Keywords carry a single orange ember. Teal and Azure add just one cool hue — on functions and types — so structure pops without a rainbow.",
+    body: "Keywords carry a single orange ember. Azure and Teal add just one cool hue — on functions and types — so structure pops without a rainbow.",
   },
   {
     title: "Light, dark, and Shiki",
@@ -31,9 +27,8 @@ const principles = [
   <section class="space-y-8" data-reveal>
     <div class="space-y-5">
       <span class="flex items-center gap-2.5">
-        <HearthMark class="size-8" />
         <span class="small-heading !text-subtle-foreground"
-          >Theme for VS Code &amp; Cursor</span
+          >Theme for VS Code, Cursor, and more</span
         >
       </span>
       <h1
@@ -67,11 +62,8 @@ const principles = [
     </div>
   </section>
 
-  <section class="space-y-5" data-reveal>
+  <section data-reveal>
     <HearthEditor />
-    <p class="text-center text-sm text-muted-foreground">
-      The switcher is live — and this page highlights its own code with Hearth.
-    </p>
   </section>
 
   <section class="grid gap-x-10 gap-y-8 sm:grid-cols-3" data-reveal>
@@ -95,30 +87,11 @@ const principles = [
         Install
       </h2>
       <p class="text-subtle-foreground text-pretty">
-        Grab it from the Marketplace, or run one command. Then open the theme
-        picker with <kbd class="hearth-kbd">⌘K</kbd>
-        <kbd class="hearth-kbd">⌘T</kbd> and choose a Hearth.
+        Hearth runs anywhere these editors do — pick yours.
       </p>
     </div>
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center" data-reveal>
-      <button
-        type="button"
-        class="hearth-cmd group"
-        data-copy={CLI_INSTALL}
-        aria-label={`Copy install command: ${CLI_INSTALL}`}
-      >
-        <span class="hearth-cmd-prompt" aria-hidden="true">$</span>
-        <code class="hearth-cmd-text">{CLI_INSTALL}</code>
-        <span class="hearth-cmd-hint" aria-hidden="true">Copy</span>
-      </button>
-      <a
-        href={MARKETPLACE_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        class={cn(buttonVariants({ variant: "outline" }), "sm:ms-auto")}
-      >
-        Open in Marketplace
-      </a>
+    <div data-reveal>
+      <HearthInstall />
     </div>
   </section>
 
@@ -150,10 +123,13 @@ const principles = [
   </section>
 
   <section
-    class="flex flex-col items-start gap-5 border-t border-border pt-12"
+    class="flex flex-col items-center gap-6 rounded-xl bg-muted px-6 py-14 text-center"
     data-reveal
   >
-    <h2 class="text-2xl font-semibold tracking-tight text-balance text-foreground">
+    <HearthMark class="size-10" />
+    <h2
+      class="text-2xl font-semibold tracking-tight text-balance text-foreground"
+    >
       Make your editor feel like home.
     </h2>
     <a
@@ -166,91 +142,3 @@ const principles = [
     </a>
   </section>
 </div>
-
-<style>
-  .hearth-kbd {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.05rem 0.35rem;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-mono);
-    font-size: 0.85em;
-    color: var(--foreground);
-    background-color: var(--muted);
-    box-shadow: inset 0 0 0 1px var(--border);
-  }
-
-  .hearth-cmd {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.625rem;
-    padding: 0.625rem 0.875rem;
-    border-radius: var(--radius-lg);
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    color: var(--foreground);
-    background-color: var(--muted);
-    box-shadow: inset 0 0 0 1px var(--border);
-    cursor: pointer;
-    transition: translate 150ms var(--ease-out-curve);
-  }
-  .hearth-cmd:active {
-    translate: 0 1px;
-  }
-  .hearth-cmd:focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-  }
-  .hearth-cmd-prompt {
-    color: var(--brand);
-  }
-  .hearth-cmd-text {
-    color: var(--foreground);
-  }
-  .hearth-cmd-hint {
-    margin-inline-start: 0.5rem;
-    font-size: 0.6875rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--subtle-foreground);
-  }
-  .hearth-cmd.is-copied .hearth-cmd-hint {
-    color: var(--brand);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hearth-cmd {
-      transition: none;
-    }
-  }
-</style>
-
-<script>
-  const status = document.createElement("span");
-  status.className = "sr-only";
-  status.setAttribute("role", "status");
-  status.setAttribute("aria-live", "polite");
-  document.body.appendChild(status);
-
-  for (const cmd of document.querySelectorAll<HTMLButtonElement>(".hearth-cmd")) {
-    const hint = cmd.querySelector<HTMLElement>(".hearth-cmd-hint");
-    let timer = 0;
-    cmd.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(cmd.dataset.copy ?? "");
-        cmd.classList.add("is-copied");
-        if (hint) hint.textContent = "Copied";
-        status.textContent = "Command copied to clipboard";
-      } catch {
-        status.textContent = "Copy failed";
-        return;
-      }
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => {
-        cmd.classList.remove("is-copied");
-        if (hint) hint.textContent = "Copy";
-        status.textContent = "";
-      }, 1100);
-    });
-  }
-</script>

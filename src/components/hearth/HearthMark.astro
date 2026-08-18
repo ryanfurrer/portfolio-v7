@@ -4,25 +4,28 @@ interface Props {
 }
 
 const { class: className } = Astro.props;
+
+// Unique per instance: duplicate gradient ids across repeated inline SVGs are
+// invalid and all references collapse onto the first definition.
+const id = `hearth-orb-${crypto.randomUUID().slice(0, 8)}`;
 ---
 
-{/* Hearth ember — a flame with a cooler inner core, echoing the warm base +
-    single accent hue of the themes. Outer flame is currentColor; the core is
-    tinted so the mark carries the brand orange even on a neutral header. */}
+{/* The Hearth mark: the ember orb from the extension icon, rebuilt as a
+    transparent radial gradient so it carries its own depth on any header,
+    light or dark — no baked-in background to fight the surface. */}
 <svg
   class={className}
   viewBox="0 0 24 24"
-  fill="none"
   role="img"
   aria-label="Hearth"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <path
-    d="M12.6 2.2c.4 3 2.4 4.4 3.8 5.9a7 7 0 1 1-11 5.7c0-2.2 1-4 2.4-5.3-.2 1.4.4 2.6 1.6 3.1C8.6 12.4 8 9 9.5 6.4c.8-1.5 2.1-2.8 3.1-4.2z"
-    fill="var(--brand)"
-  />
-  <path
-    d="M12 13.2c.9.9 1.6 1.9 1.6 3.2a3.2 3.2 0 1 1-6.4 0c0-.9.3-1.6.8-2.2.1.9.7 1.4 1.4 1.5-.6-1.3.3-2.5 2.6-2.5z"
-    fill="oklch(1 0 0 / 0.35)"
-  />
+  <defs>
+    <radialGradient id={id} cx="42%" cy="36%" r="66%">
+      <stop offset="0%" stop-color="#ff9a63"></stop>
+      <stop offset="46%" stop-color="#f05a29"></stop>
+      <stop offset="100%" stop-color="#bf3f18"></stop>
+    </radialGradient>
+  </defs>
+  <circle cx="12" cy="12" r="10" fill={`url(#${id})`}></circle>
 </svg>
