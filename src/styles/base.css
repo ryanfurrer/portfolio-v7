@@ -117,7 +117,8 @@
     backdrop-filter: none;
   }
   [data-slot="navigation-menu-content"],
-  [data-slot="dropdown-menu-content"] {
+  [data-slot="dropdown-menu-content"],
+  [data-slot="select-content"] {
     background-color: var(--popover);
     backdrop-filter: none;
   }
@@ -144,7 +145,8 @@
   }
   [data-site-header][data-scrolled],
   [data-slot="navigation-menu-content"],
-  [data-slot="dropdown-menu-content"] {
+  [data-slot="dropdown-menu-content"],
+  [data-slot="select-content"] {
     background-color: var(--popover);
     backdrop-filter: none;
     border: 1px solid var(--border);

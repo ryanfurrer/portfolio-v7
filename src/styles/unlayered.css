@@ -1,6 +1,14 @@
 /* Un-layered on purpose: an un-layered rule beats any @layer rule (regardless of
    specificity/order), which is how these win over Tailwind utilities + Typography. */
 
+/* Radix Select locks body scrolling while open, which otherwise removes the
+   reserved scrollbar gutter and shifts centered page content. Scope the override
+   to this non-modal picker so dialogs retain their scroll lock. */
+html body[data-scroll-locked][data-hearth-select-open] {
+  overflow-y: auto !important;
+  margin-inline-end: 0 !important;
+}
+
 /* Entrance reveal. [data-reveal] stays hidden until .is-revealed (added by
    scripts/reveal.ts). Head.astro sets .reveal-init before paint only when JS +
    motion are on, so no-JS / reduced-motion users see content immediately. The

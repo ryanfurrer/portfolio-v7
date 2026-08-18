@@ -34,21 +34,41 @@ const accentRows = FLAVORS.map((flavor) => ({
               </span>
             </span>
             <span class="flex gap-2">
-              <button type="button" class="hearth-chip" data-copy={row.light}>
+              <button
+                type="button"
+                class="hearth-chip"
+                data-copy={row.light}
+                aria-label={`Copy ${row.light}`}
+              >
                 <span
                   class="hearth-chip-swatch"
                   style={`background-color: ${row.light}`}
                   aria-hidden="true"
                 />
-                <span class="hearth-chip-hex">{row.light}</span>
+                <span class="hearth-chip-label">
+                  <span class="hearth-chip-hex">{row.light}</span>
+                  <span class="hearth-chip-copied" aria-hidden="true">
+                    Copied
+                  </span>
+                </span>
               </button>
-              <button type="button" class="hearth-chip" data-copy={row.dark}>
+              <button
+                type="button"
+                class="hearth-chip"
+                data-copy={row.dark}
+                aria-label={`Copy ${row.dark}`}
+              >
                 <span
                   class="hearth-chip-swatch"
                   style={`background-color: ${row.dark}`}
                   aria-hidden="true"
                 />
-                <span class="hearth-chip-hex">{row.dark}</span>
+                <span class="hearth-chip-label">
+                  <span class="hearth-chip-hex">{row.dark}</span>
+                  <span class="hearth-chip-copied" aria-hidden="true">
+                    Copied
+                  </span>
+                </span>
               </button>
             </span>
           </li>
@@ -81,21 +101,41 @@ const accentRows = FLAVORS.map((flavor) => ({
               </span>
             </span>
             <span class="flex gap-2">
-              <button type="button" class="hearth-chip" data-copy={row.light}>
+              <button
+                type="button"
+                class="hearth-chip"
+                data-copy={row.light}
+                aria-label={`Copy ${row.light}`}
+              >
                 <span
                   class="hearth-chip-swatch"
                   style={`background-color: ${row.light}`}
                   aria-hidden="true"
                 />
-                <span class="hearth-chip-hex">{row.light}</span>
+                <span class="hearth-chip-label">
+                  <span class="hearth-chip-hex">{row.light}</span>
+                  <span class="hearth-chip-copied" aria-hidden="true">
+                    Copied
+                  </span>
+                </span>
               </button>
-              <button type="button" class="hearth-chip" data-copy={row.dark}>
+              <button
+                type="button"
+                class="hearth-chip"
+                data-copy={row.dark}
+                aria-label={`Copy ${row.dark}`}
+              >
                 <span
                   class="hearth-chip-swatch"
                   style={`background-color: ${row.dark}`}
                   aria-hidden="true"
                 />
-                <span class="hearth-chip-hex">{row.dark}</span>
+                <span class="hearth-chip-label">
+                  <span class="hearth-chip-hex">{row.dark}</span>
+                  <span class="hearth-chip-copied" aria-hidden="true">
+                    Copied
+                  </span>
+                </span>
               </button>
             </span>
           </li>
@@ -103,7 +143,8 @@ const accentRows = FLAVORS.map((flavor) => ({
       }
     </ul>
   </div>
-  <span class="sr-only" role="status" aria-live="polite" data-swatch-status></span>
+  <span class="sr-only" role="status" aria-live="polite" data-swatch-status
+  ></span>
 </div>
 
 <style>
@@ -120,6 +161,7 @@ const accentRows = FLAVORS.map((flavor) => ({
   /* Fixed width + centered content so the two chip columns line up under the
      Light / Dark labels regardless of hex length. */
   .hearth-chip {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -132,16 +174,14 @@ const accentRows = FLAVORS.map((flavor) => ({
     color: var(--foreground);
     background-color: var(--muted);
     box-shadow: inset 0 0 0 1px var(--border);
-    transition:
-      translate 150ms var(--ease-out-curve),
-      color 150ms ease;
+    transition: translate 150ms var(--ease-out-curve);
     cursor: pointer;
   }
-  .hearth-chip:hover .hearth-chip-hex {
-    text-decoration: underline;
-    text-decoration-color: var(--brand);
-    text-decoration-style: dotted;
-    text-underline-offset: 3px;
+  .hearth-chip::before {
+    content: "";
+    position: absolute;
+    inset-block: -0.625rem;
+    inset-inline: 0;
   }
   .hearth-chip:active {
     translate: 0 1px;
@@ -156,12 +196,33 @@ const accentRows = FLAVORS.map((flavor) => ({
     border-radius: var(--radius-sm);
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
   }
-  .hearth-chip.is-copied .hearth-chip-hex {
+  .hearth-chip-label {
+    display: grid;
+    min-width: 3.5rem;
+    text-align: center;
+  }
+  .hearth-chip-hex,
+  .hearth-chip-copied {
+    grid-area: 1 / 1;
+    transition: opacity 150ms ease;
+  }
+  .hearth-chip-copied {
     color: var(--brand);
+    opacity: 0;
+  }
+  .hearth-chip.is-copied .hearth-chip-hex {
+    opacity: 0;
+  }
+  .hearth-chip.is-copied .hearth-chip-copied {
+    opacity: 1;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hearth-chip {
+      transition: none;
+    }
+    .hearth-chip-hex,
+    .hearth-chip-copied {
       transition: none;
     }
   }
@@ -177,12 +238,9 @@ const accentRows = FLAVORS.map((flavor) => ({
     );
     if (!chip) return;
     const value = chip.dataset.copy ?? "";
-    const hex = chip.querySelector<HTMLElement>(".hearth-chip-hex");
-    const original = hex?.textContent ?? "";
     try {
       await navigator.clipboard.writeText(value);
       chip.classList.add("is-copied");
-      if (hex) hex.textContent = "Copied";
       if (status) status.textContent = `Copied ${value}`;
     } catch {
       if (status) status.textContent = "Copy failed";
@@ -193,9 +251,8 @@ const accentRows = FLAVORS.map((flavor) => ({
       chip,
       window.setTimeout(() => {
         chip.classList.remove("is-copied");
-        if (hex) hex.textContent = original;
         if (status) status.textContent = "";
-      }, 1100),
+      }, 1500),
     );
   });
 </script>

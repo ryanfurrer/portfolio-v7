@@ -59,22 +59,121 @@ export const MARKETPLACE_URL = `https://marketplace.visualstudio.com/items?itemN
 export const GITHUB_URL = "https://github.com/ryanfurrer/hearth-theme";
 export const CLI_INSTALL = `code --install-extension ${EXTENSION_ID}`;
 
-// The centerpiece sample leans on every role the palette tints: keywords and
-// control flow (orange), strings and templates, a comment, numbers, and the
-// function/type names that carry each flavor's accent.
-export const EDITOR_SAMPLE = `import type { Ember } from "./hearth";
+// Keep each sample focused enough that visitors can compare the syntax roles at
+// a glance instead of reading an entire program.
+export const EDITOR_SAMPLES = [
+  {
+    id: "typescript",
+    label: "TypeScript",
+    lang: "ts",
+    code: `import type { Ember } from "./hearth";
 
-// Warm syntax: orange for keywords, one accent hue for functions & types.
-export function kindle(embers: Ember[], intensity = 1.5): Ember[] {
-  return embers.map((ember) => {
-    const heat = ember.temperature * intensity;
-    return { ...ember, heat, glowing: heat > 400 };
+// Warm syntax: orange plus one accent.
+export function kindle(
+  embers: Ember[],
+  intensity = 1.5,
+): Ember[] {
+  return embers.filter((ember) => {
+    const heat =
+      ember.temperature * intensity;
+    return heat > 400;
   });
 }
 
-const lit = kindle(hearth.embers).filter((e) => e.glowing);
-console.log(\`\${lit.length} embers still glowing\`);
-`;
+const lit = kindle(hearth.embers);
+console.log(\`\${lit.length} glowing\`);`,
+  },
+  {
+    id: "python",
+    label: "Python",
+    lang: "python",
+    code: `from dataclasses import dataclass
+
+@dataclass
+class Ember:
+    temperature: float
+    glowing: bool = False
+
+def kindle(
+    embers: list[Ember],
+    intensity: float = 1.5,
+) -> list[Ember]:
+    for ember in embers:
+        heat = (
+            ember.temperature
+            * intensity
+        )
+        ember.glowing = heat > 400
+    return embers`,
+  },
+  {
+    id: "rust",
+    label: "Rust",
+    lang: "rust",
+    code: `#[derive(Debug)]
+struct Ember {
+    temperature: f32,
+    glowing: bool,
+}
+
+fn kindle(
+    embers: &mut [Ember],
+    intensity: f32,
+) {
+    for ember in embers {
+        let heat = ember.temperature
+            * intensity;
+        ember.glowing = heat > 400.0;
+    }
+}`,
+  },
+  {
+    id: "go",
+    label: "Go",
+    lang: "go",
+    code: `package hearth
+
+type Ember struct {
+	Temperature float64
+	Glowing     bool
+}
+
+func Kindle(
+	embers []Ember,
+	intensity float64,
+) []Ember {
+	for i := range embers {
+		temp := embers[i].Temperature
+		heat := temp * intensity
+		embers[i].Glowing = heat > 400
+	}
+	return embers
+}`,
+  },
+  {
+    id: "css",
+    label: "CSS",
+    lang: "css",
+    code: `:root {
+  --ember: oklch(0.659 0.194 37.5);
+  --hearth: oklch(0.2 0.01 60);
+}
+
+.hearth {
+  color: var(--ember);
+  background: var(--hearth);
+  border-radius: 0.75rem;
+}
+
+@media (hover: hover) {
+  .ember {
+    opacity: 0.9;
+  }
+}`,
+  },
+] as const;
+
+export const DEFAULT_EDITOR_LANGUAGE = EDITOR_SAMPLES[0].id;
 
 // A tighter snippet for the six gallery cards, where vertical space is scarce.
 export const GALLERY_SAMPLE = `type Theme = "light" | "dark";
@@ -95,10 +194,35 @@ export interface PaletteRow {
 // Values read straight from the vendored theme JSON — the shared base is
 // identical across all three flavors; only functions & types change.
 export const BASE_PALETTE: PaletteRow[] = [
-  { label: "Background", note: "editor surface", light: "#ffffff", dark: "#0a0a0b" },
-  { label: "Foreground", note: "plain text", light: "#2d2d33", dark: "#d7d7db" },
-  { label: "Comment", note: "muted, low-contrast", light: "#717178", dark: "#626269" },
-  { label: "Keyword", note: "the orange ember", light: "#b23c00", dark: "#f87c49" },
+  {
+    label: "Background",
+    note: "editor surface",
+    light: "#ffffff",
+    dark: "#0a0a0b",
+  },
+  {
+    label: "Foreground",
+    note: "plain text",
+    light: "#2d2d33",
+    dark: "#d7d7db",
+  },
+  {
+    label: "Comment",
+    note: "muted, low-contrast",
+    light: "#717178",
+    dark: "#626269",
+  },
+  {
+    label: "Keyword",
+    note: "the orange ember",
+    light: "#b23c00",
+    dark: "#f87c49",
+  },
   { label: "String", note: "warm brown", light: "#89552a", dark: "#dfbda0" },
-  { label: "Constant", note: "numbers & literals", light: "#9f2e00", dark: "#f66335" },
+  {
+    label: "Constant",
+    note: "numbers & literals",
+    light: "#9f2e00",
+    dark: "#f66335",
+  },
 ];

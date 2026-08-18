@@ -1,8 +1,17 @@
 ---
 import { Code } from "astro:components";
-import { CLI_INSTALL, GITHUB_URL, MARKETPLACE_URL } from "@/lib/hearth/flavors";
+import {
+  CLI_INSTALL,
+  DEFAULT_FLAVOR,
+  FLAVORS,
+  GITHUB_URL,
+  MARKETPLACE_URL,
+} from "@/lib/hearth/flavors";
 
 const THEMES_URL = `${GITHUB_URL}/tree/main/themes`;
+const hearthThemes = FLAVORS.find(({ id }) => id === DEFAULT_FLAVOR)?.themes;
+
+if (!hearthThemes) throw new Error("The default Hearth theme is missing");
 
 const SHIKI_SAMPLE = `import { codeToHtml } from "shiki";
 import hearthDark from "./hearth-dark.json";
@@ -22,7 +31,7 @@ const tabs = [
 
 <div class="hearth-install space-y-6" data-hearth-install>
   <div
-    class="flex gap-1 border-b border-border"
+    class="hearth-tablist flex gap-1 border-b border-border"
     role="tablist"
     aria-label="Install Hearth in"
   >
@@ -41,6 +50,8 @@ const tabs = [
         </button>
       ))
     }
+    <span class="hearth-tab-underline" data-tab-underline aria-hidden="true"
+    ></span>
   </div>
 
   <div
@@ -52,8 +63,8 @@ const tabs = [
   >
     <ol class="hearth-steps">
       <li>
-        Install from the terminal — or search <strong>Hearth</strong> in the
-        Extensions panel and click Install.
+        Install from the terminal — or search <strong>Hearth</strong> in the Extensions
+        panel and click Install.
         <button
           type="button"
           class="hearth-cmd group"
@@ -100,8 +111,8 @@ const tabs = [
         >.
       </li>
       <li>
-        In Cursor, open the Extensions panel, click the <strong>⋯</strong> menu,
-        choose <strong>Install from VSIX…</strong>, and select the file.
+        In Cursor, open the Extensions panel, click the <strong>⋯</strong> menu, choose
+        <strong>Install from VSIX…</strong>, and select the file.
       </li>
       <li>
         Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
@@ -128,16 +139,22 @@ const tabs = [
           class="hearth-inline-link">themes folder</a
         > — they're plain VS Code theme JSON.
       </li>
-      <li>Pass one to Shiki as a <code class="hearth-inline-code">theme</code>:</li>
+      <li>
+        Pass one to Shiki as a <code class="hearth-inline-code">theme</code>:
+      </li>
     </ol>
     <div class="hearth-shiki-code not-prose">
-      <Code code={SHIKI_SAMPLE} lang="ts" />
+      <Code code={SHIKI_SAMPLE} lang="ts" themes={hearthThemes as never} />
     </div>
   </div>
 </div>
 
 <style>
+  .hearth-tablist {
+    position: relative;
+  }
   .hearth-tab {
+    position: relative;
     padding: 0.5rem 0.875rem;
     margin-bottom: -1px;
     border-bottom: 2px solid transparent;
@@ -147,6 +164,12 @@ const tabs = [
       color 150ms ease,
       border-color 150ms ease;
   }
+  .hearth-tab::before {
+    content: "";
+    position: absolute;
+    inset-block: -0.125rem;
+    inset-inline: 0;
+  }
   .hearth-tab:hover {
     color: var(--foreground);
   }
@@ -154,10 +177,32 @@ const tabs = [
     color: var(--foreground);
     border-bottom-color: var(--brand);
   }
+  .hearth-install[data-tab-underline-ready] .hearth-tab[aria-selected="true"] {
+    border-bottom-color: transparent;
+  }
   .hearth-tab:focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
+  }
+  .hearth-tab-underline {
+    position: absolute;
+    inset-block-end: -1px;
+    inset-inline-start: 0;
+    inline-size: 0;
+    block-size: 2px;
+    border-radius: var(--radius-full);
+    background-color: var(--brand);
+    opacity: 0;
+    transform: translateX(0) scaleX(1);
+    transform-origin: 0 50%;
+    pointer-events: none;
+    transition:
+      transform 200ms cubic-bezier(0.645, 0.045, 0.355, 1),
+      opacity 150ms var(--ease-out-curve);
+  }
+  .hearth-tab-underline[data-snap] {
+    transition: none;
   }
 
   .hearth-panel {
@@ -247,6 +292,9 @@ const tabs = [
     font-size: 0.8125rem;
     line-height: 1.65;
   }
+  :global(.dark) .hearth-shiki-code :global(.astro-code) {
+    background-color: var(--shiki-dark-bg) !important;
+  }
 
   .hearth-kbd {
     display: inline-flex;
@@ -301,6 +349,9 @@ const tabs = [
     .hearth-cmd {
       transition: none;
     }
+    .hearth-tab-underline {
+      transition: none;
+    }
   }
 </style>
 
@@ -315,8 +366,47 @@ const tabs = [
     "[data-hearth-install]",
   )) {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const tablist = root.querySelector<HTMLElement>(".hearth-tablist");
+    const underline = root.querySelector<HTMLElement>("[data-tab-underline]");
 
-    const select = (tab: HTMLButtonElement, focus = false) => {
+    const moveUnderline = (tab: HTMLButtonElement, animate: boolean) => {
+      if (!tablist || !underline) return;
+
+      const currentRect = underline.getBoundingClientRect();
+      const listRect = tablist.getBoundingClientRect();
+      const tabRect = tab.getBoundingClientRect();
+      const ready = underline.hasAttribute("data-ready");
+      const rtl = getComputedStyle(tablist).direction === "rtl";
+      const inlineStart = rtl
+        ? listRect.right - tabRect.right
+        : tabRect.left - listRect.left;
+
+      underline.setAttribute("data-snap", "");
+      underline.style.insetInlineStart = `${inlineStart}px`;
+      underline.style.inlineSize = `${tabRect.width}px`;
+      underline.style.transform = "translateX(0) scaleX(1)";
+      underline.style.opacity = "1";
+
+      const targetRect = underline.getBoundingClientRect();
+      if (animate && ready) {
+        const delta = currentRect.left - targetRect.left;
+        const scale = currentRect.width / targetRect.width;
+        underline.style.transform = `translateX(${delta}px) scaleX(${scale})`;
+      }
+
+      underline.getBoundingClientRect();
+      underline.removeAttribute("data-snap");
+      underline.setAttribute("data-ready", "");
+      root.setAttribute("data-tab-underline-ready", "");
+
+      if (animate && ready) {
+        requestAnimationFrame(() => {
+          underline.style.transform = "translateX(0) scaleX(1)";
+        });
+      }
+    };
+
+    const select = (tab: HTMLButtonElement, focus = false, animate = false) => {
       for (const other of tabs) {
         const active = other === tab;
         other.setAttribute("aria-selected", active ? "true" : "false");
@@ -326,18 +416,15 @@ const tabs = [
         );
         if (panel) panel.hidden = !active;
       }
+      moveUnderline(tab, animate);
       if (focus) tab.focus();
     };
 
     tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => select(tab));
+      tab.addEventListener("click", () => select(tab, false, true));
       tab.addEventListener("keydown", (event) => {
         const step =
-          event.key === "ArrowRight"
-            ? 1
-            : event.key === "ArrowLeft"
-              ? -1
-              : 0;
+          event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
         if (step) {
           event.preventDefault();
           select(tabs[(index + step + tabs.length) % tabs.length], true);
@@ -350,9 +437,21 @@ const tabs = [
         }
       });
     });
+
+    moveUnderline(tabs[0], false);
+    if (tablist) {
+      new ResizeObserver(() => {
+        const active = tabs.find(
+          (tab) => tab.getAttribute("aria-selected") === "true",
+        );
+        if (active) moveUnderline(active, false);
+      }).observe(tablist);
+    }
   }
 
-  for (const cmd of document.querySelectorAll<HTMLButtonElement>(".hearth-cmd")) {
+  for (const cmd of document.querySelectorAll<HTMLButtonElement>(
+    ".hearth-cmd",
+  )) {
     const hint = cmd.querySelector<HTMLElement>(".hearth-cmd-hint");
     let timer = 0;
     cmd.addEventListener("click", async () => {
