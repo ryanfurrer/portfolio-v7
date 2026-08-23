@@ -18,6 +18,11 @@ const chrome = (theme: unknown) => {
   return {
     bar: colors["editorGroupHeader.tabsBackground"],
     fg: colors["editor.foreground"],
+    // Dark Hearth gives the tab strip the editor's own background, so the rule
+    // is the only thing dividing them. It has to come from the theme too — the
+    // site's --border tracks the page, and would vanish on a pinned card whose
+    // polarity disagrees with it.
+    line: colors["editorGroup.border"],
   };
 };
 
@@ -26,8 +31,10 @@ const dark = chrome(themes.dark);
 const vars = [
   `--win-bar-light:${light.bar}`,
   `--win-fg-light:${light.fg}`,
+  `--win-line-light:${light.line}`,
   `--win-bar-dark:${dark.bar}`,
   `--win-fg-dark:${dark.fg}`,
+  `--win-line-dark:${dark.line}`,
 ].join(";");
 ---
 
@@ -51,7 +58,7 @@ const vars = [
 
   .hearth-window-file {
     padding: 0.5rem 1.125rem;
-    border-block-end: 1px solid var(--border);
+    border-block-end: 1px solid var(--win-line-light);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     background-color: var(--win-bar-light);
@@ -74,6 +81,7 @@ const vars = [
   :global(.dark) .hearth-window:not([data-pin]) .hearth-window-file {
     background-color: var(--win-bar-dark);
     color: var(--win-fg-dark);
+    border-block-end-color: var(--win-line-dark);
   }
 
   /* Pinned: defaultColor is off, so both sides sit on vars and the window picks
