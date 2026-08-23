@@ -13,6 +13,17 @@
   ],
   "redirects": [
     {
+      "source": "/:path((?!hearth$|hearth/|_)[^.]+)",
+      "has": [
+        {
+          "type": "host",
+          "value": "hearth.ryanfurrer.com"
+        }
+      ],
+      "destination": "https://www.ryanfurrer.com/:path",
+      "permanent": true
+    },
+    {
       "source": "/:path(.*)",
       "has": [
         {

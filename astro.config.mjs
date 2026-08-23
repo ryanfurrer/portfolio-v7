@@ -12,6 +12,7 @@ import {
   projectId,
   studioBasePath,
 } from "./src/sanity/lib/config";
+import { HEARTH_CANONICAL, HEARTH_ROUTE } from "./src/lib/hearth/site";
 
 // astro.config runs before Astro injects .env, so parse the file ourselves.
 // Inline vars (e.g. `SANITY_PREVIEW_DRAFTS=true pnpm dev`) win over the file.
@@ -143,6 +144,15 @@ export default defineConfig({
           !pathname.startsWith(`${studioBasePath}/`)
         );
       },
+      // The Hearth landing canonicalizes to its own subdomain, so listing the
+      // www path here would contradict the page. Rewritten rather than dropped
+      // so it keeps sitemap coverage: the subdomain has no sitemap of its own,
+      // and its robots.txt points at this one — which is what authorizes a
+      // sitemap to carry URLs for another host.
+      serialize: (item) =>
+        new URL(item.url).pathname === HEARTH_ROUTE
+          ? { ...item, url: HEARTH_CANONICAL }
+          : item,
     }),
     sanity({
       projectId,

@@ -6,6 +6,7 @@ import HearthMark from "@/components/hearth/HearthMark.astro";
 import ModeToggle from "@/components/ModeToggle";
 import { buttonVariants } from "@/components/ui/button";
 import { GITHUB_URL, MARKETPLACE_URL } from "@/lib/hearth/flavors";
+import { HEARTH_CANONICAL } from "@/lib/hearth/site";
 import "@/styles/global.css";
 
 interface Props {
@@ -20,7 +21,7 @@ const HEARTH_OG_IMAGE = "/hearth/og.png";
 
 const {
   title = "Hearth — A warm theme for VS Code, Cursor, and more",
-  description = "Hearth keeps your editor calm and warm, letting a single accent pick out the code worth scanning. Six light and dark variants for VS Code, Cursor, and Shiki.",
+  description = "Hearth keeps the interface calm and lights the code with a single ember. Six light and dark variants for VS Code, Cursor, Zed, Warp, and Shiki.",
   ogImage = HEARTH_OG_IMAGE,
 } = Astro.props;
 
@@ -31,7 +32,16 @@ const externalRel = "noopener noreferrer";
 ---
 
 <html lang="en">
-  <Head title={title} description={description} ogImage={ogImage} />
+  {
+    /* The subdomain serves only its root, so a second Hearth page would need
+      middleware.ts widened before it could claim a canonical of its own. */
+  }
+  <Head
+    title={title}
+    description={description}
+    ogImage={ogImage}
+    canonical={HEARTH_CANONICAL}
+  />
   <body class="bg-background text-subtle-foreground antialiased">
     <a
       href="#main-content"

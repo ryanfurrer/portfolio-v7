@@ -12,6 +12,12 @@ interface Props {
   modifiedTime?: string;
   /** schema.org structured data, rendered as a JSON-LD script. */
   jsonLd?: Record<string, unknown>;
+  /**
+   * Absolute URL to claim as this page's address, for both the canonical link
+   * and og:url. Only needed when a page is served from a host other than
+   * `site` — otherwise the URL is derived and these stay in step.
+   */
+  canonical?: string;
 }
 
 const {
@@ -22,9 +28,10 @@ const {
   publishedTime,
   modifiedTime,
   jsonLd,
+  canonical,
 } = Astro.props;
 
-const ogUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const pageUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).toString();
 const defaultOgImage = new URL("/og-image.png", Astro.site).toString();
 const ogImageUrl = ogImage
   ? ogImage.startsWith("http")
@@ -100,13 +107,13 @@ const darkThemeColor = THEME_COLORS.dark;
     crossorigin
   />
   <link rel="sitemap" href="/sitemap-index.xml" />
-  <link rel="canonical" href={ogUrl} />
+  <link rel="canonical" href={pageUrl} />
   <title>{title}</title>
   {description && <meta name="description" content={description} />}
   <meta property="og:title" content={title} />
   {description && <meta property="og:description" content={description} />}
   <meta property="og:type" content={ogType} />
-  <meta property="og:url" content={ogUrl} />
+  <meta property="og:url" content={pageUrl} />
   <meta property="og:site_name" content={SITE_NAME} />
   <meta property="og:locale" content="en_US" />
   <meta property="og:image" content={ogImageUrl} />
