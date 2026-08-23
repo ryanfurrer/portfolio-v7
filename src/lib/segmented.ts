@@ -23,8 +23,7 @@ export function segmentedItem({
       (active
         ? "font-medium text-foreground"
         : "text-subtle-foreground hover:text-foreground"),
-    variant === "raised" &&
-      cn("text-foreground", active && "bg-card font-medium"),
+    variant === "raised" && cn("text-foreground", active && "bg-card"),
     variant === "boxed" &&
       (active
         ? "bg-foreground/10 text-foreground"
