@@ -23,7 +23,7 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
   data-language={DEFAULT_EDITOR_LANGUAGE}
 >
   <div
-    class="grid items-center gap-2 border-b border-border px-3 py-3 sm:flex sm:gap-x-4 sm:px-4 sm:py-2.5"
+    class="grid items-center gap-2 border-b border-border bg-muted px-3 py-3 sm:flex sm:gap-x-4 sm:px-4 sm:py-2.5"
   >
     <span class="hidden items-center gap-1.5 sm:flex" aria-hidden="true">
       <span class="size-3 rounded-full bg-foreground/15"></span>
@@ -40,7 +40,7 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
     />
 
     <div
-      class="hearth-flavor-tabs flex w-full items-center gap-0.5 rounded-lg bg-muted p-0.5 sm:ms-auto sm:w-auto"
+      class="hearth-flavor-tabs flex w-full items-center gap-0.5 rounded-lg p-0.5 sm:ms-auto sm:w-auto"
       role="radiogroup"
       aria-label="Theme flavor"
     >
@@ -55,7 +55,7 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
               tabindex={active ? 0 : -1}
               data-flavor-btn={flavor.id}
               class={cn(
-                segmentedItem({ active }),
+                segmentedItem({ active, variant: "raised" }),
                 "relative flex flex-1 items-center justify-center gap-1.5 sm:flex-none",
               )}
             >
@@ -155,7 +155,8 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
     inset-inline-start: 0;
     inline-size: 0;
     border-radius: var(--radius-md);
-    background-color: color-mix(in oklch, var(--foreground) 10%, transparent);
+    background-color: var(--item-hover);
+    box-shadow: var(--surface-raised-shadow);
     opacity: 0;
     transform: translateX(0) scaleX(1);
     transform-origin: 0 50%;
@@ -253,10 +254,10 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
         const active = radio.dataset.flavorBtn === id;
         radio.setAttribute("aria-checked", active ? "true" : "false");
         radio.tabIndex = active ? 0 : -1;
-        // Mirror segmentedItem()'s boxed active/idle classes.
-        radio.classList.toggle("bg-foreground/10", active);
-        radio.classList.toggle("text-foreground", active);
-        radio.classList.toggle("text-subtle-foreground", !active);
+        // Mirror segmentedItem()'s raised variant. bg-card is the pre-slider
+        // fallback; the ready state clears it and the slider carries the fill.
+        radio.classList.toggle("bg-card", active);
+        radio.classList.toggle("font-medium", active);
         if (active && focus) radio.focus();
       }
       syncPanel();

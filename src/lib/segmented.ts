@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 type Size = "sm" | "md";
-type Variant = "boxed" | "plain";
+type Variant = "boxed" | "plain" | "raised";
 
 // One source of truth for segmented-control item styling (the /brand
 // colour-format switch), so any future segmented picker matches it instead of
@@ -19,12 +19,15 @@ export function segmentedItem({
   return cn(
     "rounded-md text-sm transition-colors",
     size === "md" ? "px-3 py-2" : "px-2.5 py-1",
-    variant === "plain"
-      ? active
+    variant === "plain" &&
+      (active
         ? "font-medium text-foreground"
-        : "text-subtle-foreground hover:text-foreground"
-      : active
+        : "text-subtle-foreground hover:text-foreground"),
+    variant === "raised" &&
+      cn("text-foreground", active && "bg-card font-medium"),
+    variant === "boxed" &&
+      (active
         ? "bg-foreground/10 text-foreground"
-        : "text-subtle-foreground hover:text-foreground",
+        : "text-subtle-foreground hover:text-foreground"),
   );
 }

@@ -50,7 +50,7 @@ export default function HearthLanguageSelect({ initialValue, options }: Props) {
         <SelectTrigger
           size="xs"
           aria-label="Code sample language"
-          className="relative w-full border-border bg-muted px-2.5 font-mono text-xs before:absolute before:[inset-inline:0] before:[inset-block:-0.5rem] sm:w-28"
+          className="relative w-full border-border bg-card px-2.5 font-mono text-xs before:absolute before:[inset-inline:0] before:[inset-block:-0.5rem] sm:w-28"
         >
           <SelectValue>{selectedLabel}</SelectValue>
         </SelectTrigger>
