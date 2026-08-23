@@ -32,12 +32,7 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
         <div class="grid gap-4 sm:grid-cols-2">
           {modes.map((mode) => (
             <figure class="space-y-2">
-              <HearthCodeWindow
-                file={GALLERY_FILE}
-                themes={flavor.themes}
-                pin={mode.key}
-                dense
-              >
+              <HearthCodeWindow file={GALLERY_FILE} pin={mode.key} dense>
                 <Code
                   code={GALLERY_SAMPLE}
                   lang="ts"

@@ -56,7 +56,11 @@
   --breakpoint-rail: 74rem; /* below this the gutter rail (back-link + ToC) collapses to a drawer */
 }
 
-:root {
+/* .light mirrors .dark as a nestable scope: a subtree can hold one mode while
+   the page is in the other — the Hearth variant cards pin their chrome that
+   way. Same declarations, no duplicated values. */
+:root,
+.light {
   color-scheme: light;
 
   /* shadcn/ui */

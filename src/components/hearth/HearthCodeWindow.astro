@@ -1,7 +1,6 @@
 ---
 interface Props {
   file: string;
-  themes: { light: unknown; dark: unknown };
   /** Hold one side regardless of page mode, matching a pinned <Code>. */
   pin?: "light" | "dark";
   /** Tighter type, for the six gallery cards where vertical space is scarce. */
@@ -9,41 +8,11 @@ interface Props {
   class?: string;
 }
 
-const { file, themes, pin, dense, class: className } = Astro.props;
-
-// The title bar wears the theme's own tab strip, so the chrome previews the
-// theme alongside the code instead of borrowing the site's.
-const chrome = (theme: unknown) => {
-  const { colors } = theme as { colors: Record<string, string> };
-  return {
-    bar: colors["editorGroupHeader.tabsBackground"],
-    fg: colors["editor.foreground"],
-    // Dark Hearth gives the tab strip the editor's own background, so the rule
-    // is the only thing dividing them. It has to come from the theme too — the
-    // site's --border tracks the page, and would vanish on a pinned card whose
-    // polarity disagrees with it.
-    line: colors["editorGroup.border"],
-  };
-};
-
-const light = chrome(themes.light);
-const dark = chrome(themes.dark);
-const vars = [
-  `--win-bar-light:${light.bar}`,
-  `--win-fg-light:${light.fg}`,
-  `--win-line-light:${light.line}`,
-  `--win-bar-dark:${dark.bar}`,
-  `--win-fg-dark:${dark.fg}`,
-  `--win-line-dark:${dark.line}`,
-].join(";");
+const { file, pin, dense, class: className } = Astro.props;
 ---
 
-<div
-  class:list={["hearth-window", { dense }, className]}
-  data-pin={pin}
-  style={vars}
->
-  <p class="hearth-window-file">{file}</p>
+<div class:list={["hearth-window", { dense }, className]} data-pin={pin}>
+  <p class:list={["hearth-window-file", pin]}>{file}</p>
   <slot />
 </div>
 
@@ -56,13 +25,18 @@ const vars = [
     box-shadow: 0 0 0 1px var(--border);
   }
 
+  /* Site chrome, not the theme's: the theme owns the canvas, the design system
+     owns the frame. A pinned bar carries its side's .light/.dark scope so the
+     tokens resolve to the card's mode, not the page's — otherwise a light card
+     on a dark page wears a dark bar over a white canvas. Ink is --foreground,
+     not the subtle tier, which measures 4.38:1 on --muted and misses AA. */
   .hearth-window-file {
     padding: 0.5rem 1.125rem;
-    border-block-end: 1px solid var(--win-line-light);
+    border-block-end: 1px solid var(--border);
     font-family: var(--font-mono);
     font-size: 0.75rem;
-    background-color: var(--win-bar-light);
-    color: var(--win-fg-light);
+    background-color: var(--muted);
+    color: var(--foreground);
   }
 
   .hearth-window :global(.astro-code) {
@@ -77,13 +51,6 @@ const vars = [
 
   /* Slotted <Code> output carries no scope of its own, so the window addresses
      it globally from its own scoped root. */
-  .hearth-window[data-pin="dark"] .hearth-window-file,
-  :global(.dark) .hearth-window:not([data-pin]) .hearth-window-file {
-    background-color: var(--win-bar-dark);
-    color: var(--win-fg-dark);
-    border-block-end-color: var(--win-line-dark);
-  }
-
   /* Pinned: defaultColor is off, so both sides sit on vars and the window picks
      one. Unpinned windows keep the inline light side and swap under .dark,
      which needs !important to out-rank that inline style. */
