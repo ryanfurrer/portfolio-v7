@@ -1,9 +1,6 @@
 import { EXTENSION_ID, GITHUB_URL, MARKETPLACE_URL } from "./flavors";
 
-const LATEST_RELEASE_API = `${GITHUB_URL.replace(
-  "https://github.com/",
-  "https://api.github.com/repos/",
-)}/releases/latest`;
+const LATEST_RELEASE_URL = `${GITHUB_URL}/releases/latest`;
 
 const MARKETPLACE_QUERY_API =
   "https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery";
@@ -14,12 +11,15 @@ export interface HearthVersion {
 }
 
 async function fetchLatestReleaseTag(): Promise<string | undefined> {
-  const response = await fetch(LATEST_RELEASE_API, {
-    headers: { Accept: "application/vnd.github+json" },
-  });
+  // GitHub redirects this stable URL to /releases/tag/<version>. Following the
+  // public redirect avoids the unauthenticated API quota shared by hosted
+  // builds, while still making the latest published release authoritative.
+  const response = await fetch(LATEST_RELEASE_URL);
   if (!response.ok) return undefined;
-  const { tag_name } = (await response.json()) as { tag_name?: string };
-  return tag_name?.replace(/^v/, "") || undefined;
+  const match = new URL(response.url).pathname.match(
+    /\/releases\/tag\/v?([^/]+)\/?$/,
+  );
+  return match?.[1] ? decodeURIComponent(match[1]) : undefined;
 }
 
 async function fetchMarketplaceVersion(): Promise<string | undefined> {
