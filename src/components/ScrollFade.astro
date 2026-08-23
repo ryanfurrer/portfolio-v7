@@ -24,7 +24,10 @@ const showBottom = bottom !== "0";
 <div class="pointer-events-none" aria-hidden="true">
   {
     showTop && (
-      <div class="sf-bar sf-top fixed inset-x-0 top-0 z-20" style={`height:${top}`} />
+      <div
+        class="sf-bar sf-top fixed inset-x-0 top-0 z-20"
+        style={`height:${top}`}
+      />
     )
   }
   {
@@ -39,7 +42,11 @@ const showBottom = bottom !== "0";
 
 <style>
   .sf-top {
-    background-image: linear-gradient(to bottom, var(--background), transparent);
+    background-image: linear-gradient(
+      to bottom,
+      var(--background),
+      transparent
+    );
     background-image: linear-gradient(
       to bottom,
       var(--background),

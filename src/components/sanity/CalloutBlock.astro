@@ -16,7 +16,9 @@ const components = { mark: { link: PortableTextLink } };
 ---
 
 <Callout variant={node.variant} title={node.title}>
-  {/* `body` is undefined until content is typed (draft preview) — pass an empty
-      array so astro-portabletext doesn't choke on `undefined`. */}
+  {
+    /* `body` is undefined until content is typed (draft preview) — pass an empty
+      array so astro-portabletext doesn't choke on `undefined`. */
+  }
   <PortableText value={node.body ?? []} components={components} />
 </Callout>

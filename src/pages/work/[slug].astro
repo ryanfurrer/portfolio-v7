@@ -10,9 +10,8 @@ import type {
 import { sanityClient } from "sanity:client";
 
 export async function getStaticPaths() {
-  const slugs = await sanityClient.fetch<PROJECT_SLUGS_QUERY_RESULT>(
-    PROJECT_SLUGS_QUERY,
-  );
+  const slugs =
+    await sanityClient.fetch<PROJECT_SLUGS_QUERY_RESULT>(PROJECT_SLUGS_QUERY);
   return toStaticPaths(slugs);
 }
 
@@ -83,9 +82,11 @@ const companyBack = project.company?.slug
     )
   }
 
-  {/* Referrer-aware back link: if the reader came from this project's company
+  {
+    /* Referrer-aware back link: if the reader came from this project's company
       hub, point "back" there instead of the full work index. Falls back to the
-      server-rendered /work default when there's no referrer or it's elsewhere. */}
+      server-rendered /work default when there's no referrer or it's elsewhere. */
+  }
   <script slot="scripts" is:inline define:vars={{ companyBack }}>
     if (document.referrer) {
       try {

@@ -15,7 +15,7 @@ const { token, label, note } = Astro.props;
   class="group/sw -mx-2 grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-4 rounded-md px-2 py-2.5 text-start transition-[translate] duration-150 ease-out focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:translate-y-px"
 >
   <span
-    class="mt-0.5 size-7 shrink-0 rounded-md ring-1 ring-inset ring-border"
+    class="mt-0.5 size-7 shrink-0 rounded-md ring-1 ring-border ring-inset"
     style={`background-color: var(${token})`}
     aria-hidden="true"></span>
 
@@ -26,9 +26,11 @@ const { token, label, note } = Astro.props;
     >
   </span>
 
-  {/* Value doubles as the copy confirmation: on copy it rolls out and a brand
-      "Copied" rolls in (its own space — no reserved icon column). */}
-  <span class="relative mt-0.5 font-mono-custom text-xs tabular-nums">
+  {
+    /* Value doubles as the copy confirmation: on copy it rolls out and a brand
+      "Copied" rolls in (its own space — no reserved icon column). */
+  }
+  <span class="font-mono-custom relative mt-0.5 text-xs tabular-nums">
     <span
       data-swatch-value
       class="block text-end text-foreground decoration-brand decoration-dotted underline-offset-4 transition-[opacity,translate] duration-200 ease-out group-[.is-copied]/sw:-translate-y-1 group-[.is-copied]/sw:opacity-0 can-hover:group-hover/sw:underline"
