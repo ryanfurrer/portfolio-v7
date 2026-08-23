@@ -10,6 +10,8 @@ import {
 } from "@/lib/hearth/flavors";
 
 const THEMES_URL = `${GITHUB_URL}/tree/main/themes`;
+const ZED_THEME_URL = `${GITHUB_URL}/blob/main/zed/themes/hearth.json`;
+const WARP_THEMES_URL = `${GITHUB_URL}/tree/main/warp`;
 const hearthThemes = FLAVORS.find(({ id }) => id === DEFAULT_FLAVOR)?.themes;
 
 if (!hearthThemes) throw new Error("The default Hearth theme is missing");
@@ -23,25 +25,11 @@ const html = await codeToHtml(code, {
 });
 `;
 
-// Ports that exist as intent, not yet as theme files — they get a tab so the
-// section answers for every target Hearth claims, rather than going quiet.
-const SOON = [
-  {
-    id: "zed",
-    label: "Zed",
-    body: "a Hearth theme for the Zed editor is in the works.",
-  },
-  {
-    id: "warp",
-    label: "Warp",
-    body: "a Hearth theme for the Warp terminal is in the works.",
-  },
-] as const;
-
 const tabs = [
   { id: "vscode", label: "VS Code" },
   { id: "cursor", label: "Cursor" },
-  ...SOON.map(({ id, label }) => ({ id, label })),
+  { id: "zed", label: "Zed" },
+  { id: "warp", label: "Warp" },
   { id: "shiki", label: "Shiki" },
 ];
 ---
@@ -140,30 +128,67 @@ const tabs = [
     </p>
   </div>
 
-  {
-    SOON.map(({ id, body }) => (
-      <div
-        id={`hearth-panel-${id}`}
-        role="tabpanel"
-        aria-labelledby={`hearth-tab-${id}`}
-        tabindex="0"
-        class="hearth-panel"
-        hidden
-      >
-        <p class="hearth-soon">
-          <strong>Coming soon</strong> — {body}
-        </p>
-        <a
-          href={GITHUB_URL}
+  <div
+    id="hearth-panel-zed"
+    role="tabpanel"
+    aria-labelledby="hearth-tab-zed"
+    tabindex="0"
+    class="hearth-panel"
+    hidden
+  >
+    <ol class="hearth-steps">
+      <li>
+        Download <a
+          href={ZED_THEME_URL}
           target="_blank"
           rel="noopener noreferrer"
-          class="hearth-panel-link"
-        >
-          Watch the repo for the release
-        </a>
-      </div>
-    ))
-  }
+          class="hearth-inline-link">hearth.json</a
+        > — one file carrying all six variants.
+      </li>
+      <li>
+        Move it into Zed's themes folder,
+        {" "}<code class="hearth-inline-code">~/.config/zed/themes/</code>.
+      </li>
+      <li>Pick a Hearth from Zed's theme selector.</li>
+    </ol>
+    <p class="hearth-note">
+      The repo's <code class="hearth-inline-code">zed/</code> folder also installs
+      with <code class="hearth-inline-code">zed: install dev extension</code>.
+      An extension-store listing is coming.
+    </p>
+  </div>
+
+  <div
+    id="hearth-panel-warp"
+    role="tabpanel"
+    aria-labelledby="hearth-tab-warp"
+    tabindex="0"
+    class="hearth-panel"
+    hidden
+  >
+    <ol class="hearth-steps">
+      <li>
+        Download the six themes from the repo's <a
+          href={WARP_THEMES_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hearth-inline-link">warp folder</a
+        >.
+      </li>
+      <li>
+        Move them into
+        {" "}<code class="hearth-inline-code">~/.warp/themes/hearth/</code>.
+      </li>
+      <li>
+        Restart Warp if the themes don't show up, then pick a Hearth from the
+        theme picker.
+      </li>
+    </ol>
+    <p class="hearth-note">
+      Teal and Azure change the terminal's cyan pair — Warp doesn't expose
+      editor syntax scopes. A listing in Warp's own theme repo is in review.
+    </p>
+  </div>
 
   <div
     id="hearth-panel-shiki"
@@ -317,20 +342,6 @@ const tabs = [
     color: var(--muted-foreground);
   }
 
-  /* Foreground, not the subtle tier: on the muted fill that tier measures
-     4.38:1, just under AA. */
-  .hearth-soon {
-    max-width: 42rem;
-    padding: 0.875rem 1.125rem;
-    border-radius: var(--radius-lg);
-    color: var(--foreground);
-    background-color: var(--muted);
-    box-shadow: inset 0 0 0 1px var(--border);
-    text-wrap: pretty;
-  }
-  .hearth-soon strong {
-    font-weight: 500;
-  }
   .hearth-panel-link {
     font-size: 0.9375rem;
     text-underline-offset: 3px;
