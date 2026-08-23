@@ -7,6 +7,7 @@ import ModeToggle from "@/components/ModeToggle";
 import { buttonVariants } from "@/components/ui/button";
 import { GITHUB_URL, MARKETPLACE_URL } from "@/lib/hearth/flavors";
 import { HEARTH_CANONICAL } from "@/lib/hearth/site";
+import { fetchHearthVersion } from "@/lib/hearth/version";
 import "@/styles/global.css";
 
 interface Props {
@@ -27,6 +28,7 @@ const {
 
 const SITE = "https://www.ryanfurrer.com";
 const currentYear = new Date().getFullYear();
+const version = await fetchHearthVersion();
 
 const externalRel = "noopener noreferrer";
 ---
@@ -71,7 +73,7 @@ const externalRel = "noopener noreferrer";
           <span class="font-semibold tracking-tight">Hearth</span>
         </a>
 
-        <nav class="flex items-center gap-4 sm:gap-5">
+        <nav aria-label="Site" class="flex items-center gap-4 sm:gap-5">
           <a
             href={SITE}
             target="_blank"
@@ -85,12 +87,11 @@ const externalRel = "noopener noreferrer";
             class="quiet-link hidden text-sm sm:inline">GitHub</a
           >
           <ModeToggle client:idle />
-          <a
-            href={MARKETPLACE_URL}
-            target="_blank"
-            rel={externalRel}
-            class={buttonVariants({ size: "sm" })}>Install</a
-          >
+          {
+            /* Bare "Install" must not presume an editor — it goes to the picker
+              section; only CTAs naming VS Code link straight to the Marketplace. */
+          }
+          <a href="/#install" class={buttonVariants({ size: "sm" })}>Install</a>
         </nav>
       </div>
     </header>
@@ -107,9 +108,23 @@ const externalRel = "noopener noreferrer";
           <div class="flex items-center gap-2.5">
             <HearthMark class="size-6" />
             <div>
-              <p class="font-medium text-foreground">Hearth</p>
+              <p class="flex items-baseline gap-2 font-medium text-foreground">
+                Hearth
+                {
+                  version && (
+                    <a
+                      href={version.href}
+                      target="_blank"
+                      rel={externalRel}
+                      class="quiet-link font-mono text-xs font-normal"
+                    >
+                      v{version.version}
+                    </a>
+                  )
+                }
+              </p>
               <p class="text-sm text-subtle-foreground">
-                A warm editor theme by
+                A warm color theme by
                 {" "}<a
                   href={SITE}
                   target="_blank"
@@ -121,7 +136,10 @@ const externalRel = "noopener noreferrer";
               </p>
             </div>
           </div>
-          <nav class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+          <nav
+            aria-label="Footer"
+            class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm"
+          >
             <a
               href={MARKETPLACE_URL}
               target="_blank"
