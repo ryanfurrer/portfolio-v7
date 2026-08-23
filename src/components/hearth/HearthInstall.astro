@@ -7,6 +7,7 @@ import {
   FLAVORS,
   GITHUB_URL,
   MARKETPLACE_URL,
+  OPEN_VSX_URL,
   VSIX_URL,
 } from "@/lib/hearth/flavors";
 
@@ -128,7 +129,12 @@ const tabs = [
       </li>
     </ol>
     <p class="hearth-note">
-      Hearth isn't on Open VSX yet, so Cursor has no one-click install for now.
+      Hearth is also available from <a
+        href={OPEN_VSX_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hearth-inline-link">Open VSX</a
+      >.
     </p>
   </div>
 
