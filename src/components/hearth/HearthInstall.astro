@@ -110,17 +110,27 @@ const tabs = [
   >
     <ol class="hearth-steps">
       <li>
-        <a
+        In Cursor, open the Extensions panel, search <strong>Hearth</strong>,
+        and click <strong>Install</strong>.
+      </li>
+      <li>
+        You can also find Hearth on <a
+          href={OPEN_VSX_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hearth-inline-link">Open VSX</a
+        >.
+      </li>
+      <li>
+        To sideload instead, <a
           href={VSIX_URL}
           target="_blank"
           rel="noopener noreferrer"
           class="hearth-inline-link"
-          >Download the <code class="hearth-inline-code">.vsix</code></a
-        > — always the current published build.
-      </li>
-      <li>
-        In Cursor, open the Extensions panel, click the <strong>⋯</strong> menu, choose
-        {" "}<strong>Install from VSIX…</strong>, and select the file.
+          >download <code class="hearth-inline-code">hearth-latest.vsix</code
+          ></a
+        >, then choose <strong>Install from VSIX…</strong> from the Extensions panel's
+        <strong>⋯</strong> menu.
       </li>
       <li>
         Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
@@ -128,14 +138,6 @@ const tabs = [
         a Hearth.
       </li>
     </ol>
-    <p class="hearth-note">
-      Hearth is also available from <a
-        href={OPEN_VSX_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hearth-inline-link">Open VSX</a
-      >.
-    </p>
   </div>
 
   <div
