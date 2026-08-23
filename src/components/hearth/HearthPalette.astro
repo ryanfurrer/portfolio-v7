@@ -3,7 +3,10 @@ import { BASE_PALETTE, FLAVORS } from "@/lib/hearth/flavors";
 
 const accentRows = FLAVORS.map((flavor) => ({
   label: flavor.fullName,
-  note: "functions & types",
+  note:
+    flavor.id === "duotone"
+      ? "keywords; functions and types stay neutral"
+      : "functions, with a lighter tint on types",
   light: flavor.accent.light,
   dark: flavor.accent.dark,
 }));
@@ -82,7 +85,7 @@ const accentRows = FLAVORS.map((flavor) => ({
       class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4"
       data-reveal
     >
-      <h3 class="small-heading">Accent — the one role that changes</h3>
+      <h3 class="small-heading">Accent — what each flavor changes</h3>
       <span class="flex gap-2" aria-hidden="true">
         <span class="hearth-col-label">Light</span>
         <span class="hearth-col-label">Dark</span>

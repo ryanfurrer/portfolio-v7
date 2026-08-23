@@ -120,8 +120,9 @@ const editorPane = (
         backgroundColor: ui["editor.background"],
       },
     },
-    // Hearth Dark paints the tab strip the same color as the editor, marking
-    // the active tab with an ember rule along its top — so does this.
+    // Hearth Dark paints the tab strip the same color as the editor; its ember
+    // tab rule is drawn as an underline here — the landing page's own tab
+    // treatment — overlapping the strip divider like the site's tabs do.
     h(
       "div",
       {
@@ -137,8 +138,9 @@ const editorPane = (
         {
           style: {
             display: "flex",
-            padding: "12px 22px 14px",
-            borderTop: `3px solid ${ui["tab.activeBorderTop"]}`,
+            padding: "14px 22px 12px",
+            marginBottom: "-1px",
+            borderBottom: `3px solid ${ui["tab.activeBorderTop"]}`,
             color: ui["tab.activeForeground"],
           },
         },

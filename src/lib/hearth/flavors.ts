@@ -9,7 +9,7 @@ import lightTeal from "@/lib/shiki/hearth-light-teal.json";
 // drift from the page it links to.
 export const HEARTH_KICKER = "Theme for VS Code, Cursor, and more";
 export const HEARTH_TAGLINE =
-  "A warm color theme that keeps the interface calm and lets a single accent pick out the code worth scanning.";
+  "A warm color theme that keeps the interface calm and lights the code with a single ember.";
 
 export type FlavorId = "duotone" | "teal" | "azure";
 
@@ -43,7 +43,7 @@ export const FLAVORS: Flavor[] = [
     id: "azure",
     name: "Azure",
     fullName: "Hearth Azure",
-    tagline: "Warm base, a brighter blue on functions and types.",
+    tagline: "The same base, clear blue on functions and types.",
     accent: { light: "#007da3", dark: "#2eb3e5" },
     themes: { light: lightAzure, dark: darkAzure },
   },
@@ -51,7 +51,7 @@ export const FLAVORS: Flavor[] = [
     id: "teal",
     name: "Teal",
     fullName: "Hearth Teal",
-    tagline: "Warm base, teal functions and types for a second axis to scan.",
+    tagline: "The same base, teal on functions and types.",
     accent: { light: "#008472", dark: "#4cd0b8" },
     themes: { light: lightTeal, dark: darkTeal },
   },
