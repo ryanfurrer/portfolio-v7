@@ -66,12 +66,23 @@
      styles force the !important). The surface itself is pinned to --muted in both
      modes rather than each theme's own editor background — the warm themes'
      backgrounds match the page (pure white / near-black), so without this a code
-     block would dissolve into the page instead of reading as a recessed panel. */
+     block would dissolve into the page instead of reading as a recessed panel.
+     [data-shiki-pin] opts a block out of the swap: it renders one fixed theme
+     whatever the page mode (the Hearth variant gallery). */
   .prose pre.astro-code {
     background-color: var(--muted) !important;
   }
-  .dark .astro-code,
-  .dark .astro-code span {
+  /* Shiki inlines `color` for the default theme but leaves font-style, weight and
+     decoration on vars for both sides, so the theme's italics — comments, types,
+     decorators — need claiming here or they only ever render in dark. */
+  .astro-code:not([data-shiki-pin]),
+  .astro-code:not([data-shiki-pin]) span {
+    font-style: var(--shiki-light-font-style);
+    font-weight: var(--shiki-light-font-weight);
+    text-decoration: var(--shiki-light-text-decoration);
+  }
+  .dark .astro-code:not([data-shiki-pin]),
+  .dark .astro-code:not([data-shiki-pin]) span {
     color: var(--shiki-dark) !important;
     font-style: var(--shiki-dark-font-style) !important;
     font-weight: var(--shiki-dark-font-weight) !important;
