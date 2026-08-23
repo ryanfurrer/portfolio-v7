@@ -12,6 +12,7 @@ interface Props {
   modifiedTime?: string;
   /** schema.org structured data, rendered as a JSON-LD script. */
   jsonLd?: Record<string, unknown>;
+  noIndex?: boolean;
   /**
    * Absolute URL to claim as this page's address, for both the canonical link
    * and og:url. Only needed when a page is served from a host other than
@@ -28,6 +29,7 @@ const {
   publishedTime,
   modifiedTime,
   jsonLd,
+  noIndex = false,
   canonical,
 } = Astro.props;
 
@@ -107,6 +109,7 @@ const darkThemeColor = THEME_COLORS.dark;
     crossorigin
   />
   <link rel="sitemap" href="/sitemap-index.xml" />
+  {noIndex && <meta name="robots" content="noindex" />}
   <link rel="canonical" href={pageUrl} />
   <title>{title}</title>
   {description && <meta name="description" content={description} />}

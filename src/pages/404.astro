@@ -1,0 +1,30 @@
+---
+import PageHeader from "@/components/PageHeader.astro";
+import { buttonVariants } from "@/components/ui/button";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout
+  title="Page not found — Ryan Furrer"
+  description="The page you requested could not be found."
+  noIndex
+  noNavbar
+  noFooter
+  centerContent
+>
+  <main>
+    <section class="space-y-6">
+      <PageHeader title="404" lead="That page isn’t here." />
+      <p class="max-w-lg text-pretty text-subtle-foreground" data-reveal>
+        The address may be mistyped, or the page may have moved. You can head
+        home or browse my writing.
+      </p>
+      <div class="flex flex-wrap gap-3" data-reveal>
+        <a href="/" class={buttonVariants()}>Back home</a>
+        <a href="/writing" class={buttonVariants({ variant: "outline" })}>
+          Browse writing
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>
