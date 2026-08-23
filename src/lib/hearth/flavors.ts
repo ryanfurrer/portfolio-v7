@@ -68,6 +68,7 @@ export const CLI_INSTALL = `code --install-extension ${EXTENSION_ID}`;
 export const EDITOR_SAMPLES = [
   {
     id: "typescript",
+    file: "hearth.ts",
     label: "TypeScript",
     lang: "ts",
     code: `import type { Ember } from "./hearth";
@@ -89,6 +90,7 @@ console.log(\`\${lit.length} glowing\`);`,
   },
   {
     id: "python",
+    file: "hearth.py",
     label: "Python",
     lang: "python",
     code: `from dataclasses import dataclass
@@ -112,6 +114,7 @@ def kindle(
   },
   {
     id: "rust",
+    file: "hearth.rs",
     label: "Rust",
     lang: "rust",
     code: `#[derive(Debug)]
@@ -133,6 +136,7 @@ fn kindle(
   },
   {
     id: "go",
+    file: "hearth.go",
     label: "Go",
     lang: "go",
     code: `package hearth
@@ -156,6 +160,7 @@ func Kindle(
   },
   {
     id: "css",
+    file: "hearth.css",
     label: "CSS",
     lang: "css",
     code: `:root {
@@ -180,6 +185,7 @@ func Kindle(
 export const DEFAULT_EDITOR_LANGUAGE = EDITOR_SAMPLES[0].id;
 
 // A tighter snippet for the six gallery cards, where vertical space is scarce.
+export const GALLERY_FILE = "warmth.ts";
 export const GALLERY_SAMPLE = `type Theme = "light" | "dark";
 
 export function warmth(theme: Theme): number {

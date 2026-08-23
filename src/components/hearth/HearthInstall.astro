@@ -1,5 +1,6 @@
 ---
 import { Code } from "astro:components";
+import HearthCodeWindow from "./HearthCodeWindow.astro";
 import {
   CLI_INSTALL,
   DEFAULT_FLAVOR,
@@ -16,6 +17,7 @@ const hearthThemes = FLAVORS.find(({ id }) => id === DEFAULT_FLAVOR)?.themes;
 
 if (!hearthThemes) throw new Error("The default Hearth theme is missing");
 
+const SHIKI_FILE = "highlight.ts";
 const SHIKI_SAMPLE = `import { codeToHtml } from "shiki";
 import hearthDark from "./hearth-dark.json";
 
@@ -211,9 +213,13 @@ const tabs = [
         Pass one to Shiki as a <code class="hearth-inline-code">theme</code>:
       </li>
     </ol>
-    <div class="hearth-shiki-code not-prose">
+    <HearthCodeWindow
+      class="hearth-shiki-code not-prose"
+      file={SHIKI_FILE}
+      themes={hearthThemes}
+    >
       <Code code={SHIKI_SAMPLE} lang="ts" themes={hearthThemes as never} />
-    </div>
+    </HearthCodeWindow>
   </div>
 </div>
 
@@ -350,18 +356,6 @@ const tabs = [
   .hearth-shiki-code {
     width: 100%;
     max-width: 42rem;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: inset 0 0 0 1px var(--border);
-  }
-  .hearth-shiki-code :global(.astro-code) {
-    margin: 0;
-    padding: 1rem 1.125rem;
-    font-size: 0.8125rem;
-    line-height: 1.65;
-  }
-  :global(.dark) .hearth-shiki-code :global(.astro-code) {
-    background-color: var(--shiki-dark-bg) !important;
   }
 
   .hearth-kbd {

@@ -30,6 +30,9 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
       <span class="size-3 rounded-full bg-foreground/15"></span>
       <span class="size-3 rounded-full bg-foreground/15"></span>
     </span>
+    <p class="hearth-file hidden sm:block" data-hearth-file>
+      {EDITOR_SAMPLES[0].file}
+    </p>
     <HearthLanguageSelect
       client:load
       initialValue={DEFAULT_EDITOR_LANGUAGE}
@@ -81,6 +84,7 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
             class="hearth-panel"
             data-flavor={flavor.id}
             data-language={sample.id}
+            data-file={sample.file}
             hidden={
               flavor.id !== DEFAULT_FLAVOR ||
               sample.id !== DEFAULT_EDITOR_LANGUAGE
@@ -118,6 +122,12 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
 
   :global(.dark) .hearth-editor :global(.astro-code) {
     background-color: var(--shiki-dark-bg) !important;
+  }
+
+  .hearth-file {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--subtle-foreground);
   }
 
   [data-flavor-btn]::before {
@@ -187,11 +197,16 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
       }
     };
 
+    const fileLabel = editor.querySelector<HTMLElement>("[data-hearth-file]");
+
     const syncPanel = () => {
       for (const panel of panels) {
         panel.hidden =
           panel.dataset.flavor !== editor.dataset.flavor ||
           panel.dataset.language !== editor.dataset.language;
+        if (!panel.hidden && fileLabel && panel.dataset.file) {
+          fileLabel.textContent = panel.dataset.file;
+        }
       }
     };
 

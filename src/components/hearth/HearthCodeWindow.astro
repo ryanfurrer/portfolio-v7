@@ -1,0 +1,105 @@
+---
+interface Props {
+  file: string;
+  themes: { light: unknown; dark: unknown };
+  /** Hold one side regardless of page mode, matching a pinned <Code>. */
+  pin?: "light" | "dark";
+  /** Tighter type, for the six gallery cards where vertical space is scarce. */
+  dense?: boolean;
+  class?: string;
+}
+
+const { file, themes, pin, dense, class: className } = Astro.props;
+
+// The title bar wears the theme's own tab strip, so the chrome previews the
+// theme alongside the code instead of borrowing the site's.
+const chrome = (theme: unknown) => {
+  const { colors } = theme as { colors: Record<string, string> };
+  return {
+    bar: colors["editorGroupHeader.tabsBackground"],
+    fg: colors["editor.foreground"],
+  };
+};
+
+const light = chrome(themes.light);
+const dark = chrome(themes.dark);
+const vars = [
+  `--win-bar-light:${light.bar}`,
+  `--win-fg-light:${light.fg}`,
+  `--win-bar-dark:${dark.bar}`,
+  `--win-fg-dark:${dark.fg}`,
+].join(";");
+---
+
+<div
+  class:list={["hearth-window", { dense }, className]}
+  data-pin={pin}
+  style={vars}
+>
+  <p class="hearth-window-file">{file}</p>
+  <slot />
+</div>
+
+<style>
+  /* An outset ring, not inset: the code <pre> fills the window edge to edge and
+     paints straight over an inset one. */
+  .hearth-window {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 0 0 1px var(--border);
+  }
+
+  .hearth-window-file {
+    padding: 0.5rem 1.125rem;
+    border-block-end: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background-color: var(--win-bar-light);
+    color: var(--win-fg-light);
+  }
+
+  .hearth-window :global(.astro-code) {
+    margin: 0;
+    padding: 1rem 1.125rem;
+    font-size: 0.8125rem;
+    line-height: 1.65;
+  }
+  .hearth-window.dense :global(.astro-code) {
+    font-size: 0.75rem;
+  }
+
+  /* Slotted <Code> output carries no scope of its own, so the window addresses
+     it globally from its own scoped root. */
+  .hearth-window[data-pin="dark"] .hearth-window-file,
+  :global(.dark) .hearth-window:not([data-pin]) .hearth-window-file {
+    background-color: var(--win-bar-dark);
+    color: var(--win-fg-dark);
+  }
+
+  /* Pinned: defaultColor is off, so both sides sit on vars and the window picks
+     one. Unpinned windows keep the inline light side and swap under .dark,
+     which needs !important to out-rank that inline style. */
+  .hearth-window[data-pin="light"] :global(.astro-code) {
+    background-color: var(--shiki-light-bg);
+  }
+  .hearth-window[data-pin="light"] :global(.astro-code),
+  .hearth-window[data-pin="light"] :global(.astro-code span) {
+    color: var(--shiki-light);
+    font-style: var(--shiki-light-font-style);
+    font-weight: var(--shiki-light-font-weight);
+    text-decoration: var(--shiki-light-text-decoration);
+  }
+  .hearth-window[data-pin="dark"] :global(.astro-code) {
+    background-color: var(--shiki-dark-bg);
+  }
+  .hearth-window[data-pin="dark"] :global(.astro-code),
+  .hearth-window[data-pin="dark"] :global(.astro-code span) {
+    color: var(--shiki-dark);
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+  }
+  :global(.dark) .hearth-window:not([data-pin]) :global(.astro-code) {
+    background-color: var(--shiki-dark-bg) !important;
+  }
+</style>

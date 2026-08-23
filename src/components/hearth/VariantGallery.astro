@@ -1,6 +1,7 @@
 ---
 import { Code } from "astro:components";
-import { FLAVORS, GALLERY_SAMPLE } from "@/lib/hearth/flavors";
+import HearthCodeWindow from "./HearthCodeWindow.astro";
+import { FLAVORS, GALLERY_FILE, GALLERY_SAMPLE } from "@/lib/hearth/flavors";
 
 const modes = [
   { key: "light", label: "Light" },
@@ -31,7 +32,12 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
         <div class="grid gap-4 sm:grid-cols-2">
           {modes.map((mode) => (
             <figure class="space-y-2">
-              <div class="hearth-variant" data-mode={mode.key}>
+              <HearthCodeWindow
+                file={GALLERY_FILE}
+                themes={flavor.themes}
+                pin={mode.key}
+                dense
+              >
                 <Code
                   code={GALLERY_SAMPLE}
                   lang="ts"
@@ -40,7 +46,7 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
                   data-shiki-pin={mode.key}
                   wrap={true}
                 />
-              </div>
+              </HearthCodeWindow>
               <figcaption class="text-xs text-subtle-foreground">
                 {mode.label}
               </figcaption>
@@ -51,46 +57,3 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
     ))
   }
 </div>
-
-<style>
-  /* An outset ring, not inset: the code <pre> fills the card edge-to-edge, so an
-     inset shadow paints under it and vanishes. --border is translucent, so one
-     ring reads on any card against any page. */
-  .hearth-variant {
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: 0 0 0 1px var(--border);
-  }
-  .hearth-variant :global(.astro-code) {
-    margin: 0;
-    padding: 1rem 1.125rem;
-    font-size: 0.75rem;
-    line-height: 1.65;
-  }
-
-  /* Cards share the editor's three dual-theme highlighters rather than minting a
-     single-theme one each: `defaultColor={false}` leaves both sides on
-     --shiki-light/--shiki-dark and each card pins itself to one. data-shiki-pin
-     also opts the card out of the global .dark swap in prose.css, so it holds
-     its theme whatever mode the page is in. */
-  .hearth-variant :global([data-shiki-pin="light"]) {
-    background-color: var(--shiki-light-bg);
-  }
-  .hearth-variant :global([data-shiki-pin="light"]),
-  .hearth-variant :global([data-shiki-pin="light"] span) {
-    color: var(--shiki-light);
-    font-style: var(--shiki-light-font-style);
-    font-weight: var(--shiki-light-font-weight);
-    text-decoration: var(--shiki-light-text-decoration);
-  }
-  .hearth-variant :global([data-shiki-pin="dark"]) {
-    background-color: var(--shiki-dark-bg);
-  }
-  .hearth-variant :global([data-shiki-pin="dark"]),
-  .hearth-variant :global([data-shiki-pin="dark"] span) {
-    color: var(--shiki-dark);
-    font-style: var(--shiki-dark-font-style);
-    font-weight: var(--shiki-dark-font-weight);
-    text-decoration: var(--shiki-dark-text-decoration);
-  }
-</style>
