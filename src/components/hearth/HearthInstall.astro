@@ -3,11 +3,14 @@ import { Code } from "astro:components";
 import HearthCodeWindow from "./HearthCodeWindow.astro";
 import {
   CLI_INSTALL,
+  CURSOR_DEEP_LINK,
   DEFAULT_FLAVOR,
   FLAVORS,
   GITHUB_URL,
   MARKETPLACE_URL,
+  OPEN_VSX_URL,
   VSIX_URL,
+  VSCODE_DEEP_LINK,
 } from "@/lib/hearth/flavors";
 
 const THEMES_URL = `${GITHUB_URL}/tree/main/themes`;
@@ -85,17 +88,21 @@ const tabs = [
       </li>
       <li>
         Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
-        {" "}<kbd class="hearth-kbd">⌘T</kbd> and choose a Hearth.
+        {" "}<kbd class="hearth-kbd">⌘T</kbd> (Ctrl on Windows and Linux) and choose
+        a Hearth.
       </li>
     </ol>
-    <a
-      href={MARKETPLACE_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="hearth-panel-link"
-    >
-      Open in Marketplace
-    </a>
+    <div class="hearth-panel-links">
+      <a href={VSCODE_DEEP_LINK} class="hearth-panel-link"> Open in VS Code </a>
+      <a
+        href={MARKETPLACE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hearth-panel-link"
+      >
+        View Marketplace
+      </a>
+    </div>
   </div>
 
   <div
@@ -108,26 +115,45 @@ const tabs = [
   >
     <ol class="hearth-steps">
       <li>
-        <a
+        In Cursor, open the Extensions panel, search <strong>Hearth</strong>,
+        and click <strong>Install</strong>.
+      </li>
+      <li>
+        You can also find Hearth on <a
+          href={OPEN_VSX_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hearth-inline-link">Open VSX</a
+        >.
+      </li>
+      <li>
+        To sideload instead, <a
           href={VSIX_URL}
           target="_blank"
           rel="noopener noreferrer"
           class="hearth-inline-link"
-          >Download the <code class="hearth-inline-code">.vsix</code></a
-        > — always the current published build.
-      </li>
-      <li>
-        In Cursor, open the Extensions panel, click the <strong>⋯</strong> menu, choose
-        {" "}<strong>Install from VSIX…</strong>, and select the file.
+          >download <code class="hearth-inline-code">hearth-latest.vsix</code
+          ></a
+        >, then choose <strong>Install from VSIX…</strong> from the Extensions panel's
+        {" "}<strong>⋯</strong> menu.
       </li>
       <li>
         Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
-        {" "}<kbd class="hearth-kbd">⌘T</kbd> and choose a Hearth.
+        {" "}<kbd class="hearth-kbd">⌘T</kbd> (Ctrl on Windows and Linux) and choose
+        a Hearth.
       </li>
     </ol>
-    <p class="hearth-note">
-      Hearth isn't on Open VSX yet, so Cursor has no one-click install for now.
-    </p>
+    <div class="hearth-panel-links">
+      <a href={CURSOR_DEEP_LINK} class="hearth-panel-link"> Open in Cursor </a>
+      <a
+        href={OPEN_VSX_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hearth-panel-link"
+      >
+        View on Open VSX
+      </a>
+    </div>
   </div>
 
   <div
@@ -149,7 +175,8 @@ const tabs = [
       </li>
       <li>
         Move it into Zed's themes folder,
-        {" "}<code class="hearth-inline-code">~/.config/zed/themes/</code>.
+        {" "}<code class="hearth-inline-code">~/.config/zed/themes/</code> on macOS
+        and Linux.
       </li>
       <li>Pick a Hearth from Zed's theme selector.</li>
     </ol>
@@ -347,6 +374,11 @@ const tabs = [
   .hearth-panel-link {
     font-size: 0.9375rem;
     text-underline-offset: 3px;
+  }
+  .hearth-panel-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
   }
 
   .hearth-shiki-code {

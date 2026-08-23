@@ -1,0 +1,92 @@
+---
+import { CHANGELOG_URL, fetchHearthChangelog } from "@/lib/hearth/changelog";
+
+interface Props {
+  version?: string;
+}
+
+const { version } = Astro.props;
+const releases = await fetchHearthChangelog(version);
+
+const formatDate = (date: string) =>
+  new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${date}T00:00:00Z`));
+---
+
+<section id="changelog" class="scroll-mt-24 space-y-8">
+  <div
+    class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end"
+    data-reveal
+  >
+    <div class="space-y-2">
+      <h2
+        class="max-w-xl text-2xl font-semibold tracking-tight text-balance text-foreground"
+      >
+        Changelog
+      </h2>
+      <p class="max-w-xl text-pretty text-subtle-foreground">
+        What’s new in Hearth, from new homes to small refinements.
+      </p>
+    </div>
+    <a
+      href={CHANGELOG_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="quiet-link shrink-0 text-sm"
+    >
+      Full changelog
+    </a>
+  </div>
+
+  {
+    releases.length ? (
+      <ol class="divide-y divide-border border-y border-border" role="list">
+        {releases.map((release) => (
+          <li
+            class="grid gap-5 py-7 sm:grid-cols-[8.5rem_1fr] sm:gap-8"
+            data-reveal
+          >
+            <div class="space-y-1">
+              <h3 class="font-mono text-sm font-medium text-foreground">
+                v{release.version}
+              </h3>
+              {release.date && (
+                <time
+                  datetime={release.date}
+                  class="block text-sm text-muted-foreground"
+                >
+                  {formatDate(release.date)}
+                </time>
+              )}
+            </div>
+            <div class="grid gap-6 sm:grid-cols-2">
+              {release.groups.map((group) => (
+                <div class="space-y-2">
+                  <h4 class="text-sm font-medium text-foreground">
+                    {group.title}
+                  </h4>
+                  <ul
+                    class="list-disc space-y-2 ps-4 text-base text-pretty text-subtle-foreground sm:text-sm"
+                    role="list"
+                  >
+                    {group.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="border-y border-border py-7 text-subtle-foreground">
+        Release notes live in the full changelog on GitHub.
+      </p>
+    )
+  }
+</section>

@@ -1,16 +1,19 @@
 ---
 import { buttonVariants } from "@/components/ui/button";
+import HearthChangelog from "./HearthChangelog.astro";
 import HearthEditor from "./HearthEditor.astro";
 import HearthInstall from "./HearthInstall.astro";
 import HearthMark from "./HearthMark.astro";
 import HearthPalette from "./HearthPalette.astro";
 import VariantGallery from "./VariantGallery.astro";
 import {
-  GITHUB_URL,
   HEARTH_KICKER,
   HEARTH_TAGLINE,
-  MARKETPLACE_URL,
+  VSCODE_DEEP_LINK,
 } from "@/lib/hearth/flavors";
+import { fetchHearthVersion } from "@/lib/hearth/version";
+
+const version = await fetchHearthVersion();
 
 const principles = [
   {
@@ -36,30 +39,37 @@ const principles = [
           {HEARTH_KICKER}
         </span>
       </span>
-      <h1
-        class="text-5xl font-semibold tracking-tight text-balance text-foreground sm:text-6xl"
-      >
-        Hearth
-      </h1>
+      <span class="flex flex-wrap items-baseline gap-x-3">
+        <h1
+          class="text-5xl font-semibold tracking-tight text-balance text-foreground sm:text-6xl"
+        >
+          Hearth
+        </h1>
+        {
+          version && (
+            <a
+              href={version.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="quiet-link font-mono text-sm no-underline"
+            >
+              v{version.version}
+            </a>
+          )
+        }
+      </span>
       <p class="lead max-w-xl text-xl!">{HEARTH_TAGLINE}</p>
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
-      <a
-        href={MARKETPLACE_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        class={buttonVariants({ size: "lg" })}
-      >
-        Install for VS Code
+      <a href={VSCODE_DEEP_LINK} class={buttonVariants({ size: "lg" })}>
+        Open in VS Code
       </a>
       <a
-        href={GITHUB_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+        href="#install"
         class={buttonVariants({ variant: "outline", size: "lg" })}
       >
-        View on GitHub
+        More ways to install
       </a>
     </div>
   </section>
@@ -83,7 +93,7 @@ const principles = [
     }
   </section>
 
-  <section class="space-y-6">
+  <section id="install" class="scroll-mt-24 space-y-6">
     <div class="space-y-2" data-reveal>
       <h2 class="text-2xl font-semibold tracking-tight text-foreground">
         Install
@@ -124,6 +134,8 @@ const principles = [
     <HearthPalette />
   </section>
 
+  <HearthChangelog version={version?.version} />
+
   <section
     class="flex flex-col items-center gap-6 rounded-xl bg-muted px-6 py-14 text-center"
     data-reveal
@@ -134,12 +146,7 @@ const principles = [
     >
       Make your editor feel like home.
     </h2>
-    <a
-      href={MARKETPLACE_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      class={buttonVariants({ size: "lg" })}
-    >
+    <a href="#install" class={buttonVariants({ size: "lg" })}>
       Install Hearth
     </a>
   </section>
