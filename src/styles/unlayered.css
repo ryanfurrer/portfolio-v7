@@ -203,4 +203,28 @@ nav.toc[data-toc-snap]::before {
     color: var(--color-foreground);
     text-decoration-color: var(--color-foreground);
   }
+
+  /* Callout body links take the variant's tint (--callout-accent, set by
+     Callout.astro) plus a medium weight so they hold up on the tinted card.
+     Hover/focus keep the tint and only bring the underline to full strength.
+     Extra class specificity beats the neutral declarations above. */
+  .callout-body & {
+    font-weight: var(--font-weight-medium);
+    color: var(--callout-accent);
+    text-decoration-color: color-mix(
+      in oklch,
+      var(--callout-accent) 40%,
+      transparent
+    );
+    @media (hover: hover) {
+      &:hover {
+        color: var(--callout-accent);
+        text-decoration-color: var(--callout-accent);
+      }
+    }
+    &:focus-visible {
+      color: var(--callout-accent);
+      text-decoration-color: var(--callout-accent);
+    }
+  }
 }

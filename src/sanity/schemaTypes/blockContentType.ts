@@ -29,7 +29,10 @@ export const blockContentType = defineType({
         annotations: [linkAnnotation],
       },
     }),
-    defineArrayMember({ type: "code" }),
+    defineArrayMember({
+      type: "code",
+      options: { withFilename: true },
+    }),
     // Edit callouts in a full dialog, not the default popover. For a block-level
     // object inside Portable Text, the editor reads the modal option from the
     // array-member reference (the point of use), NOT from the object type's own

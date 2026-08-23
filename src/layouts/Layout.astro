@@ -18,8 +18,10 @@ interface Props {
   publishedTime?: string;
   modifiedTime?: string;
   jsonLd?: Record<string, unknown>;
+  noIndex?: boolean;
   noNavbar?: boolean;
   noFooter?: boolean;
+  centerContent?: boolean;
   maxWidth?: "sm" | "lg";
 }
 
@@ -31,8 +33,10 @@ const {
   publishedTime,
   modifiedTime,
   jsonLd,
+  noIndex = false,
   noNavbar = false,
   noFooter = false,
+  centerContent = false,
   maxWidth = "lg",
 } = Astro.props;
 
@@ -53,6 +57,7 @@ const isContentPage = contentPrefixes.some(
     publishedTime={publishedTime}
     modifiedTime={modifiedTime}
     jsonLd={jsonLd}
+    noIndex={noIndex}
   />
   <body class="bg-background text-subtle-foreground antialiased">
     <!-- Pinned to the page container's start edge (not the raw viewport edge),
@@ -105,7 +110,10 @@ const isContentPage = contentPrefixes.some(
     }
 
     <div
-      class="mx-auto max-w-page px-4 py-8 rail:grid rail:grid-cols-[minmax(0,1fr)_var(--container-content)_minmax(0,1fr)] rail:gap-x-8"
+      class={cn(
+        "mx-auto max-w-page px-4 py-8 rail:grid rail:grid-cols-[minmax(0,1fr)_var(--container-content)_minmax(0,1fr)] rail:gap-x-8",
+        centerContent && "flex min-h-dvh items-center rail:grid",
+      )}
     >
       <!-- Left gutter -->
       <aside class="hidden rail:col-start-1 rail:block rail:text-end">
@@ -121,6 +129,7 @@ const isContentPage = contentPrefixes.some(
           // headings line up with Item rows, whose hover pill bleeds -mx-2 into
           // it). Centralized here instead of repeated per-section.
           "space-y-16 min-w-0 focus:outline-none md:px-2 rail:col-start-2",
+          centerContent && "w-full",
           maxWidth === "sm"
             ? "mx-auto max-w-sm rail:mx-0"
             : "mx-auto max-w-content rail:mx-0",

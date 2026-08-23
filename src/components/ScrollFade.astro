@@ -5,10 +5,15 @@
  *
  * A single `linear-gradient` of the `--background` token: no backdrop-filter,
  * no JS, no scroll listeners, so it's cheap on every device and adapts to
- * light/dark automatically through the token. The transparent stop is the
- * background color at zero alpha (relative-color syntax) to avoid the grey
- * mid-band you get fading to `transparent` (transparent-black); the keyword
- * fallback on the line above covers browsers without relative color.
+ * light/dark automatically through the token. All stops are the background
+ * color at descending alpha (relative-color syntax) to avoid the grey mid-band
+ * you get fading to `transparent` (transparent-black); the keyword fallback on
+ * the line above covers browsers without relative color.
+ *
+ * The alpha stops trace smoothstep (3t² − 2t³) rather than a straight ramp: a
+ * constant-rate fade has an abrupt slope change where it begins and ends, which
+ * the eye amplifies into a faint horizontal crease (Mach banding). Easing to
+ * zero slope at both edges makes the dissolve start and finish imperceptibly.
  *
  * Props: top/bottom heights ("0" disables that edge).
  */
@@ -16,7 +21,7 @@ interface Props {
   top?: string;
   bottom?: string;
 }
-const { top = "0", bottom = "5rem" } = Astro.props;
+const { top = "0", bottom = "7rem" } = Astro.props;
 const showTop = top !== "0";
 const showBottom = bottom !== "0";
 ---
@@ -42,22 +47,27 @@ const showBottom = bottom !== "0";
 
 <style>
   .sf-top {
+    --sf-dir: to bottom;
+  }
+  .sf-bottom {
+    --sf-dir: to top;
+  }
+  .sf-bar {
     background-image: linear-gradient(
-      to bottom,
+      var(--sf-dir),
       var(--background),
       transparent
     );
     background-image: linear-gradient(
-      to bottom,
-      var(--background),
-      rgb(from var(--background) r g b / 0)
-    );
-  }
-  .sf-bottom {
-    background-image: linear-gradient(to top, var(--background), transparent);
-    background-image: linear-gradient(
-      to top,
-      var(--background),
+      var(--sf-dir),
+      rgb(from var(--background) r g b / 1),
+      rgb(from var(--background) r g b / 0.957) 12.5%,
+      rgb(from var(--background) r g b / 0.844) 25%,
+      rgb(from var(--background) r g b / 0.684) 37.5%,
+      rgb(from var(--background) r g b / 0.5) 50%,
+      rgb(from var(--background) r g b / 0.316) 62.5%,
+      rgb(from var(--background) r g b / 0.156) 75%,
+      rgb(from var(--background) r g b / 0.043) 87.5%,
       rgb(from var(--background) r g b / 0)
     );
   }

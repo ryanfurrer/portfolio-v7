@@ -4,7 +4,8 @@ import { Code } from "astro:components";
 import { hearthThemes } from "@/lib/shiki/hearth";
 
 const { node } = Astro.props;
-const { code, language } = node;
+const { code, language, filename } = node;
+const displayFilename = filename?.trim();
 
 // Default to 'text' if language is not specified
 const lang = language || "text";
@@ -20,7 +21,17 @@ const themes = hearthThemes as never;
   /* A code block can be empty before any code is typed (e.g. editing a draft in
      the Studio with preview on). Guard so Shiki doesn't crash on `undefined`. */
   code && (
-    <div class="code-surface" data-code={code}>
+    <div
+      class:list={["code-surface", { "code-surface--titled": displayFilename }]}
+      data-code={code}
+    >
+      {displayFilename && (
+        <div class="code-titlebar">
+          <div class="code-filename" title={displayFilename}>
+            {displayFilename}
+          </div>
+        </div>
+      )}
       <button type="button" class="code-copy" aria-label="Copy code">
         {/* Copy glyph cross-fades to a brand check on the copied state — the
             site-wide copy-confirm language (matches ColorSwatch). */}
@@ -103,6 +114,38 @@ const themes = hearthThemes as never;
     position: relative;
   }
 
+  /* Filename chrome only wraps blocks that opt in, so older Portable Text
+     entries retain their existing single-surface treatment. */
+  .code-surface--titled {
+    margin-block: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .code-titlebar {
+    padding-block: 0.5rem;
+    padding-inline: 1.125rem 3rem;
+    border-block-end: 1px solid var(--border);
+    background-color: var(--muted);
+    color: var(--foreground);
+  }
+
+  .code-filename {
+    min-inline-size: 0;
+    overflow: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .code-surface--titled :global(pre.astro-code) {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
   .code-copy {
     position: absolute;
     inset-block-start: 0.5rem;
@@ -124,6 +167,15 @@ const themes = hearthThemes as never;
       opacity 150ms ease,
       color 150ms ease,
       scale 150ms var(--ease-out-curve);
+  }
+
+  .code-surface--titled .code-copy {
+    inset-block-start: 0.125rem;
+  }
+
+  /* Keep keyboard focus visible inside the clipped title-bar frame. */
+  .code-surface--titled .code-copy:focus-visible {
+    outline-offset: -2px;
   }
 
   /* Press feedback, matching the shadcn Button (this is a bespoke icon button,

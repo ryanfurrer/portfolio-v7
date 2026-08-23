@@ -785,8 +785,9 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
       </h3>
       <Callout variant="info">
         <p>
-          Info leans blue — the conventional informational hue, a semantic
-          colour outside the neutral system.
+          Info leans azure — the conventional informational hue, a semantic
+          colour outside the neutral system. Body links like
+          {" "}<a href="/writing">this one</a> pick up the variant's tint.
         </p>
       </Callout>
       <Callout variant="warning">
@@ -805,8 +806,8 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
         Long-form content renders in <code
           class="font-mono-custom rounded-sm bg-muted px-1.5 py-0.5 text-foreground ring-1 ring-border ring-inset"
           >.prose</code
-        > — headings, lists, links, quotes, and dual-theme code blocks (Catppuccin
-        Latte / Mocha) with a copy button.
+        > — headings, lists, links, quotes, and dual-theme Hearth Azure code blocks
+        with optional filenames and a copy button.
       </p>
       <div class="prose max-w-none prose-neutral dark:prose-invert">
         <h4>A prose heading</h4>
@@ -822,7 +823,9 @@ list.style.setProperty("--dir-hover-h", \`\${height}px\`);`;
           <li>Lists keep a comfortable rhythm.</li>
           <li>Markers align to the reading measure.</li>
         </ul>
-        <CodeBlock node={{ code: sampleCode, language: "ts" }} />
+        <CodeBlock
+          node={{ code: sampleCode, language: "ts", filename: "dir-hover.ts" }}
+        />
         <blockquote>
           Impact comes from proportion and restraint — one accent, generous
           whitespace, and motion you feel more than notice.
