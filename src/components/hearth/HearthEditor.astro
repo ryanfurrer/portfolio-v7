@@ -139,13 +139,23 @@ const asTheme = (themes: { light: unknown; dark: unknown }) => themes as never;
     inset-inline: 0;
   }
 
-  /* A well for the chip to lift out of. An inset ring rather than a border, so
-     the track's box stays the geometry the slider measures against. */
+  /* A well for the chip to lift out of. The rail shares the toolbar's fill, so
+     the depth has to come from the shadow rather than the surface — hence an
+     inset one, deeper in dark where there is less room between the two. Inset
+     ring rather than a border, so the rail's box stays the geometry the slider
+     measures its offsets against. */
   .hearth-flavor-tabs {
     position: relative;
     isolation: isolate;
     background-color: var(--muted);
-    box-shadow: inset 0 0 0 1px var(--border);
+    box-shadow:
+      inset 0 0 0 1px var(--border),
+      inset 0 1px 2px oklch(0 0 0 / 0.07);
+  }
+  :global(.dark) .hearth-flavor-tabs {
+    box-shadow:
+      inset 0 0 0 1px var(--border),
+      inset 0 1px 3px oklch(0 0 0 / 0.4);
   }
 
   /* Reserving the selected weight keeps selection from resizing the row. A
