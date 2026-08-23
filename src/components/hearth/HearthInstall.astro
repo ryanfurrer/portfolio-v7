@@ -6,6 +6,7 @@ import {
   FLAVORS,
   GITHUB_URL,
   MARKETPLACE_URL,
+  VSIX_URL,
 } from "@/lib/hearth/flavors";
 
 const THEMES_URL = `${GITHUB_URL}/tree/main/themes`;
@@ -93,7 +94,7 @@ const tabs = [
         </button>
       </li>
       <li>
-        Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
+        Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>{" "}
         <kbd class="hearth-kbd">⌘T</kbd> and choose a Hearth.
       </li>
     </ol>
@@ -117,25 +118,26 @@ const tabs = [
   >
     <ol class="hearth-steps">
       <li>
-        On the <a
-          href={MARKETPLACE_URL}
+        <a
+          href={VSIX_URL}
           target="_blank"
           rel="noopener noreferrer"
-          class="hearth-inline-link">Marketplace page</a
-        >, use <strong>Download Extension</strong> to grab the <code
-          class="hearth-inline-code">.vsix</code
-        >.
+          class="hearth-inline-link"
+          >Download the <code class="hearth-inline-code">.vsix</code></a
+        > — always the current published build.
       </li>
       <li>
-        In Cursor, open the Extensions panel, click the <strong>⋯</strong> menu, choose
-        <strong>Install from VSIX…</strong>, and select the file.
+        In Cursor, open the Extensions panel, click <strong>⋯</strong> and{" "}
+        <strong>Install from VSIX…</strong>, then select the file.
       </li>
       <li>
-        Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
+        Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>{" "}
         <kbd class="hearth-kbd">⌘T</kbd> and choose a Hearth.
       </li>
     </ol>
-    <p class="hearth-note">A one-click Open VSX listing is coming soon.</p>
+    <p class="hearth-note">
+      Hearth isn't on Open VSX yet, so Cursor has no one-click install for now.
+    </p>
   </div>
 
   {

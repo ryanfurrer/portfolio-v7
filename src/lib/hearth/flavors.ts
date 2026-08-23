@@ -57,6 +57,10 @@ export const DEFAULT_FLAVOR: FlavorId = "duotone";
 export const EXTENSION_ID = "RyanFurrer.hearth";
 export const MARKETPLACE_URL = `https://marketplace.visualstudio.com/items?itemName=${EXTENSION_ID}`;
 export const GITHUB_URL = "https://github.com/ryanfurrer/hearth-theme";
+// Cursor has no Open VSX listing to install from yet, and the Marketplace site
+// offers no download control, so the release asset is the only public source for
+// the file. The asset ships unversioned, so this URL never needs bumping.
+export const VSIX_URL = `${GITHUB_URL}/releases/latest/download/hearth-latest.vsix`;
 export const CLI_INSTALL = `code --install-extension ${EXTENSION_ID}`;
 
 // Keep each sample focused enough that visitors can compare the syntax roles at
