@@ -61,16 +61,14 @@
     border: 1px solid var(--border);
   }
 
-  /* Warm · Teal Shiki dual-theme: <Code> ships the light token colors inline and
+  /* Hearth Azure Shiki dual-theme: <Code> ships the light token colors inline and
      the dark ones on parallel --shiki-dark vars; swap to them in dark (inline
-     styles force the !important). The surface itself is pinned to --muted in both
-     modes rather than each theme's own editor background — the warm themes'
-     backgrounds match the page (pure white / near-black), so without this a code
-     block would dissolve into the page instead of reading as a recessed panel.
+     styles force the !important). Match the page canvas in both modes, as the
+     Hearth windows do; the border and optional muted title bar define the frame.
      [data-shiki-pin] opts a block out of the swap: it renders one fixed theme
      whatever the page mode (the Hearth variant gallery). */
   .prose pre.astro-code {
-    background-color: var(--muted) !important;
+    background-color: var(--background) !important;
   }
   /* Shiki inlines `color` for the default theme but leaves font-style, weight and
      decoration on vars for both sides, so the theme's italics — comments, types,
