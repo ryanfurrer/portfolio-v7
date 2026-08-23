@@ -5,7 +5,12 @@ import HearthInstall from "./HearthInstall.astro";
 import HearthMark from "./HearthMark.astro";
 import HearthPalette from "./HearthPalette.astro";
 import VariantGallery from "./VariantGallery.astro";
-import { GITHUB_URL, MARKETPLACE_URL } from "@/lib/hearth/flavors";
+import {
+  GITHUB_URL,
+  HEARTH_KICKER,
+  HEARTH_TAGLINE,
+  MARKETPLACE_URL,
+} from "@/lib/hearth/flavors";
 
 const principles = [
   {
@@ -27,19 +32,16 @@ const principles = [
   <section class="space-y-8" data-reveal>
     <div class="space-y-5">
       <span class="flex items-center gap-2.5">
-        <span class="small-heading text-subtle-foreground!"
-          >Theme for VS Code, Cursor, and more</span
-        >
+        <span class="small-heading text-subtle-foreground!">
+          {HEARTH_KICKER}
+        </span>
       </span>
       <h1
         class="text-5xl font-semibold tracking-tight text-balance text-foreground sm:text-6xl"
       >
         Hearth
       </h1>
-      <p class="lead max-w-xl text-xl!">
-        A warm color theme that keeps the interface calm and lets a single
-        accent pick out the code worth scanning.
-      </p>
+      <p class="lead max-w-xl text-xl!">{HEARTH_TAGLINE}</p>
     </div>
 
     <div class="flex flex-wrap items-center gap-3">

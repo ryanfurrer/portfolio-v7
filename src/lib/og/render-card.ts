@@ -1,7 +1,7 @@
 import { Resvg } from "@resvg/resvg-js";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import satori from "satori";
+import { ogFonts } from "./fonts";
+import { h } from "./vdom";
 
 /**
  * Build-time Open Graph card renderer (Satori → SVG → resvg → PNG).
@@ -11,9 +11,7 @@ import satori from "satori";
  * title/description here so every share card is on-brand and generated — no
  * per-entry image to hand-author. See [og-generator memory].
  *
- * Satori only accepts static ttf/otf fonts (NOT woff2 or variable fonts), so we
- * ship single-weight Google Sans ttfs (400 + the site's 600 heading weight) +
- * Berkeley Mono otfs under src/assets/og/fonts (see that dir).
+ * The Hearth landing has its own card — src/lib/og/hearth-card.ts.
  */
 
 const OG_WIDTH = 1200;
@@ -54,45 +52,6 @@ const WORDMARK_HEIGHT = 30;
 const WORDMARK_WIDTH = Math.round((WORDMARK_HEIGHT * 97) / 19);
 const wordmarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="97" height="19" viewBox="0 0 97 19" fill="none"><path d="${WORDMARK_DOT}" fill="${COLORS.brand}"/>${WORDMARK_LETTERS.map((d) => `<path d="${d}" fill="${COLORS.title}"/>`).join("")}</svg>`;
 const WORDMARK_SRC = `data:image/svg+xml;base64,${Buffer.from(wordmarkSvg).toString("base64")}`;
-
-// These routes are prerendered during `astro build`, whose cwd is the project
-// root — resolve the committed font files from there. (import.meta.url can't be
-// used: the endpoint is bundled into dist/chunks, so relative paths shift.)
-const fontPath = (file: string) =>
-  join(process.cwd(), "src/assets/og/fonts", file);
-
-// Read once at module load — endpoints render many cards per build.
-const fonts = [
-  {
-    name: "Google Sans",
-    data: readFileSync(fontPath("GoogleSans-Regular.ttf")),
-    weight: 400 as const,
-    style: "normal" as const,
-  },
-  {
-    name: "Google Sans",
-    data: readFileSync(fontPath("GoogleSans-SemiBold.ttf")),
-    weight: 600 as const,
-    style: "normal" as const,
-  },
-  {
-    name: "Berkeley Mono",
-    data: readFileSync(fontPath("BerkeleyMono-Regular.otf")),
-    weight: 400 as const,
-    style: "normal" as const,
-  },
-];
-
-/** Minimal hyperscript so we can build Satori's VDOM without JSX in a .ts file. */
-type Node = { type: string; props: Record<string, unknown> };
-const h = (
-  type: string,
-  props: Record<string, unknown> = {},
-  ...children: Array<Node | string>
-): Node => ({
-  type,
-  props: { ...props, children: children.length === 1 ? children[0] : children },
-});
 
 /**
  * Scale the title to fill the card without overflowing. Short section names
@@ -215,7 +174,7 @@ export async function renderOgCard({
   const svg = await satori(tree as never, {
     width: OG_WIDTH,
     height: OG_HEIGHT,
-    fonts,
+    fonts: ogFonts,
   });
 
   const png = new Resvg(svg, {

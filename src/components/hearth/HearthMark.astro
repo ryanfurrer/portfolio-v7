@@ -1,6 +1,6 @@
 ---
-// The extension's icon.png rebuilt as a transparent gradient: a baked-in
-// background would fight whatever surface the mark sits on.
+import { hearthOrbSvg } from "@/lib/hearth/mark";
+
 interface Props {
   class?: string;
 }
@@ -12,19 +12,4 @@ const { class: className } = Astro.props;
 const id = `hearth-orb-${crypto.randomUUID().slice(0, 8)}`;
 ---
 
-<svg
-  class={className}
-  viewBox="0 0 24 24"
-  role="img"
-  aria-label="Hearth"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <defs>
-    <radialGradient id={id} cx="42%" cy="36%" r="66%">
-      <stop offset="0%" stop-color="#ff9a63"></stop>
-      <stop offset="46%" stop-color="#f05a29"></stop>
-      <stop offset="100%" stop-color="#bf3f18"></stop>
-    </radialGradient>
-  </defs>
-  <circle cx="12" cy="12" r="10" fill={`url(#${id})`}></circle>
-</svg>
+<Fragment set:html={hearthOrbSvg({ id, class: className })} />

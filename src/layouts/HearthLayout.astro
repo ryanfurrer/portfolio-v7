@@ -14,10 +14,14 @@ interface Props {
   ogImage?: string;
 }
 
+// Hearth gets its own card rather than the site's generic one: the product is
+// its colors, so the card shows the theme highlighting real code.
+const HEARTH_OG_IMAGE = "/hearth/og.png";
+
 const {
   title = "Hearth — A warm theme for VS Code, Cursor, and more",
   description = "Hearth keeps your editor calm and warm, letting a single accent pick out the code worth scanning. Six light and dark variants for VS Code, Cursor, and Shiki.",
-  ogImage,
+  ogImage = HEARTH_OG_IMAGE,
 } = Astro.props;
 
 const SITE = "https://www.ryanfurrer.com";

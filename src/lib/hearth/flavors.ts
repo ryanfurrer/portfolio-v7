@@ -5,6 +5,12 @@ import lightAzure from "@/lib/shiki/hearth-light-azure.json";
 import lightDuotone from "@/lib/shiki/hearth-light.json";
 import lightTeal from "@/lib/shiki/hearth-light-teal.json";
 
+// The hero's own words, shared with the OG card so the share image can never
+// drift from the page it links to.
+export const HEARTH_KICKER = "Theme for VS Code, Cursor, and more";
+export const HEARTH_TAGLINE =
+  "A warm color theme that keeps the interface calm and lets a single accent pick out the code worth scanning.";
+
 export type FlavorId = "duotone" | "teal" | "azure";
 
 export interface Flavor {
