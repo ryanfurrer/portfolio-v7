@@ -1,5 +1,6 @@
 ---
 import { buttonVariants } from "@/components/ui/button";
+import HearthChangelog from "./HearthChangelog.astro";
 import HearthEditor from "./HearthEditor.astro";
 import HearthInstall from "./HearthInstall.astro";
 import HearthMark from "./HearthMark.astro";
@@ -8,7 +9,7 @@ import VariantGallery from "./VariantGallery.astro";
 import {
   HEARTH_KICKER,
   HEARTH_TAGLINE,
-  MARKETPLACE_URL,
+  VSCODE_DEEP_LINK,
 } from "@/lib/hearth/flavors";
 import { fetchHearthVersion } from "@/lib/hearth/version";
 
@@ -61,13 +62,8 @@ const principles = [
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
-      <a
-        href={MARKETPLACE_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        class={buttonVariants({ size: "lg" })}
-      >
-        Install for VS Code
+      <a href={VSCODE_DEEP_LINK} class={buttonVariants({ size: "lg" })}>
+        Open in VS Code
       </a>
       <a
         href="#install"
@@ -137,6 +133,8 @@ const principles = [
     </div>
     <HearthPalette />
   </section>
+
+  <HearthChangelog version={version?.version} />
 
   <section
     class="flex flex-col items-center gap-6 rounded-xl bg-muted px-6 py-14 text-center"

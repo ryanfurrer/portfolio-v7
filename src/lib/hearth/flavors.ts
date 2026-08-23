@@ -61,6 +61,8 @@ export const DEFAULT_FLAVOR: FlavorId = "duotone";
 
 // Distribution — README and marketplace listing are the source of truth.
 export const EXTENSION_ID = "RyanFurrer.hearth";
+export const VSCODE_DEEP_LINK = `vscode:extension/${EXTENSION_ID}`;
+export const CURSOR_DEEP_LINK = `cursor:extension/${EXTENSION_ID}`;
 export const MARKETPLACE_URL = `https://marketplace.visualstudio.com/items?itemName=${EXTENSION_ID}`;
 export const OPEN_VSX_URL =
   "https://open-vsx.org/extension/ryanfurrer/hearth/changes";
