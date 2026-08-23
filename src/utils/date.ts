@@ -23,4 +23,3 @@ export function formatDateLong(dateString: string): string {
     day: "numeric",
   });
 }
-

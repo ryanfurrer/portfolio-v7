@@ -60,7 +60,7 @@ export default function NavMenu({ label, items, pathname }: Props) {
               // the primary nav; the ring persists on hover/open (only the
               // chevron rotates). Inactive → muted with the nav-hover lift.
               groupActive
-                ? "text-foreground ring-1 ring-inset ring-border"
+                ? "text-foreground ring-1 ring-border ring-inset"
                 : "text-subtle-foreground hover:bg-nav-hover hover:text-foreground hover:[box-shadow:var(--nav-hover-shadow)] data-[state=open]:bg-nav-hover data-[state=open]:text-foreground data-[state=open]:[box-shadow:var(--nav-hover-shadow)]",
             )}
           >

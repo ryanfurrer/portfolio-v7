@@ -1,5 +1,5 @@
-import {defineField, defineType} from 'sanity'
-import {FolderIcon} from '@sanity/icons/Folder'
+import { defineField, defineType } from "sanity";
+import { FolderIcon } from "@sanity/icons/Folder";
 import {
   bodyField,
   descriptionField,
@@ -10,12 +10,12 @@ import {
   slugField,
   titleField,
   updatedAtField,
-} from './shared'
+} from "./shared";
 
 export const projectType = defineType({
-  name: 'project',
-  title: 'Project',
-  type: 'document',
+  name: "project",
+  title: "Project",
+  type: "document",
   icon: FolderIcon,
   orderings: publishedAtOrderings,
   fields: [
@@ -24,30 +24,30 @@ export const projectType = defineType({
     publishedAtField,
     updatedAtField,
     defineField({
-      name: 'projectUrl',
-      type: 'url',
-      title: 'Live Site URL',
+      name: "projectUrl",
+      type: "url",
+      title: "Live Site URL",
     }),
     defineField({
-      name: 'githubUrl',
-      type: 'url',
-      title: 'GitHub Repo URL',
+      name: "githubUrl",
+      type: "url",
+      title: "GitHub Repo URL",
     }),
     defineField({
-      name: 'company',
-      type: 'reference',
-      title: 'Company',
-      to: [{type: 'company'}],
-      description: 'Leave empty for personal projects.',
+      name: "company",
+      type: "reference",
+      title: "Company",
+      to: [{ type: "company" }],
+      description: "Leave empty for personal projects.",
     }),
     descriptionField,
     headerImageField,
     bodyField,
   ],
   preview: {
-    select: {title: 'title', date: 'publishedAt', media: 'headerImage'},
-    prepare({title, date, media}) {
-      return {title, subtitle: formatPreviewDate(date), media}
+    select: { title: "title", date: "publishedAt", media: "headerImage" },
+    prepare({ title, date, media }) {
+      return { title, subtitle: formatPreviewDate(date), media };
     },
   },
-})
+});

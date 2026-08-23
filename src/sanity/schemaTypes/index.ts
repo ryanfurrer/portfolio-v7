@@ -1,15 +1,15 @@
-import {blockContentType} from './blockContentType'
-import {calloutType} from './calloutType'
-import {youtubeType} from './youtubeType'
-import {xPostType} from './xPostType'
-import {videoType} from './videoType'
-import {postType} from './postType'
-import {projectType} from './projectType'
-import {appearanceType} from './appearanceType'
-import {aboutType} from './aboutType'
-import {nowType} from './nowType'
-import {companyType} from './companyType'
-import {usesType} from './usesType'
+import { blockContentType } from "./blockContentType";
+import { calloutType } from "./calloutType";
+import { youtubeType } from "./youtubeType";
+import { xPostType } from "./xPostType";
+import { videoType } from "./videoType";
+import { postType } from "./postType";
+import { projectType } from "./projectType";
+import { appearanceType } from "./appearanceType";
+import { aboutType } from "./aboutType";
+import { nowType } from "./nowType";
+import { companyType } from "./companyType";
+import { usesType } from "./usesType";
 
 export const schemaTypes = [
   // Objects / shared types
@@ -26,4 +26,4 @@ export const schemaTypes = [
   nowType,
   companyType,
   usesType,
-]
+];

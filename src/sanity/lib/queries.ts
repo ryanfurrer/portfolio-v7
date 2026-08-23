@@ -1,4 +1,4 @@
-import {defineQuery} from "groq";
+import { defineQuery } from "groq";
 
 /**
  * All GROQ queries live here, wrapped in `defineQuery` so Sanity
@@ -32,9 +32,7 @@ export const LATEST_ITEMS_QUERY = defineQuery(
 // `_originalId`, but it cannot tell whether a published counterpart exists.
 // This small published-perspective lookup lets local previews mark only
 // draft-only documents rather than every document with pending edits.
-export const PUBLISHED_DOCUMENT_IDS_QUERY = defineQuery(
-  `*[_id in $ids]._id`,
-);
+export const PUBLISHED_DOCUMENT_IDS_QUERY = defineQuery(`*[_id in $ids]._id`);
 
 // --- Links page (single latest of each) ---
 

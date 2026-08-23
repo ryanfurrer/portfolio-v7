@@ -1,6 +1,6 @@
-import type {SanityClient} from "@sanity/client";
-import {slugify} from "@/lib/utils";
-import {PUBLISHED_DOCUMENT_IDS_QUERY} from "@/sanity/lib/queries";
+import type { SanityClient } from "@sanity/client";
+import { slugify } from "@/lib/utils";
+import { PUBLISHED_DOCUMENT_IDS_QUERY } from "@/sanity/lib/queries";
 
 /**
  * Shared helpers for the three content detail pages (post / project /
@@ -17,7 +17,7 @@ export interface TocHeading {
 interface HeadingBlock {
   _type: string;
   style?: string;
-  children?: Array<{text?: string}>;
+  children?: Array<{ text?: string }>;
 }
 
 interface DocumentIdentity {
@@ -42,8 +42,8 @@ export async function getUnpublishedDocumentIds(
 
   const publishedIds = await client.fetch<string[]>(
     PUBLISHED_DOCUMENT_IDS_QUERY,
-    {ids: draftBackedIds},
-    {perspective: "published"},
+    { ids: draftBackedIds },
+    { perspective: "published" },
   );
   const publishedIdSet = new Set(publishedIds);
 
@@ -72,7 +72,9 @@ export function extractHeadings(body: unknown): TocHeading[] {
  * buckets plus the years sorted newest-first. Shared by the three
  * index pages.
  */
-export function groupByYear<T extends {publishedAt?: string | null}>(items: T[]) {
+export function groupByYear<T extends { publishedAt?: string | null }>(
+  items: T[],
+) {
   const byYear = items.reduce<Record<number, T[]>>((acc, item) => {
     const year = item.publishedAt
       ? new Date(item.publishedAt).getFullYear()
@@ -83,15 +85,19 @@ export function groupByYear<T extends {publishedAt?: string | null}>(items: T[])
   const years = Object.keys(byYear)
     .map(Number)
     .sort((a, b) => b - a);
-  return {byYear, years};
+  return { byYear, years };
 }
 
 /**
  * Turn a slugs query result into Astro `getStaticPaths` entries,
  * dropping any rows without a usable slug so params are always strings.
  */
-export function toStaticPaths(rows: Array<{params: {slug: string | null}}>) {
+export function toStaticPaths(
+  rows: Array<{ params: { slug: string | null } }>,
+) {
   return rows
-    .filter((row): row is {params: {slug: string}} => Boolean(row.params.slug))
-    .map((row) => ({params: {slug: row.params.slug}}));
+    .filter((row): row is { params: { slug: string } } =>
+      Boolean(row.params.slug),
+    )
+    .map((row) => ({ params: { slug: row.params.slug } }));
 }

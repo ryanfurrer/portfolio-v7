@@ -108,11 +108,7 @@ export function imageDimensions(
   const width = Number(match[1]);
   const height = Number(match[2]);
   return {
-    width: Math.round(
-      width * (1 - (crop?.left ?? 0) - (crop?.right ?? 0)),
-    ),
-    height: Math.round(
-      height * (1 - (crop?.top ?? 0) - (crop?.bottom ?? 0)),
-    ),
+    width: Math.round(width * (1 - (crop?.left ?? 0) - (crop?.right ?? 0))),
+    height: Math.round(height * (1 - (crop?.top ?? 0) - (crop?.bottom ?? 0))),
   };
 }

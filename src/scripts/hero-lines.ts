@@ -15,7 +15,11 @@ if (title && document.documentElement.classList.contains("reveal-init")) {
 
   // Flatten the headline to per-word spans, tagging words from the muted tail so
   // their colour survives being regrouped into line masks.
-  const collectWords = (node: Node, muted: boolean, out: (HTMLElement | Text)[]) => {
+  const collectWords = (
+    node: Node,
+    muted: boolean,
+    out: (HTMLElement | Text)[],
+  ) => {
     node.childNodes.forEach((child) => {
       if (child.nodeType === Node.TEXT_NODE) {
         (child.textContent ?? "").split(/(\s+)/).forEach((part) => {
@@ -25,12 +29,18 @@ if (title && document.documentElement.classList.contains("reveal-init")) {
             return;
           }
           const word = document.createElement("span");
-          word.className = muted ? "hero-word text-muted-foreground" : "hero-word";
+          word.className = muted
+            ? "hero-word text-muted-foreground"
+            : "hero-word";
           word.textContent = part;
           out.push(word);
         });
       } else if (child instanceof HTMLElement) {
-        collectWords(child, muted || child.classList.contains("text-muted-foreground"), out);
+        collectWords(
+          child,
+          muted || child.classList.contains("text-muted-foreground"),
+          out,
+        );
       }
     });
   };

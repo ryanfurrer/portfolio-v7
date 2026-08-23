@@ -1,5 +1,5 @@
-import {defineField, defineType} from 'sanity'
-import {PlayIcon} from '@sanity/icons/Play'
+import { defineField, defineType } from "sanity";
+import { PlayIcon } from "@sanity/icons/Play";
 
 /**
  * Uploaded video — a block-level, self-hosted clip embedded inside
@@ -17,45 +17,45 @@ import {PlayIcon} from '@sanity/icons/Play'
  * (defaults to 16:9). The value is a ready-to-use CSS `aspect-ratio`.
  */
 export const videoType = defineType({
-  name: 'video',
-  title: 'Video',
-  type: 'object',
+  name: "video",
+  title: "Video",
+  type: "object",
   icon: PlayIcon,
   fields: [
     defineField({
-      name: 'file',
-      title: 'Video file',
-      type: 'file',
-      options: {accept: 'video/*'},
+      name: "file",
+      title: "Video file",
+      type: "file",
+      options: { accept: "video/*" },
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'aspectRatio',
-      title: 'Aspect ratio',
-      type: 'string',
-      description: 'Match this to your video so the frame has no black bars.',
-      initialValue: '16 / 9',
+      name: "aspectRatio",
+      title: "Aspect ratio",
+      type: "string",
+      description: "Match this to your video so the frame has no black bars.",
+      initialValue: "16 / 9",
       options: {
         list: [
-          {title: '16:9 (widescreen)', value: '16 / 9'},
-          {title: '16:10', value: '16 / 10'},
+          { title: "16:9 (widescreen)", value: "16 / 9" },
+          { title: "16:10", value: "16 / 10" },
         ],
-        layout: 'radio',
+        layout: "radio",
       },
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'caption',
-      title: 'Caption',
-      type: 'string',
+      name: "caption",
+      title: "Caption",
+      type: "string",
       description:
-        'Optional — shown beneath the video and used as its accessible label.',
+        "Optional — shown beneath the video and used as its accessible label.",
     }),
   ],
   preview: {
-    select: {caption: 'caption', filename: 'file.asset.originalFilename'},
-    prepare({caption, filename}) {
-      return {title: caption || 'Video', subtitle: filename}
+    select: { caption: "caption", filename: "file.asset.originalFilename" },
+    prepare({ caption, filename }) {
+      return { title: caption || "Video", subtitle: filename };
     },
   },
-})
+});

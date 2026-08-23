@@ -1,5 +1,5 @@
-import {defineField, defineType} from 'sanity'
-import {VideoIcon} from '@sanity/icons/Video'
+import { defineField, defineType } from "sanity";
+import { VideoIcon } from "@sanity/icons/Video";
 import {
   bodyField,
   descriptionField,
@@ -10,26 +10,26 @@ import {
   slugField,
   titleField,
   updatedAtField,
-} from './shared'
+} from "./shared";
 
 // Single source of truth for the appearance kinds: drives both the Studio
 // radio list and the preview subtitle label (so e.g. "Live Stream" reads
 // correctly instead of a naive capitalize of the stored value).
 const APPEARANCE_TYPES = [
-  {title: 'Podcast', value: 'podcast'},
-  {title: 'Video', value: 'video'},
-  {title: 'Live Stream', value: 'livestream'},
-  {title: 'Talk', value: 'talk'},
-  {title: 'Presentation', value: 'presentation'},
-]
+  { title: "Podcast", value: "podcast" },
+  { title: "Video", value: "video" },
+  { title: "Live Stream", value: "livestream" },
+  { title: "Talk", value: "talk" },
+  { title: "Presentation", value: "presentation" },
+];
 const APPEARANCE_TYPE_LABELS: Record<string, string> = Object.fromEntries(
   APPEARANCE_TYPES.map((t) => [t.value, t.title]),
-)
+);
 
 export const appearanceType = defineType({
-  name: 'appearance',
-  title: 'Appearance',
-  type: 'document',
+  name: "appearance",
+  title: "Appearance",
+  type: "document",
   icon: VideoIcon,
   orderings: publishedAtOrderings,
   fields: [
@@ -38,22 +38,22 @@ export const appearanceType = defineType({
     publishedAtField,
     updatedAtField,
     defineField({
-      name: 'appearanceType',
-      type: 'string',
-      title: 'Appearance Type',
+      name: "appearanceType",
+      type: "string",
+      title: "Appearance Type",
       options: {
         list: APPEARANCE_TYPES,
-        layout: 'radio',
+        layout: "radio",
       },
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'externalUrl',
-      type: 'url',
-      title: 'External URL',
+      name: "externalUrl",
+      type: "url",
+      title: "External URL",
       validation: (rule) =>
         rule.required().uri({
-          scheme: ['http', 'https'],
+          scheme: ["http", "https"],
         }),
     }),
     descriptionField,
@@ -62,17 +62,17 @@ export const appearanceType = defineType({
   ],
   preview: {
     select: {
-      title: 'title',
-      date: 'publishedAt',
-      type: 'appearanceType',
-      media: 'headerImage',
+      title: "title",
+      date: "publishedAt",
+      type: "appearanceType",
+      media: "headerImage",
     },
-    prepare({title, date, type, media}) {
-      const label = type ? (APPEARANCE_TYPE_LABELS[type] ?? type) : undefined
+    prepare({ title, date, type, media }) {
+      const label = type ? (APPEARANCE_TYPE_LABELS[type] ?? type) : undefined;
       const subtitle = [label, formatPreviewDate(date)]
         .filter(Boolean)
-        .join(' · ')
-      return {title, subtitle: subtitle || undefined, media}
+        .join(" · ");
+      return { title, subtitle: subtitle || undefined, media };
     },
   },
-})
+});

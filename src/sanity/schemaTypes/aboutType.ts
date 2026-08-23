@@ -1,6 +1,6 @@
-import {defineType} from 'sanity'
-import {UserIcon} from '@sanity/icons/User'
-import {bodyField, descriptionField, titleField} from './shared'
+import { defineType } from "sanity";
+import { UserIcon } from "@sanity/icons/User";
+import { bodyField, descriptionField, titleField } from "./shared";
 
 /**
  * The About page. A singleton — exactly one of these exists (enforced by
@@ -9,15 +9,15 @@ import {bodyField, descriptionField, titleField} from './shared'
  * Signature flourish stays in the template; only the prose lives here.
  */
 export const aboutType = defineType({
-  name: 'about',
-  title: 'About',
-  type: 'document',
+  name: "about",
+  title: "About",
+  type: "document",
   icon: UserIcon,
   fields: [titleField, descriptionField, bodyField],
   preview: {
-    select: {title: 'title'},
-    prepare({title}) {
-      return {title: title || 'About'}
+    select: { title: "title" },
+    prepare({ title }) {
+      return { title: title || "About" };
     },
   },
-})
+});

@@ -1,7 +1,7 @@
-import {defineType, defineField, defineArrayMember} from 'sanity'
-import {CogIcon} from '@sanity/icons/Cog'
-import {descriptionField, titleField} from './shared'
-import {UsesIconInput} from '../components/UsesIconInput'
+import { defineType, defineField, defineArrayMember } from "sanity";
+import { CogIcon } from "@sanity/icons/Cog";
+import { descriptionField, titleField } from "./shared";
+import { UsesIconInput } from "../components/UsesIconInput";
 
 /**
  * The Uses page — the gear/software I use. A singleton (exactly one exists,
@@ -11,80 +11,80 @@ import {UsesIconInput} from '../components/UsesIconInput'
  * and reordered in the Studio without a schema change.
  */
 export const usesType = defineType({
-  name: 'uses',
-  title: 'Uses',
-  type: 'document',
+  name: "uses",
+  title: "Uses",
+  type: "document",
   icon: CogIcon,
   fields: [
     titleField,
     descriptionField,
     defineField({
-      name: 'categories',
-      title: 'Categories',
-      type: 'array',
+      name: "categories",
+      title: "Categories",
+      type: "array",
       of: [
         defineArrayMember({
-          type: 'object',
-          name: 'usesCategory',
-          title: 'Category',
+          type: "object",
+          name: "usesCategory",
+          title: "Category",
           fields: [
             defineField({
-              name: 'title',
-              title: 'Title',
-              type: 'string',
+              name: "title",
+              title: "Title",
+              type: "string",
               validation: (rule) => rule.required(),
             }),
             defineField({
-              name: 'items',
-              title: 'Items',
-              type: 'array',
+              name: "items",
+              title: "Items",
+              type: "array",
               of: [
                 defineArrayMember({
-                  type: 'object',
-                  name: 'usesItem',
-                  title: 'Item',
+                  type: "object",
+                  name: "usesItem",
+                  title: "Item",
                   fields: [
                     defineField({
-                      name: 'name',
-                      title: 'Name',
-                      type: 'string',
+                      name: "name",
+                      title: "Name",
+                      type: "string",
                       validation: (rule) => rule.required(),
                     }),
                     defineField({
-                      name: 'description',
-                      title: 'Description',
-                      type: 'text',
+                      name: "description",
+                      title: "Description",
+                      type: "text",
                       rows: 2,
                     }),
                     defineField({
-                      name: 'icon',
-                      title: 'Icon',
-                      type: 'string',
+                      name: "icon",
+                      title: "Icon",
+                      type: "string",
                       description:
                         'Optional. Pick an icon; if left empty, one is inferred from the description (e.g. "Terminal" → terminal).',
-                      components: {input: UsesIconInput},
+                      components: { input: UsesIconInput },
                     }),
                     defineField({
-                      name: 'url',
-                      title: 'URL',
-                      type: 'url',
+                      name: "url",
+                      title: "URL",
+                      type: "url",
                     }),
                   ],
                   preview: {
-                    select: {title: 'name', subtitle: 'description'},
+                    select: { title: "name", subtitle: "description" },
                   },
                 }),
               ],
             }),
           ],
           preview: {
-            select: {title: 'title', items: 'items'},
-            prepare({title, items}) {
-              const count = Array.isArray(items) ? items.length : 0
+            select: { title: "title", items: "items" },
+            prepare({ title, items }) {
+              const count = Array.isArray(items) ? items.length : 0;
               return {
-                title: title || 'Category',
-                subtitle: `${count} item${count === 1 ? '' : 's'}`,
-              }
+                title: title || "Category",
+                subtitle: `${count} item${count === 1 ? "" : "s"}`,
+              };
             },
           },
         }),
@@ -92,9 +92,9 @@ export const usesType = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title'},
-    prepare({title}) {
-      return {title: title || 'Uses'}
+    select: { title: "title" },
+    prepare({ title }) {
+      return { title: title || "Uses" };
     },
   },
-})
+});

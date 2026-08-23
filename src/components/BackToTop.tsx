@@ -42,7 +42,9 @@ export default function BackToTop() {
         inert={!visible}
         initial={false}
         animate={{ opacity: visible ? 1 : 0, y: reduce ? 0 : visible ? 0 : 8 }}
-        transition={reduce ? { duration: 0.2 } : { duration: 0.3, ease: EASE_IOS }}
+        transition={
+          reduce ? { duration: 0.2 } : { duration: 0.3, ease: EASE_IOS }
+        }
         className="pointer-events-auto flex items-center gap-2 rounded-lg border border-border bg-secondary/40 px-4 py-2.5 text-sm font-medium text-foreground shadow-lg backdrop-blur-xl transition-[scale] duration-150 ease-out hover:bg-secondary/60 active:scale-[0.96] dark:shadow-none dark:inset-ring dark:inset-ring-white/10"
       >
         Back to top

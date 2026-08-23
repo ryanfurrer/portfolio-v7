@@ -30,10 +30,14 @@ function isCurrentPage(item: HTMLAnchorElement): boolean {
 
 function configFor(item: HTMLAnchorElement): Config {
   const key = item.getAttribute("data-dir-hover");
-  return key && key in CONFIG ? CONFIG[key as keyof typeof CONFIG] : CONFIG.item;
+  return key && key in CONFIG
+    ? CONFIG[key as keyof typeof CONFIG]
+    : CONFIG.item;
 }
 
-function findListContainer(element: HTMLAnchorElement): HTMLUListElement | null {
+function findListContainer(
+  element: HTMLAnchorElement,
+): HTMLUListElement | null {
   return element.closest("ul");
 }
 
@@ -68,7 +72,8 @@ function updateHighlight(
 
   const wasHidden = !currentHovered.has(list);
   if (wasHidden) {
-    const rawStart = entryClient != null ? entryClient - listStart : pos + size / 2;
+    const rawStart =
+      entryClient != null ? entryClient - listStart : pos + size / 2;
     const startPos = Math.max(0, Math.min(rawStart, extent));
     list.setAttribute("data-dir-snap", "");
     list.style.setProperty(posVar, `${startPos}px`);

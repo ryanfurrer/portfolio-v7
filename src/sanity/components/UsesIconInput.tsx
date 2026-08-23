@@ -1,6 +1,6 @@
-import {useCallback} from 'react'
-import {set, unset, type StringInputProps} from 'sanity'
-import {USES_ICONS} from '../../lib/uses-icons'
+import { useCallback } from "react";
+import { set, unset, type StringInputProps } from "sanity";
+import { USES_ICONS } from "../../lib/uses-icons";
 
 /**
  * Visual icon picker for the Uses `icon` field — a curated grid of the Lucide
@@ -13,26 +13,26 @@ import {USES_ICONS} from '../../lib/uses-icons'
  * again clears it (unset), so the field stays optional.
  */
 export function UsesIconInput(props: StringInputProps) {
-  const {onChange, value, readOnly, elementProps} = props
+  const { onChange, value, readOnly, elementProps } = props;
 
   const handleSelect = useCallback(
     (name: string) => {
-      onChange(name === value ? unset() : set(name))
+      onChange(name === value ? unset() : set(name));
     },
     [onChange, value],
-  )
+  );
 
   return (
     <div
       {...elementProps}
       style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(48px, 1fr))',
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(48px, 1fr))",
         gap: 6,
       }}
     >
       {USES_ICONS.map((icon) => {
-        const selected = icon.name === value
+        const selected = icon.name === value;
         return (
           <button
             key={icon.name}
@@ -43,24 +43,26 @@ export function UsesIconInput(props: StringInputProps) {
             disabled={readOnly}
             onClick={() => handleSelect(icon.name)}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              aspectRatio: '1 / 1',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              aspectRatio: "1 / 1",
               padding: 8,
               borderRadius: 6,
-              cursor: readOnly ? 'default' : 'pointer',
-              color: selected ? 'var(--card-fg-color, currentColor)' : 'currentColor',
+              cursor: readOnly ? "default" : "pointer",
+              color: selected
+                ? "var(--card-fg-color, currentColor)"
+                : "currentColor",
               background: selected
-                ? 'var(--card-badge-default-bg-color, rgba(127,127,127,0.25))'
-                : 'var(--card-code-bg-color, rgba(127,127,127,0.08))',
+                ? "var(--card-badge-default-bg-color, rgba(127,127,127,0.25))"
+                : "var(--card-code-bg-color, rgba(127,127,127,0.08))",
               border: `1px solid ${
                 selected
-                  ? 'var(--card-focus-ring-color, rgba(127,127,127,0.6))'
-                  : 'transparent'
+                  ? "var(--card-focus-ring-color, rgba(127,127,127,0.6))"
+                  : "transparent"
               }`,
               opacity: readOnly ? 0.5 : 1,
-              transition: 'background 120ms ease, border-color 120ms ease',
+              transition: "background 120ms ease, border-color 120ms ease",
             }}
           >
             <svg
@@ -74,11 +76,11 @@ export function UsesIconInput(props: StringInputProps) {
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden="true"
-              dangerouslySetInnerHTML={{__html: icon.svg}}
+              dangerouslySetInnerHTML={{ __html: icon.svg }}
             />
           </button>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

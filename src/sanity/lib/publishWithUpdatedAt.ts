@@ -1,11 +1,11 @@
-import {useDocumentOperation, type DocumentActionComponent} from 'sanity'
+import { useDocumentOperation, type DocumentActionComponent } from "sanity";
 
 /**
  * Document types that carry an `updatedAt` field (see shared.ts). The
  * publish wrapper below only stamps the timestamp for these, so it never
  * adds a stray `updatedAt` to types that don't define it (about/now/company).
  */
-const TYPES_WITH_UPDATED_AT = ['post', 'project', 'appearance']
+const TYPES_WITH_UPDATED_AT = ["post", "project", "appearance"];
 
 /**
  * Wraps the default Publish action so `updatedAt` is set to "now" only when
@@ -18,20 +18,20 @@ export function publishWithUpdatedAt(
   originalPublish: DocumentActionComponent,
 ): DocumentActionComponent {
   const WrappedPublish: DocumentActionComponent = (props) => {
-    const original = originalPublish(props)
-    const {patch} = useDocumentOperation(props.id, props.type)
-    if (!original) return original
+    const original = originalPublish(props);
+    const { patch } = useDocumentOperation(props.id, props.type);
+    if (!original) return original;
 
     return {
       ...original,
       onHandle: () => {
         if (props.published && TYPES_WITH_UPDATED_AT.includes(props.type)) {
-          patch.execute([{set: {updatedAt: new Date().toISOString()}}])
+          patch.execute([{ set: { updatedAt: new Date().toISOString() } }]);
         }
-        original.onHandle?.()
+        original.onHandle?.();
       },
-    }
-  }
+    };
+  };
 
-  return WrappedPublish
+  return WrappedPublish;
 }

@@ -1,6 +1,6 @@
-import { defineType } from 'sanity'
-import { DocumentTextIcon } from '@sanity/icons/DocumentText'
-import { MarkdownPostInput } from '../components/MarkdownPostInput'
+import { defineType } from "sanity";
+import { DocumentTextIcon } from "@sanity/icons/DocumentText";
+import { MarkdownPostInput } from "../components/MarkdownPostInput";
 import {
   bodyField,
   descriptionField,
@@ -11,12 +11,12 @@ import {
   slugField,
   titleField,
   updatedAtField,
-} from './shared'
+} from "./shared";
 
 export const postType = defineType({
-  name: 'post',
-  title: 'Post',
-  type: 'document',
+  name: "post",
+  title: "Post",
+  type: "document",
   icon: DocumentTextIcon,
   orderings: publishedAtOrderings,
   fields: [
@@ -30,9 +30,9 @@ export const postType = defineType({
   ],
   components: { input: MarkdownPostInput },
   preview: {
-    select: { title: 'title', date: 'publishedAt', media: 'headerImage' },
+    select: { title: "title", date: "publishedAt", media: "headerImage" },
     prepare({ title, date, media }) {
-      return { title, subtitle: formatPreviewDate(date), media }
+      return { title, subtitle: formatPreviewDate(date), media };
     },
   },
-})
+});

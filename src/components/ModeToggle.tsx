@@ -26,7 +26,10 @@ export default function ModeToggle({ size = "sm" }: Props) {
       )}
     >
       <SunIcon aria-hidden="true" className={cn(iconSize, "dark:hidden")} />
-      <MoonIcon aria-hidden="true" className={cn(iconSize, "hidden dark:block")} />
+      <MoonIcon
+        aria-hidden="true"
+        className={cn(iconSize, "hidden dark:block")}
+      />
       <span className="dark:hidden">Light</span>
       <span className="hidden dark:block">Dark</span>
       <span className="sr-only"> theme</span>

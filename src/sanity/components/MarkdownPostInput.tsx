@@ -9,134 +9,140 @@ import {
   Text,
   TextArea,
   useToast,
-} from '@sanity/ui'
-import { useCallback, useMemo, useRef, useState, type ChangeEvent } from 'react'
+} from "@sanity/ui";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type ChangeEvent,
+} from "react";
 import {
   PatchEvent,
   set,
   type ArraySchemaType,
   type FormPatch,
   type ObjectInputProps,
-} from 'sanity'
+} from "sanity";
 import {
   markdownToPortableText,
   type MarkdownFrontmatter,
-} from '../lib/markdownToPortableText'
+} from "../lib/markdownToPortableText";
 
 type PostValue = {
-  body?: unknown[]
-  title?: string
-  description?: string
-  slug?: { current?: string }
-  publishedAt?: string
-  [key: string]: unknown
-}
+  body?: unknown[];
+  title?: string;
+  description?: string;
+  slug?: { current?: string };
+  publishedAt?: string;
+  [key: string]: unknown;
+};
 
 function frontmatterPatches(frontmatter: MarkdownFrontmatter): FormPatch[] {
-  const patches: FormPatch[] = []
+  const patches: FormPatch[] = [];
 
-  if (frontmatter.title) patches.push(set(frontmatter.title, ['title']))
+  if (frontmatter.title) patches.push(set(frontmatter.title, ["title"]));
   if (frontmatter.description)
-    patches.push(set(frontmatter.description, ['description']))
+    patches.push(set(frontmatter.description, ["description"]));
   if (frontmatter.slug) {
-    patches.push(set({ _type: 'slug', current: frontmatter.slug }, ['slug']))
+    patches.push(set({ _type: "slug", current: frontmatter.slug }, ["slug"]));
   }
   if (frontmatter.publishedAt) {
-    patches.push(set(frontmatter.publishedAt, ['publishedAt']))
+    patches.push(set(frontmatter.publishedAt, ["publishedAt"]));
   }
 
-  return patches
+  return patches;
 }
 
 export function MarkdownPostInput(props: ObjectInputProps<PostValue>) {
-  const { onChange, readOnly, renderDefault, schemaType, value } = props
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [markdown, setMarkdown] = useState('')
-  const [applyFrontmatter, setApplyFrontmatter] = useState(true)
-  const [error, setError] = useState<string>()
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const toast = useToast()
+  const { onChange, readOnly, renderDefault, schemaType, value } = props;
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [markdown, setMarkdown] = useState("");
+  const [applyFrontmatter, setApplyFrontmatter] = useState(true);
+  const [error, setError] = useState<string>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const toast = useToast();
 
   const bodySchemaType = useMemo(
     () =>
-      schemaType.fields.find((field) => field.name === 'body')?.type as
+      schemaType.fields.find((field) => field.name === "body")?.type as
         ArraySchemaType | undefined,
     [schemaType.fields],
-  )
-  const hasBody = Array.isArray(value?.body) && value.body.length > 0
+  );
+  const hasBody = Array.isArray(value?.body) && value.body.length > 0;
 
   const closeDialog = useCallback(() => {
-    setDialogOpen(false)
-    setError(undefined)
-  }, [])
+    setDialogOpen(false);
+    setError(undefined);
+  }, []);
 
   const handleFile = useCallback(
     async (event: ChangeEvent<HTMLInputElement>) => {
-      const file = event.currentTarget.files?.[0]
-      event.currentTarget.value = ''
-      if (!file) return
+      const file = event.currentTarget.files?.[0];
+      event.currentTarget.value = "";
+      if (!file) return;
 
       try {
-        setMarkdown(await file.text())
-        setError(undefined)
+        setMarkdown(await file.text());
+        setError(undefined);
       } catch {
         setError(
-          'That file could not be read. Try pasting its Markdown instead.',
-        )
+          "That file could not be read. Try pasting its Markdown instead.",
+        );
       }
     },
     [],
-  )
+  );
 
   const importMarkdown = useCallback(
-    (mode: 'append' | 'replace') => {
+    (mode: "append" | "replace") => {
       if (!bodySchemaType) {
-        setError('The Body schema could not be loaded.')
-        return
+        setError("The Body schema could not be loaded.");
+        return;
       }
 
       if (!markdown.trim()) {
-        setError('Paste Markdown or choose a Markdown file first.')
-        return
+        setError("Paste Markdown or choose a Markdown file first.");
+        return;
       }
 
       try {
-        const result = markdownToPortableText(markdown, bodySchemaType)
+        const result = markdownToPortableText(markdown, bodySchemaType);
 
         if (result.blocks.length === 0) {
-          setError('No body content was found in that Markdown.')
-          return
+          setError("No body content was found in that Markdown.");
+          return;
         }
 
-        const existingBody = Array.isArray(value?.body) ? value.body : []
+        const existingBody = Array.isArray(value?.body) ? value.body : [];
         const nextBody =
-          mode === 'append'
+          mode === "append"
             ? [...existingBody, ...result.blocks]
-            : result.blocks
-        const patches: FormPatch[] = [set(nextBody, ['body'])]
+            : result.blocks;
+        const patches: FormPatch[] = [set(nextBody, ["body"])];
 
         if (applyFrontmatter)
-          patches.push(...frontmatterPatches(result.frontmatter))
+          patches.push(...frontmatterPatches(result.frontmatter));
 
-        onChange(PatchEvent.from(patches))
-        closeDialog()
-        setMarkdown('')
+        onChange(PatchEvent.from(patches));
+        closeDialog();
+        setMarkdown("");
 
         toast.push({
-          status: result.warnings.length > 0 ? 'warning' : 'success',
-          title: mode === 'append' ? 'Markdown appended' : 'Markdown imported',
+          status: result.warnings.length > 0 ? "warning" : "success",
+          title: mode === "append" ? "Markdown appended" : "Markdown imported",
           description:
             result.warnings.length > 0
-              ? result.warnings.join(' ')
-              : 'Review the converted Body, then publish when it looks right.',
+              ? result.warnings.join(" ")
+              : "Review the converted Body, then publish when it looks right.",
           duration: 8000,
-        })
+        });
       } catch (caught) {
         setError(
           caught instanceof Error
             ? caught.message
-            : 'The Markdown could not be imported.',
-        )
+            : "The Markdown could not be imported.",
+        );
       }
     },
     [
@@ -148,7 +154,7 @@ export function MarkdownPostInput(props: ObjectInputProps<PostValue>) {
       toast,
       value?.body,
     ],
-  )
+  );
 
   return (
     <Stack gap={4}>
@@ -184,15 +190,15 @@ export function MarkdownPostInput(props: ObjectInputProps<PostValue>) {
                 <Button
                   disabled={!markdown.trim()}
                   mode="ghost"
-                  onClick={() => importMarkdown('append')}
+                  onClick={() => importMarkdown("append")}
                   text="Append to body"
                 />
               )}
               <Button
                 disabled={!markdown.trim()}
-                onClick={() => importMarkdown('replace')}
-                text={hasBody ? 'Replace body' : 'Import Markdown'}
-                tone={hasBody ? 'critical' : 'primary'}
+                onClick={() => importMarkdown("replace")}
+                text={hasBody ? "Replace body" : "Import Markdown"}
+                tone={hasBody ? "critical" : "primary"}
               />
             </Flex>
           }
@@ -231,15 +237,15 @@ export function MarkdownPostInput(props: ObjectInputProps<PostValue>) {
               <TextArea
                 aria-label="Markdown source"
                 onChange={(event) => {
-                  setMarkdown(event.currentTarget.value)
-                  setError(undefined)
+                  setMarkdown(event.currentTarget.value);
+                  setError(undefined);
                 }}
                 placeholder={
-                  '---\ntitle: My post\nslug: my-post\n---\n\n## Start writing…'
+                  "---\ntitle: My post\nslug: my-post\n---\n\n## Start writing…"
                 }
                 rows={18}
                 style={{
-                  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
                 }}
                 value={markdown}
               />
@@ -290,5 +296,5 @@ export function MarkdownPostInput(props: ObjectInputProps<PostValue>) {
         </Dialog>
       )}
     </Stack>
-  )
+  );
 }

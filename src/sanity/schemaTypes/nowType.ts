@@ -1,12 +1,12 @@
-import {defineArrayMember, defineField, defineType} from 'sanity'
-import {ClockIcon} from '@sanity/icons/Clock'
+import { defineArrayMember, defineField, defineType } from "sanity";
+import { ClockIcon } from "@sanity/icons/Clock";
 import {
   bodyField,
   formatPreviewDate,
   linkAnnotation,
   publishedAtField,
   publishedAtOrderings,
-} from './shared'
+} from "./shared";
 
 /**
  * A "Now" entry — one per update. The newest renders as the live "Now"
@@ -18,43 +18,43 @@ import {
  * design relies on one-liners, so headings/lists are intentionally off).
  */
 export const nowType = defineType({
-  name: 'now',
-  title: 'Now',
-  type: 'document',
+  name: "now",
+  title: "Now",
+  type: "document",
   icon: ClockIcon,
   orderings: publishedAtOrderings,
   fields: [
     publishedAtField,
     bodyField,
     defineField({
-      name: 'media',
-      title: 'Media',
-      type: 'array',
+      name: "media",
+      title: "Media",
+      type: "array",
       of: [
         defineArrayMember({
-          type: 'object',
-          name: 'mediaRow',
-          title: 'Row',
+          type: "object",
+          name: "mediaRow",
+          title: "Row",
           fields: [
             defineField({
-              name: 'label',
-              type: 'string',
-              description: 'e.g. Watching, Reading, Playing, Obsessed with',
+              name: "label",
+              type: "string",
+              description: "e.g. Watching, Reading, Playing, Obsessed with",
               validation: (rule) => rule.required(),
             }),
             defineField({
-              name: 'value',
-              title: 'Value',
-              type: 'array',
+              name: "value",
+              title: "Value",
+              type: "array",
               of: [
                 defineArrayMember({
-                  type: 'block',
-                  styles: [{title: 'Normal', value: 'normal'}],
+                  type: "block",
+                  styles: [{ title: "Normal", value: "normal" }],
                   lists: [],
                   marks: {
                     decorators: [
-                      {title: 'Strong', value: 'strong'},
-                      {title: 'Emphasis', value: 'em'},
+                      { title: "Strong", value: "strong" },
+                      { title: "Emphasis", value: "em" },
                     ],
                     annotations: [linkAnnotation],
                   },
@@ -63,16 +63,16 @@ export const nowType = defineType({
             }),
           ],
           preview: {
-            select: {title: 'label'},
+            select: { title: "label" },
           },
         }),
       ],
     }),
   ],
   preview: {
-    select: {date: 'publishedAt'},
-    prepare({date}) {
-      return {title: formatPreviewDate(date) || 'Now', subtitle: 'Now entry'}
+    select: { date: "publishedAt" },
+    prepare({ date }) {
+      return { title: formatPreviewDate(date) || "Now", subtitle: "Now entry" };
     },
   },
-})
+});
