@@ -1,4 +1,6 @@
 ---
+// The extension's icon.png rebuilt as a transparent gradient: a baked-in
+// background would fight whatever surface the mark sits on.
 interface Props {
   class?: string;
 }
@@ -10,9 +12,6 @@ const { class: className } = Astro.props;
 const id = `hearth-orb-${crypto.randomUUID().slice(0, 8)}`;
 ---
 
-{/* The Hearth mark: the ember orb from the extension icon, rebuilt as a
-    transparent radial gradient so it carries its own depth on any header,
-    light or dark — no baked-in background to fight the surface. */}
 <svg
   class={className}
   viewBox="0 0 24 24"
