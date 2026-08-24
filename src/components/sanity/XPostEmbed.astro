@@ -98,10 +98,18 @@ const post = parsePostUrl(node?.url);
     justify-content: center;
   }
 
-  .x-post-embed :global(.twitter-tweet) {
+  .x-post-embed :global(.twitter-tweet),
+  .x-post-embed :global(iframe) {
     width: 100%;
     max-width: 550px;
     margin: 0;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    corner-shape: round;
+  }
+
+  .x-post-embed :global(.twitter-tweet iframe) {
+    border-radius: inherit;
   }
 
   /* Undo the site's prose blockquote treatment on X's pre-enhancement link. */
