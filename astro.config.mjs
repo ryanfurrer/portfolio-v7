@@ -111,11 +111,9 @@ const hearthLocalHost = {
       hearthDevServer = server;
       server.middlewares.use((req, _res, next) => {
         const host = req.headers.host ?? "";
-        if (
-          host.startsWith(HEARTH_DEV_HOST) &&
-          (req.url === "/" || req.url === "")
-        ) {
-          req.url = "/hearth";
+        const requestUrl = new URL(req.url ?? "/", "http://localhost");
+        if (host.startsWith(HEARTH_DEV_HOST) && requestUrl.pathname === "/") {
+          req.url = `/hearth${requestUrl.search}`;
         }
         next();
       });

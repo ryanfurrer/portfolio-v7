@@ -456,8 +456,25 @@ const tabs = [
     "[data-hearth-install]",
   )) {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    if (!tabs.length) continue;
+
     const tablist = root.querySelector<HTMLElement>(".hearth-tablist");
     const underline = root.querySelector<HTMLElement>("[data-tab-underline]");
+    const tabId = (tab: HTMLButtonElement) =>
+      tab.id.slice("hearth-tab-".length);
+    const tabsById = new Map(tabs.map((tab) => [tabId(tab), tab]));
+
+    const tabFromUrl = () => {
+      const install = new URL(window.location.href).searchParams.get("install");
+      return (install && tabsById.get(install)) || tabs[0];
+    };
+
+    const replaceUrl = (tab: HTMLButtonElement) => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("install", tabId(tab));
+      url.hash = "install";
+      window.history.replaceState(window.history.state, "", url);
+    };
 
     const moveUnderline = (tab: HTMLButtonElement, animate: boolean) => {
       if (!tablist || !underline) return;
@@ -496,7 +513,12 @@ const tabs = [
       }
     };
 
-    const select = (tab: HTMLButtonElement, focus = false, animate = false) => {
+    const select = (
+      tab: HTMLButtonElement,
+      focus = false,
+      animate = false,
+      updateUrl = false,
+    ) => {
       for (const other of tabs) {
         const active = other === tab;
         other.setAttribute("aria-selected", active ? "true" : "false");
@@ -507,28 +529,35 @@ const tabs = [
         if (panel) panel.hidden = !active;
       }
       moveUnderline(tab, animate);
+      if (updateUrl) replaceUrl(tab);
       if (focus) tab.focus();
     };
 
     tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => select(tab, false, true));
+      tab.addEventListener("click", () => select(tab, false, true, true));
       tab.addEventListener("keydown", (event) => {
         const step =
           event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
         if (step) {
           event.preventDefault();
-          select(tabs[(index + step + tabs.length) % tabs.length], true);
+          select(
+            tabs[(index + step + tabs.length) % tabs.length],
+            true,
+            false,
+            true,
+          );
         } else if (event.key === "Home") {
           event.preventDefault();
-          select(tabs[0], true);
+          select(tabs[0], true, false, true);
         } else if (event.key === "End") {
           event.preventDefault();
-          select(tabs[tabs.length - 1], true);
+          select(tabs[tabs.length - 1], true, false, true);
         }
       });
     });
 
-    moveUnderline(tabs[0], false);
+    select(tabFromUrl());
+    window.addEventListener("popstate", () => select(tabFromUrl(), false, true));
     if (tablist) {
       new ResizeObserver(() => {
         const active = tabs.find(

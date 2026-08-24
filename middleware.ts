@@ -11,9 +11,11 @@ export const config = {
 };
 
 export default function middleware(request: Request) {
-  const { hostname, origin } = new URL(request.url);
+  const url = new URL(request.url);
+  const { hostname } = url;
   if (hostname === "hearth.ryanfurrer.com") {
-    return rewrite(`${origin}/hearth`);
+    url.pathname = "/hearth";
+    return rewrite(url);
   }
   return next();
 }
