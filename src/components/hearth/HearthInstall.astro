@@ -1,6 +1,7 @@
 ---
 import { Code } from "astro:components";
 import HearthCodeWindow from "./HearthCodeWindow.astro";
+import HearthTabs from "./HearthTabs.astro";
 import {
   CLI_INSTALL,
   CURSOR_DEEP_LINK,
@@ -16,6 +17,7 @@ import {
 const THEMES_URL = `${GITHUB_URL}/tree/main/themes`;
 const ZED_THEME_URL = `${GITHUB_URL}/blob/main/zed/themes/hearth.json`;
 const WARP_THEMES_URL = `${GITHUB_URL}/tree/main/warp`;
+const GHOSTTY_THEMES_URL = `${GITHUB_URL}/tree/main/ghostty`;
 const hearthThemes = FLAVORS.find(({ id }) => id === DEFAULT_FLAVOR)?.themes;
 
 if (!hearthThemes) throw new Error("The default Hearth theme is missing");
@@ -35,35 +37,17 @@ const tabs = [
   { id: "cursor", label: "Cursor" },
   { id: "zed", label: "Zed" },
   { id: "warp", label: "Warp" },
+  { id: "ghostty", label: "Ghostty" },
   { id: "shiki", label: "Shiki" },
 ];
 ---
 
-<div class="hearth-install space-y-6" data-hearth-install>
-  <div
-    class="hearth-tablist flex gap-1 border-b border-border"
-    role="tablist"
-    aria-label="Install Hearth in"
-  >
-    {
-      tabs.map((tab, index) => (
-        <button
-          type="button"
-          role="tab"
-          id={`hearth-tab-${tab.id}`}
-          aria-controls={`hearth-panel-${tab.id}`}
-          aria-selected={index === 0 ? "true" : "false"}
-          tabindex={index === 0 ? 0 : -1}
-          class="hearth-tab"
-        >
-          {tab.label}
-        </button>
-      ))
-    }
-    <span class="hearth-tab-underline" data-tab-underline aria-hidden="true"
-    ></span>
-  </div>
-
+<HearthTabs
+  tabs={tabs}
+  label="Install Hearth in"
+  idPrefix="hearth"
+  param="install"
+>
   <div
     id="hearth-panel-vscode"
     role="tabpanel"
@@ -197,7 +181,7 @@ const tabs = [
   >
     <ol class="hearth-steps">
       <li>
-        Download the six themes from the repo's <a
+        Download the light and dark themes from the repo's <a
           href={WARP_THEMES_URL}
           target="_blank"
           rel="noopener noreferrer"
@@ -214,8 +198,47 @@ const tabs = [
       </li>
     </ol>
     <p class="hearth-note">
-      Teal and Azure change the terminal's cyan pair — Warp doesn't expose
-      editor syntax scopes. A listing in Warp's own theme repo is in review.
+      Warp doesn't expose editor syntax scopes, so Hearth ships one complete
+      ANSI palette in light and dark. A listing in Warp's own theme repo is in
+      review.
+    </p>
+  </div>
+
+  <div
+    id="hearth-panel-ghostty"
+    role="tabpanel"
+    aria-labelledby="hearth-tab-ghostty"
+    tabindex="0"
+    class="hearth-panel"
+    hidden
+  >
+    <ol class="hearth-steps">
+      <li>
+        Download the light and dark themes from the repo's <a
+          href={GHOSTTY_THEMES_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hearth-inline-link">ghostty folder</a
+        >.
+      </li>
+      <li>
+        Move them into
+        {" "}<code class="hearth-inline-code">~/.config/ghostty/themes/</code>.
+      </li>
+      <li>
+        Add <code class="hearth-inline-code">theme = hearth-dark</code> (or
+        {" "}<code class="hearth-inline-code">hearth-light</code>) to your
+        {" "}<code class="hearth-inline-code">~/.config/ghostty/config</code>,
+        then reload with <kbd class="hearth-kbd">⌘</kbd>
+        {" "}<kbd class="hearth-kbd">⇧</kbd> <kbd class="hearth-kbd">,</kbd> (Ctrl
+        on Linux).
+      </li>
+    </ol>
+    <p class="hearth-note">
+      To follow your system appearance automatically, pair both variants:
+      {" "}<code class="hearth-inline-code"
+        >theme = dark:hearth-dark,light:hearth-light</code
+      >.
     </p>
   </div>
 
@@ -244,69 +267,9 @@ const tabs = [
       <Code code={SHIKI_SAMPLE} lang="ts" themes={hearthThemes as never} />
     </HearthCodeWindow>
   </div>
-</div>
+</HearthTabs>
 
 <style>
-  .hearth-tablist {
-    position: relative;
-  }
-  .hearth-tab {
-    position: relative;
-    padding: 0.5rem;
-    margin-bottom: -1px;
-    border-bottom: 2px solid transparent;
-    font-size: 0.9375rem;
-    color: var(--subtle-foreground);
-    transition:
-      color 150ms ease,
-      border-color 150ms ease;
-  }
-  .hearth-tab::before {
-    content: "";
-    position: absolute;
-    inset-block: -0.125rem;
-    inset-inline: 0;
-  }
-  .hearth-tab:hover {
-    color: var(--foreground);
-  }
-  .hearth-tab[aria-selected="true"] {
-    color: var(--foreground);
-    border-bottom-color: var(--brand);
-  }
-  .hearth-install[data-tab-underline-ready] .hearth-tab[aria-selected="true"] {
-    border-bottom-color: transparent;
-  }
-  .hearth-tab:focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-  }
-  @media (min-width: 40rem) {
-    .hearth-tab {
-      padding-inline: 0.875rem;
-    }
-  }
-  .hearth-tab-underline {
-    position: absolute;
-    inset-block-end: -1px;
-    inset-inline-start: 0;
-    inline-size: 0;
-    block-size: 2px;
-    border-radius: var(--radius-full);
-    background-color: var(--brand);
-    opacity: 0;
-    transform: translateX(0) scaleX(1);
-    transform-origin: 0 50%;
-    pointer-events: none;
-    transition:
-      transform 200ms cubic-bezier(0.645, 0.045, 0.355, 1),
-      opacity 150ms var(--ease-out-curve);
-  }
-  .hearth-tab-underline[data-snap] {
-    transition: none;
-  }
-
   .hearth-panel {
     display: flex;
     flex-direction: column;
@@ -435,11 +398,7 @@ const tabs = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hearth-tab,
     .hearth-cmd {
-      transition: none;
-    }
-    .hearth-tab-underline {
       transition: none;
     }
   }
@@ -451,122 +410,6 @@ const tabs = [
   status.setAttribute("role", "status");
   status.setAttribute("aria-live", "polite");
   document.body.appendChild(status);
-
-  for (const root of document.querySelectorAll<HTMLElement>(
-    "[data-hearth-install]",
-  )) {
-    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
-    if (!tabs.length) continue;
-
-    const tablist = root.querySelector<HTMLElement>(".hearth-tablist");
-    const underline = root.querySelector<HTMLElement>("[data-tab-underline]");
-    const tabId = (tab: HTMLButtonElement) =>
-      tab.id.slice("hearth-tab-".length);
-    const tabsById = new Map(tabs.map((tab) => [tabId(tab), tab]));
-
-    const tabFromUrl = () => {
-      const install = new URL(window.location.href).searchParams.get("install");
-      return (install && tabsById.get(install)) || tabs[0];
-    };
-
-    const replaceUrl = (tab: HTMLButtonElement) => {
-      const url = new URL(window.location.href);
-      url.searchParams.set("install", tabId(tab));
-      url.hash = "install";
-      window.history.replaceState(window.history.state, "", url);
-    };
-
-    const moveUnderline = (tab: HTMLButtonElement, animate: boolean) => {
-      if (!tablist || !underline) return;
-
-      const currentRect = underline.getBoundingClientRect();
-      const listRect = tablist.getBoundingClientRect();
-      const tabRect = tab.getBoundingClientRect();
-      const ready = underline.hasAttribute("data-ready");
-      const rtl = getComputedStyle(tablist).direction === "rtl";
-      const inlineStart = rtl
-        ? listRect.right - tabRect.right
-        : tabRect.left - listRect.left;
-
-      underline.setAttribute("data-snap", "");
-      underline.style.insetInlineStart = `${inlineStart}px`;
-      underline.style.inlineSize = `${tabRect.width}px`;
-      underline.style.transform = "translateX(0) scaleX(1)";
-      underline.style.opacity = "1";
-
-      const targetRect = underline.getBoundingClientRect();
-      if (animate && ready) {
-        const delta = currentRect.left - targetRect.left;
-        const scale = currentRect.width / targetRect.width;
-        underline.style.transform = `translateX(${delta}px) scaleX(${scale})`;
-      }
-
-      underline.getBoundingClientRect();
-      underline.removeAttribute("data-snap");
-      underline.setAttribute("data-ready", "");
-      root.setAttribute("data-tab-underline-ready", "");
-
-      if (animate && ready) {
-        requestAnimationFrame(() => {
-          underline.style.transform = "translateX(0) scaleX(1)";
-        });
-      }
-    };
-
-    const select = (
-      tab: HTMLButtonElement,
-      focus = false,
-      animate = false,
-      updateUrl = false,
-    ) => {
-      for (const other of tabs) {
-        const active = other === tab;
-        other.setAttribute("aria-selected", active ? "true" : "false");
-        other.tabIndex = active ? 0 : -1;
-        const panel = document.getElementById(
-          other.getAttribute("aria-controls") ?? "",
-        );
-        if (panel) panel.hidden = !active;
-      }
-      moveUnderline(tab, animate);
-      if (updateUrl) replaceUrl(tab);
-      if (focus) tab.focus();
-    };
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => select(tab, false, true, true));
-      tab.addEventListener("keydown", (event) => {
-        const step =
-          event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
-        if (step) {
-          event.preventDefault();
-          select(
-            tabs[(index + step + tabs.length) % tabs.length],
-            true,
-            false,
-            true,
-          );
-        } else if (event.key === "Home") {
-          event.preventDefault();
-          select(tabs[0], true, false, true);
-        } else if (event.key === "End") {
-          event.preventDefault();
-          select(tabs[tabs.length - 1], true, false, true);
-        }
-      });
-    });
-
-    select(tabFromUrl());
-    window.addEventListener("popstate", () => select(tabFromUrl(), false, true));
-    if (tablist) {
-      new ResizeObserver(() => {
-        const active = tabs.find(
-          (tab) => tab.getAttribute("aria-selected") === "true",
-        );
-        if (active) moveUnderline(active, false);
-      }).observe(tablist);
-    }
-  }
 
   for (const cmd of document.querySelectorAll<HTMLButtonElement>(
     ".hearth-cmd",

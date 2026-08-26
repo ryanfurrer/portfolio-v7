@@ -1,235 +1,55 @@
 ---
-import { BASE_PALETTE, FLAVORS } from "@/lib/hearth/flavors";
+import HearthSwatchGroup from "./HearthSwatchGroup.astro";
+import HearthTabs from "./HearthTabs.astro";
+import {
+  BASE_PALETTE,
+  FLAVORS,
+  TERMINAL_PALETTE,
+  type PaletteGroup,
+} from "@/lib/hearth/flavors";
 
-const accentRows = FLAVORS.map((flavor) => ({
-  label: flavor.fullName,
-  note:
-    flavor.id === "duotone"
-      ? "keywords; functions and types stay neutral"
-      : "functions, with a lighter tint on types",
-  light: flavor.accent.light,
-  dark: flavor.accent.dark,
-}));
+const ideGroups: PaletteGroup[] = [
+  { heading: "Base — shared by every flavor", rows: BASE_PALETTE },
+  {
+    heading: "Accent — what each flavor changes",
+    rows: FLAVORS.map((flavor) => ({
+      label: flavor.fullName,
+      note:
+        flavor.id === "duotone"
+          ? "keywords; functions and types stay neutral"
+          : "functions, with a lighter tint on types",
+      light: flavor.accent.light,
+      dark: flavor.accent.dark,
+    })),
+  },
+];
+
+const targets = [
+  { id: "ide", label: "IDE", groups: ideGroups },
+  { id: "terminal", label: "Terminal", groups: TERMINAL_PALETTE },
+];
 ---
 
-<div class="space-y-8">
-  <div class="space-y-4">
-    <div
-      class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4"
-      data-reveal
-    >
-      <h3 class="small-heading">Base — shared by every flavor</h3>
-      <span class="flex gap-2" aria-hidden="true">
-        <span class="hearth-col-label">Light</span>
-        <span class="hearth-col-label">Dark</span>
-      </span>
-    </div>
-    <ul class="hearth-swatches space-y-1" data-reveal>
-      {
-        BASE_PALETTE.map((row) => (
-          <li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-1.5">
-            <span class="min-w-0">
-              <span class="block truncate font-medium text-foreground">
-                {row.label}
-              </span>
-              <span class="block text-sm text-subtle-foreground">
-                {row.note}
-              </span>
-            </span>
-            <span class="flex gap-2">
-              <button
-                type="button"
-                class="hearth-chip"
-                data-copy={row.light}
-                aria-label={`Copy ${row.light}`}
-              >
-                <span
-                  class="hearth-chip-swatch"
-                  style={`background-color: ${row.light}`}
-                  aria-hidden="true"
-                />
-                <span class="hearth-chip-label">
-                  <span class="hearth-chip-hex">{row.light}</span>
-                  <span class="hearth-chip-copied" aria-hidden="true">
-                    Copied
-                  </span>
-                </span>
-              </button>
-              <button
-                type="button"
-                class="hearth-chip"
-                data-copy={row.dark}
-                aria-label={`Copy ${row.dark}`}
-              >
-                <span
-                  class="hearth-chip-swatch"
-                  style={`background-color: ${row.dark}`}
-                  aria-hidden="true"
-                />
-                <span class="hearth-chip-label">
-                  <span class="hearth-chip-hex">{row.dark}</span>
-                  <span class="hearth-chip-copied" aria-hidden="true">
-                    Copied
-                  </span>
-                </span>
-              </button>
-            </span>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-
-  <div class="space-y-4">
-    <div
-      class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4"
-      data-reveal
-    >
-      <h3 class="small-heading">Accent — what each flavor changes</h3>
-      <span class="flex gap-2" aria-hidden="true">
-        <span class="hearth-col-label">Light</span>
-        <span class="hearth-col-label">Dark</span>
-      </span>
-    </div>
-    <ul class="hearth-swatches space-y-1" data-reveal>
-      {
-        accentRows.map((row) => (
-          <li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-1.5">
-            <span class="min-w-0">
-              <span class="block truncate font-medium text-foreground">
-                {row.label}
-              </span>
-              <span class="block text-sm text-subtle-foreground">
-                {row.note}
-              </span>
-            </span>
-            <span class="flex gap-2">
-              <button
-                type="button"
-                class="hearth-chip"
-                data-copy={row.light}
-                aria-label={`Copy ${row.light}`}
-              >
-                <span
-                  class="hearth-chip-swatch"
-                  style={`background-color: ${row.light}`}
-                  aria-hidden="true"
-                />
-                <span class="hearth-chip-label">
-                  <span class="hearth-chip-hex">{row.light}</span>
-                  <span class="hearth-chip-copied" aria-hidden="true">
-                    Copied
-                  </span>
-                </span>
-              </button>
-              <button
-                type="button"
-                class="hearth-chip"
-                data-copy={row.dark}
-                aria-label={`Copy ${row.dark}`}
-              >
-                <span
-                  class="hearth-chip-swatch"
-                  style={`background-color: ${row.dark}`}
-                  aria-hidden="true"
-                />
-                <span class="hearth-chip-label">
-                  <span class="hearth-chip-hex">{row.dark}</span>
-                  <span class="hearth-chip-copied" aria-hidden="true">
-                    Copied
-                  </span>
-                </span>
-              </button>
-            </span>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
+<HearthTabs tabs={targets} label="Palette surface" idPrefix="hearth-palette">
+  {
+    targets.map((target, index) => (
+      <div
+        id={`hearth-palette-panel-${target.id}`}
+        role="tabpanel"
+        aria-labelledby={`hearth-palette-tab-${target.id}`}
+        tabindex="0"
+        class="space-y-8"
+        hidden={index !== 0}
+      >
+        {target.groups.map((group) => (
+          <HearthSwatchGroup heading={group.heading} rows={group.rows} />
+        ))}
+      </div>
+    ))
+  }
   <span class="sr-only" role="status" aria-live="polite" data-swatch-status
   ></span>
-</div>
-
-<style>
-  .hearth-col-label {
-    width: 6.5rem;
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--subtle-foreground);
-  }
-
-  /* Fixed width + centered content so the two chip columns line up under the
-     Light / Dark labels regardless of hex length. */
-  .hearth-chip {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 6.5rem;
-    gap: 0.5rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-md);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--foreground);
-    background-color: var(--muted);
-    box-shadow: inset 0 0 0 1px var(--border);
-    transition: translate 150ms var(--ease-out-curve);
-    cursor: pointer;
-  }
-  .hearth-chip::before {
-    content: "";
-    position: absolute;
-    inset-block: -0.625rem;
-    inset-inline: 0;
-  }
-  .hearth-chip:active {
-    translate: 0 1px;
-  }
-  .hearth-chip:focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-  }
-  .hearth-chip-swatch {
-    width: 1rem;
-    height: 1rem;
-    border-radius: var(--radius-sm);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
-  }
-  .hearth-chip-label {
-    display: grid;
-    min-width: 3.5rem;
-    text-align: center;
-  }
-  .hearth-chip-hex,
-  .hearth-chip-copied {
-    grid-area: 1 / 1;
-    transition: opacity 150ms ease;
-  }
-  .hearth-chip-copied {
-    color: var(--brand);
-    opacity: 0;
-  }
-  .hearth-chip.is-copied .hearth-chip-hex {
-    opacity: 0;
-  }
-  .hearth-chip.is-copied .hearth-chip-copied {
-    opacity: 1;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hearth-chip {
-      transition: none;
-    }
-    .hearth-chip-hex,
-    .hearth-chip-copied {
-      transition: none;
-    }
-  }
-</style>
+</HearthTabs>
 
 <script>
   const status = document.querySelector<HTMLElement>("[data-swatch-status]");

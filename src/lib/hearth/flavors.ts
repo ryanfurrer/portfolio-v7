@@ -209,6 +209,11 @@ export interface PaletteRow {
   dark: string;
 }
 
+export interface PaletteGroup {
+  heading: string;
+  rows: PaletteRow[];
+}
+
 // Values read straight from the vendored theme JSON — the shared base is
 // identical across all three flavors; only functions & types change.
 export const BASE_PALETTE: PaletteRow[] = [
@@ -243,4 +248,77 @@ export const BASE_PALETTE: PaletteRow[] = [
     light: "#9f2e00",
     dark: "#f66335",
   },
+];
+
+// The shared ANSI palette every embedded terminal carries, in light and dark.
+// Values read straight from the base theme JSON's `terminal.ansi*` colors —
+// index 0–7 are the standard colors, 8–15 the bright pairings. Azure anchors
+// blue, Teal anchors cyan, matching the two accent flavors.
+const ANSI_ROLES: Array<{ label: string; note: string }> = [
+  { label: "Black", note: "background base" },
+  { label: "Red", note: "ember" },
+  { label: "Green", note: "moss" },
+  { label: "Yellow", note: "amber" },
+  { label: "Blue", note: "Azure anchor" },
+  { label: "Magenta", note: "muted magenta" },
+  { label: "Cyan", note: "Teal anchor" },
+  { label: "White", note: "foreground text" },
+];
+
+const ANSI_LIGHT = {
+  normal: [
+    "#2d2d33",
+    "#b74844",
+    "#438246",
+    "#856e3d",
+    "#007da3",
+    "#9c48ae",
+    "#008472",
+    "#5d5d63",
+  ],
+  bright: [
+    "#747479",
+    "#9c3d39",
+    "#386f3b",
+    "#715e33",
+    "#006a8c",
+    "#853d95",
+    "#007161",
+    "#16161a",
+  ],
+};
+
+const ANSI_DARK = {
+  normal: [
+    "#0a0a0b",
+    "#f77172",
+    "#74c077",
+    "#d1ac5b",
+    "#2eb3e5",
+    "#cd91da",
+    "#4cd0b8",
+    "#d7d7db",
+  ],
+  bright: [
+    "#626269",
+    "#eca5a2",
+    "#8dda8f",
+    "#e6c278",
+    "#7dc9ec",
+    "#dcb4e5",
+    "#8bddcb",
+    "#fafafb",
+  ],
+};
+
+const ansiRows = (weight: "normal" | "bright"): PaletteRow[] =>
+  ANSI_ROLES.map((role, index) => ({
+    ...role,
+    light: ANSI_LIGHT[weight][index],
+    dark: ANSI_DARK[weight][index],
+  }));
+
+export const TERMINAL_PALETTE: PaletteGroup[] = [
+  { heading: "Normal — the eight base colors", rows: ansiRows("normal") },
+  { heading: "Bright — bold text and highlights", rows: ansiRows("bright") },
 ];
