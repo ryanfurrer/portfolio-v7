@@ -81,7 +81,14 @@ const description = SECTION_META.links.description;
 
     <main class="space-y-16">
       <section class="space-y-4">
-        <h2 class="small-heading" data-reveal>Connect with me</h2>
+        <div class="flex items-baseline justify-between gap-4" data-reveal>
+          <h2 class="small-heading">Connect with me</h2>
+          <p
+            data-trend-period
+            hidden
+            class="text-xs leading-none text-muted-foreground tabular-nums"
+          />
+        </div>
         <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
           {
             socialCards.map((link) => {
@@ -103,8 +110,8 @@ const description = SECTION_META.links.description;
                           link.iconBackground,
                         ]}
                       />
-                      <span class="pointer-events-none inline-flex items-center gap-1 text-xs font-medium text-subtle-foreground transition-colors duration-200 ease-out can-hover:group-hover:text-subtle-foreground">
-                        {link.actionLabel}
+                      <span class="pointer-events-none inline-flex items-center text-subtle-foreground">
+                        <span class="sr-only">{link.actionLabel}</span>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -124,16 +131,23 @@ const description = SECTION_META.links.description;
                     <div>
                       <h3 class="small-heading leading-none">{link.label}</h3>
                       {link.followerCount !== undefined ? (
-                        <>
-                          <p class="mt-2.5 text-4xl leading-none font-bold text-foreground tabular-nums">
-                            <span data-social={livePlatform}>
-                              {formatFollowerCount(link.followerCount)}
-                            </span>
-                          </p>
-                          <p class="mt-2 text-sm leading-none text-subtle-foreground">
-                            {followLabel}
-                          </p>
-                        </>
+                        <div class="mt-2.5 flex items-end justify-between gap-3">
+                          <div>
+                            <p class="text-4xl leading-none font-bold text-foreground tabular-nums">
+                              <span data-social={livePlatform}>
+                                {formatFollowerCount(link.followerCount)}
+                              </span>
+                            </p>
+                            <p class="mt-2 text-sm leading-none text-subtle-foreground">
+                              {followLabel}
+                            </p>
+                          </div>
+                          <div
+                            data-sparkbars={livePlatform}
+                            class="flex-1"
+                            hidden
+                          />
+                        </div>
                       ) : (
                         <p class="mt-2.5 text-base leading-none font-medium text-subtle-foreground">
                           {link.description}
@@ -189,16 +203,99 @@ const description = SECTION_META.links.description;
   </div>
 
   <script>
+    const SOCIALS_API = import.meta.env.PUBLIC_SOCIALS_API_URL;
+    const MIN_HISTORY_POINTS = 7;
+    const canHover = matchMedia("(hover: hover)").matches;
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     const formatter = new Intl.NumberFormat("en-US", {
       notation: "compact",
       maximumFractionDigits: 1,
     });
 
-    try {
-      const response = await fetch(
-        `${import.meta.env.PUBLIC_SOCIALS_API_URL}/api/socials`,
+    function paintColumns(columns: HTMLElement[], activeIndex: number) {
+      columns.forEach((column, index) => {
+        const active = index === activeIndex;
+        column.classList.toggle("bg-brand", active);
+        column.classList.toggle("bg-subtle-foreground/55", !active);
+      });
+    }
+
+    function renderSparkBars(container: HTMLElement, values: number[]) {
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      const range = max - min || 1;
+      const delta = values[values.length - 1] - values[0];
+      const signed = `${delta >= 0 ? "+" : "−"}${Math.abs(delta)}`;
+
+      const bars = document.createElement("div");
+      bars.className = "flex h-9 items-end gap-px";
+      bars.setAttribute("role", "img");
+      bars.setAttribute(
+        "aria-label",
+        `Follower trend over ${values.length} days, ${
+          delta >= 0 ? "up" : "down"
+        } ${Math.abs(delta)}`,
       );
 
+      const columns = values.map((value, index) => {
+        const column = document.createElement("span");
+        const height = 0.28 + 0.72 * ((value - min) / range);
+        column.className =
+          "flex-1 origin-bottom rounded-t-sm " +
+          (index === values.length - 1
+            ? "bg-brand"
+            : "bg-subtle-foreground/55");
+        column.style.height = `${(height * 100).toFixed(1)}%`;
+        bars.appendChild(column);
+        return column;
+      });
+
+      const deltaEl = document.createElement("p");
+      deltaEl.className =
+        "mt-2 text-end text-sm leading-none font-medium text-subtle-foreground tabular-nums";
+      deltaEl.textContent = signed;
+
+      container.replaceChildren(bars, deltaEl);
+      container.hidden = false;
+
+      if (!reduceMotion) {
+        columns.forEach((column, index) => {
+          column.animate(
+            [{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }],
+            {
+              duration: 450,
+              delay: index * 25,
+              easing: "cubic-bezier(0, 0, 0.2, 1)",
+              fill: "backwards",
+            },
+          );
+        });
+      }
+
+      if (canHover) {
+        bars.addEventListener("mousemove", (event) => {
+          const rect = bars.getBoundingClientRect();
+          const ratio = (event.clientX - rect.left) / rect.width;
+          const index = Math.min(
+            columns.length - 1,
+            Math.max(0, Math.floor(ratio * columns.length)),
+          );
+          paintColumns(columns, index);
+          const ago = columns.length - 1 - index;
+          deltaEl.textContent = `${values[index]} · ${
+            ago === 0 ? "now" : `${ago}d ago`
+          }`;
+        });
+        bars.addEventListener("mouseleave", () => {
+          paintColumns(columns, columns.length - 1);
+          deltaEl.textContent = signed;
+        });
+      }
+    }
+
+    try {
+      const response = await fetch(`${SOCIALS_API}/api/socials`);
       if (response.ok) {
         const socials: { platform: string; follower_count: number }[] =
           await response.json();
@@ -219,6 +316,46 @@ const description = SECTION_META.links.description;
       }
     } catch {
       // Keep the static fallback counts when the API is unavailable.
+    }
+
+    try {
+      let history: {
+        platform: string;
+        points: { follower_count: number }[];
+      }[] = [];
+      const response = await fetch(`${SOCIALS_API}/api/socials/history`);
+      if (response.ok) history = await response.json();
+
+      const byPlatform = new Map(
+        history.map((entry) => [entry.platform.toLowerCase(), entry.points]),
+      );
+      let periodDays = 0;
+      for (const container of document.querySelectorAll<HTMLElement>(
+        "[data-sparkbars]",
+      )) {
+        const points = byPlatform.get(
+          container.dataset.sparkbars?.toLowerCase() ?? "",
+        );
+        if (points && points.length >= MIN_HISTORY_POINTS) {
+          renderSparkBars(
+            container,
+            points.map((point) => point.follower_count),
+          );
+          periodDays = Math.max(periodDays, points.length);
+        }
+      }
+
+      if (periodDays > 0) {
+        const caption = document.querySelector<HTMLElement>(
+          "[data-trend-period]",
+        );
+        if (caption) {
+          caption.textContent = `last ${periodDays} days`;
+          caption.hidden = false;
+        }
+      }
+    } catch {
+      // No trend bars until history is available.
     }
   </script>
 </Layout>
