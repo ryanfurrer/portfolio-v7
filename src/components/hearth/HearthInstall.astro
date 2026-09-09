@@ -2,6 +2,7 @@
 import { Code } from "astro:components";
 import HearthCodeWindow from "./HearthCodeWindow.astro";
 import HearthTabs from "./HearthTabs.astro";
+import HearthShortcut from "./HearthShortcut.astro";
 import {
   CLI_INSTALL,
   CURSOR_DEEP_LINK,
@@ -15,7 +16,6 @@ import {
 } from "@/lib/hearth/flavors";
 
 const THEMES_URL = `${GITHUB_URL}/tree/main/themes`;
-const ZED_THEME_URL = `${GITHUB_URL}/blob/main/zed/themes/hearth.json`;
 const WARP_THEMES_URL = `${GITHUB_URL}/tree/main/warp`;
 const GHOSTTY_THEMES_URL = `${GITHUB_URL}/tree/main/ghostty`;
 const hearthThemes = FLAVORS.find(({ id }) => id === DEFAULT_FLAVOR)?.themes;
@@ -71,9 +71,9 @@ const tabs = [
         </button>
       </li>
       <li>
-        Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
-        {" "}<kbd class="hearth-kbd">⌘T</kbd> (Ctrl on Windows and Linux) and choose
-        a Hearth.
+        Open the theme picker with <HearthShortcut keys={["Cmd", "K"]} />{" "}
+        then <HearthShortcut keys={["Cmd", "T"]} /> (Ctrl on Windows and Linux) and
+        choose a Hearth.
       </li>
     </ol>
     <div class="hearth-panel-links">
@@ -122,9 +122,9 @@ const tabs = [
         {" "}<strong>⋯</strong> menu.
       </li>
       <li>
-        Open the theme picker with <kbd class="hearth-kbd">⌘K</kbd>
-        {" "}<kbd class="hearth-kbd">⌘T</kbd> (Ctrl on Windows and Linux) and choose
-        a Hearth.
+        Open the theme picker with <HearthShortcut keys={["Cmd", "K"]} />{" "}
+        then <HearthShortcut keys={["Cmd", "T"]} /> (Ctrl on Windows and Linux) and
+        choose a Hearth.
       </li>
     </ol>
     <div class="hearth-panel-links">
@@ -150,25 +150,18 @@ const tabs = [
   >
     <ol class="hearth-steps">
       <li>
-        Download <a
-          href={ZED_THEME_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hearth-inline-link">hearth.json</a
-        > — one file carrying all six variants.
+        In Zed, open Extensions with <HearthShortcut
+          keys={["Cmd", "Shift", "X"]}
+        /> (Ctrl on Windows and Linux), search <strong>Hearth</strong>, and
+        click{" "}
+        <strong>Install</strong>.
       </li>
       <li>
-        Move it into Zed's themes folder,
-        {" "}<code class="hearth-inline-code">~/.config/zed/themes/</code> on macOS
-        and Linux.
+        Open the theme picker with <HearthShortcut keys={["Cmd", "K"]} />{" "}
+        then <HearthShortcut keys={["Cmd", "T"]} /> (Ctrl on Windows and Linux) and
+        choose a Hearth.
       </li>
-      <li>Pick a Hearth from Zed's theme selector.</li>
     </ol>
-    <p class="hearth-note">
-      The repo's <code class="hearth-inline-code">zed/</code> folder also installs
-      with <code class="hearth-inline-code">zed: install dev extension</code>.
-      An extension-store listing is planned.
-    </p>
   </div>
 
   <div
@@ -229,9 +222,8 @@ const tabs = [
         Add <code class="hearth-inline-code">theme = hearth-dark</code> (or
         {" "}<code class="hearth-inline-code">hearth-light</code>) to your
         {" "}<code class="hearth-inline-code">~/.config/ghostty/config</code>,
-        then reload with <kbd class="hearth-kbd">⌘</kbd>
-        {" "}<kbd class="hearth-kbd">⇧</kbd> <kbd class="hearth-kbd">,</kbd> (Ctrl
-        on Linux).
+        then reload with <HearthShortcut keys={["Cmd", "Shift", ","]} /> (Ctrl on
+        Linux).
       </li>
     </ol>
     <p class="hearth-note">
@@ -347,18 +339,6 @@ const tabs = [
   .hearth-shiki-code {
     width: 100%;
     max-width: 42rem;
-  }
-
-  .hearth-kbd {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.05rem 0.35rem;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-mono);
-    font-size: 0.85em;
-    color: var(--foreground);
-    background-color: var(--muted);
-    box-shadow: inset 0 0 0 1px var(--border);
   }
 
   .hearth-cmd {

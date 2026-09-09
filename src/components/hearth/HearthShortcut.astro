@@ -1,0 +1,34 @@
+---
+import { ArrowBigUp, Command } from "lucide-react";
+
+interface Props {
+  keys: string[];
+}
+
+const { keys } = Astro.props;
+const label = keys
+  .map((key) => (key === "Cmd" ? "Command" : key === "," ? "Comma" : key))
+  .join(" + ");
+---
+
+<kbd
+  class="inline-flex items-center gap-1 align-baseline font-sans text-xs font-medium whitespace-nowrap text-subtle-foreground"
+  aria-label={label}
+>
+  {
+    keys.map((key) => (
+      <span
+        class="inline-flex h-6 min-w-6 items-center justify-center rounded-sm bg-muted px-1.5 leading-none ring-1 ring-border ring-inset"
+        aria-hidden="true"
+      >
+        {key === "Cmd" ? (
+          <Command className="size-3.5" aria-hidden="true" />
+        ) : key === "Shift" ? (
+          <ArrowBigUp className="size-3.5" aria-hidden="true" />
+        ) : (
+          key
+        )}
+      </span>
+    ))
+  }
+</kbd>
