@@ -1,49 +1,33 @@
 ---
-/**
- * Renders a Sanity `xPost` block from only its post URL. The blockquote/link
- * remains useful when JavaScript or X is unavailable; widgets.js upgrades it
- * to the official post embed in the browser.
- */
+import { parseXEmbedUrl } from "../../lib/x-embed";
+
 const { node } = Astro.props;
-
-function parsePostUrl(value?: string): { id: string; url: string } | null {
-  if (!value) return null;
-
-  try {
-    const url = new URL(value);
-    const host = url.hostname.toLowerCase().replace(/^(?:www\.|mobile\.)/, "");
-    if (host !== "x.com" && host !== "twitter.com") return null;
-
-    const match = url.pathname.match(
-      /^\/(?:[a-z0-9_]+|i\/web)\/status\/(\d+)(?:\/.*)?$/i,
-    );
-    if (!match) return null;
-
-    url.protocol = "https:";
-    url.hostname = "x.com";
-    url.port = "";
-    url.search = "";
-    url.hash = "";
-
-    return {
-      id: match[1],
-      url: url.toString(),
-    };
-  } catch {
-    return null;
-  }
-}
-
-const post = parsePostUrl(node?.url);
+const post = parseXEmbedUrl(node?.url);
 ---
 
 {
-  post && (
-    <div class="x-post-embed" data-x-post-id={post.id}>
-      <blockquote class="twitter-tweet">
-        <a href={post.url}>View this post on X</a>
-      </blockquote>
+  post?.kind === "broadcast" ? (
+    <div class="x-broadcast-embed flex flex-col items-center gap-2">
+      <iframe
+        class="aspect-video w-full rounded-xl border-0"
+        src={`https://studio.x.com/embed/broadcast/${post.id}`}
+        title="X broadcast video player"
+        loading="lazy"
+        allow="fullscreen; picture-in-picture"
+        allowfullscreen
+      />
+      <a class="text-sm" href={post.url}>
+        View this broadcast on X
+      </a>
     </div>
+  ) : (
+    post && (
+      <div class="x-post-embed" data-x-post-id={post.id}>
+        <blockquote class="twitter-tweet">
+          <a href={post.url}>View this post on X</a>
+        </blockquote>
+      </div>
+    )
   )
 }
 
