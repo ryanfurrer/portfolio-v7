@@ -43,7 +43,9 @@ const linkAttrs = isLink
 
 <Tag data-reveal {...linkAttrs}>
   <div class="w-full items-center justify-between gap-4 md:flex">
-    <div class="flex w-fit items-center gap-3 text-foreground">
+    <div
+      class="flex w-fit max-w-full min-w-0 items-center gap-3 text-foreground"
+    >
       {
         hasLeading && (
           <span class="shrink-0 text-subtle-foreground transition-colors can-hover:group-hover/item:text-foreground">
@@ -51,7 +53,7 @@ const linkAttrs = isLink
           </span>
         )
       }
-      <h3 class="flex items-center gap-2 font-medium">
+      <h3 class="flex min-w-0 items-center gap-2 font-medium">
         {
           unpublished && (
             <span
@@ -62,7 +64,7 @@ const linkAttrs = isLink
             />
           )
         }
-        <span>{title}</span>
+        <span class="truncate">{title}</span>
       </h3>
       {
         external && (
