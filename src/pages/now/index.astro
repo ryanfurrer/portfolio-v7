@@ -125,38 +125,25 @@ const entries = await sanityClient.fetch<NOW_QUERY_RESULT>(NOW_QUERY);
       0 12px 32px -18px oklch(0 0 0 / 0.18);
   }
 
-  /* Lock every line to the rhythm. */
-  .now-card :is(p, dt, dd, span, time, a) {
-    line-height: var(--r);
-  }
-
   /* All vertical spacing is a whole number of rule lines so nothing drifts. */
-  .now-card > * + *,
-  .now-body > * + * {
+  .now-card > * + * {
+    margin-top: var(--r);
+  }
+  /* The body blocks are rendered by PortableText, so they carry no scope hash
+     of this page — without :global() the paragraphs go unspaced. */
+  .now-body > :global(* + *) {
     margin-top: var(--r);
   }
   .now-row + .now-row {
     margin-top: 0; /* rows flow line-by-line, like list entries on the page */
   }
 
-  /* Inside the cards the "writing" reads as a single ink color: body copy and
-     its values use the foreground, and links drop the accent — the underline
-     alone marks them. (Eyebrow, date, and category labels keep their styling.) */
+  /* Inside the cards the "writing" reads as a single ink color — body copy and
+     its values take the foreground, not the inherited muted tier. (Eyebrow,
+     date, and category labels keep their own styling.) */
   .now-body,
   .now-row dd {
     color: var(--color-foreground);
-  }
-  .now-card :is(.now-body, .now-row dd) a {
-    color: var(--color-foreground);
-    text-decoration-color: color-mix(
-      in oklch,
-      var(--color-foreground) 40%,
-      transparent
-    );
-  }
-  .now-card :is(.now-body, .now-row dd) a:hover {
-    color: var(--color-foreground);
-    text-decoration-color: currentColor;
   }
 
   :global(.dark) .now-card {
